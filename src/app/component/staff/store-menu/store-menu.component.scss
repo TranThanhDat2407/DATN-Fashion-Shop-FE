@@ -1,0 +1,133 @@
+* {
+  font-family: "Libre Franklin", serif;
+}
+
+.container-menu {
+
+  display: flex;
+  height: 100%;
+  justify-content: start;
+  flex-direction: column;
+  padding: 10px;
+
+}
+
+.header-menu {
+  margin-left: 10px;
+  font-family: "Kanit", sans-serif;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #efefef;
+
+}
+
+.header-menu h6 {
+  font-size: 1.4rem;
+  padding-top: 15px;
+  font-weight: 700;
+}
+
+.menu-aside {
+  // background-color: blue;
+  min-width: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.footer-menu {
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-menu button {
+  min-width: 39px;
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  border: 3px solid black;
+  border-radius: 5px;
+  transition: width 0.3s ease ;
+}
+span{
+  display: inline-block;
+  width: auto;
+  transition: width 0.3s ease ;
+}
+.content-menu {
+  font-size: 0.74rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  margin-right: 5px;
+}
+
+.menu-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: black;
+  gap: 4px;
+  border-radius: 5px;
+  margin-bottom: 4px;
+  padding: 9px;
+  transition: background-color 0.3s ease,
+  color 0.3s ease,width 1s ease
+
+;
+}
+
+
+.menu-item:hover {
+  background-color: #c4c4c4;
+  color: black
+}
+
+
+
+
+
+.menu-item.active-routerLink {
+
+  width: 100%;
+  background-color: #84adea;
+  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+}
+.menu-item-admin {
+  padding: 12px 7px 12px 7px;
+
+  font-size: 0.8rem;
+  color: #ababab
+}
+
+.header-menu.activeRespone{
+  margin-left: 0;
+}
+.menu-item.activeRespone .menu-mini {
+  display: none;
+}
+
+.menu-item.activeRespone {
+  width: 35px !important;
+}
+
+.menu-item.active-routerLink {
+  background-color: #84adea;
+  color: white;
+}
+
+
+
+@media (max-width: 1000px) {
+  * {
+    font-size: 12px;
+  }
+}

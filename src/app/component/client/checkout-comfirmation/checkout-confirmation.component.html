@@ -1,0 +1,15 @@
+<div class="container">
+  <h2>🎉 Đặt Hàng Thành Công!</h2>
+  <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
+  <p>Mã đơn hàng: <strong id="orderId">{{ orderId }}</strong></p>
+  <p>Chúng tôi sẽ sớm giao hàng đến bạn!</p>
+  <a href="/" class="btn">Tiếp tục mua sắm</a>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId");
+    document.getElementById("orderId").textContent = orderId;
+  });
+</script>

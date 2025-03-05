@@ -1,0 +1,152 @@
+
+<div class="container" style="margin-top: 80px">
+    <div class="container-inventory">
+        <div class="header-conteriner">
+            <a [routerLink]="['/client', currentCurrency, currentLang,'detail_product', dataDetailsProduct?.id,
+                                                                                    dataColors?.[0]?.id,
+                                                                                    dataSizes?.[0]?.id]"
+            >{{ 'back_product' | translate }} </a> <br>
+            <strong>{{ dataDetailsProduct?.name }}</strong>
+        </div>
+        <div class="row ms-1">
+            <div class="col-md-8   layout-item-content d-flex flex-column">
+                <div class="title-content">
+                   <span> {{ 'find_store' | translate }}</span>
+
+                </div>
+                <div class="layout-mobile content-image">
+                    <img [src]="getImageProduct(productImageUrl)">
+                    <p >{{ 'select_color_size' | translate }}</p>
+
+                </div>
+
+                <div class="content-box">
+                    <div class="row">
+                        <div class="col-md-3 content-colors">
+                            <span class="title-color">{{ 'color' | translate }} :</span> <br>
+                            <span>{{ selectedColorName }}</span>
+                        </div>
+                        <div class="col-md-9 ">
+                            <div class="color-picker mt-1">
+                                <dl class="color-picker-list">
+                                    <!-- Màu trắng -->
+                                    <div class="color-item" *ngFor="let color of dataColors" [attr.data-test]="color.valueName">
+                                        <dt>
+                                            <input type="radio" [value]="color.id" name="product-color-picker"
+                                                   [id]="'product-color-picker' + color.id" class="color-input" (click)="selectColor(color)"
+                                                   [checked]="color.id === selectedColorId">
+
+                                            <label class="color-label" [for]="'product-color-picker' + color.id"
+                                                   [style.backgroundImage]="'url(' + getImageColor(color.valueImg) + ')'">
+
+                                            </label>
+                                        </dt>
+                                    </div>
+
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-3 content-colors">
+                            <span class="title-color">{{ 'size' | translate }} :</span> <br>
+                            <span>{{selectedSizeName}}</span>
+                        </div>
+                        <div class="col-md-9 ">
+
+                            <div class="btn-box-color">
+                                <dl class="size-picker">
+                                    <div class="size-item" *ngFor="let size of dataSizes" [attr.data-test]="size.valueName"  >
+                                        <dt style="margin-bottom: 10px;">
+                                            <input type="radio" [value]="size.id" name="product-size-picker"
+                                                   [id]="'product-size-picker' + size.valueName" class="color-input" (click)="selectSize(size)"
+                                                    >
+
+                                            <label class="fr-chip-label" [for]="'product-size-picker' + size.valueName"
+                                                   style="background-size: 50px; background-position: center center;  display: flex; min-height: 0px; min-width: 0px;">
+                                                <span class="fr-chip-text" role="img" [attr.aria-label]="size.valueName">{{ size.valueName }}</span>
+                                            </label>
+                                        </dt>
+                                    </div>
+                                </dl>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-3 content-colors">
+                            <span class="title-color">{{ 'keyword' | translate }} :</span> <br>
+                            <span></span>
+                        </div>
+                        <div class="col-md-9 ">
+
+
+                            <div class="btn-box-color" style="background-color: rgb(151, 151, 151);">
+                                <input type="text"  [(ngModel)]="searchQuery"
+                                       placeholder="{{ 'enter_city' | translate }}">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-md-3 content-colors">
+
+                        </div>
+                        <div class="col-md-9 ">
+
+
+                            <div class="btn-box-color">
+                                <button class="btn-search"
+                                        (click)="fetchStores()"
+                                >TÌM KIẾM</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row  mt-4 ps-2 pe-2">
+                        <div class="col-md-12 content-colors">
+                            <ul class="describe">
+                                <li>{{ 'reload_location' | translate }}</li>
+                                <li>{{ 'search_store' | translate }}</li>
+                                <li>{{ 'no_order' | translate }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div *ngFor="let store of stores"
+                         [routerLink]="['/client', currentCurrency, currentLang,'store_detail', store.id]"
+                         class="row ps-2 pe-2 " style="cursor: pointer">
+                        <hr>
+                        <div class="col-md-8 content-search"  >
+                            <span class="title-search fs-4">{{ store.name }}</span>
+                            <span class="title-search fs-5 mt-2" *ngIf="store.distance">{{ store.distance | number:'1.0-0' }} KM</span>
+                            <span class="title-time mt-2">{{ 'opening_hours' | translate }}
+                                {{ store.openHour }}{{ +store.openHour.split(':')[0] < 12 ? ' AM' : ' PM' }} -
+                                {{ store.closeHour }}{{ +store.closeHour.split(':')[0] < 12 ? ' AM' : ' PM' }}
+                            </span>
+                            <span class="title-describe mt-2 fs-6">{{ store.fullAddress }}
+                            </span>
+                        </div>
+
+                        <div class="col-md-4 content-distance">
+                            <span *ngIf="(store.quantity ?? 0) <= 0">{{ 'out_of_stock' | translate }}</span>
+                            <span *ngIf="(store.quantity ?? 0) > 0">{{ 'in_stock' | translate:{ store: store } }}</span>
+                        </div>
+
+                    </div>
+                    <p *ngIf="showMoreButton" (click)="showMoreStore()"
+                        class="fw-bold fs-5 text-decoration-underline d-flex justify-content-center"
+                    >{{ 'see_more' | translate }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 content-image">
+                <div  class="image-page">
+                    <img [src]="getImageProduct(productImageUrl)" alt="">
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

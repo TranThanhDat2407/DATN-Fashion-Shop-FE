@@ -1,0 +1,85 @@
+.container-form {
+    padding: 10px;
+}
+
+.content-border {
+   width: 80%;
+    border: 1px solid #cccccc;
+    background-color: white;
+    border-radius: 5px;
+
+}
+
+.row {
+    padding: 30px 50px 30px 50px;
+}
+
+input[type="text"], input[type="number"], input[type="datetime-local"] {
+    border-radius: 1px;
+    font-family: "Kanit", sans-serif;
+    border: none;
+    border-bottom: 2px solid #dee2e6;
+    transition: border-bottom 0.3s ease;
+    position: relative;
+    background: transparent;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, input[type="datetime-local"]:focus {
+    outline: none;
+    box-shadow: none;
+    border-bottom: 2px solid #3498db;
+}
+
+input[type="text"]:focus::after, input[type="number"]:focus::after, input[type="datetime-local"]:focus::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #3498db;
+    transition: width 0.3s ease, left 0.3s ease;
+}
+
+input[type="text"]:focus::after, input[type="number"]:focus::after, input[type="datetime-local"]:focus::after {
+    width: 100%;
+    left: 0;
+}
+
+input[type="checkbox"] {
+    border: 1px solid black;
+    transition: none;
+}
+
+.col-md-6 {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+label {
+    position: absolute;
+    top: 10%;
+    left: 6px;
+    padding: 3px;
+    margin-left: 4px;
+    font-family: "Kanit", sans-serif;
+    transition: all 0.3s ease;
+    color: #000000;
+}
+
+input[type="text"]:focus ~ label,
+input[type="number"]:focus ~ label,
+input[type="datetime-local"]:focus ~ label,
+input:not(:placeholder-shown) ~ label {
+    top: -20px;
+    font-size: 0.875rem;
+    color: #3498db;
+    box-shadow: none;
+}
+
+span {
+    padding: 3px;
+    font-family: "Kanit", sans-serif;
+    transition: all 0.3s ease;
+    color: #000000;
+}

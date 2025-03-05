@@ -1,0 +1,172 @@
+<!---------------------------------------------------------------------------------------------->
+<button type="button" class="bottom-navigation-icon-wrapper btn1"
+        [routerLink]="['/client', currentCurrency, currentLang]"
+>
+  <i class="text-dark bi bi-house-door-fill"></i>
+</button>
+<!-- Icon 2 -->
+<button type="button"
+        class="bottom-navigation-icon-wrapper fw-bold nav-icon bottom-navigation-icon-wrapper-center btn2"
+        [ngClass]="{'active': isSearchActive}"
+        (click)="toggleSearch()">
+  <i class="text-dark bi bi-search" *ngIf="!isSearchActive"></i>
+  <i class="fa-solid fa-x X-icon" *ngIf="isSearchActive"></i>
+</button>
+
+<button type="button" class="bottom-navigation-icon-wrapper btn3"
+        [routerLink]="['/client', currentCurrency, currentLang, 'profile','edit_profile']"
+        queryParamsHandling="merge"
+>
+  <i class="text-dark bi bi-person"></i>
+</button>
+
+
+<div class="overlay" *ngIf="isSearchActive">
+
+  <div class="dropdown-menu show w-100 h-100 shadow rounded p-2" id="suggestionsBox" *ngIf="searchResults.length > 0 && searchQuery">
+    <a [routerLink]="['/client', currentCurrency, currentLang, 'detail_product', item.id, 0, 0]"
+       class="dropdown-item d-flex align-items-center py-2 border-bottom"
+       *ngFor="let item of searchResults"
+       (click)="closeSearch()">
+
+      <!-- Ảnh sản phẩm -->
+      <div class="me-3 ms-5">
+        <img [src]="'http://localhost:8080/uploads/images/products/'+item.imageUrl"
+             alt="{{ item.name }}"
+             class="img-fluid rounded"
+             style="max-width: 60px; height: 60px; object-fit: cover;">
+      </div>
+
+      <!-- Thông tin sản phẩm -->
+      <div class="d-flex flex-column flex-grow-1">
+        <p class="mb-0 fw-bold text-dark">{{ item.name }}</p>
+
+        <!-- Hiển thị danh mục sản phẩm -->
+        <small class="text-muted" *ngIf="item.categoryParent && item.categoryParent.length === 1">
+          {{ item.categoryParent[0]?.name ?? '' }}
+        </small>
+        <small class="text-muted" *ngIf="item.categoryParent && item.categoryParent.length > 1">
+          Unisex
+        </small>
+      </div>
+
+      <!-- Mũi tên điều hướng -->
+      <div class="ms-auto me-5">
+        <i class="bi bi-chevron-right text-muted"></i>
+      </div>
+    </a>
+  </div>
+
+  <app-header></app-header>
+  <div class="container position-relative window-category">
+    <div class="container body-category" style="">
+      <!-- Wrapper for Carousel -->
+      <div class="carousel-wrapper"
+           [ngClass]="{'carousel-move-left': currentLevel === 3, 'carousel-move-right': currentLevel === 2}">
+        <!-- Tầng 2 -->
+        <div class="categories-level level-2"
+             [ngClass]="{'hidden': currentLevel !== 2}"
+        >
+          <div class="row text-center">
+            <div
+              class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4"
+              *ngFor="let category of categories$ | async; let i = index"
+              (click)="onCategoryChildClick(category.id)"
+            >
+              <div class="category-item" [style.animationDelay]="i * 0.05 + 's'">
+                <img src="{{getCategoryImage(category.imageUrl)}}" alt="{{ category.name }}" class="img-fluid"
+                     style="max-height: 60px;">
+                <p class="fw-normal">{{ category.name }}</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Tầng 3 -->
+        <div class="categories-level level-3"
+             [ngClass]="{'hidden': currentLevel !== 3}"
+        >
+          <button
+            class="btn-back mb-3"
+            (click)="goBack()"
+            *ngIf="selectedCategory | async as category"
+          >
+            <i class="fa-solid fa-chevron-left me-2"></i> {{ category.name }}
+          </button>
+          <div class="row text-center">
+            <div
+              class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4"
+              *ngFor="let child of categoriesChid; let i = index"
+            >
+              <div
+                class="category-item" [style.animationDelay]="i * 0.05 + 's'"
+                (click)="toProduct(child.id)"
+              >
+                <img [src]="getCategoryImage(child.imageUrl)" alt="{{ child.name }}" class="img-fluid"
+                     style="max-height: 60px;">
+                <p class="fw-normal">{{ child.name }}</p>
+              </div>
+            </div>
+            <div
+              class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4"
+              *ngIf="selectedCategory | async as category"
+            >
+              <div
+                class="category-item" [style.animationDelay]="2 * 0.05 + 's'"
+                (click)="toProduct(category.id)"
+              >
+                <img [src]="getCategoryImage(category.imageUrl)" alt="{{ category.name }}" class="img-fluid"
+                     style="max-height: 60px;">
+                <p class="fw-normal">{{ "Tất Cả" | translate }} {{ category.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div>
+        <h1>Thông báo</h1>
+        <!--          <div class="categories-level level-2">-->
+        <!--            <div class="row text-center">-->
+        <!--              <div-->
+        <!--                class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4"-->
+        <!--                *ngFor="let category of categories; let i = index"-->
+        <!--                (click)="selectCategory(category)"-->
+        <!--              >-->
+        <!--                <div class="category-item" [style.animationDelay]="i * 0.05 + 's'">-->
+        <!--                  <img [src]="category.img" alt="{{ category.name }}" class="img-fluid" style="max-height: 60px;">-->
+        <!--                  <p class="fw-normal">{{ category.name }}</p>-->
+        <!--                </div>-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          </div><div class="categories-level level-2">-->
+        <!--          <div class="row text-center">-->
+        <!--            <div-->
+        <!--              class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4"-->
+        <!--              *ngFor="let category of categories; let i = index"-->
+        <!--              (click)="selectCategory(category)"-->
+        <!--            >-->
+        <!--              <div class="category-item" [style.animationDelay]="i * 0.05 + 's'">-->
+        <!--                <img [src]="category.img" alt="{{ category.name }}" class="img-fluid" style="max-height: 60px;">-->
+        <!--                <p class="fw-normal">{{ category.name }}</p>-->
+        <!--              </div>-->
+        <!--            </div>-->
+        <!--          </div>-->
+        <!--        </div>-->
+      </div>
+    </div>
+
+
+    <div class="container Search-Bar bottom-navigation">
+      <input type="text" class="form-control rounded-pill"
+             [(ngModel)]="searchQuery"
+             (input)="onSearchInput($event)"
+             (keyup.enter)="onSearchEnter()"
+             placeholder="Tìm kiếm theo từ khóa">
+    </div>
+
+    <!-- Search Bar -->
+  </div>
+
+</div>

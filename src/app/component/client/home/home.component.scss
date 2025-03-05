@@ -1,0 +1,135 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.carousel {
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.carousel > * {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.carousel-item {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+
+.carousel-item img ,
+.carousel-item video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.3s ease-in-out;
+  min-width: 100%;
+  min-height: 100%;
+  object-position: 50% 50%;
+}
+
+.carousel-logo {
+  width: 100px;
+  height: 100px;
+}
+
+.carousel-logo {
+  object-fit: contain;
+  width: 4rem;
+  height: 1.2rem;
+}
+
+.carousel-caption {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  text-align: left;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.carousel-title {
+  font-weight: 600;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.carousel-product-title {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.carousel-logo {
+  display: flex; /* Đảm bảo logo nằm đúng vị trí */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  max-width: 80px; /* Đặt kích thước tối đa cho logo */
+  max-height: 80px; /* Đặt chiều cao tối đa */
+  width: auto; /* Để logo không bị méo */
+  height: auto;
+  margin-bottom: 1.0rem;
+  overflow: hidden; /* Đảm bảo không bị tràn */
+}
+
+.carousel-logo img {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* Đảm bảo logo không bị méo */
+}
+
+
+.carousel-title,
+.carousel-product-title {
+  color: #fff;
+}
+
+/* Tùy chỉnh thanh cuộn cực kỳ mỏng */
+.carousel::-webkit-scrollbar {
+  display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
+}
+
+.carousel::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Màu nền của thanh cuộn */
+  border-radius: 10px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background: #888; /* Màu của phần thanh cuộn */
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+/* Khi hover trên thanh cuộn */
+.carousel::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Màu thanh cuộn khi hover */
+}
+
+@media screen and (max-width: 768px) {
+  .carousel {
+      overflow-y: scroll;
+  }
+
+  /* Ẩn thanh cuộn trong trình duyệt Webkit (Chrome, Safari) */
+  .carousel::-webkit-scrollbar {
+      display: block;
+  }
+}
+
+

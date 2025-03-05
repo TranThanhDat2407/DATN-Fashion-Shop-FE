@@ -1,0 +1,122 @@
+
+
+<!--<div class="row">-->
+<!--  <app-shipping></app-shipping>-->
+
+<!--</div>-->
+<div class="row">
+  <app-payment></app-payment>
+</div>
+<div class="row">
+  <div class="fr-contents-card full">
+    <div class="accordion-item" style="border: none;" >
+      <div class="mb-xl">
+        <div style=" border-width: 1px 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+             border-left-style: solid;
+              border-top-color: rgb(224, 224, 224);
+               border-right-color: rgb(224, 224, 224);
+                border-bottom-color: rgb(224, 224, 224);
+                 border-left-color: rgb(224, 224, 224);
+                  border-image: initial;
+                   padding: 28px 20px;">
+          <div class="fr-wrapper mb-m" style="width: auto;">
+            <h4 class="text-uppercase accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#overview" aria-expanded="false" aria-controls="overview">
+                <span class="title">3. Tổng đơn hàng</span>
+              </button>
+            </h4>
+          </div>
+          <div id="overview" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div
+                style="border-top: 1px solid rgb(224, 224, 224); padding: 28px 20px;">
+                <div class="fr-contents-card">
+                  <div>
+                    <div class="fr-wrapper mb-xl" style="width: auto;">
+                      <div class="fr-table" *ngIf="shippingInfo">
+                        <table>
+                          <tbody>
+                          <tr class="">
+                            <td data-test="tổng-cộng-label">Tổng cộng</td>
+                            <td data-test="tổng-cộng"><span
+                              class="fr-price-currency fr-price-currency-order-change"><abbr
+                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
+                            <span>
+                              {{ getCurrencyPrice(cartData?.totalPrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                            </span></span>
+                            </td>
+                          </tr>
+                          <tr class="">
+                            <td data-test="phi-vận-chuyển-label">Phí vận chuyển</td>
+                            <td data-test="phi-vận-chuyển"><span
+                              class="fr-price-currency fr-price-currency-order-change"><abbr
+                              class="fr-no-uppercase fr-price-currency-margin"
+                              title="Vietnamese dong">VND</abbr><span>
+                             </span>
+                              {{ getCurrencyPrice(shippingInfo.shippingFee ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                          </span></td>
+                          </tr>
+                          <tr class="header-row separate-header">
+                            <th class="text-uppercase" data-test="tổng-label">Tổng</th>
+                            <th data-test="tổng"><span class="fr-price-currency fr-price-currency-order-change"><abbr
+                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
+                            <span>
+                            {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                          </span></span>
+                            </th>
+                          </tr>
+                          <tr class="">
+                            <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">Đã bao gồm thuế giá trị gia tăng</td>
+                            <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang"><span
+                              class="fr-price-currency fr-price-currency-order-change"><abbr
+                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr><span></span></span>
+                            </td>
+                          </tr>
+                          </tbody>
+                          <tfoot>
+                          <div class="fr-h-rule full">
+                            <hr>
+                          </div>
+                          <tr class="text-uppercase">
+                            <th data-test="tổng-dơn-dặt-hang-label">Tổng đơn đặt hàng</th>
+                            <th data-test="tổng-dơn-dặt-hang"><span
+                              class="fr-price-currency fr-price-currency-order-change"><abbr
+                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
+                            <span>
+                              {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                            </span></span>
+                            </th>
+                          </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="button-container"
+                         style="display: flex; align-items: flex-start; justify-content: flex-start; flex-direction: column;">
+                      <div>
+                        <button (click)="confirmOrder()" class="fr-btn attention fr-btn w4-f w4-f" type="button" data-test="đặt-hàng-button"
+                        >Đặt hàng
+                        </button>
+                        <span class="mt-xxs fr-text-annotation weak">Nhấn Đặt hàng để hoàn tất mua hàng.</span></div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+              <hr>
+
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,112 @@
+/* Lớp nền mờ */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    opacity: 0;
+    animation: fade-in 0.3s forwards;
+}
+
+/* Hộp modal */
+.modal-container {
+    color: #202020;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 30%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    padding: 20px;
+    border-radius: 1px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    animation: fade-in 0.3s forwards, scale-in 0.3s forwards;
+}
+
+/* Nội dung modal */
+.modal-content {
+    text-align: left;
+}
+.modal-content span{
+    font: 700 1rem/1.2  'Arial', sans-serif;
+}
+.modal-content p{
+    padding-top: 20px;
+    font: 400 0.8rem/1.2  "Kanit", sans-serif;
+
+}
+.btn-content{
+    width: 49%;
+    border: none;
+    border-radius: 0;
+    border: 1px solid #202020;
+}
+.btn-closes{
+    color: #202020;
+    background-color: #ffff;
+    font-weight: 600;
+
+}
+.btn-closes:hover{
+    color: #ffff;
+    background-color: #202020;
+}
+.btn-login {
+    position: relative; /* Để `::after` định vị đúng */
+    background-color: #202020;
+    color: white;
+    padding: 10px 20px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    overflow: hidden; /* Giữ hiệu ứng bên trong */
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-login::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(227, 227, 227, 0.2); /* Lớp mờ màu trắng */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.btn-login:hover::after {
+    opacity: 1; /* Hiển thị hiệu ứng khi hover */
+}
+/* Nút đóng */
+
+
+
+/* Hiệu ứng mờ dần */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Hiệu ứng phóng to */
+@keyframes scale-in {
+    from {
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.loading-spinner {
+  z-index: 9997 !important; /* Đảm bảo nằm dưới modal */
+}

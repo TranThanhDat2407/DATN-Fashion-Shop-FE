@@ -1,0 +1,359 @@
+a:hover {
+  color: #b3b3b3; /* Màu đen nhạt hơn */
+}
+
+.sticky-top{
+  top: 4.5rem;
+}
+
+.icon-color{
+  color: #3A9199;
+}
+
+/*-----------------------Dáng---------------------*/
+.fr-flitem{
+  width: 100%;
+}
+.fr-fitting-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.fr-fitting-label-item {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  text-align: center;
+  width: 18.4%;
+  word-break: break-word;
+  font-size: 14px;
+}
+.fr-fitting-graph {
+  width: 92%;
+  height: 30px; /* Chiều cao của vùng chứa */
+  position: relative;
+}
+
+.fr-fitting-graph::before {
+  content: '';
+  position: absolute;
+  top: 30%; /* Đặt đường kẻ ngang đúng giữa */
+  left: 50px;
+  right: 0px;
+  height: 2px; /* Độ dày của đường kẻ ngang */
+  background-color: #d3d3d3;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.fr-fitting-point {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 92%;
+  position: relative;
+  z-index: 2; /* Đảm bảo các chấm nằm trên đường */
+  margin-left: 2.5rem;
+}
+
+.fr-dots {
+  width: 1rem; /* Kích thước lớn hơn */
+  height: 1rem;
+  background-color: #d3d3d3; /* Màu mặc định */
+  border-radius: 50%; /* Làm tròn */
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  z-index: 3; /* Đảm bảo nằm trên đường */
+}
+
+.fr-dots.selected {
+  background-color: #000; /* Màu của chấm được chọn */
+  transform: scale(1.2); /* Phóng to khi được chọn */
+}
+
+
+.fr-implicit {
+  position: absolute;
+  top: -25px; /* Đẩy nhãn lên phía trên */
+  font-size: 14px; /* Kích thước chữ của nhãn */
+  white-space: nowrap; /* Tránh xuống dòng */
+  color: #000; /* Màu chữ */
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4; /* Đảm bảo nhãn nằm trên tất cả */
+}
+
+input[type="range"] {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  opacity: 0; /* Ẩn thanh trượt */
+}
+
+/*------------------ Tiêu đề ------------------*/
+/* Container styles */
+.title-row {
+  margin-bottom: 1.5rem;
+}
+
+/* Label styles */
+.title-form-label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Input field styles */
+.title-form-control {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #ccc; /* Đường viền dưới */
+  background-color: #f8f8f8; /* Màu nền */
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Input focus styles */
+.title-form-control:focus {
+  background-color: #f2f2f2; /* Màu nền khi focus */
+  border-bottom: 1px solid #333; /* Đổi màu đường viền */
+}
+
+/* Placeholder styles */
+.title-form-control::placeholder {
+  color: #999;
+  font-size: 14px;
+}
+
+/* Small text styles */
+.title-text-muted {
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+  color: #999;
+}
+
+
+/* Placeholder styling */
+.title-form-control::placeholder {
+  color: #aaa; /* Màu placeholder */
+  font-size: 14px;
+}
+
+.review-form-container {
+  margin-top: 1rem;
+}
+.review-form-check-input {
+  width: 2rem;
+  height: 2rem;
+}
+.review-form-check-label {
+  font-size: 1rem;
+  font-weight: 400;
+}
+.review-form-text-muted {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
+.review-form-text-muted li {
+  margin-bottom: 0.5rem;
+}
+.review-form-link {
+  color: black;
+}
+.review-submit-btn {
+  padding: 0.75rem 2rem;
+  width: 21rem;
+  border-radius: 0;
+}
+.review-back-btn {
+  padding: 0.75rem 2rem;
+  border: 1px solid black;
+  border-radius: 0;
+  width: 21rem;
+}
+
+.review-checkbox-container {
+  display: flex;
+  align-items: center; /* Căn giữa theo chiều dọc */
+  gap: 0.5rem; /* Khoảng cách giữa checkbox và label */
+}
+
+/*---------------------Responsive---------------------------*/
+
+@media (max-width: 1200px) {
+  .review-form-container {
+    margin-top: 2rem;
+  }
+
+  .fit-selector .fr-fitting-label {
+    font-size: 12px;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .title-row {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .review-form-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .review-submit-btn,
+  .review-back-btn {
+    width: 100%;
+  }
+
+  .review-checkbox-container {
+    flex-direction: column;
+    align-items: start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .fit-selector .fr-fitting-label {
+    text-align: center;
+  }
+
+  .col-md-3 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .img-fluid {
+    width: 100%;
+  }
+
+  .review-form-checkbox-label {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 0.5rem;
+  }
+
+  .fit-selector .fr-dots {
+    width: 10px;
+    height: 10px;
+  }
+
+  .review-form-container {
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+  }
+}
+
+
+
+
+
+.custom-select {
+  position: relative;
+  width: 100%;
+   
+}
+ 
+.selected-item {
+   border-radius: 5px;
+  padding: 5px;
+  padding-left: 10px;
+
+  border: 1px solid #dee2e6;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.selected-item img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* Dropdown ẩn ban đầu */
+.dropdown {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #000000;
+  border-top: none;
+  background: white;
+  z-index: 1000;
+  max-height: 0; /* Ẩn dropdown */
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Khi dropdown mở */
+.custom-select:hover .dropdown {
+  max-height: 200px; /* Trượt xuống */
+  opacity: 1;
+}
+
+/* Input trong dropdown */
+.dropdown input {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  outline: none;
+}
+
+/* Danh sách dropdown */
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 130px;
+  overflow-y: auto; /* Cho phép cuộn */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome & Safari */
+.dropdown ul::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown li {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown li img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.dropdown li:hover {
+  background: #f1f1f1;
+}
+.activeValidationText{
+  color: red;
+}
+.activeValidationInput{
+  border:  1px solid red;
+}

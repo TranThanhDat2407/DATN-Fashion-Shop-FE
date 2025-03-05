@@ -1,0 +1,249 @@
+/* Cơ bản */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  padding: 20px;
+  text-align: left;
+}
+
+label {
+  padding: 0;
+  width: auto;
+  min-width: 80px;
+  font-size: 0.8rem;
+  height: 20px;
+  font-weight: 400 ;
+}
+.form-switch label{
+  font-weight: 400 !important;
+}
+/* Nút mở form */
+.btn-open-form {
+  height: 40px;
+  padding: 9px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* Input checkbox ẩn */
+.toggle-checkbox {
+  display: none;
+}
+
+/* Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.sliding-form {
+  padding: 10px;
+  border-top-left-radius: 20%;
+  border-bottom-right-radius: 20%;
+  position: fixed;
+  top: 14%;
+  right: -100%;
+  width: 300px;
+  background: #fff;
+  box-shadow: -8px 5px 6px 5px rgba(255, 40, 40, 0.1);
+  padding: 20px;
+  z-index: 1500;
+  transition: right 0.4s ease-in-out;
+}
+
+/* Nút đóng */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+/* Hiển thị khi checkbox được chọn */
+.toggle-checkbox:checked~.overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.toggle-checkbox:checked~.sliding-form {
+  right: 0;
+}
+
+.overlay {
+  cursor: pointer;
+}
+
+.form-edit-address {
+  padding-bottom: 10px;
+}
+
+.form-edit-address input {
+  border: 1px solid #efefef;
+  border-radius: 1px;
+}
+
+.form-select {
+  border-radius: 2px;
+}
+
+.wishlist-table {
+  margin-bottom: 20px;
+}
+
+.wishlist-table .table {
+  margin-bottom: 0;
+}
+
+.wishlist-table .btn {
+  margin: 0;
+}
+
+.wishlist-table>table>thead>tr>th,
+.wishlist-table>table>thead>tr>td,
+.wishlist-table>table>tbody>tr>th,
+.wishlist-table>table>tbody>tr>td {
+  vertical-align: middle !important;
+}
+
+.wishlist-table>table thead th {
+  padding-top: 17px;
+  padding-bottom: 17px;
+  border-width: 1px;
+}
+
+.wishlist-table .remove-from-cart {
+  display: inline-block;
+  color: #ff5252;
+  font-size: 18px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.address-item {
+  display: flex;
+  align-items: center;
+}
+
+.address-thumb img {
+  width: 50px;
+  height: auto;
+}
+
+.address-info {
+  margin-left: 10px;
+}
+
+.address-title {
+  margin: 0;
+  font-size: 1rem;
+}
+.mobile-title{
+  display: none;
+}
+.pc-title{
+  display: block;
+}
+
+
+.modal {
+  --bs-modal-width: 770px;
+}
+.modal-content{
+  padding: 20px;
+  border-radius: 0;
+}
+.fr-icon{
+  background-image: url(https://asset.uniqlo.com/g/icons/required_error.svg);
+}
+//.fr-icon.required {
+//  background-image: url(https://asset.uniqlo.com/g/icons/required.svg);
+//}
+//.fr-icon.chevron_updown {
+//  background-image: url(https://asset.uniqlo.com/g/icons/chevron_updown.svg);
+//}
+.btn-address{
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.col-form-label{
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+
+}
+.form-control, .form-select{
+  font-size: 13px;
+  padding: 12px;
+  border-radius: 0;
+  border:0.5px solid rgb(97% 97% 97%);
+  background-color: rgb(97% 97% 97%);
+  box-shadow: rgb(0% 0% 0% / 0) 0px 1px 0px 0px;
+  color: rgb(11% 11% 11%);
+  letter-spacing: 0.32px;
+  line-height: 23.536px;
+
+}
+
+
+@media (max-width:900px) {
+  th{
+    min-width: 60px;
+
+    height: auto;
+    padding: 5px;
+    text-align: center; /* Canh giữa nội dung */
+    word-wrap: break-word; /* Tự động xuống hàng khi từ quá dài */
+    word-break: break-word; /* Xử lý xuống hàng cho từ dài */
+    white-space: normal;
+
+  }
+  label{
+    width: auto;
+  }
+  td{
+    margin: 0;
+  }
+  .address-item{
+    padding: 0;
+  }
+  .address-thumb{
+    display: none;
+  }
+  .pc-title{
+    display: none;
+  }
+  .mobile-title{
+    display: block;
+  }
+}
+@media (max-width:300px) {
+  .sliding-form {
+    top: 9%;
+    right: -170%;
+    width: 300px;
+  }
+
+}

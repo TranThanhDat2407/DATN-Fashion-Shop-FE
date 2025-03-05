@@ -1,0 +1,193 @@
+<!-- <div class="container">
+    <div class="textLink" style="margin-left: 40px; padding: 10px;"><span style="
+      font-family:  'Kanit', sans-serif; font-size: 17px;font-weight: 500;
+      ">Home</span>
+        <span style="padding: 5px;">/</span>
+        <span style="color: #8ba1b0; font-size: 12px;font-weight: 500;">Products</span>
+        <span style="padding: 5px;">/</span>
+        <span style="color: #8ba1b0; font-size: 12px;font-weight: 500;">Product detail</span>
+    </div>
+</div> -->
+<!-- CONTENT -->
+<div class="container-fluid">
+  <div class="background-box">
+    <!-- <img class="image-overlay" src="../../../assets/images/banner-product-1.jpg" alt=""> -->
+    <!-- <div class="overlay"></div> -->
+    <div class="content-box">
+      <div class="container p-3  " style="background-color: rgba(255, 255, 255, 0.6);height: auto;">
+        <div class="content-product-title">
+        </div>
+        <div class="content-fiter-tools">
+          <div class="tools-title">
+            <i class="fa-solid fa-sort"></i>
+            <span>{{ "Bộ lọc" | translate }}</span>
+          </div>
+          <div class="tool-elements">
+            <div class="element-select">
+              <select class="form-select" (change)="onPriceRangeChange($event)">
+                <option value="">Khoảng giá</option>
+                <option value="600000-700000">
+                  {{ getCurrencyPrice(600000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
+                  -
+                  {{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
+                </option>
+                <option value="700000-800000">
+                  {{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
+                  -
+                  {{ getCurrencyPrice(800000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
+                </option>
+              </select>
+            </div>
+            <div class="element-select text-end">
+              <select class="form-select" (change)="onSortChange($event)">
+                <option value="" selected>Chọn sắp xếp</option>
+                <option value="priceAsc">Giá Tăng Dần</option>
+                <option value="priceDesc">Giá Giảm Dần</option>
+                <option value="createdAtAsc">Hàng mới về</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+        <div class="tool-search">
+          <div class="count-product">
+            <span>{{products.length}} Sản Phẩm</span>
+          </div>
+          <input type="text" class="form-control rounded-pill"
+                 [(ngModel)]="searchQuery"
+                 (input)="onSearchInput($event)"
+                 placeholder="Tìm kiếm theo từ khóa">
+        </div>
+
+
+        <div class="products-box">
+
+          <div class="product-item" *ngFor="let product of getFilteredProducts()"
+           [routerLink]="['/client', currentCurrency, currentLang,'detail_product', product.id,
+                                                                                    product.colors?.[0]?.id,
+                                                                                    product.sizes?.[0]?.id]"  >
+
+            <div class="product-item-image">
+              <img src="{{getImageProduct(product.detail?.variantImage)}}" alt="aaa">
+            </div>
+            <div class="product-item-ColorAndbtnWishList">
+              <div class="product-item-color">
+                <label *ngFor="let color of product.colors" class="fr-chip-label"
+                  [style.background-image]="'url(' + getColorImage(color.valueImg) + ')'"
+                  [style.background-size]="'50px'" [style.background-position]="'center center'" [style.width]="'21px'"
+                  [style.height]="'21px'">
+                </label>
+              </div>
+              <div class="product-item-btnWishList">
+                <button (click)="$event.stopPropagation(); toggleWishlist(product.id, product.detail?.colorId ?? 0)">
+                  <i *ngIf="product.detail?.inWishlist" class="fa-solid fa-heart" style="color: #ff0000;"></i>
+                  <i *ngIf="!product.detail?.inWishlist" class="fa-regular fa-heart"></i>
+                </button>
+              </div>
+
+
+            </div>
+            <div class="product-item-size" *ngIf="product.sizes?.length">
+              <span>
+                <span>{{ product.sizes?.[0]?.valueName ?? '' }}</span>
+                <span>-</span><span *ngIf="product.sizes && product.sizes.length">{{product.sizes[product.sizes.length -
+                  1].valueName}}
+                </span>
+              </span>
+
+              <span *ngIf=" product.categoryParent?.length">
+                <span class="product-item-categoryParent" *ngIf="product.categoryParent?.length === 1">
+                  {{ product.categoryParent?.[0]?.name ?? '' }}
+                </span>
+                <span class="product-item-categoryParent" *ngIf="(product.categoryParent?.length || 0) > 1">
+                  Unisex
+                </span>
+              </span>
+            </div>
+
+
+
+            <div class="product-item-name">
+              <p>{{ product.detail?.name }}</p>
+            </div>
+            <div class="product-item-price">
+              <p style="line-height: 1;padding-top: 4px;">
+                <!-- Nếu basePrice === salePrice, chỉ hiển thị giá gốc -->
+
+                <span *ngIf="product.detail?.basePrice === product.detail?.salePrice" class="product-item-priceInit">
+                  {{ getCurrencyPrice(product.detail?.basePrice ?? 0, currentCurrencyDetail?.rateToBase ??
+                  1,currentCurrencyDetail?.code ?? '' )}}
+
+                </span>
+                <!-- Nếu basePrice > salePrice, hiển thị cả hai giá -->
+                <span *ngIf="product.detail?.basePrice != product.detail?.salePrice">
+                  <span class="product-item-priceInit" style="text-decoration: line-through;">
+                    {{ getCurrencyPrice(product.detail?.basePrice ?? 0, currentCurrencyDetail?.rateToBase ??
+                    1,currentCurrencyDetail?.code ?? '' )}}
+
+                  </span>
+                  <br>
+                  <span class="product-item-priceSale">
+
+                    {{ getCurrencyPrice(product.detail?.salePrice ?? 0, currentCurrencyDetail?.rateToBase ??
+                    1,currentCurrencyDetail?.code ?? '' )}}
+
+                  </span>
+
+                </span><br>
+
+              </p>
+            </div>
+            <ng-container *ngIf="product.promotion?.isActive != null && product.promotion?.isActive">
+              <div class="product-item-coupon">
+                <span>{{ "Giảm giá hết thời hạn" | translate }}  {{ product.promotion?.endDate | date:'dd/MM/yyyy, hh:mm a' }}</span>
+
+
+              </div>
+            </ng-container>
+
+            <div class="product-item-rate">
+              <span class="rate-icon"><i class="fa-solid fa-star"></i></span>
+              <span class="rate-total">{{product.reviewAverage}}</span>
+              <span class="rate-count">({{product.reviewTotal}})</span>
+
+            </div>
+
+          </div>
+
+
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+      <!-- Nút "Trước" -->
+      <li class="page-item" [class.disabled]="first">
+        <a class="page-link" (click)="changePage(currentPage - 1)" [attr.aria-disabled]="first ? 'true' : null">Trước</a>
+      </li>
+
+      <!-- Số trang -->
+      <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+        <a class="page-link" (click)="changePage(page)">{{ page + 1 }}</a>
+      </li>
+
+      <!-- Nút "Sau" -->
+      <li class="page-item" [class.disabled]="last">
+        <a class="page-link" (click)="changePage(currentPage + 1)" [attr.aria-disabled]="last ? 'true' : null">Sau</a>
+      </li>
+    </ul>
+  </nav>
+
+
+</div>
+
+

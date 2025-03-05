@@ -1,0 +1,14 @@
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="onCancel()"></div>
+
+<div class="modal-container" *ngIf="isModalOpen">
+    <div class="modal-content">
+        <span>CONFIRM</span>
+        <p>{{'Bạn có muốn xóa không' | translate}}?</p>
+        <div class="d-flex">
+            <button mat-button mat-dialog-close="false" class="btn-content btn-login"
+                (click)="onConfirm()">{{'Xóa' | translate}}</button>
+            <button mat-button mat-dialog-close="true" class="btn-content btn-closes"
+                (click)="onCancel()">{{'Hủy' | translate}}</button>
+        </div>
+    </div>
+</div>

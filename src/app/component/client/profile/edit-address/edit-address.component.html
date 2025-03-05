@@ -1,0 +1,253 @@
+<div class="table-responsive wishlist-table margin-bottom-none p-3">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Tất Cả Địa Chỉ </th>
+
+      <th class="text-center "> <label for="toggleForm" class="btn-open-form btn-primary">
+        <span class="mobile-title"><i class="fa-solid fa-plus"></i></span>
+
+        <!-- <span class="pc-title "><i class="fa-solid fa-plus"></i> Thêm địa chỉ mới</span> -->
+        <span class="pc-title " (click)="resetForm()"  type="button" data-bs-toggle="modal" data-bs-target="#dang-ky-dia-chi-profile"><i class="fa-solid fa-plus"></i> Thêm địa chỉ mới</span>
+
+        <!-- <button
+      type="button" data-bs-toggle="modal" data-bs-target="#dang-ky-dia-chi-profile">
+      Đăng ký một địa chỉ mới</button>  -->
+      </label>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let address of address">
+      <td>
+        <div class="address-item">
+          <a class="address-thumb">
+            <img src="https://cdn-icons-png.flaticon.com/512/4942/4942358.png" alt="address" />
+          </a>
+          <div class="address-info">
+            <!-- Hiển thị tên đường, quận, tỉnh, v.v. -->
+            <h4 class="address-title">
+              <a>{{ address.street }}, {{ address.district }}, {{ address.ward }}, {{ address.province }}</a>
+            </h4>
+            <!-- Hiển thị tên người nhận -->
+            <div class="text-lg text-medium text-muted"></div>
+            <!-- Hiển thị số điện thoại -->
+            <div>
+              Số Điện Thoại Nhận Hàng:
+              <div class="d-inline text-success">{{address.phoneNumber}}</div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" id="flexSwitchCheckChecked"
+                       type="radio"
+                       name="defaultAddress"
+                       [id]="'address' + address.id"
+                       [checked]="address.isDefault"
+                       (change)="onAddressDefaultChange(address)"
+                >
+
+                <label class="form-check-label" for="flexSwitchCheckChecked">Đặt làm địa chỉ mặc
+                  định</label>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="text-center">
+        <label
+          for="toggleForm"
+          class="btn-open-form btn-primary"
+        >
+              <span
+                class="pc-title"
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#dang-ky-dia-chi-profile"
+                (click)="editAddress(address)">
+
+
+               Sửa</span
+              >
+
+        </label>
+      </td>
+      <td >
+              <span
+                class="btn btn-outline-danger"
+                type="button"
+                (click)="confirmDelete(address)"
+              >  Xóa</span
+              >
+      </td>
+    </tr>
+
+
+    </tbody>
+  </table>
+</div>
+
+
+
+<div class="container">
+
+
+
+  <div class="modal" id="dang-ky-dia-chi-profile" tabindex="-1" aria-labelledby="modal-new-address"  aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title text-uppercase">  {{ NewAddress.id === 0 ? 'Thêm địa chỉ mới' : 'Chỉnh sửa địa chỉ' }}</h3>
+          <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Hủy"></button>
+        </div>
+        <div class="modal-body">
+          <div class="wrapper">
+            <form #addressForm="ngForm" novalidate class="form-new-address">
+
+              <!-- Tên -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Tên&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" maxlength="30" name="givenName" placeholder="Vui lòng nhập tên của bạn"
+                         required [(ngModel)]="NewAddress.lastName" #givenName="ngModel"
+                         [ngClass]="{'is-invalid': givenName.invalid && givenName.touched}">
+                  <div *ngIf="givenName.invalid && givenName.touched" class="invalid-feedback">
+                    <small *ngIf="givenName.errors?.required">Tên không được để trống.</small>
+                    <small *ngIf="givenName.errors?.maxlength">Tên tối đa 30 ký tự.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Họ -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Họ&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" maxlength="30" name="familyName" placeholder="Vui lòng nhập họ của bạn"
+                         required [(ngModel)]="NewAddress.firstName" #familyName="ngModel"
+                         [ngClass]="{'is-invalid': familyName.invalid && familyName.touched}">
+                  <div *ngIf="familyName.invalid && familyName.touched" class="invalid-feedback">
+                    <small *ngIf="familyName.errors?.required">Họ không được để trống.</small>
+                    <small *ngIf="familyName.errors?.maxlength">Họ tối đa 30 ký tự.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tỉnh -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Tỉnh&nbsp;</label>
+                <div class="col-sm-9">
+                  <select class="form-select" required name="state"  [(ngModel)]="selectedProvince" #province="ngModel"
+                          (change)="onProvinceChange($event)"
+                          [ngClass]="{'is-invalid': province.invalid && province.touched}">
+                    <option value="">Chọn tỉnh/thành</option>
+                    <option *ngFor="let province of provinces" [value]="province.code">{{ province.name }} </option>
+                  </select>
+                  <div *ngIf="province.invalid && province.touched" class="invalid-feedback">
+                    <small>Vui lòng chọn tỉnh/thành.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quận/Huyện -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Quận/Huyện:</label>
+                <div class="col-sm-9">
+                  <select
+                    class="form-select"
+                    required
+                    [(ngModel)]="selectedDistrict"
+                    #district="ngModel"
+                    (change)="onDistrictChange($event)"
+                    [disabled]="!selectedProvince"
+                    [ngClass]="{'is-invalid': district.invalid && district.touched}">
+                    <option value="">Chọn quận/huyện</option>
+                    <option *ngFor="let district of districts" [value]="district.code">
+                      {{ district.name }}
+                    </option>
+                  </select>
+
+
+
+                  <div *ngIf="district.invalid && district.touched" class="invalid-feedback">
+                    <small>Vui lòng chọn quận/huyện.</small>
+                  </div>
+                </div>
+              </div>
+              <!-- Phường/Xã -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Phường/Xã:</label>
+                <div class="col-sm-9">
+                  <select
+                    class="form-select"
+                    required
+                    [(ngModel)]="selectedWard"
+                    #ward="ngModel"
+                    (change)="onWardChange($event)"
+                    [disabled]="!selectedDistrict"
+                    [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
+                    <option value="">Chọn phường/xã</option>
+                    <option *ngFor="let ward of wards" [value]="ward.code">
+                      {{ ward.name }}
+                    </option>
+                  </select>
+                  <div *ngIf="ward.invalid && ward.touched" class="invalid-feedback">
+                    <small>Vui lòng chọn phường/xã.</small>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <!-- Chi tiết địa chỉ -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Chi tiết địa chỉ&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" maxlength="70" name="street" placeholder="Nhập địa chỉ chi tiết"
+                         required [(ngModel)]="NewAddress.street" #street="ngModel"
+                         [ngClass]="{'is-invalid': street.invalid && street.touched}">
+                  <div *ngIf="street.invalid && street.touched" class="invalid-feedback">
+                    <small *ngIf="street.errors?.required">Địa chỉ không được để trống.</small>
+                    <small *ngIf="street.errors?.maxlength">Tối đa 70 ký tự.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Điện thoại -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Điện thoại&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" name="phone" placeholder="Nhập số điện thoại"
+                         pattern="^0[235789][0-9]{8,9}$" required [(ngModel)]="NewAddress.phoneNumber" #phone="ngModel"
+                         [ngClass]="{'is-invalid': phone.invalid && phone.touched}">
+                  <div *ngIf="phone.invalid && phone.touched" class="invalid-feedback">
+                    <small *ngIf="phone.errors?.required">Số điện thoại không được để trống.</small>
+                    <small *ngIf="phone.errors?.pattern">Số điện thoại không hợp lệ.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Nút xác nhận -->
+              <div class="row g-3">
+                <div class="col">
+                  <button class="btn btn-address" [disabled]="addressForm.invalid"
+                          style="padding: 10px 100px; background-color: #1b1b1b; color: #ffffff"
+                          type="button" (click)="isUpdate ? updateAddress() : addNewAddress()">
+                    {{ isUpdate ? 'Cập nhật' : 'Xác nhận' }}
+                  </button>
+                </div>
+                <div class="col">
+                  <button class="btn btn-address border" style="padding: 10px 100px; color: #1b1b1b"
+                          type="button" data-bs-dismiss="modal">Huỷ</button>
+                </div>
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

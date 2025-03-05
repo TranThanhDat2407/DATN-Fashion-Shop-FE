@@ -1,0 +1,119 @@
+<div class="container mt-5"  >
+  <h1 class="mt-5 pt-3 fw-semibold">BẢNG KÍCH THƯỚC</h1>
+  <p class="mt-4">So sánh kích thước với sản phẩm khác.</p>
+  <hr>
+  <div class="container my-5">
+    <div class="align-items-center">
+      <!-- Hình ảnh sản phẩm -->
+      <div class="d-flex">
+        <div class="me-5">
+          <img [src]="product.image" [alt]="product.name" class="img-fluid">
+        </div>
+        <!-- Thông tin sản phẩm -->
+        <div class="">
+          <h2 class="fw-medium">{{ product.name }}</h2>
+          <p class="text-black">Mã sản phẩm: {{ product.code }}</p>
+        </div>
+      </div>
+      <!-- Kích cỡ -->
+      <div class="size-picker mt-5">
+        <div class="d-flex justify-content-between" style="width: auto;">
+          <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal">
+                <span class="">Kích cỡ:
+                  <span class="">&nbsp;{{ product.gender }}&nbsp;</span>S
+                </span>
+          </p>
+        </div>
+        <dl>
+          <div *ngFor="let size of product.sizes" class="size-item">
+            <dt>
+              <input
+                type="radio"
+                [value]="size"
+                name="product-color-picker"
+                id="product-size-picker-{{ size }}"
+                class="color-input"
+                (click)="selectSize(size)"
+                [checked]="size === selectedSize"
+              >
+              <label
+                [for]="'product-size-picker-' + size"
+                class="fr-chip-label"
+              >
+                <span class="fr-chip-text">{{ size }}</span>
+              </label>
+            </dt>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+  </div>
+
+  <!--      Bảng kích thước-->
+  <div class="container my-4">
+    <!-- Phần tiêu đề -->
+    <p class="fw-normal">Các thông số này dựa trên kích thước của sản phẩm hoàn thiện.</p>
+
+    <!-- Đơn vị chọn -->
+    <div class="mb-3">
+      <span>Đơn vị: <span class="fw-bold text-decoration-none text-dark me-3">CM</span></span>
+
+    </div>
+
+    <!-- Bảng kích thước -->
+    <table class="table table-bordered align-middle text-center">
+      <thead class="table-secondary">
+      <tr>
+        <th *ngFor="let title of sizeDetails.title" class="fw-normal">{{ title }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
+        *ngFor="let detail of sizeDetails.value"
+        [ngClass]="{ 'fw-bold table-active': detail.size === selectedSize }"
+      >
+        <td>{{ detail.size }}</td>
+        <td *ngFor="let value of detail.details">{{ value }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- Thông báo -->
+  <div class="compare-container my-4">
+
+    <p class="compare-header">Bạn có thể thêm 20 sản phẩm để so sánh kích cỡ.</p>
+
+    <!-- Nút Thêm sản phẩm khác -->
+    <div class="compare-add-product mb-3">
+      <button class="compare-btn btn btn-outline-dark px-5 fw-bold">THÊM SẢN PHẨM KHÁC</button>
+    </div>
+
+    <!-- Các liên kết -->
+    <ul class="compare-links list-unstyled">
+      <li><a href="#" class="compare-link text-black">Hướng dẫn chọn chiều dài theo kiểu dáng</a></li>
+      <li><a href="#" class="compare-link text-black">Xem số đo cơ thể</a></li>
+      <li><a href="#" class="compare-link text-black">Cách đo kích thước</a></li>
+    </ul>
+
+    <!-- Ghi chú -->
+    <div class="compare-notes mt-4">
+      <p class="compare-note-header fw-bold">*Lưu ý</p>
+      <ul class="compare-note-list list-unstyled">
+        <li>- Một số sản phẩm không thể hiển thị vì không có dữ liệu.</li>
+        <li>- Dựa trên tính chất vải, kích cỡ có thể có sự khác biệt khoảng 1cm-2cm (1cm-3cm đối với thắt lưng).</li>
+        <li>- Kích thước sản phẩm là số đo của sản phẩm thực tế.</li>
+        <li>- Dù mã kích thước giống nhau, cảm giác vừa vặn khi mặc sẽ khác nhau tùy theo thiết kế của từng sản phẩm.</li>
+        <li>- Đối với các sản phẩm có nếp gấp (xếp ly), kích thước được đo khi nếp gấp (xếp ly) mở ra.</li>
+        <li>- Kích thước ghi trên tag sản phẩm là kích thước cơ thể.</li>
+        <li>- Để biết kích thước cơ thể, vui lòng kiểm tra "View body dimensions".</li>
+      </ul>
+    </div>
+
+    <!-- Nút Quay lại -->
+    <div class="compare-back-btn mt-4">
+      <button class="btn btn-outline-dark px-5 fw-bold">QUAY LẠI CHI TIẾT SẢN PHẨM</button>
+    </div>
+  </div>
+
+</div>

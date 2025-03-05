@@ -1,0 +1,39 @@
+
+<app-header-admin title_header="Coupon" title_btn="Add Item"
+                  routerLinkString="/admin/edit_coupon"></app-header-admin>
+
+<div class="p-6 bg-gray-100 min-h-screen">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-xl font-bold">Coupon Management</h1>
+    <a routerLink="/admin/edit_coupon" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+      Add Coupon
+    </a>
+  </div>
+
+  <!-- 🔍 Search Filters -->
+  <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+    <input [(ngModel)]="searchKeyword"
+           (ngModelChange)="loadCoupons()"
+           type="text"
+           placeholder="Search anything..."
+           class="p-2 border rounded w-full">
+  </div>
+
+
+
+  <!-- Coupon Table -->
+
+  <app-table *ngIf="coupons"
+             [currentPage]="currentPage"
+             [tableData]="coupons?.content?.flat() || []"
+             [dataPage]="coupons"
+             [tableHeaders]="['code', 'name','imageUrl','discountType','discountValue', 'expirationDate','userIds','description','button' ]"
+             [routerLinkString]="'/admin/edit_coupon'"
+             (pageChanged)="onPageChange($event)"
+             [typeImage] = "'coupons'"
+  >
+  </app-table>
+
+
+
+</div>

@@ -1,0 +1,42 @@
+.modal {
+  --bs-modal-width: 770px;
+}
+
+.modal-content{
+  padding: 20px;
+  border-radius: 0;
+}
+.fr-icon{
+  background-image: url(https://asset.uniqlo.com/g/icons/required_error.svg);
+}
+//.fr-icon.required {
+//  background-image: url(https://asset.uniqlo.com/g/icons/required.svg);
+//}
+//.fr-icon.chevron_updown {
+//  background-image: url(https://asset.uniqlo.com/g/icons/chevron_updown.svg);
+//}
+.btn-address{
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.col-form-label{
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+
+}
+.form-control, .form-select{
+  font-size: 13px;
+  padding: 12px;
+  border-radius: 0;
+  border:0.5px solid rgb(97% 97% 97%);
+  background-color: rgb(97% 97% 97%);
+  box-shadow: rgb(0% 0% 0% / 0) 0px 1px 0px 0px;
+  color: rgb(11% 11% 11%);
+  letter-spacing: 0.32px;
+  line-height: 23.536px;
+
+}
+

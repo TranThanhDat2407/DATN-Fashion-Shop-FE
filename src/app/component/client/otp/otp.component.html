@@ -1,0 +1,115 @@
+<!-- <div class="container">
+    <div class="textLink" style="margin-left: 40px; padding: 10px;"><span style="
+      font-family:  'Kanit', sans-serif; font-size: 17px;font-weight: 500;
+      ">Home</span>
+        <span style="padding: 5px;">/</span>
+        <span style="color: #8ba1b0; font-size: 12px;font-weight: 500;">Products</span>
+        <span style="padding: 5px;">/</span>
+        <span style="color: #8ba1b0; font-size: 12px;font-weight: 500;">Product detail</span>
+    </div>
+</div> -->
+<!-- CONTENT -->
+<div class="container-fluid">
+  <div class="background-box">
+    <img src="../../../assets/images/background2.avif" alt="">
+    <div class="overlay"></div>
+  </div>
+  <div class="content-box" style="padding-top: 70px;">
+
+    <div class="container p-5 border border-1 mt-5 " style="background-color: rgba(255, 255, 255, 0.6);">
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 signintext">
+          <h2>QUÊN MẬT KHẨU</h2>
+          <p>Hãy nhớ mạt khẩu của bạn đi, đừng quên nữa</p>
+          <form #OtpForm="ngForm" (ngSubmit)="onSubmit()">
+            <div class="row form-design">
+              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
+
+
+                <label class="form-label fw-bold" >MÃ OTP </label>
+                <input class="form-control "
+                       type="text"
+                       id="otp"
+                       name="otp"
+                       [(ngModel)]="otp"
+                       #otpCtrl="ngModel"
+                       required
+                       pattern="^\d{6}$"
+                />
+
+                <div *ngIf="otpCtrl.touched && otpCtrl.invalid" class="error mt-2">
+                  <div *ngIf="otpCtrl.errors?.['required']" class="text-danger">Vui lòng nhập OTP.</div>
+                  <div *ngIf="otpCtrl.errors?.['pattern']" class="text-danger">OTP phải là 6 chữ số.</div>
+                </div>
+
+              </div>
+
+              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
+                <div class="row">
+                  <div class="col-9 ">
+
+
+                    <label class="form-check-label"
+                           style="font-size: 18px; color:#3896c2 ;"><a href="">Gửi mã lại
+                    </a> </label>
+
+
+                  </div>
+
+
+                </div>
+              </div>
+
+              <!-- Submit button -->
+              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-4">
+                <div class="anim-btn" style="margin-left: 10px;">
+                  <button type="submit" class="btnSignin slide_leftbtnSignin">Xác thực OTP </button>
+                </div>
+
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6"
+             style="background-color: rgb(255, 255, 255,0.4); border: 1px solid
+                 #ebeced; border-radius: 10px; margin-top: -20px;">
+          <div class="row form-design " style="padding-left: 10px;padding-right: 5px;">
+            <h2>BẠN ĐÃ CÓ TÀI KHOẢN ? </h2>
+            <p>Hãy đăng nhập ngay để có thể nhận được các dịch vụ đặc biệt cho riêng bạn như kiểm tra
+              lịch sử mua hàng và nhận phiếu giảm giá cho thành viên. Nếu chưa có hãy đăng ký ngay</p>
+          </div>
+
+
+
+          <div class="row">
+            <div class="col-12 col-sm-5 col-md-5" style="margin-right: -15px;">
+
+              <div class="btnLogin slide_leftbtnLogin">ĐĂNG KÝ </div>
+
+
+            </div>
+            <div class="col-12 col-sm-7 col-md-7">
+
+              <div class="btnLoginWithGoogle slide_leftbtnbtnLoginWithGoogle">
+                ĐĂNG NHẬP VỚI  <i></i>
+                <i style="color: #4285f4;" class="ggText">G</i>
+                <i style="color: #ea4335;" class="ggText">o</i>
+                <i style="color: #F4B400;" class="ggText">o</i>
+                <i style="color: #4285f4;" class="ggText">g</i>
+                <i style="color: #34a853;" class="ggText">l</i>
+                <i style="color: #ea4335;" class="ggText">e</i>
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>

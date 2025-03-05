@@ -1,0 +1,57 @@
+<div class="container-menu">
+  <div class="header-menu" [class.activeRespone]="isActive">
+    <img src="../../../../assets/images/admin.png" alt="" width="32">
+    <h6 class="menu-item" [class.activeRespone]="isActive"><span
+      class="menu-mini">STORE</span></h6>
+  </div>
+  <div class="menu-aside">
+    <div class="content-menu">
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'dashboard']"
+           routerLinkActive="active-routerLink" data-bs-toggle="tooltip" data-bs-placement="top" title="This is a tooltip">
+        <img src="../../../../assets/images/dashboard.png" width="18" alt=""><span
+        class="menu-mini">Dashboard</span>
+      </div>
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'checkout']"
+           routerLinkActive="active-routerLink">
+        <img src="../../../../assets/images/category.png" width="18" alt=""><span
+        class="menu-mini">Checkout</span>
+      </div>
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'stock']"
+           routerLinkActive="active-routerLink">
+        <img src="../../../../assets/images/value.png" width="18" alt=""><span
+        class="menu-mini">Stock</span>
+      </div>
+
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'transfer']"
+           routerLinkActive="active-routerLink">
+        <img src="../../../../assets/images/value.png" width="18" alt=""><span
+        class="menu-mini">Inventory Transfer</span>
+      </div>
+
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'transfer']"
+           routerLinkActive="active-routerLink">
+        <img src="../../../../assets/images/value.png" width="18" alt=""><span
+        class="menu-mini">Staff Manager</span>
+      </div>
+
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'transfer']"
+           routerLinkActive="active-routerLink">
+        <img src="../../../../assets/images/value.png" width="18" alt=""><span
+        class="menu-mini">Order</span>
+      </div>
+
+
+    </div>
+    <div class="footer-menu">
+      <button class="menu-item" [class.activeRespone]="isActive">
+        <img src="../../../../assets/images/turn-off.png" width="18" alt="">
+        <span class="menu-mini" (click)="logout()">
+                Log Out
+            </span>
+      </button>
+
+    </div>
+  </div>
+
+
+</div>

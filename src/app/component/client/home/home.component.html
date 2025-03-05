@@ -1,0 +1,38 @@
+<div class="carousel">
+<!--    <div class="carousel-item">-->
+<!--      <img src="../../../assets/images/baner1.jpg" alt="Image 1" style="height: 100%; width: 100%">-->
+<!--      <div class="carousel-caption  ">-->
+<!--        <div class="carousel-logo">-->
+<!--          <img src="//im.uniqlo.com/global-cms/spa/res774074c64bce9794ee79384b777a4082fr.png" alt="PUFFTECH">-->
+<!--        </div>-->
+
+<!--        <h5 class="carousel-title">Bộ Sưu Tập PUFTECH </h5>-->
+<!--        <p class="carousel-product-title">Quần Chino Dáng Rộng</p>-->
+<!--      </div>-->
+<!--    </div>-->
+
+  <div  class="carousel-item" *ngFor="let banner of banners | async">
+    <!-- Nếu mediaUrl là video -->
+    <video #videoPlayer *ngIf="banner.mediaUrl?.endsWith('.mp4'); else imageTemplate"
+           [muted]="true" [autoplay]="true" [loop]="true" playsinline>
+      <source [src]="'http://localhost:8080/uploads/images/banners/media/' + banner.mediaUrl" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Nếu mediaUrl không phải là video, dùng img -->
+    <ng-template #imageTemplate>
+      <img [src]="'http://localhost:8080/uploads/images/banners/media/' + banner.mediaUrl" alt="Image">
+    </ng-template>
+
+    <div class="carousel-caption">
+      <div class="carousel-logo">
+        <img [src]="'http://localhost:8080/uploads/images/banners/logo_images/' + banner.logoUrl" alt="PUFFTECH">
+      </div>
+
+      <h5 class="carousel-title">{{ banner.title }}</h5>
+      <p class="carousel-product-title">{{ banner.subtitle }}</p>
+    </div>
+  </div>
+
+</div>
+<!--<app-nav-bottom/>-->

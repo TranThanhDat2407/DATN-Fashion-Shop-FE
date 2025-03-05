@@ -1,0 +1,83 @@
+<div class="container mt-5">
+  <div class="container">
+    <h1 class="mt-5 pt-3 fs-3">{{ "HÌNH ẢNH CHI TIẾT" | translate }}</h1>
+    <hr>
+    <div class="mt-3 row">
+      <div class="col-md-4">
+        <img class="img-fluid" [src]="'http://localhost:8080/uploads/images/products/'+ dataMediaInfo?.mediaUrl"
+          [alt]="dataMediaInfo?.mediaType">
+
+      </div>
+
+
+      <div class="col-md-8">
+        <span>{{ "Mẫu cao" | translate }}: {{dataMediaInfo?.modelHeight}} cm</span>
+        <ul>
+          <li *ngFor="let item of dataDetailMedia; let i = index"
+          >
+            <hr>
+            <div class="container d-flex "
+                 [routerLink]="['/client', currentCurrency, currentLang,'detail_product', item?.productId,
+                                                                                    item.colorId,
+                                                                                    item.sizeId]">
+              <div class="card product-card">
+                <div class="product-image">
+                  <img class="img-fluid"
+                    [src]="'http://localhost:8080/uploads/images/products/' + getMediaUrl(item.productId)"
+                    alt="Product Image">
+                </div>
+                <div class="card-body product-details" >
+                  <h6 class="text-uppercase fw-normal">
+                    {{getStringCateProduct(currentLang, item.productId)}}
+
+                  </h6>
+                  <p  class="text-uppercase fw-bolder">{{getNameProduct(item.productId)}}</p>
+                  <p ><strong>{{ "Màu" | translate }}:</strong> {{item.colorName}}</p>
+                  <p><strong>{{ "Kích thước" | translate }}: </strong> {{getStringCateProduct(currentLang, item.productId)}} {{item.size}}</p>
+                  <div style="font-weight: 600;">
+                    <span *ngIf="item.basePrice === item.salePrice" class="product-item-priceInit">
+                      {{ getCurrencyPrice(item.basePrice ?? 0, currentCurrencyDetail?.rateToBase ??
+                      1,currentCurrencyDetail?.code ?? '' )}}
+                    </span>
+                    <!-- Nếu basePrice > salePrice, hiển thị cả hai giá -->
+                    <span *ngIf="item.basePrice != item.salePrice">
+                      <span class="product-item-priceInit" style="text-decoration: line-through;">
+                        {{ getCurrencyPrice(item.basePrice ?? 0, currentCurrencyDetail?.rateToBase ??
+                        1,currentCurrencyDetail?.code ?? '' )}}
+                      </span>
+                      <br>
+                      <span class="product-item-priceSale" >
+                        {{ getCurrencyPrice(item.salePrice ?? 0, currentCurrencyDetail?.rateToBase ??
+                        1,currentCurrencyDetail?.code ?? '' )}}
+                         <span style="font-size: 0.8rem;margin-left: 10px;" *ngIf="dataDetailsProduct?.promotion">{{ "Giảm giá hết thời hạn" | translate }}
+                          {{getPromotionProduct(item.productId)}}
+                        </span>
+                      </span>
+
+
+                    </span><br>
+                  </div>
+                </div>
+                <button class="btn btn-icon" (click)="$event.stopPropagation();toggleWishlist(userId,item.productId,item.colorId);item.isInWishlist = !item.isInWishlist">
+                  <i *ngIf="item.isInWishlist" class="fa-solid fa-heart" style="color: #ff0000;"></i>
+                  <i *ngIf="!item.isInWishlist" class="fa-regular fa-heart"></i>
+                </button>
+              </div>
+            </div>
+
+          </li>
+
+        </ul>
+        <hr>
+        <div class="d-flex ms-3 mb-3">
+          <button (click)="goBack()" class="btn bg-white text-black border border-2 px-4 py-2 text-uppercase">
+            {{ 'back_product' | translate }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

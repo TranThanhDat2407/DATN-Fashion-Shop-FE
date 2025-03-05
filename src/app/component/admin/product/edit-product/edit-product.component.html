@@ -1,0 +1,80 @@
+<app-header-admin [title_header]="'Product'" />
+<div class="container">
+    <div class="section">
+        <div class="card">
+            <h3>Product Image</h3>
+            <label>Tag</label>
+            <input type="text" value="Sunscreen, Sun">
+            <label>Product Image</label>
+            <div style="background: #ddd; height: 150px; display: flex; align-items: center; justify-content: center;">
+                <span>Image Placeholder</span>
+            </div>
+            <button>Replace</button>
+            <button>Remove</button>
+            <button>Add Another Image</button>
+        </div>
+    </div>
+    <div class="section-content">
+        <div class="section">
+            <div class="card">
+                <h3>General Information</h3>
+                <label>Product Name</label>
+                <input type="text" placeholder="Enter product name">
+
+                <label>Product Type</label>
+                <select>
+                    <option>Moisturizer</option>
+                </select>
+
+                <label>Product Merk</label>
+                <select>
+                    <option>Scarlett Whitening</option>
+                </select>
+
+                <label>Price</label>
+                <input type="text" value="$100.00">
+
+                <label>Discount</label>
+                <input type="text" value="20%">
+
+                <label>Discount Price</label>
+                <input type="text" value="$80.00">
+
+                <label>Business Descriptions</label>
+                <textarea placeholder="Description"></textarea>
+
+                <label>Expiration Date</label>
+                <input type="date">
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="card">
+                <h3>Manage Stock</h3>
+                <label>Stock Keeping Unit</label>
+                <input type="text" value="SKC001380003">
+
+                <label>Stock</label>
+                <input type="text" value="2,000">
+
+                <label>Minimum Stock</label>
+                <input type="text" value="10">
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="card">
+                <h3>Instructions and Material</h3>
+                <label>Instructions</label>
+                <ul>
+                    <li>Cleanse facial skin with cleanser</li>
+                    <li>Apply moisturizer evenly</li>
+                </ul>
+                <label>Material Used</label>
+                <input type="text" placeholder="Enter material used">
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,207 @@
+<app-store-header [title_header]="'Dashboard'" [title_btn]="'Statistic'" />
+<div class="container-fluid row">
+  <div class="col-12 col-md-6 col-xl-3 ">
+    <div class="statis-item  ">
+      <div class="row">
+        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2  ">
+          <span>Today's Money</span>
+          <strong>$53</strong>
+        </div>
+        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4 ">
+          <div class="item-icon">
+            <img src="https://img.icons8.com/?size=100&id=9gf6ZL61hgEI&format=png&color=ffffff"
+                 alt="icon item Dashboard" width="30" height="30">
+          </div>
+        </div>
+      </div>
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
+      <div class="item-statis-time">
+        <span style="color: #4caf50;">+55% </span> than last week
+      </div>
+    </div>
+
+  </div>
+  <div class="col-12 col-md-6 col-xl-3 ">
+    <div class="statis-item  ">
+      <div class="row">
+        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
+          <span>Today's Users</span>
+          <strong>2300</strong>
+        </div>
+        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
+          <div class="item-icon">
+            <img src="https://img.icons8.com/?size=100&id=98957&format=png&color=ffffff"
+                 alt="icon item Dashboard" width="30" height="30">
+          </div>
+        </div>
+      </div>
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
+      <div class="item-statis-time">
+        <span style="color: #4caf50;">+55% </span> than last week
+      </div>
+    </div>
+
+  </div>
+  <div class="col-12 col-md-6 col-xl-3 ">
+    <div class="statis-item  ">
+      <div class="row">
+        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
+          <span>Today's Order</span>
+          <strong>$53</strong>
+        </div>
+        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
+          <div class="item-icon">
+            <img src="https://img.icons8.com/?size=100&id=4255&format=png&color=ffffff"
+                 alt="icon item Dashboard" width="30" height="30">
+          </div>
+        </div>
+      </div>
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
+      <div class="item-statis-time">
+        <span style="color: #f44335;">-2% </span> than yesterday
+      </div>
+    </div>
+
+  </div>
+  <div class="col-12 col-md-6 col-xl-3 ">
+    <div class="statis-item  ">
+      <div class="row">
+        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
+          <span>Today's Cancel Order</span>
+          <strong>3</strong>
+        </div>
+        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
+          <div class="item-icon">
+            <img src="https://img.icons8.com/?size=100&id=114052&format=png&color=ffffff"
+                 alt="icon item Dashboard" width="30" height="30">
+          </div>
+        </div>
+      </div>
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
+      <div class="item-statis-time">
+        <span style="color: #4caf50;">+55% </span> than last week
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="col-12 col-md-12 col-lg-6  ">
+    <div class="chart-content line-chart-box">
+      <span>Daily Sales</span>
+      <label>Check and edit category</label>
+      <app-line-chart [labels]="labels" [datasetOne]="data" [datasetTwo]="data_dou2" />
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
+      <div class="ps-4 p-3">
+        <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
+        <label>updated 4 min ago</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-12 col-lg-6 ">
+    <div class="chart-content line-chart-box">
+      <span>Daily Sales</span>
+      <label>Check and edit category</label>
+      <app-bar-chart [lable]="lable2" [data_col_one]="data2" [data_col_two]="data_dou2" [lable_col]="lable_col" />
+
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
+      <div class="ps-4 p-3">
+        <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
+        <label>updated 4 min ago</label>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-12 col-md-12  col-lg-8">
+    <div class="chart-content line-chart-box">
+      <span>Daily Sales</span>
+      <label>Check and edit category</label>
+      <app-bar-chart [lable]="labels" [data_col_one]="data" />
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
+      <div class="ps-4 p-3">
+        <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
+        <label>updated 4 min ago</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-12  col-md-12 col-lg-4 ">
+    <div class="chart-content line-chart-box pb-4">
+      <span>Daily Sales</span>
+      <label>Check and edit category</label>
+      <app-doughnut-chart [lable]="labels" [data]="data" />
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
+      <div class="ps-4 p-3">
+        <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
+        <label>updated 4 min ago</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-12  col-md-12 col-lg-3 ">
+    <div class="chart-content line-chart-box  ">
+      <span>Daily Sales</span>
+      <label>Check and edit category</label>
+
+
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
+      <div class="ps-4 p-3">
+        <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
+        <label>updated 4 min ago</label>
+      </div>
+    </div>
+  </div>
+  <div class="col-12  col-md-12 col-lg-9  ">
+    <div class="chart-content line-chart-box  ">
+      <span>Daily Sales</span>
+      <label>Check and edit category</label>
+      <app-table [tableHeaders]="headers" [tableData]="dataTable" [changePage]="false"/>
+
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
+      <div class="ps-4 p-3">
+        <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
+        <label>updated 4 min ago</label>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+
+
+
+  <!-- <app-bar-chart [lable]="labels" [data]="data"/> -->
+
+
+
+
+
+
+
+
+
+
+
+</div>

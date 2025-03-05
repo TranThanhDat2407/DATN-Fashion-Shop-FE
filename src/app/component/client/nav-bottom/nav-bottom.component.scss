@@ -1,0 +1,483 @@
+.body-category{
+  height: 34rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  z-index: 10; /* Lớp phủ nằm trên các phần tử khác */
+  display: flex;
+  justify-content: flex-start; /* Sửa từ center thành flex-start */
+  align-items: flex-start; /* Sửa từ center thành flex-start */
+  padding-top: 4.5rem; /* Nếu cần khoảng cách phía trên */
+}
+/* Bottom Navigation Styling */
+.bottom-navigation {
+    width: 100%;
+    height: 112px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent; /* Transparent Nav */
+    z-index: 9999; /* Cao hơn dropdown */
+  }
+
+  /* Bottom Navigation Icon */
+  .bottom-navigation-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff; /* White Background */
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: #000; /* Black Icon */
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 9999; /* Cao hơn dropdown */
+    position: fixed;
+    top: 85%;
+  }
+
+  .btn1{
+    left: 33%;
+    top: 86%;
+  }
+
+  .btn2{
+    left: 48%;
+
+  }
+
+  .btn3{
+    left: 63%;
+    top: 86%;
+  }
+
+  /* Larger Search Button */
+  .bottom-navigation-icon-wrapper-center {
+    width: 63px;
+    height: 63px;
+  }
+
+  .gap-5 {
+    gap: 9.8rem !important;
+  }
+
+  .px-5 {
+    padding-right: 11rem !important;
+    padding-left: 11rem !important;
+  }
+
+  .nav-icon.active {
+    background-color: #000; /* Nền đen */
+    color: #fff; /* Màu icon trắng */
+  }
+
+  .X-icon{
+    font-weight: 50;
+  }
+
+  /* Category Images */
+  .fullscreen-dropdown img {
+    object-fit: contain;
+  }
+
+  /* Fullscreen Dropdown */
+  .fullscreen-dropdown {
+    position: fixed; /* Cố định ở toàn màn hình */
+    bottom: 0; /* Bắt đầu từ phía dưới */
+    left: 0;
+    right: 0;
+    width: calc(100% + 5px); /* Chiếm toàn bộ chiều rộng */
+    height: -100%; /* Trừ chiều cao của bottom nav (112px) */
+    background-color: #fff; /* Nền trắng */
+    z-index: 8888; /* Dưới 3 nút */
+    overflow-y: auto; /* Cuộn khi nội dung quá dài */
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Search Bar Styling */
+  .fullscreen-dropdown input {
+    width: 80%;
+    margin: 1rem auto 4rem auto;
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Nút Close Icon */
+  .nav-icon.active {
+    background-color: #000;
+    color: #fff;
+  }
+
+  /* Close Button */
+  .close-btn {
+    position: absolute;
+    bottom: calc(112px / 2); /* Canh giữa với chiều cao của bottom nav */
+    left: 50%; /* Đặt nút chính giữa */
+    transform: translate(-50%, 50%); /* Canh chỉnh cho chuẩn xác */
+    width: 63px;
+    height: 63px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000; /* Nền đen */
+    color: #fff; /* Icon trắng */
+    border-radius: 50%;
+    border: none;
+    font-size: 1.5rem;
+    z-index: 9999; /* Đảm bảo nằm trên cùng */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .categories{
+    width: 80%;
+  }
+
+  /* Category Item Styling */
+  .category-item {
+    display: flex; /* Sử dụng flexbox để căn chỉnh ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-content: flex-start; /* Canh trái */
+    gap: 10px; /* Khoảng cách giữa ảnh và tên category */
+    opacity: 0; /* Ẩn ban đầu */
+    transform: translateY(20px) translateX(-20px); /* Dịch chuyển từ dưới và trái */
+    animation: slideIn 0.8s ease forwards; /* Áp dụng animation */
+  }
+
+  /* Category Image */
+  .category-item img {
+    width: 40px; /* Điều chỉnh kích thước ảnh nhỏ lại */
+    height: 40px; /* Đảm bảo ảnh vuông */
+    object-fit: contain; /* Đảm bảo ảnh không bị méo */
+  }
+
+  /* Category Name */
+  .category-item p {
+    margin: 0; /* Xóa margin mặc định của thẻ p */
+    font-size: 1rem; /* Kích thước chữ */
+    font-weight: bold; /* Đậm chữ */
+    color: #333; /* Màu chữ */
+  }
+
+  @keyframes slideIn {
+    to {
+      opacity: 1; /* Hiển thị */
+      transform: translateY(0) translateX(0); /* Đưa về vị trí ban đầu */
+    }
+  }
+
+  //Header
+  /* Header Styles */
+  header {
+    background-color: transparent; /* Background trong suốt */
+    z-index: 1030; /* Đảm bảo header nằm trên */
+  }
+
+  /* Gạch chân màu trắng mặc định của nav-underline */
+  .nav-underline .nav-link {
+    color: #000000; /* Chữ màu trắng */
+    position: relative;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+
+  .nav-underline .nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    transition: width 0.3s ease;
+  }
+
+  /* Ẩn dấu tam giác trong dropdown */
+  .no-caret::after {
+    display: none !important;
+  }
+
+  .head-icon-global {
+    padding: 0px !important;
+    margin: 0.5rem !important;
+    border: 0px !important;
+  }
+
+  /* Loại bỏ border và shadow khi focus hoặc active */
+  .no-focus:focus,
+  .no-focus:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Dropdown Menu Custom */
+  .dropdown-custom {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 12rem;
+
+  }
+
+
+  /* Dropdown Item */
+  .dropdown-custom .dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #000;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+
+  .dropdown-menu .dropdown-custom{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+
+  .dropdown-custom .dropdown-item.active {
+    background-color: #fff; /* Nền trắng */
+    color: #000; /* Chữ đen */
+    font-weight: bold;
+  }
+
+  .dropdown-custom .dropdown-item.active i {
+    color: #000; /* Màu của icon check */
+  }
+
+  .dropdown-custom .dropdown-item:hover {
+    background-color: #f8f9fa; /* Màu xám nhạt khi hover */
+  }
+
+
+
+  .bi {
+    font-size: 1.5rem; /* Icon size */
+    color: #000000; /* Icon màu Đen */
+  }
+
+  .head-icon .bi:hover{
+    color: rgb(123, 123, 123);
+  }
+
+  .head-icon .bi{
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  .head-title{
+    font-size: 1.1rem;
+    margin-right: 5rem;
+  }
+
+  header img {
+    cursor: pointer; /* Biến con trỏ thành pointer khi hover vào logo */
+  }
+
+  .py-5 {
+    padding-top: 4rem !important;
+  }
+
+
+
+  .Search-Bar{
+    position: fixed;
+    bottom: 9rem;
+    overflow-y: auto;
+    width: 78%;
+  }
+
+  .form-control{
+    font-size: 1.2rem !important;
+  }
+
+/*-----------------------------------------------------*/
+/* Wrapper for Carousel */
+.carousel-wrapper {
+  display: flex;
+  width: 200%; /* 2 tầng: mỗi tầng chiếm 100% */
+  overflow: hidden; /* Ẩn thanh cuộn */
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-move-left {
+  transform: translateX(-50%); /* Di chuyển sang tầng 3 */
+}
+
+.carousel-move-right {
+  transform: translateX(0); /* Quay lại tầng 2 */
+}
+
+/* Categories Level Styling */
+.categories-level {
+  flex: 0 0 50%; /* Chiếm 50% chiều rộng (vì tổng là 200%) */
+  width: 100%;
+
+}
+
+.categories-level.level-3 {
+  min-height: auto; /* Đảm bảo chiều cao vừa đủ */
+}
+
+/* Ẩn thanh cuộn nhưng vẫn cho phép nội dung di chuyển */
+.carousel-wrapper::-webkit-scrollbar {
+  display: none; /* Ẩn trên WebKit (Chrome, Safari) */
+}
+
+
+
+/* Nút Quay lại */
+.btn-back {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: #fff;
+  color: #000;
+  border: 0px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+
+
+/*--------------Responsive------------------*/
+
+
+  /* Responsive Scrollable Categories */
+  @media (max-width: 1200px) {
+    .scrollable-categories {
+      max-height: 25rem; /* Giảm chiều cao tối đa trên màn hình trung bình */
+    }
+
+    .category-item img {
+      width: 30px; /* Giảm kích thước ảnh trên màn hình nhỏ hơn */
+      height: 30px;
+    }
+
+    .category-item p {
+      font-size: 0.9rem; /* Giảm kích thước chữ */
+    }
+  }
+
+  @media (max-width: 992px) {
+    .fullscreen-dropdown {
+      padding: 20px 10px; /* Giảm padding của dropdown */
+    }
+
+    .head-title {
+      font-size: 1rem; /* Giảm kích thước tiêu đề */
+      margin-right: 2rem;
+    }
+
+    .scrollable-categories {
+      max-height: 20rem; /* Giảm chiều cao khi màn hình hẹp hơn */
+    }
+
+    /* Bottom Navigation Icon */
+    .bottom-navigation-icon-wrapper {
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+    }
+
+    /* Larger Search Button */
+    .bottom-navigation-icon-wrapper-center {
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    header {
+      display: none; /* Ẩn header trên màn hình nhỏ */
+    }
+
+    .scrollable-categories {
+      max-height: 18rem;
+    }
+
+    /* Bottom Navigation Responsive */
+    .bottom-navigation {
+      height: 90px; /* Giảm chiều cao nav bottom */
+    }
+
+    .gap-5 {
+      gap: 3rem !important; /* Giảm khoảng cách giữa các icon */
+    }
+  }
+
+  @media (max-width: 576px) {
+    .category-item {
+      flex-direction: column; /* Chuyển các thành phần thành dạng dọc */
+      gap: 5px; /* Giảm khoảng cách giữa ảnh và chữ */
+    }
+
+    .fullscreen-dropdown input {
+      width: 90%; /* Giảm chiều rộng thanh search */
+    }
+
+    /* Bottom Navigation Icon */
+    .bottom-navigation-icon-wrapper {
+      width: 35px;
+      height: 35px;
+      font-size: 1rem;
+    }
+
+    /* Search Button Center */
+    .bottom-navigation-icon-wrapper-center {
+      width: 45px;
+      height: 45px;
+    }
+
+    .Search-Bar{
+      bottom: 10rem;
+      left: 5rem;
+      z-index: 20 !important;
+    }
+
+    .search-container {
+      position: relative; /* Đảm bảo hộp gợi ý bám theo input */
+    }
+
+    #suggestionsBox {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%); /* Căn giữa theo chiều ngang */
+      z-index: 12;
+      max-height: 500px;
+      overflow-y: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      background: white;
+      width: 80%; /* Đảm bảo độ rộng phù hợp */
+    }
+
+
+  }
+
+
+
+
+

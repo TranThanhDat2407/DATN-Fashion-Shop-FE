@@ -1,0 +1,25 @@
+// regular style toast
+@import 'ngx-toastr/toastr';
+
+
+
+html{
+    font-size: 16px;
+}
+@media (max-width: 900px) {
+    html{
+        font-size: 15px;
+    }
+}
+@media (max-width: 500px) {
+    html{
+        font-size: 14px;
+    }
+}
+@media (max-width: 450px) {
+    html{
+        font-size: 11px;
+    }
+}
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
