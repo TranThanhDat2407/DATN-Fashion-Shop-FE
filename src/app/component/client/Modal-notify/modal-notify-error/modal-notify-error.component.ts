@@ -1,31 +1,42 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-modal-notify-error',
   standalone: true,
-  imports: [CommonModule,TranslateModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './modal-notify-error.component.html',
   styleUrl: './modal-notify-error.component.scss'
 })
-export class ModalNotifyErrorComponent implements OnInit {
-  isModalOpen: boolean = true;
+export class ModalNotifyErrorComponent implements OnChanges {
+  @Input() isModalOpen: boolean = false;
+  isFadingOut: boolean = false;
+  constructor(private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {
-    // Ngừng cuộn trang trên toàn bộ trang
-    document.documentElement.style.overflow = 'hidden';
-    
+  ngOnChanges(changes: SimpleChanges) {
+    // Sửa lỗi: Đúng tên biến @Input
+    if (changes['isModalOpen'] && this.isModalOpen) {
+      this.autoCloseModal();
+    }
+  }
+
+  autoCloseModal() {
     setTimeout(() => {
-      this.isModalOpen = false;
-      // Khôi phục cuộn trang khi modal đóng
-      document.documentElement.style.overflow = '';
+      this.isFadingOut = true;
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.isModalOpen = false;
+        this.isFadingOut = false;
+        this.cdr.detectChanges();
+      }, 500);
     }, 1500);
   }
 
-  closeModal() {
-    this.isModalOpen = false;
-    // Khôi phục cuộn trang khi modal đóng
-    document.documentElement.style.overflow = '';
+  openModal() {
+    this.isModalOpen = true;
+    this.isFadingOut = false;
+    this.autoCloseModal();
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -9,23 +9,34 @@ import { TranslateModule } from '@ngx-translate/core';
   templateUrl: './model-notify-succsess.component.html',
   styleUrl: './model-notify-succsess.component.scss'
 })
-export class ModelNotifySuccsessComponent implements OnInit {
- isModalOpen : boolean = true
+export class ModelNotifySuccsessComponent implements OnChanges {
+  @Input() isModalOpenaa: boolean = false;
+  isFadingOut: boolean = false;
 
+  constructor(private cdr: ChangeDetectorRef) {}
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['isModalOpenaa'] && this.isModalOpenaa) {
+      this.autoCloseModal();
+    }
+  }
 
-  ngOnInit(): void {
-    document.body.classList.add('modal-open');
+  autoCloseModal() {
     setTimeout(() => {
-      this.isModalOpen = false;
-      document.body.classList.remove('modal-open');  
+      this.isFadingOut = true;
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.isModalOpenaa = false;
+        this.isFadingOut = false;
+        this.cdr.detectChanges();
+      }, 500);
     }, 1500);
   }
- 
 
   openModal() {
-    this.isModalOpen = true;
+    this.isModalOpenaa = true;
+    this.isFadingOut = false;
+    this.autoCloseModal();
   }
-
-   
 }

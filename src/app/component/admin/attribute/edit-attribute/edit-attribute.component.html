@@ -1,28 +1,60 @@
-<app-header-admin [title_header]="'Attribute'" />
-<div class="container">
-     
-    <div class="custom-select">
-        <div class="selected-item" (click)="isOpen = !isOpen">
-            <span *ngIf="selectedItem">
-                <img [src]="selectedItem.image" alt="Selected" />
-                {{ selectedItem.name }}
-            </span>
-            <span *ngIf="!selectedItem"><img src="../../../../../assets/images/color.png" width="30" alt="">
-                Choose Colors </span>
-        </div>
-    
-        <div class="dropdown" *ngIf="isOpen">
-            <input type="text" [(ngModel)]="searchText" placeholder="Tìm kiếm sản phẩm..." />
-            <ul>
-                <li *ngFor="let product of filteredProducts" (click)="selectItem(product)">
-                    <img [src]="product.image" alt="Product" />
-                    {{ product.name }}
-                </li>
-            </ul>
-        </div>
-    </div>
-    
-     
+<app-header-admin [title_header]="'Attribute'" [routerLinkString]="'/admin/list_attribute'" />
 
+<div class="container-form ">
+  <div class="box-color">
+    <h4>COLOR FORM</h4>
+    <div >
+      <!-- https://t3.ftcdn.net/jpg/04/62/93/66/360_F_462936689_BpEEcxfgMuYPfTaIAOC1tCDurmsno7Sp.jpg -->
+      <div class="item-color p-2 w-100">
+        <div class=" d-flex flex-column justify-content-center " style="width: 25%;">
+          <img [src]="imageUrl"
+               width="100%" alt="hinh">
+          <input class="form-control mt-2 " type="file" style="width: 95%;"
+                 (change)="onFileSelected($event)"
+          >
+        </div>
+        <div class=" text-start w-100">
+          <div>
+            <label for="disabledTextInput" class="form-label">Color ID </label>
+            <input type="text" [(ngModel)]="colorId" name="colorId" id="disabledTextInput" class="form-control " placeholder="Color ID"
+                   disabled>
+          </div>
+          <div>
+            <label for="disabledTextInput" class="form-label">Color Name</label>
+            <input type="text" [(ngModel)]="nameColor" name="nameColor" class="form-control" placeholder="Color Name">
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-1 mt-5 p-2">
+        <app-button [nameButton]="'Add'"  [eventClickBtnAdd]="createColor" />
+        <app-button [nameButton]="'Save'" [eventClickBtnAdd]="updateColor" />
+      </div>
+    </div>
+  </div>
+  <div class="box-size">
+    <h4>SIZE FORM</h4>
+    <div class="d-flex flex-column " >
+      <div class="item-color p-2 w-100 ">
+
+        <div class=" text-start w-100">
+          <div>
+            <label for="disabledTextInput" class="form-label">Size ID </label>
+            <input type="text" [(ngModel)]="sizeId"  name="id" id="disabledTextInput" class="form-control " placeholder="Size ID"
+                   disabled>
+          </div>
+          <div>
+            <label for="disabledTextInput" class="form-label  ">Size Name</label>
+            <input type="text" [(ngModel)]="nameSize" name="nameColor" class="form-control" placeholder="Size Name">
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-1  p-2 pt-3" style="margin-top: 60px;">
+        <app-button [nameButton]="'Add'" [eventClickBtnAdd]="createSize"/>
+        <app-button [nameButton]="'Save'"  [eventClickBtnAdd]="updateSize"/>
+      </div>
+    </div>
+  </div>
 
 </div>
