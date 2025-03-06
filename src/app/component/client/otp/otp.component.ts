@@ -5,6 +5,8 @@ import {ForgotPasswordService} from '../../../services/forgot-password/forgot-pa
 import {NavigationService} from '../../../services/Navigation/navigation.service';
 import {response} from 'express';
 import {error} from 'console';
+import {MatDialog} from '@angular/material/dialog';
+import {ModalOtpSuccessComponent} from '../Modal-notify/modal-otp-success/modal-otp-success.component';
 
 @Component({
   selector: 'app-otp',
@@ -29,6 +31,7 @@ export class OTPComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private forgotPasswordService: ForgotPasswordService,
     private router: Router,
+    private dialog: MatDialog,
     private navigationService: NavigationService,
   ) {
     // Lấy email từ query params
@@ -65,6 +68,21 @@ export class OTPComponent implements OnInit {
 
     this.navigationService.currentCurrency$.subscribe((currency) => {
       this.currentCurrency = currency;
+    });
+  }
+
+  sendOtpAgain(){
+    // Gọi API để gửi OTP qua email
+    console.log(this.email);
+    this.forgotPasswordService.forgotPassword(this.email).subscribe({
+
+      next: (response) => {
+        console.log(response);
+        this.dialog.open(ModalOtpSuccessComponent)
+      },
+      error: (error) => {
+        console.error(error);
+      }
     });
   }
 }

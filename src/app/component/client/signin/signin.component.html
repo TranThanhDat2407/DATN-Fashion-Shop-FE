@@ -98,6 +98,17 @@
                         {{ "Mật khẩu không trùng khớp." | translate }}
                       </div>
                     </div>
+                    <div class="form-check">
+                      <div>
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                               (click)="togglePassword()">
+                        <label class="form-check-label text-black" for="flexCheckDefault">
+                          {{ "Hiên mật khẩu." | translate }}
+                        </label>
+                      </div>
+                      <a class="text-success" [routerLink]="['../forgot_password']" style="text-decoration: none; color: #238bc8 !important;
+                                font-family: 'Kanit', sans-serif;">{{ "Quên mật khẩu ?" | translate }}</a>
+                    </div>
 
                     <!-- NÚT ĐĂNG KÝ -->
                     <button type="submit" class="btnSignin slide_leftbtnSignin mt-3"
