@@ -40,6 +40,8 @@ import { ModelNotifySuccsessComponent } from '../Modal-notify/model-notify-succs
 })
 export class InsertReviewComponent implements OnInit {
   validationForm: boolean = false
+  notifyError: boolean = false
+  notifySuccsess: boolean = false
 
   currentLang: string = 'vi';
   currentCurrency: string = 'vn';
@@ -192,15 +194,15 @@ export class InsertReviewComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder,
-    private navigationService: NavigationService,
-    private activeRoute: ActivatedRoute,
-    private router: Router,
-    private addressService: AddressServiceService,
-    private productService: ProductServiceService,
-    private reviewService: ReviewServiceService,
-    private toastr: ToastrService,
-    private detailProductService: DetailProductService,
-    private dialog: MatDialog
+              private navigationService: NavigationService,
+              private activeRoute: ActivatedRoute,
+              private router: Router,
+              private addressService: AddressServiceService,
+              private productService: ProductServiceService,
+              private reviewService: ReviewServiceService,
+              private toastr: ToastrService,
+              private detailProductService: DetailProductService,
+              private dialog: MatDialog
 
 
 
@@ -367,11 +369,13 @@ export class InsertReviewComponent implements OnInit {
 
     this.reviewService.createReview(this.reviewNew).subscribe(
       response => {
-        this.dialog.open(ModelNotifySuccsessComponent)
-        // this.toastr.success('Review created successfully!', 'Successfully', {
-        //   timeOut: 2000,
-        // })
+        this.notifySuccsess = false;
+        setTimeout(() => {
+          this.notifySuccsess = true;
+        }, 10);
         this.resetForm()
+        return;
+
 
       },
       error => {
@@ -484,18 +488,21 @@ export class InsertReviewComponent implements OnInit {
 
 
     if (!this.terms) {
-      this.dialog.open(ModalNotifyErrorComponent);
+      this.notifyError = false;
+      setTimeout(() => {
+        this.notifyError = true;
+      }, 10);
       return false
     }
 
 
     // Nếu có lỗi, mở modal thông báo
     if (!isValid) {
-      this.dialog.open(ModalNotifyErrorComponent);
+      this.notifyError = false;
+      setTimeout(() => {
+        this.notifyError = true;
+      }, 10);
     }
-
-
-
     return isValid;
   }
 

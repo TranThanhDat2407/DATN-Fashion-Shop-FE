@@ -1,1 +1,124 @@
-<p>list-attribute works!</p>
+<app-header-admin [title_header]="'Attribute'" [routerLinkString]="'/admin/edit_attribute'" />
+<div class="d-flex flex-column">
+  <div class="select-box">
+    <div class="content-fiter-tools">
+      <div class="tools-title" (click)="resetFiter()">
+        <i class="fa-solid fa-sort"></i>
+        <span>Filter</span>
+      </div>
+      <div class="tool-elements  ">
+        <select class="form-select" [(ngModel)]="isActive" (change)="onIsActiveChange()">
+          <option [value]="null" selected>--</option>
+          <option [value]="true">Active</option>
+          <option [value]="false">Non Avtive</option>
+        </select>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 0 10px 0 10px;margin-top: 10px;margin-bottom: 10px;">
+    <hr style="border: 0.2px solid black; margin: 0;">
+
+  </div>
+  <div class="row">
+    <div class="col-10">
+      <div class="tool-searchs row">
+        <div class="col-1 mt-2 ps-4 " style="cursor: pointer;" (click)="deleteItemsCheck()"><img
+          src="https://img.icons8.com/?size=100&id=gq8yzmdS4C7D&format=png&color=000000" width="50"
+          alt=""></div>
+        <div class="col-9" style="margin-left: 4px;">
+          <div class="search-product">
+            <input type="text" [(ngModel)]="nameSearch" name="nameSearch"
+                   (ngModelChange)="onNameChange($event)" placeholder=" Search Category Name">
+          </div>
+        </div>
+        <div class="col-1">
+          <div class="search-product">
+            <!-- <input type="text" style="font-size: 10px;" [(ngModel)]="parentId" name="parentId" disabled
+  placeholder="Parent Id"> -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-2" style="text-align: end;padding-right: 20px;">
+      <strong>
+        SORT </strong>
+
+      <div class="sortBox">
+        <!-- <div class="search-product">
+  <input type="text" [(ngModel)]="parentIdSearch" name="parentIdSearch"
+    (ngModelChange)="searchParentIdCategory($event)" placeholder=" Search Parent Id">
+</div> -->
+        <div class="element-select ms-1 ">
+          <select style="height: 30px;" [(ngModel)]="sortBy" (change)="onCreateAtChange()">
+            <option [value]="'id'" selected>Id</option>
+            <option [value]="'createdAt'">Created At</option>
+          </select>
+        </div>
+
+        <div class="element-select d-flex justify-content-end   ">
+          <select class=" " [(ngModel)]="sortDir" (change)="onSortDirChange()">
+            <option [value]="'asc'" selected>&uarr;</option>
+            <option [value]="'desc'" selected>&darr;</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+<div class="container-list">
+  <div class="tabs">
+    <input class="input" name="tabs" type="radio" id="tab-1" checked="checked" />
+    <label class="label" for="tab-1" (click)="resetColor()">
+      <i class="fa-solid fa-brush"></i> Color
+      List</label>
+    <div class="panel">
+      <!-- <h1>Color List</h1> -->
+      <app-table *ngIf="dataColor" [currentPage]="pageColor" [tableData]="dataColor?.content?.flat() || []"
+                 [dataPage]="dataColor" [typeImage]="'colors'" [tableHeaders]="headersColor"
+                 [routerLinkString]="'/admin/edit_attribute/color'" [eventClickDelete]="deleteColor"
+                 [toggleCheckbox]="toggleCheckboxColor" (pageChanged)="onPageChangeColor($event)">
+
+      </app-table>
+      <!-- [eventClickDelete]="deleteCategory"  -->
+    </div>
+    <input class="input" name="tabs" type="radio" id="tab-2" />
+    <label class="label" for="tab-2" (click)="resetSize()"><i class="fa-solid fa-maximize"></i> Size List</label>
+    <div class="panel">
+      <!-- <h1>Color List</h1> -->
+      <app-table *ngIf="dataSize" [currentPage]="pageSize" [tableData]="dataSize?.content?.flat() || []"
+                 [dataPage]="dataSize" [tableHeaders]="headersSize" [routerLinkString]="'/admin/edit_attribute/size'"
+                 [eventClickDelete]="deleteSize" [toggleCheckbox]="toggleCheckboxSize"
+                 (pageChanged)="onPageChangeSize($event)">
+      </app-table>
+      <!-- [eventClickDelete]="deleteCategory"  -->
+    </div>
+    <!-- <input class="input" name="tabs" type="radio" id="tab-3" />
+    <label class="label" for="tab-3">Tekno Match</label>
+    <div class="panel">
+        <h1>Tekno Match</h1>
+        <p>Tekno Match (Citrus ×clementina) is a hybrid between a mandarin orange and a sweet orange, so named in
+            1902. The exterior is a deep orange colour with a smooth, glossy appearance. Clementines can be
+            separated into 7 to 14 segments. Similarly to tangerines, they tend to be easy to peel.</p>
+    </div> -->
+  </div>
+</div>
