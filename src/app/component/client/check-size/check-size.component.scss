@@ -1,0 +1,156 @@
+.text-black:hover{
+  text-decoration: none !important;
+}
+
+.btn{
+  border-radius: 0px !important;
+}
+
+.size-picker .size-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.fr-chip-label {
+  width: 3rem !important; /* Kích thước nút */
+  height: 3rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #000; /* Viền đen */
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000; /* Chữ đen */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover */
+.fr-chip-label:hover {
+  border-color: #000; /* Viền đậm hơn */
+  box-shadow: 0 0 0 1px #818181; /* Tạo khoảng cách với viền đen */
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Khi được chọn */
+  .color-input:checked + .fr-chip-label {
+  background-color: #000; /* Nền đen */
+  color: #fff; /* Chữ trắng */
+  border: 2px solid #fff; /* Loại bỏ viền cũ */
+  box-shadow: 0 0 0 2px #000; /* Tạo khoảng cách với viền đen */
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.color-input {
+  display: none;
+}
+
+/* Responsive settings */
+@media (max-width: 768px) {
+  /* Container and spacing adjustments */
+  .container {
+    padding: 0 1rem; /* Giảm khoảng cách bên trong container */
+  }
+
+  .size-picker .size-item {
+    margin-right: 5px; /* Giảm khoảng cách giữa các size items */
+  }
+
+  .fr-chip-label {
+    width: 2.5rem !important; /* Giảm kích thước nút */
+    height: 2.5rem !important;
+    font-size: 0.85rem; /* Giảm kích thước font chữ */
+  }
+
+  /* Image adjustments */
+  .img-fluid {
+    max-width: 80%; /* Giảm kích thước hình ảnh trên điện thoại */
+    height: auto;
+    margin-bottom: 1rem; /* Thêm khoảng cách bên dưới */
+  }
+
+  /* Product information adjustments */
+  h2.fw-medium {
+    font-size: 1.25rem; /* Giảm kích thước font chữ tiêu đề */
+  }
+
+  p.text-black {
+    font-size: 0.9rem; /* Giảm kích thước font chữ của mô tả sản phẩm */
+  }
+
+  /* Table adjustments */
+  table {
+    font-size: 0.85rem; /* Giảm kích thước chữ trong bảng */
+  }
+
+  .table thead th {
+    font-size: 0.9rem; /* Giảm kích thước chữ phần tiêu đề của bảng */
+  }
+
+  /* Button adjustments */
+  .btn {
+    padding: 0.5rem 1.5rem; /* Giảm padding của nút */
+    font-size: 0.9rem; /* Giảm kích thước font chữ */
+  }
+
+  /* Responsive links and notes */
+  .compare-links li {
+    font-size: 0.85rem; /* Giảm kích thước chữ của các liên kết */
+  }
+
+  .compare-note-list li {
+    font-size: 0.8rem; /* Giảm kích thước chữ của các ghi chú */
+  }
+}
+
+@media (min-width: 769px) {
+  /* Revert adjustments for larger screens */
+  .container {
+    padding: 0 2rem;
+  }
+
+  .size-picker .size-item {
+    margin-right: 10px;
+  }
+
+  .fr-chip-label {
+    width: 3rem !important;
+    height: 3rem !important;
+    font-size: 1rem;
+  }
+
+  .img-fluid {
+    max-width: 100%;
+    height: auto;
+  }
+
+  h2.fw-medium {
+    font-size: 1.5rem;
+  }
+
+  p.text-black {
+    font-size: 1rem;
+  }
+
+  table {
+    font-size: 1rem;
+  }
+
+  .table thead th {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+  }
+
+  .compare-links li {
+    font-size: 1rem;
+  }
+
+  .compare-note-list li {
+    font-size: 0.9rem;
+  }
+}
+

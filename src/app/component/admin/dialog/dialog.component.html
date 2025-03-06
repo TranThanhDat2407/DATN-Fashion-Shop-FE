@@ -1,0 +1,14 @@
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="onCancel()"></div>
+
+<div class="modal-container" *ngIf="isModalOpen">
+    <div class="modal-content">
+        <span>CONFIRM</span>
+        <p>{{data.message }}</p>
+        <div class="d-flex">
+            <button mat-button mat-dialog-close="false" class="btn-content btn-login"
+                (click)="onConfirm()">DELETE</button>
+            <button mat-button mat-dialog-close="true" class="btn-content btn-closes"
+                (click)="onCancel()">CLOSE</button>
+        </div>
+    </div>
+</div>

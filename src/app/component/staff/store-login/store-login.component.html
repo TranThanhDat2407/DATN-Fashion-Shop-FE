@@ -1,0 +1,88 @@
+<div class="container-fluid" style="background-color: #ffffff;">
+  <div class="header-login-admin">
+    <img src="https://thumbs.dreamstime.com/b/brand-colored-rainbow-word-text-suitable-logo-design-card-brochure-typography-127992561.jpg"
+         height="50" width="120" alt="">
+    <p style="margin-top: -15px;">LOGIN</p>
+  </div>
+
+  <div class="content-box">
+    <div class="image-content">
+      <img src="https://www.feedough.com/wp-content/uploads/2016/08/what-is-brand-1024x536.webp" alt="">
+    </div>
+    <div class="login-box">
+      <div class="login-box-form">
+        <div class="login-title">
+          <p class="fw-bold fs-2 text-uppercase">Login as a Staff User</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <!-- Email Input -->
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Email" formControlName="email"
+                   [ngClass]="{ 'border border-danger': hasError('email') }"
+            >
+            <span class="input-group-text" [ngClass]="{ 'border border-danger': hasError('email') }">
+              <img src="https://img.icons8.com/?size=100&id=15265&format=png&color=000000" width="25" alt="">
+            </span>
+          </div>
+          @if (hasError('email')) {
+            <p  class="text-danger ms-2 mt-1"  style="text-align: left; font-size: 12px">
+
+              @if (loginForm.get('email')?.errors?.['required']) { Email cannot be empty. }
+              @if (loginForm.get('email')?.errors?.['email']) { Invalid email format. }
+            </p>
+          } @else {
+                <div class="mt-4">
+                </div>
+              }
+
+          <!-- Password Input -->
+          <div class="input-group mt-2">
+            <input [type]="showPassword ? 'text' : 'password'" class="form-control" placeholder="Password"
+                   formControlName="password" [ngClass]="{ 'border border-danger': hasError('password') }">
+            <span class="input-group-text" (click)="togglePassword()"
+                  [ngClass]="{ 'border border-danger': hasError('password') }">
+              <img src="https://img.icons8.com/?size=100&id=hQSVyu621s1v&format=png&color=000000" width="25" alt="">
+            </span>
+          </div>
+          @if (hasError('password')) {
+            <p class="text-danger ms-2 mt-1" style="text-align: left; font-size: 12px">
+              @if (loginForm.get('password')?.errors?.['required']) {
+                Password cannot be empty.
+              }
+              @if (loginForm.get('password')?.errors?.['pattern']) {
+                Password must be at least 6 characters long and contain at least one uppercase letter and one number.
+              }
+            </p>
+          } @else {
+            <p class="ms-2 mt-1 text-muted" style="text-align: left; font-size: 12px">
+              Password must be at least 6 characters long and contain at least one uppercase letter and one number.
+            </p>
+          }
+
+          <!-- Store Dropdown -->
+          <select class="form-select form-select-lg mb-1 mt-2" formControlName="storeId"
+                  [ngClass]="{ 'border border-danger': hasError('storeId') }"
+          >
+            <option value="">Choose Store</option>
+            @for (store of stores; track store.id) {
+              <option [value]="store.id">{{ store.name }}</option>
+            }
+          </select>
+
+            <p  class="text-danger ms-2"  style="text-align: left; font-size: 12px">
+              @if (hasError('storeId')) {
+                Please select a store.
+              }
+            </p>
+
+          <p class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+          <!-- Login Button -->
+          <button type="submit" class="btn-login">L O G I N</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

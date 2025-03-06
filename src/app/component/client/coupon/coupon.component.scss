@@ -1,0 +1,397 @@
+body {
+  font-family: 'Helvetica Neue', HelveticaNeue, Helvetica, 'Noto Sans',
+  Roboto, Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic Pro', '\30D2\30E9\30AE\30CE\89D2\30B4 Pro W3'
+  , 'Noto Sans CJK JP', Osaka, Meiryo, '\30E1\30A4\30EA\30AA',
+  'MS PGothic', '\FF2D\FF33 \FF30\30B4\30B7\30C3\30AF', 'Hiragino Sans GB',
+  'Arial Unicode MS', sans-serif;
+}
+
+.return, .coupon-ref+a {
+  text-decoration: underline;
+  font-weight: bolder;
+  margin-left: 150px;
+  color: black;
+  display: inline-block;
+}
+
+.coupon-ref+a {
+  margin-left: 0;
+}
+
+.coupon-box {
+  border: 1px solid grey;
+  width: 60%;
+  margin-left: 150px;
+  padding: 12px;
+  margin-bottom: 120px;
+
+}
+
+.coupon-box span, .text {
+  //font-weight: bolder
+  text-decoration: none;
+}
+.panel-action {
+
+  flex-direction: column;
+  align-items: center; /* Căn giữa nội dung theo chiều ngang */
+
+  gap: 10px; /* Khoảng cách giữa các phần tử bên trong */
+  padding: 10px;
+}
+
+.barcode {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 10px;
+  border-radius: 8px; /* Bo góc nhẹ */
+  border: 1px solid #ddd; /* Viền nhạt */
+}
+
+.barcode img {
+  max-width: 400px; /* Giới hạn chiều rộng */
+  height: auto;
+
+}
+
+
+.button-group {
+  display: flex;
+  flex-direction: column; /* Sắp xếp nút theo chiều dọc */
+  align-items: center; /* Căn giữa theo chiều ngang */
+  gap: 10px; /* Khoảng cách giữa các nút */
+  margin: 20px 0px 0px 50px;
+}
+
+.button-group .btn {
+  width: 120px; /* Độ rộng đồng đều */
+  height: 40px; /* Chiều cao */
+  border-radius: 8px; /* Bo góc */
+  border: 2px solid #1b1b1b; /* Viền đậm hơn */
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+.button-group .btn:hover {
+  background-color: #1b1b1b; /* Nền đen khi hover */
+  color: #fff; /* Chữ trắng */
+}
+
+
+button .disabled {
+  font-size: 16px;
+  background-color: black;
+  color: white;
+  padding: 10px 100px;
+  margin-right: 20px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.coupon-value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.coupon-value p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.coupon-value input {
+  flex: 1; /* Chiếm không gian còn lại */
+  min-width: 100px; /* Đảm bảo input không quá nhỏ */
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.responsive-button {
+  max-width: 25rem;
+  padding: 4px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.responsive-button:hover {
+  background-color: #bbb;
+  transform: scale(1.05);
+}
+
+.responsive-button:disabled {
+  background-color: #dadada;
+  border-color: #dadada;
+  color: white;
+  cursor: not-allowed;
+}
+
+/* Responsive thiết bị nhỏ hơn 768px (tablet) */
+@media (max-width: 768px) {
+  .coupon-value {
+    flex-direction: column; /* Chuyển thành dạng cột */
+    align-items: stretch;
+  }
+
+  .coupon-value input {
+    width: 100%; /* Input chiếm toàn bộ chiều ngang */
+  }
+
+  .responsive-button {
+    width: 100%; /* Nút chiếm toàn bộ chiều ngang */
+  }
+}
+
+/* Responsive thiết bị nhỏ hơn 576px (mobile) */
+@media (max-width: 576px) {
+  .coupon-value p {
+    font-size: 14px; /* Thu nhỏ chữ */
+  }
+
+  .coupon-value input {
+    font-size: 12px;
+  }
+
+  .responsive-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+}
+.coupon-box input {
+  width:100%;
+  padding: 10px;
+  //margin-left: 50px;
+  font-size: 14px;
+  border: 0;
+  //background-color: whitesmoke;
+}
+
+.coupon-box input:focus {
+  outline: white;
+  border-bottom: 3px solid cadetblue;
+  background-color: white;
+}
+
+.couponref {
+  color: grey;
+  text-decoration: underline;
+  font-size: 15px;
+  margin-left: 150px;
+  font-weight: lighter;
+  padding-top: 60px;
+}
+
+.fr-head{
+  color: #1b1b1b;
+  display: flex;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.36px;
+  line-height: 21.6px;
+  text-transform: uppercase;
+}
+
+.mb-xl {
+  margin-bottom: 40px;
+}
+
+.fr-text.withtooltip {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.fr-list>* {
+  list-style: none;
+}
+
+.fr-text .withtooltip .fr-system-text {
+  align-items: center;
+  color: #1b1b1b;
+  display: flex;
+  font-size: 15px;
+  letter-spacing: 0.16px;
+  line-height: 18px;
+}
+
+span .fr-icon .info {
+  background-image: url("https://asset.uniqlo.com/g/icons/info.svg");
+  background-size: 24px 24px;
+  color: #1b1b1b;
+  display: inline-block;
+  letter-spacing: 0.16px;
+  line-height: 28.8px;
+  text-align: right;
+}
+
+.apply-coupons-page .fr-coupon-list-item {
+  align-items: flex-start;
+  width: 70%;
+}
+
+.panel-contents {
+  flex-wrap: nowrap;
+}
+
+.fr-coupon-list-item {
+  display: flex;
+}
+.fr-coupon-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px; /* Đảm bảo khung ảnh cố định */
+  height: 180px;
+  padding-top: 20px;
+
+
+
+
+
+}
+
+.fr-coupon-image .thumb-img {
+  width: 100%; /* Ảnh tự căn chỉnh theo khung */
+  height: 100%;
+  object-fit: cover; /* Đảm bảo ảnh không bị méo, lấp đầy khung */
+
+}
+
+
+
+
+.fr-coupon-list-item-info {
+  flex-grow: 1;
+  text-decoration: none;
+  margin-left: 10px;
+  padding: 20px;
+}
+
+.coupon-name {
+  margin-bottom: 4px;
+  font-size: 18px;
+  letter-spacing: 0.35px;
+  line-height: 21px;
+  font-weight: 700;
+}
+
+.coupon-expiration {
+  margin-top: 0;
+  letter-spacing: 0.35px;
+  line-height: 24px;
+}
+
+img {
+  height: initial;
+  width: auto;
+  max-width: 100%;
+  border-style: none;
+  display: block;
+}
+
+.mb-xs {
+  margin-bottom: 12px;
+}
+
+.fr-panel .panel-action .fr-btn, .panel-action .fr-btn {
+  margin: 0;
+  min-height: 30px !important;
+  min-width: 117px;
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 376px) {
+  .coupon-box {
+    width: 95%;
+    margin-left: 2px;
+    padding: 8px;
+  }
+
+  .coupon-box input {
+    width: 180px;
+    //margin-left: 20px;
+    font-size: 14px;
+  }
+
+  .underline {
+    color: #7d7d7d;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .underline>div>p {
+    font-size: 15px;
+    margin-right: 10px;
+  }
+
+  .flexdiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 776px) {
+  .couponref {
+    margin-left: 15px;
+  }
+
+  .coupon-box {
+    width: 85%;
+    margin-left: 2px;
+    padding: 8px;
+  }
+
+  .underline {
+    color: #7d7d7d;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .underline>div>p {
+    font-size: 15px;
+    margin-right: 10px;
+  }
+
+  .flexdiv {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 576px) {
+  .footer-coupon {
+    flex-direction: column;
+  }
+
+
+}
+
+
+/* Kích thước nhỏ hơn 768px (mobile) */
+@media (max-width: 768px) {
+  .responsive-button {
+    font-size: 14px;
+  }
+}
+
+/* Kích thước nhỏ hơn 576px (mobile nhỏ) */
+@media (max-width: 576px) {
+  .responsive-button {
+    font-size: 12px;
+  }
+}
+.btn{
+  text-transform: uppercase;
+}

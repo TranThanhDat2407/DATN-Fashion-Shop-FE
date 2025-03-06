@@ -1,0 +1,85 @@
+
+
+<div class="couponref"><span>  TRANG CHỦ </span>  / <span>THANH TOÁN</span> / <span> ÁP DỤNG MÃ GIẢM GIÁ</span></div><br><br>
+<a [routerLink]="['../checkout']"> <p class="return">QUAY LẠI TRANG THANH TOÁN</p></a><br><br>
+
+<div class="coupon-box">
+  <h1>ÁP DỤNG PHIẾU GIẢM GIÁ</h1>
+  <p id="success"></p>
+
+  <!-- Ô nhập mã giảm giá -->
+  <div class="coupon-value">
+    <p class="text">NHẬP MÃ GIẢM GIÁ</p>
+    <input id="input" type="text" placeholder="Nhập mã giảm giá" [(ngModel)]="couponCode">
+    <button class="responsive-button" [disabled]="!couponCode" type="button" (click)="applyCoupon()">ÁP DỤNG</button>
+  </div>
+  <p *ngIf="message" class="coupon-message">{{ message }}</p>
+  <hr>
+
+  <div>
+    <div class="fr-wrapper mb-m">
+      <h5 class="fr-head h5">
+        <span class="title">Phiếu giảm giá có sẵn <em class="text-emphasis">({{ coupons?.length || 0 }})</em></span>
+      </h5>
+      <div class="fr-wrapper mt-xs">
+        <div class="fr-text withtooltip fr-system-text p-3">
+          <span>Chọn một phiếu giảm giá từ danh sách dưới đây và áp dụng cho đơn hàng của bạn.</span>
+        </div>
+      </div>
+    </div>
+    <!-- Hiển thị danh sách mã giảm giá -->
+    <div class="mb-xl">
+      <ul class="fr-list mbt-m mb-m coupon-list-wrapper">
+        <li class="coupon-tile-wrapper" *ngFor="let coupon of coupons">
+          <div class="coupon-tile">
+            <div class="fr-panel">
+              <div class="panel-inner">
+                <div class="panel-contents fr-flbox between d-flex">
+
+                  <!-- Hình ảnh & Thông tin mã giảm giá -->
+                  <div class="fr-coupon-list-item">
+                    <div class="fr-coupon-list-item-image d-flex justify-content-between">
+                      <figure class="fr-coupon-image">
+                        <img [src]="'http://localhost:8080/uploads/images/coupons/'+coupon.imageUrl" alt="{{ coupon.name }}" class="thumb-img">
+                      </figure>
+                    </div>
+                    <div class="fr-coupon-list-item-info">
+                      <p class="coupon-code"><strong>Mã:</strong> <span class="text-danger">{{ coupon.code }}</span></p>
+                      <p class="coupon-discount"><strong>Giảm:</strong> {{ coupon.discountValue | number  }} {{ coupon.discountType === 'FIXED' ? '' : '%' }}
+                        (Tối đa {{ coupon.minOrderValue | number }} VND)</p>
+                      <p class="coupon-min-order"><strong>Đơn tối thiểu:</strong> {{ coupon.minOrderValue | number }} VND</p>
+                      <p class="coupon-expiration"><strong>Ngày hết hạn:</strong>{{ coupon.expirationDate | date: 'dd/MM/yyyy HH:mm' }}</p>
+                    </div>
+                  </div>
+
+                  <!-- Mã vạch -->
+                  <div class="panel-action">
+                    <div class="barcode">
+                      <img [src]="'https://barcode.tec-it.com/barcode.ashx?data=' + coupon.id + '&code=Code128'" alt="Barcode">
+                    </div>
+                  </div>
+
+                  <!-- Button -->
+                  <div class="button-group">
+                    <!-- Nút chọn mã giảm giá -->
+                    <button class="btn" type="button"  (click)="selectCoupon(coupon.id)" >Chọn</button>
+
+                    <button class="btn" type="button">Chi tiết</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Hiển thị khi không có mã giảm giá -->
+      <p *ngIf="coupons?.length === 0" class="text-center text-muted">Không có mã giảm giá nào khả dụng.</p>
+    </div>
+  </div>
+</div>
+
+
+
+

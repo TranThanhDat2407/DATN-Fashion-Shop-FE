@@ -1,0 +1,121 @@
+
+<div class="row">
+  <app-shipping></app-shipping>
+
+</div>
+<div class="row">
+  <div class=" fr-contents-card full">
+    <div class="accordion-item" style="border: none">
+      <div class="mb-xl">
+        <div style=" border-width: 1px 1px;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: solid;
+             border-left-style: solid;
+              border-top-color: rgb(224, 224, 224);
+               border-right-color: rgb(224, 224, 224);
+                border-bottom-color: rgb(224, 224, 224);
+                 border-left-color: rgb(224, 224, 224);
+                  border-image: initial;
+                   padding: 28px 20px;">
+          <div class="fr-wrapper mb-m" style="width: auto;">
+            <h4 class="text-uppercase accordion-header">
+              <button class="accordion-button collapsed show" type="button" data-bs-toggle="collapse" data-bs-target="#payment" aria-expanded="false" aria-controls="payment">
+                <span class="title">2. Phương thức thanh toán</span>
+              </button>
+            </h4>
+          </div>
+          <div class="fr-wrapper" style="width: auto;">
+            Vui lòng chọn tùy chọn thanh toán
+          </div>
+
+          <div id="payment" class="accordion-collapse collapse show">
+            <div class="accordion-body">
+              <div class="d-flex justify-content-around"
+                   style="border-top: 1px solid rgb(224, 224, 224); padding: 28px 20px;">
+
+                <div class="mb-m pr-s">
+                    <span class="fr-radio fr-radio-primary bold-with-subtext">
+                      <input type="radio" id="cod" name="paymentMethod" value="1"
+                             (change)="onSelectionChange(1)" [checked]="selectedMethod === 1"/>
+                      <label for="cod" class="content-wrapper">
+                        <span class="content-text">
+                          <span class="title">Thanh toán khi nhận hàng</span>
+                        </span>
+                      </label>
+                    </span>
+                </div>
+
+                <div class="mb-m pr-s">
+                   <span class="fr-radio fr-radio-primary bold-with-subtext">
+                    <input type="radio" id="vnpay" name="paymentMethod" value="2"
+                           (change)="onSelectionChange(2)" [checked]="selectedMethod === 2" />
+                    <label for="vnpay" class="content-wrapper">
+                      <span class="content-text">
+                        <span class="title">Thanh toán bằng VNPAY</span>
+                      </span>
+                    </label>
+                  </span>
+                </div>
+
+              </div>
+              <hr>
+              <!-- Nội dung tương ứng -->
+
+
+
+
+              <div *ngIf="selectedMethod === + '1'">
+                <div class="fr-contents-card">
+                  <div>
+                    <div>
+                      <div class="fr-wrapper mb-l mt-l" style="width: auto;">
+                        <div class="fr-text">Vui lòng thanh toán bằng tiền mặt cho người vận chuyển khi đơn hàng của bạn đã
+                          đến nơi.
+                        </div>
+                      </div>
+                      <div class="fr-wrapper mb-m mt-m" style="width: auto;">
+                        <button [routerLink]="['../review']" style="max-width: 288px" class="fr-btn fr-btn w4-f wundefined-f" type="button" data-test="tiếp-tục-button"
+                        >Tiếp tục
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div *ngIf="selectedMethod === + '2'">
+                <div class="fr-contents-card">
+                  <div>
+                    <div>
+                      <div class="fr-wrapper mb-l mt-l" style="width: auto;">
+                        <div class="fr-text">Chọn tiếp tục để tiến hành thanh toán bằng VNPAY. Quý khách sẽ được chuyển
+                          hướng đến cổng thanh toán sau khi xác nhận chi tiết đơn hàng
+                        </div>
+                        <div class="fr-text">Quý khách vui lòng hoàn tất thanh toán trong vòng 15 phút sau khi nhấn "ĐẶT
+                          HÀNG".
+                        </div>
+                      </div>
+                      <div class="fr-wrapper mb-m mt-m" style="width: auto;">
+                        <button [routerLink]="['../review']" style="max-width: 288px" class="fr-btn fr-btn w4-f wundefined-f" type="button" data-test="tiếp-tục-button"
+                        >Tiếp tục
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="../../../../../assets/js/checkout/checkout.js"></script>
+

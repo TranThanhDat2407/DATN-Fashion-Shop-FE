@@ -1,0 +1,27 @@
+<!-- Hiển thị layout admin đầy đủ khi không phải trang login_admin -->
+<ng-container *ngIf="!isLoginAdmin; else loginTemplate">
+    <div class="container-fluid">
+      <div class="container-layout-admin" [class.active]="isMenuActive">
+        <div class="layout-none" [class.active]="isMenuActive"></div>
+        
+        <div class="admin-menu" [class.active]="isMenuActive">
+          <app-menu [isActive]="isMenuActive"></app-menu>
+          <div class="btnZoomOut" [class.active]="isMenuActive">
+            <span class="p-2" (click)="toggleMenu()">
+              <i class="fa-solid fa-desktop"></i>
+            </span>
+          </div>
+        </div>
+  
+        <div class="admin-content" [class.active]="isMenuActive">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <!-- Nếu route có chứa 'login_admin', chỉ hiển thị router-outlet -->
+  <ng-template #loginTemplate>
+    <router-outlet></router-outlet>
+  </ng-template>
+  

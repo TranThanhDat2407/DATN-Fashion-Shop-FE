@@ -1,0 +1,20 @@
+<!-- Nút mở modal -->
+<!-- <button (click)="openModal()">Mở Modal</button> -->
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div>
+
+<div class="modal-container" *ngIf="isModalOpen">
+    <div class="modal-content">
+        <span>ĐĂNG NHẬP</span>
+        <p> Nếu bạn đăng nhập, bạn cũng có thể thấy các sản phẩm mà bạn đã thêm vào danh sách mong muốn trước đó.</p>
+        <div class="d-flex justify-content-between">
+            <button class="btn-content btn-login"
+             (click)="onLogin()"
+            >ĐĂNG NHẬP</button>
+            <button class="btn-content btn-closes"
+                    (click)="closeModal()"
+            >HỦY </button>
+        </div>
+    </div>
+</div>

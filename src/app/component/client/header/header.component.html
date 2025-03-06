@@ -1,0 +1,75 @@
+<header [ngClass]="{
+    'header-home': isHome || !isSearchActive,
+    'bg-white': !isHome || isSearchActive
+  }" class="position-fixed w-100 py-2" style="z-index: 1000; top: 0;">
+  <div class="container-fluid d-flex align-items-center justify-content-around">
+    <!-- Logo -->
+    <div class="logo text-center" style="width: 157.57px;">
+      <h5 [ngClass]="{
+          'text-black': !isHome || isSearchActive
+          }" class="" style="cursor: pointer" [routerLink]="['/client', currentCurrency, currentLang]">BRAND</h5>
+    </div>
+    <!-- Navigation -->
+    <ul class="nav nav-underline d-none d-md-flex justify-content-center align-items-center" style="font-weight: 500">
+      <li *ngFor="let category of categoriesParent" class="nav-item">
+        <a [ngClass]="{
+          'text-white': !isSearchActive,
+          'text-black': isSearchActive
+          }" class="head-title nav-link text-center" (click)="onCategoryClick(category.id)">{{ category.name }}</a>
+      </li>
+    </ul>
+    <!-- Icons -->
+    <div class="d-flex align-items-center">
+      <!-- Dropdown Menu -->
+      <div class="dropdown">
+        <button class="head-icon head-icon-global btn mx-2 dropdown-toggle no-focus no-caret" type="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <i [ngClass]="{
+          'text-black': !isHome || isSearchActive
+          }" class="bi bi-globe"></i>
+        </button>
+        <ul class="dropdown-menu dropdown-custom z-3">
+          <li *ngFor="let language of languageList">
+            <p class="dropdown-item" href="javascript:void(0)" [ngClass]="{ 'active': currentLang === language.code }"
+              (click)="changeLanguageAndCurrency(language.code)">
+              {{ language.name | translate}}
+              <i *ngIf="currentLang === language.code" class="bi bi-check2 ms-2"></i>
+            </p>
+          </li>
+          <!--          <li *ngFor="let language of languageList">-->
+          <!--            <a-->
+          <!--              class="dropdown-item"-->
+          <!--              [class.active]="currentLang === language.code"-->
+          <!--              (click)="changeLanguageAndCurrency(language.code)">-->
+          <!--              {{ language.name | translate }}-->
+          <!--              <i class="bi bi-check2"></i>-->
+          <!--            </a>-->
+          <!--          </li>-->
+        </ul>
+      </div>
+      <!-- Other Icons -->
+      <a [routerLink]="['/client', currentCurrency, currentLang, 'wishlist']" class="head-icon mx-2">
+        <i [ngClass]="{
+          'text-black': !isHome || isSearchActive
+          }" class="bi bi-heart position-relative">
+          <span *ngIf="(totalWishlist$ | async) !== 0"
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
+            {{ totalWishlist$ | async }}
+          </span>
+        </i>
+      </a>
+      <a [routerLink]="['/client', currentCurrency, currentLang, 'cart']" [queryParams]="null"
+        queryParamsHandling="merge" class="head-icon mx-2 ">
+        <i [ngClass]="{
+          'text-black': !isHome || isSearchActive
+          }" class="bi bi-cart  position-relative">
+          <span *ngIf="totalCartItems != 0 && totalCartItems != null"
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark">
+              {{totalCartItems}}
+          </span>
+        </i>
+
+      </a>
+    </div>
+  </div>
+</header>

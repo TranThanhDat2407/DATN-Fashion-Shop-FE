@@ -1,0 +1,69 @@
+<div class="container-fluid">
+    <div class="background-box">
+        <div class="overlay"></div>
+    </div>
+    <div class="content-box">
+        <div class="wishlist-layout">
+          <div class="wishlist-title">
+            <i class="fa-regular fa-heart"></i>
+            <h2> WishList </h2>
+          </div>
+            <p></p>
+            <div *ngIf="productsInWishlist.length > 0"
+              class="wishlist-allProduct">
+
+                <!-- render product wishlist -->
+              <ng-container *ngFor="let product of productsInWishlist">
+              <div
+
+                [routerLink]="['/client', currentCurrency, currentLang,'detail_product', product.productId,
+                                                                                    product.colorId,1]"
+                class="wishlist-product-item">
+                <div class="item-layout-image">
+                  <div class="product-item-image">
+                    <img [src]="getImageProduct(product.dataImagesProduct[0].mediaUrl)" alt="Image">
+                  </div>
+                </div>
+                <div class="item-layout-infor">
+                  <p class="item-name">
+                    {{product.detail?.name}}
+                  </p>
+                  <div class="item-inforColorSizeQty">
+                    <div style="flex: 4;">
+                      <p class="item-size">
+                        <span>Màu sắc: <span class="text-size-color">{{ product.colorName }}</span> </span>
+                      </p>
+                      <p class="item-color">
+                        <span>
+                          Kích thước:
+                          <span class="product-item-categoryParent" *ngIf="product.categoryParent?.length === 1">
+                            {{ product.categoryParent?.[0]?.name ?? '' }}
+                          </span>
+                          <span class="product-item-categoryParent" *ngIf="(product.categoryParent?.length || 0) > 1">
+                            Unisex
+                          </span>
+                        </span>
+                      </p>
+                    </div>
+                    <div style="flex: 6;"></div>
+                  </div>
+                  <div class="item-inforPrice_btnRemove">
+                    <span class="item-btnRemove"
+                      (click)="$event.stopPropagation();toggleWishlist(product.productId,product.colorId)"
+                    >
+                      <a style="cursor: pointer">Remove</a>
+                    </span>
+                    <div class="item-price">Giá:
+                      <span class="textTotal">
+                        {{ getCurrencyPrice(product.detail?.basePrice ?? 0, currentCurrencyDetail?.rateToBase ??
+                        1,currentCurrencyDetail?.code ?? '' )}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

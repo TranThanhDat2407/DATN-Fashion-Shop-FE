@@ -1,0 +1,371 @@
+.background-box .image-overlay {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.content-box {
+    padding: 70px 0 60px 0;
+    margin-bottom: 50px;
+    z-index: 10;
+}
+
+// .content-product-title {
+//     padding-bottom: 1.875rem;
+// }
+
+
+
+.tools-title {
+    gap: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    height: 40px;
+    border-right: 3px solid #e7e7e7;
+    width: 110px;
+    // background-color: rgb(97, 16, 16);
+    font-size: 15px;
+    font-family: "Kanit", sans-serif;
+}
+
+.content-fiter-tools {
+    padding-top: 10px;
+    gap: 5px;
+    display: flex;
+    height: auto;
+    // background-color: rgb(34, 114, 126);
+}
+
+.tool-elements {
+    gap: 10px;
+    // background-color: red;
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    justify-content: start;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    -ms-overflow-style: scrollbar;
+}
+
+.tool-elements::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.tool-elements::-webkit-scrollbar-thumb {
+    // background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.tool-elements::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.element-select {
+    color: #2f2f2f;
+    flex: 0 0 auto;
+    min-width: 150px;
+    box-sizing: border-box;
+}
+
+.element-select select {
+    font-weight: 600;
+    border: 2px solid #dadada;
+    border-radius: 8px;
+    min-width: 120px;
+    overflow: hidden;
+}
+
+.element-select select option {
+    display: inline-flex;
+    overflow: hidden;
+    font-size: 15px;
+    border: 1px solid #e7e7e7;
+    height: auto;
+    padding: 10px 20px;
+    font-family: "Kanit", sans-serif;
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+.tool-search {
+    display: flex;
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    justify-content: left;
+    /* Căn giữa theo chiều ngang */
+    padding-top: 10px;
+    padding-bottom: 30px;
+
+}
+
+.count-product {
+    min-width: 90px;
+    text-align: left;
+    font-family: "Kanit", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    flex: 0.8;
+}
+
+.search-product {
+    height: 50px;
+    flex: 9;
+    display: flex;
+    /* Đảm bảo input nằm giữa */
+    justify-content: center;
+    /* Căn giữa theo chiều ngang */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+}
+
+input {
+    padding-left: 10px;
+    font-family: "Kanit", sans-serif;
+
+}
+
+.search-product input {
+    width: 100%;
+    height: 70%;
+
+    flex: 9;
+    border: 2px solid #dadada;
+    border-radius: 10px;
+
+
+}
+
+.mobile-text-product {
+    display: none;
+}
+
+
+.products-box {
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    // background-color: aqua;
+    justify-content: left;
+    gap: 2.2%;
+}
+
+.product-item {
+    // background-color: red;
+
+    flex-basis: 23%;
+    padding-bottom: 1%;
+    margin-bottom: 4%;
+}
+
+.product-item-image {
+    width: 100%;
+    height: 23rem;
+}
+
+.product-item-image img {
+    object-fit: cover;
+    width: 100%;
+    height: 23rem;
+}
+
+.product-item-ColorAndbtnWishList {
+    padding: 5px 5px 3px 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-item-color {
+    display: flex;
+    gap: 10px;
+}
+
+.product-item-color label {
+    border-radius: 100%;
+}
+.product-item-btnWishList{
+    z-index: 9;
+    margin-top: -4px;
+}
+.product-item-btnWishList button {
+    border: none;
+
+    background-color: hsl(0, 0%, 100%, 0);
+}
+.product-item-btnWishList i {
+    font-size: 20px;
+    color: #252525;
+
+}
+// .product-item-categoryParent{
+//     margin-left: 8.8rem;
+// }
+.product-item-coupon{
+    font-weight: 700;
+    color: red;
+    font-size: 0.8rem;
+    padding: 10px 6px 6px 6px;
+}
+.product-item-btnWishList button i:hover{
+    color: rgb(220, 63, 176);
+}
+.product-item-size{
+    display: flex;
+    justify-content: space-between;
+}
+.product-item-size span{
+    padding-left: 3px;
+    padding-right: 6px;
+    color: #6a6a6a;
+    font-size: 15px;
+    font-family: "Kanit", sans-serif;
+
+}
+.product-item-name p{
+    font-size: 1.25rem ;
+    text-align: left;
+    padding-left: 6px;
+    color: #171717;
+    font-family: "Kanit", sans-serif;
+
+}
+.product-item-price {
+   margin-top: -10px
+}
+.product-item-price p{
+    text-align: left;
+    max-height: 20px;
+    padding-left: 6px;
+    color: #171717;
+    font-size: 1.25rem;
+    font-family: "Kanit", sans-serif;
+
+}
+.product-item-priceInit{
+
+}
+.product-item-priceSale{
+    color: rgb(255, 44, 44);
+}
+.product-item-rate{
+    padding-top: 10px;
+}
+
+.product-item-rate span{
+    margin-right: 3px;
+}
+.product-item-rate i{
+font-size: 13px;
+}
+.rate-icon{
+    font-size: 12%;
+}
+.rate-total{
+    font-size: 17px;
+    font-weight: 600;
+
+}
+.rate-count{
+    font-size: 11px;
+}
+.product-item{
+    transition: transform 0.3s ease;
+
+  }
+  .product-item:hover{
+  cursor: pointer;
+    transform: scale(0.9);
+  }
+
+@media (max-width: 900px) {
+    .content-product-title {
+        text-align: center;
+        padding: 0;
+    }
+
+    .tools-title {
+        display: none;
+    }
+
+    .tool-elements {
+        justify-content: start;
+    }
+
+    .element-select {
+        flex-basis: 27%;
+    }
+
+    .element-select select {
+        font-size: 70%;
+    }
+
+    .tool-search {
+        align-items: start;
+        flex-direction: column-reverse;
+    }
+
+    .search-product {
+        width: 100%;
+    }
+
+    .count-product {
+        padding: 4px;
+    }
+
+    .count-product span {
+        display: flex;
+        gap: 0;
+    }
+
+    .mobile-text-product {
+        display: block;
+    }
+
+    .products-box {
+        justify-content: space-evenly;
+    }
+    .product-item {
+
+        flex-basis: 45%;
+    }
+
+    .product-item-price p{
+        font-size: 0.9rem;
+
+    }
+    .product-item-priceInit{
+        font-size: 0.7rem;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+
+    .product-item {
+
+
+        flex-basis: 100%;
+    }
+
+
+    .product-item-name p{
+        font-size: 1rem ;
+
+
+    }
+
+    .product-item-priceInit{
+        font-size: 10px;
+    }
+
+
+
+}

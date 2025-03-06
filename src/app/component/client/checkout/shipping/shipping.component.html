@@ -1,0 +1,311 @@
+
+<div class=" fr-contents-card full">
+  <div class="accordion-item" style="border: none">
+    <div class="mb-xl">
+      <div style=" border-width: 1px 1px ;
+            border-top-style: solid;
+            border-right-style: solid;
+            border-bottom-style: initial;
+             border-left-style: solid;
+              border-top-color: rgb(224, 224, 224);
+               border-right-color: rgb(224, 224, 224);
+                border-bottom-color: initial;
+                 border-left-color: rgb(224, 224, 224);
+                  border-image: initial;
+                   padding: 28px 20px;">
+        <div class="fr-wrapper mb-m" style="width: auto;">
+          <h4 class="text-uppercase accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#delivery" aria-expanded="true" aria-controls="delivery">
+              <span class="title">1. Tùy chọn giao hàng</span>
+            </button>
+          </h4>
+        </div>
+        <div class="fr-wrapper" style="width: auto;">
+          Đủ điều kiện áp dụng miễn phí vận chuyển.
+        </div>
+      </div>
+      <div id="delivery" class="accordion-collapse collapse show">
+        <div class="accordion-body">
+
+          <div style="border: 1px solid rgb(224, 224, 224); padding: 28px 20px;">
+            <div style="width: auto;">
+              <div class="mb-m pr-s">
+                  <span class="fr-radio fr-radio-primary bold-with-subtext">
+                  <input type="radio" id="shippingAddress" name="shippingMethod" value="1"
+                         (change)="selectShippingMethod(1)"   [checked]="selectedShippingMethod === 1" >
+                  <label for="shippingAddress" class="content-wrapper">
+                    <span class="content-text">
+                      <span class="title">Giao đến địa chỉ</span>
+                      <span class="text-price">
+                        <span class="text-label">Phí vận chuyển</span>
+                        <strong class="text-price-num">
+                          <span class="fr-price-currency">
+                            <span>Miễn phí</span>
+                          </span>
+                        </strong>
+                      </span>
+                    </span>
+                  </label>
+                </span>
+              </div>
+              <div class=" fr-wrapper pt-xxs px-l mx-xxxs" style="width: auto;">
+                <p class="text-shipping">
+                  [Thời gian giao hàng dự kiến] TP. Hồ Chí Minh: 2 ngày, các tỉnh miền Nam khác: 3 ngày, Hà Nội: 3
+                  ngày,
+                  các tỉnh miền Bắc khác: 4 ngày, các tỉnh miền Trung: 4 ngày.
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+               <span class="fr-radio fr-radio-primary bold-with-subtext">
+                  <input type="radio" id="store" name="shippingMethod" value="2"
+                         (change)="selectShippingMethod(2)"   [checked]="selectedShippingMethod === 2"/>
+                  <label for="store" class="content-wrapper">
+                    <span class="content-text">
+                      <span class="title">Click &amp; Collect</span>
+                      <span class="text-price">
+                        <span class="text-label">Phí vận chuyển</span>
+                        <strong class="text-price-num">
+                          <span class="fr-price-currency">
+                            <span>Miễn phí</span>
+                          </span>
+                        </strong>
+                      </span>
+                    </span>
+                  </label>
+                </span>
+              <div class=" fr-wrapper pt-xxs px-l mx-xxxs" style="width: auto;">
+                <p class="text-shipping">
+                  Khách hàng sẽ nhận được email thông báo khi đơn hàng có tại cửa hàng. Cửa hàng có thể trực tiếp chuẩn
+                  bị đơn hàng nếu có số lượng sản phẩm phù hợp. TP. Hồ Chí Minh: 1 - 4 ngày, Hà Nội &amp; Hải Phòng: 1 -
+                  7 ngày.
+                </p>
+              </div>
+              <div>
+
+                <div class="fr-h-rule full">
+                  <hr style="color: rgb(224, 224, 224)">
+                </div>
+                <div *ngIf="selectedShippingMethod === 2" class="fr-contents-card">
+
+                  <div>
+                    <div>
+                      <div class="pay-in-store">
+                        <div class="fr-wrapper mt-l mb-m" style="width: auto;"><h4 id="" class="fr-head h4"><span
+                          class="title">Tìm một cửa hàng</span></h4></div>
+                        <div class="fr-textfield"><label class="fr-textfield-label">
+                          <div class="fr-flbox middle">
+                            <div class="fr-form-label" style="margin-bottom: 0px;">Quận, tỉnh hoặc mã bưu chính&nbsp;
+                            </div>
+                            <input class="fr-textfield-input" placeholder="Quận, tỉnh hoặc mã bưu chính"
+                                   autocomplete="on" type="text" fdprocessedid="hs86rf"></div>
+                        </label></div>
+                        <div style="margin-left: 30%;">
+                          <div class="fr-wrapper mt-m mb-xl" style="width: auto;">
+                            <button fdprocessedid="a60y9" style="background-color: #ffffff">
+                              <div class="fr-link link-text-left"><span class="inner"><div class="text">Sử dụng vị trí hiện tại</div></span>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="fr-flbox">
+                          <div class="mr-l searchButton w4-f" data-test="searchButton">
+                            <button class="fr-btn primary wundefined-f" type="button" data-test="tìm-địa-điểm-button"
+                                    fdprocessedid="31su3z">Tìm địa điểm
+                            </button>
+                          </div>
+                        </div>
+                        <ul  class="fr-list bordered-bottom-with-pd mt-l mb-xl">
+                          <li class="">
+                            <div>
+                              <div class="fr-panel">
+                                <div class="panel-inner">
+                                  <div class="panel-contents">
+                                    <div class="fr-showmore close">
+                                      <div>
+                                        <div><h4  class="fr-head h4"><span
+                                          class="title">UNIQLO Vạn Hạnh Mall</span></h4></div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text bold">Tầng 1, Số 11, Đ. Sư Vạn Hạnh, Phường 12, Quận 10,
+                                            TP Hồ Chí Minh ● Tel 028 3535 2680
+                                          </div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">Van Hanh Mall, 11 Sư Vạn Hạnh, Phường 12, Quận 10,, Hồ
+                                            Chí Minh, 70000, VN
+                                          </div>
+                                        </div>
+                                        <div class="mt-xxs"><h4 class="fr-head h4"><span
+                                          class="title">Giờ mở cửa</span></h4></div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">T2 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">T.Ba 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">T.Tư 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">T.Năm 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">Thứ 6 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">T.Bảy 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">C.Nhật 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">Ngày lễ 09:30 AM - 10:00 PM</div>
+                                        </div>
+                                        <!--                                        <div class="mt-xxs">-->
+                                        <!--                                          <div class="fr-text"></div>-->
+                                        <!--                                          <div class="fr-text"></div>-->
+                                        <!--                                        </div>-->
+                                        <div class="mt-xxs"><h4  class="fr-head h4"><span
+                                          class="title">Bãi đậu xe</span></h4></div>
+                                        <div class="mt-xxs">
+                                          <div class="fr-text">Có bãi đậu xe</div>
+                                        </div>
+                                      </div>
+                                      <p class="button"><a class="">Đọc thêm</a></p></div>
+                                    <div class="panel-action"
+                                         style="width: 50%; display: flex; flex-direction: column; align-items: flex-end; padding-left: 20px; justify-content: flex-start;">
+                                      <div class="mb-xs">
+                                        <button class="fr-btn small fr-btn panel-action-button w2-f" type="button"
+                                                data-test="chọn-button" >Chọn
+                                        </button>
+                                      </div>
+                                      <div class="mb-xs">
+                                        <button class=" icon relative small panel-action-button w2-f btn-text fr-btn"  data-test="chi-tiết-button">
+                                          <!--                                        <div class="fr-btn small panel-action-button w2-f"></div>Chi tiết-->
+                                          Chi tiết
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+
+                        </ul>
+                        <!--                        <div data-test="loadingIndicator" class=""><span-->
+                        <!--                          class="_2vJqfSRj93G2OKjQYIF5OI" style="animation-delay: 0s;"></span></div>-->
+                        <a class="" href="#" target="_self">
+                          <div class="fr-load-more noborder"><span class="text">Xem thêm</span><span class="arrow"><span
+                            class="fr-icon chevron_updown" style="font-size: 24px;" role="img" aria-label="View more"
+                            aria-hidden="true"></span></span></div>
+                        </a>
+                        <div class="fr-wrapper mt-m w4-f" style="width: auto;">
+                          <button class="fr-btn primary disabled wundefined-f" type="button"
+                                  data-test="lấy-hàng-tại-cửa-hàng-này-button" fdprocessedid="40frbwg" disabled="">Lấy
+                            hàng tại cửa hàng này
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+
+            <!-- Danh sách địa chỉ -->
+            <div class="fr-h-rule full">
+              <hr style="color: rgb(224, 224, 224)">
+            </div>
+            <div>
+              <div class="fr-contents-card">
+                <div>
+                  <div>
+                    <div>
+                      <ul class="fr-list bordered-between-content mt-m mb-l">
+                        <li *ngFor="let addr of address">
+                          <div>
+                            <div class="fr-panel" data-test="address">
+                              <div class="panel-inner">
+                                <div class="panel-contents">
+                                  <div class="info-section">
+                                    <section class="fr-info-section">
+                                      <div class="info-container">
+                                        <div class="left-info">
+                                          <h4 class="info-main">
+                                            {{ addr.firstName }} <span *ngIf="addr.lastName ">(Địa chỉ thành viên)</span>
+                                          </h4>
+                                        </div>
+                                        <div class="right-info">
+                                          <p>{{ addr.street }},  {{addr.ward}},  {{addr.district}},  {{addr.province}}</p>
+                                          <p>{{ addr.phoneNumber }}</p>
+                                        </div>
+                                      </div>
+                                    </section>
+                                  </div>
+                                  <div class="panel-action" style="padding-left: 20px;">
+                                    <div class="mb-xs">
+                                      <!-- Nếu địa chỉ này đang được chọn -->
+                                      <button class="icon relative small panel-action-button w2-f btn-text fr-btn" type="button"
+                                              *ngIf="addr.id === selectedAddressId">
+                                        <div class="absolute fr-icon check_large center-vertical" aria-hidden="true"></div>
+                                        <div>Đã chọn</div>
+                                      </button>
+                                      <!-- Nếu địa chỉ này chưa được chọn -->
+                                      <button class="icon relative small panel-action-button w2-f btn-text fr-btn"
+                                              *ngIf="addr.id !== selectedAddressId" (click)="selectAddress(addr)">
+                                        <div>Chọn</div>
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+
+                      <div class="button-container">
+                    <span class="mr-s">
+                      <button [routerLink]="['../payment']" class="fr-btn btn-dark w4-f" type="button" data-test="tiếp-tục-thanh-toán-button"
+                      >Tiếp tục thanh toán</button>
+                    </span><span>
+                    <button
+                      class="fr-btn back w4-f border" type="button">
+                    Đăng ký một địa chỉ mới</button></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

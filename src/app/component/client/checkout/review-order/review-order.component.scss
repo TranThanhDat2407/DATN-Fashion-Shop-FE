@@ -1,0 +1,619 @@
+*{
+  color:#1b1b1b;
+  padding:0;
+  margin:0;
+  font-family: Arial, 'Helvetica Neue', HelveticaNeue, Helvetica,
+  'Noto Sans', Roboto, 'Hiragino Sans', 'Hiragino Kaku Gothic Pro',
+  '\30D2\30E9\30AE\30CE\89D2\30B4 Pro W3', 'Noto Sans CJK JP', Osaka, Meiryo,
+  '\30E1\30A4\30EA\30AA', 'MS PGothic', '\FF2D\FF33 \FF30\30B4\30B7\30C3\30AF',
+  'Hiragino Sans GB', 'Arial Unicode MS', sans-serif;
+}
+.background-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: fixed;
+  top: 0%;
+  left: 0;
+  z-index: -1;
+
+}
+.overlay {
+
+  position: absolute;
+  top: 0%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  background-color:
+    rgb(255, 255, 255,0.4); /* Màu trắng với độ mờ 50% */
+  z-index: 2; /* Đặt lớp phủ nằm trên ảnh nền */
+}
+.content-box {
+  position: relative;
+  z-index: 2; /* Giá trị cao hơn để hiển thị trên ảnh */
+  color: white; /* Tùy chọn màu chữ để tương phản với nền */
+  padding: 20px;
+  height: auto;
+}
+
+.placeholder {
+  visibility: hidden; /* Giữ không gian nhưng không hiển thị nội dung */
+}
+
+.textTitle h2{
+  border-radius: 28px;
+  text-align: center;
+  width: 250px;
+  background-color: rgb(255, 255, 255,0.85);
+  padding: 6px;
+  color: black;
+  font-family: "Kanit", sans-serif;
+}
+
+.textTitle span{
+  font-weight: 500;
+  font-size: 22px;
+  color: black;
+  font-family: "Kanit", sans-serif;
+}
+
+.textTitle p{
+  font-size: 14px;
+  color: #a9a9a9;
+  font-family: "Kanit", sans-serif;
+}
+
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+
+p .text-shipping{
+  color: black;
+  font-weight: 500;
+}
+.contents {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 600px;
+  width: 90%;
+}
+
+
+/* Form */
+
+.fr-textfield-input, .fr-pulldown-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #378694;
+  border-radius: 4px;
+}
+.fr-contents-card {
+  background: #fff;
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+
+
+.btn-text{
+  border: 1px solid #378694;
+  background: none;
+
+}
+.btn-text:hover{
+
+  background-color: #ccc;
+
+}
+form {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.px-l {
+  padding-left: 28px;
+  padding-right: 28px;
+}
+.pt-xxs {
+  padding-top: 8px;
+}
+.mx-xxxs {
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.fr-radio.bold-with-subtext label>span {
+  padding-top: .15em;
+}
+.fr-radio.bold-with-subtext .title {
+  display: inline-block;
+  padding-bottom: 8px;
+}
+.fr-flbox, .fr-pulldown-box {
+  display: flex
+;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.fr-wrapper {
+  gap: 10px; /* Khoảng cách giữa các phần tử */
+  margin-bottom: 5px;
+}
+.mb-xl {
+  margin-bottom: 40px;
+}
+.fr-table>table {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+.fr-table tbody, .fr-table tfoot {
+  display: block;
+}
+.fr-table tbody>tr, .fr-table tfoot>tr {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+}
+.fr-table tbody>tr>td:first-child, .fr-table tfoot>tr>td:first-child {
+  padding-right: 0.75em;
+}
+.fr-table tbody>tr>:last-child, .fr-table tfoot>tr>:last-child {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+
+
+.fr-table tbody>tr, .fr-table tfoot>tr {
+  align-items: flex-end;
+  display: flex
+;
+  justify-content: space-between;
+}
+
+.fr-h-rule {
+  display: block;
+  height: 1px;
+  line-height: 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+}
+.fr-h-rule.full hr {
+  width: 100%;
+}
+
+.fr-h-rule hr {
+  background-color: #dadada;
+  border: 0;
+  height: 1px;
+  display: block;
+  margin: 0 auto;
+}
+
+.fr-table tfoot>tr:last-child>th:first-child {
+  padding-bottom: 0;
+  font-size: 20px;
+}
+
+
+li {
+  display: list-item;
+  text-align: -webkit-match-parent;
+  unicode-bidi: isolate;
+}
+.fr-list>* {
+  list-style: none;
+}
+.fr-h-rule {
+  display: block;
+  height: 1px;
+  line-height: 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+}
+.fr-h-rule hr {
+  background-color: #dadada;
+  border: 0;
+  height: 1px;
+  display: block;
+  margin: 0 auto;
+}
+.mb-l {
+  margin-bottom: 28px;
+}
+//.fr-list.bordered-between-content>*:last-child, .fr-list.bordered-between-content-border-last>*:last-child {
+//  border-bottom: 0px solid #f2f2f2;
+//}
+.fr-panel {
+  margin: 20px auto;
+}
+.fr-panel .panel-inner {
+  min-height: 1.6em;
+  position: relative;
+}
+.fr-panel .panel-inner .panel-contents {
+  display: flex
+;
+  justify-content: space-between;
+}
+.info-section {
+  height: 100%;
+  width: 60%;
+}
+.info-container {
+  display: flex
+;
+}
+.info-container {
+  display: flex
+;
+}
+.fr-info-section .info-main {
+  font-weight: normal;
+  font-size: 16px !important;
+  line-height: 24px;
+}
+.right-info {
+  width: 50%;
+  line-height: 24px;
+}
+.left-info {
+  width: 50%;
+  padding-right: 10px;
+}
+.fr-panel .panel-action .fr-btn, .pay-in-store .panel-action .fr-btn {
+  margin: 10px;
+  min-height: 30px !important;
+  min-width: 117px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  //margin-top: 40px;
+}
+button, input, select, textarea {
+  background-color: transparent;
+  border-style: none;
+  color: inherit;
+}
+button, select {
+  text-transform: none;
+}
+
+.primary.fr-btn {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.25);
+  background: #1b1b1b;
+  border-color: #1b1b1b;
+  color: #fff;
+}
+.mt-l {
+  margin-top: 28px;
+}
+
+.attention.fr-btn {
+  -webkit-tap-highlight-color: rgba(153, 0, 0, 0.25);
+  background: red;
+  border-color: red;
+  color: #fff;
+}
+
+/* Form heading */
+form h1 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+/* Label styling */
+form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #000;
+}
+
+/* Input and select styling */
+form input[type="text"],
+form input[type="tel"],
+form select,
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Error messages */
+form .error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+/* Button styles */
+form .buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+form button {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+fr-btn primary {
+  background-color: black;
+  color: white;
+}
+
+.back.fr-btn {
+  -webkit-tap-highlight-color: rgba(55, 134, 148, 0.25);
+  background: #fff;
+  border-color: #7d7d7d;
+  color: #1b1b1b;
+}
+
+
+/* modal */
+/* Center the modal on the screen */
+.modal-dialog {
+  max-width: 600px;
+  margin: 30px auto;
+}
+
+/* Style modal title */
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #333;
+}
+
+/* Button styling */
+.modal-footer {
+  border-top: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-footer .btn {
+  width: 45%;
+}
+
+.fr-btn {
+  padding: 12px;
+  font-size: 1rem;
+}
+
+.fr-textfield-input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.fr-pulldown-select {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.fr-form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.fr-wrapper {
+  margin-bottom: 20px;
+}
+
+.fr-textfield-label,
+.fr-pulldown-area {
+  font-size: 1rem;
+}
+
+.fr-flbox.middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fr-text-18 {
+  font-size: 18px;
+}
+
+/* Modal Body styling */
+.modal-body {
+  padding: 20px;
+}
+
+/* Button hover effects */
+.fr-btn.bg-black:hover {
+  background-color: #333;
+}
+
+.fr-btn.bg-white:hover {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+.fr-btn.text-dark {
+  color: #333;
+}
+
+.fr-btn.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.fr-btn.bg-white {
+  background-color: white;
+  color: #007bff;
+}
+/*payment */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 8px;
+  background-color: #f9f9f9;
+}
+
+.card-registration-form {
+  //max-width: 600px;
+  //margin: 0 auto;
+  background: #fff;
+  padding: 20px;
+  //border: 1px solid #e0e0e0;
+  //border-radius: 8px;
+}
+
+.card-registration-form h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.card-icons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.card-icons img {
+  height: 30px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  //width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+//.cvv-info {
+//  height: 20px;
+//  //margin-top: 10px;
+//}
+
+.checkbox {
+  display: flex;
+  //justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #000;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  //border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #333;
+}
+.accordion-button {
+  background-color: #999999;
+
+}
+.accordion-button:hover {
+  background-color: #999999;
+}
+.fr-text {
+  display: block;
+  overflow-wrap: break-word;
+}
+abbr[title] {
+  //border-bottom: 1px dotted;
+  text-decoration: none;
+}
+.fr-price-currency-order-change.fr-price-currency>abbr.fr-price-currency-margin {
+  margin-left: .278em;
+  font-size: 15px;
+}
+.fr-price-currency-order-change.fr-price-currency>abbr {
+  margin-right: auto;
+  order: 1;
+}
+.fr-price-currency {
+  align-items: baseline;
+  color: inherit;
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+.fr-table td,
+.fr-table th {
+  text-align: left;
+  padding: 8px 5px;
+}
+
+.fr-table th {
+  font-weight: bold;
+}
+
+/* Total Section */
+
+.fr-price-currency abbr {
+  font-size: 15px;
+}

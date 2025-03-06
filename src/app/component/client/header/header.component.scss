@@ -1,0 +1,155 @@
+/* Header Styles */
+header {
+    background-color: transparent; /* Background trong suốt */
+    z-index: 1030; /* Đảm bảo header nằm trên */
+    border-bottom: 1px solid #dadada;
+  }
+
+
+
+  /* Gạch chân màu trắng mặc định của nav-underline */
+  .nav-underline .nav-link {
+    color: #fff; /* Chữ màu trắng */
+    position: relative;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+
+  .nav-underline .nav-link::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    transition: width 0.3s ease;
+  }
+
+  /* Ẩn dấu tam giác trong dropdown */
+  .no-caret::after {
+    display: none !important;
+  }
+
+  .head-icon-global {
+    padding: 0px !important;
+    margin: 0.5rem !important;
+    border: 0px !important;
+  }
+
+  /* Loại bỏ border và shadow khi focus hoặc active */
+  .no-focus:focus,
+  .no-focus:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  /* Dropdown Menu Custom */
+  .dropdown-custom {
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 12rem;
+
+  }
+
+
+  /* Dropdown Item */
+  .dropdown-custom .dropdown-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #000;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+
+  .dropdown-custom{
+    margin-left: 1rem;
+    margin-right: 1rem;
+    border-radius: 0;
+    z-index: 999;
+  }
+
+.centered-navigation {
+  display: flex; /* Sử dụng Flexbox */
+  justify-content: center; /* Căn giữa các mục theo chiều ngang */
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
+}
+
+.centered-navigation .nav-item {
+  display: flex; /* Chuyển <li> thành container linh hoạt */
+  align-items: center; /* Căn giữa các liên kết <a> */
+}
+
+.centered-navigation .nav-link {
+  display: flex; /* Chuyển <a> thành container linh hoạt */
+  align-items: center; /* Căn giữa văn bản bên trong <a> */
+  padding: 0.5rem 1rem; /* Tạo khoảng cách trên dưới và hai bên */
+  text-align: center; /* Canh giữa nội dung văn bản */
+}
+
+.nav-item{
+  width: 9rem !important;
+}
+
+
+.dropdown-custom .dropdown-item.active {
+    background-color: white ;
+    color: #000; /* Chữ đen */
+    font-weight: bold;
+  }
+
+  .dropdown-custom .dropdown-item.active i {
+    color: #000; /* Màu của icon check */
+  }
+
+  .dropdown-custom .dropdown-item:hover {
+    background-color: #f8f9fa; /* Màu xám nhạt khi hover */
+  }
+
+
+
+  .bi {
+    font-size: 1.5rem; /* Icon size */
+    color: #fff; /* Icon màu trắng */
+  }
+
+  .head-icon .bi:hover{
+    color: rgb(123, 123, 123);
+  }
+
+  .head-icon .bi{
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+  }
+
+  .head-title{
+    font-size: 1.1rem;
+    width: 4.5rem;
+    margin-right: 2.5rem;
+    margin-left: 2.5rem;
+  }
+
+  header img {
+    cursor: pointer; /* Biến con trỏ thành pointer khi hover vào logo */
+  }
+
+  /* Header for other pages */
+  .header-other {
+    background-color: #fff; /* Nền trắng */
+    color: #000; /* Chữ đen */
+  }
+
+  .header-home {
+    background-color: transparent; /* Nền trong suốt */
+    color: #fff; /* Chữ trắng */
+  }
+
+
+.start-100 {
+  left: 150% !important;
+}

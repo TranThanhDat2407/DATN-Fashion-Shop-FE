@@ -1,0 +1,298 @@
+<!--<div *ngIf="showSuccessMessage" class="alert alert-success" role="alert">-->
+<!--  {{message}}-->
+<!--</div>-->
+<app-store-header [title_header]="'CHECKOUT'" [title_btn]="'insert'"/>
+
+<div class="container-fluid "
+     #scrollContainer
+     style="  max-height: 100vh; /* Giới hạn chiều cao */
+    overflow-y: auto;
+">
+
+  <!-- Overlay barcode scanner -->
+
+  <div class="background-box">
+    <!-- <img src="../../../assets/images/backgroundCart.jpeg" alt=""> -->
+    <button class="btn btn-primary mt-3 mb-3" (click)="clearCart()">CLEAR</button>
+  </div>
+  <div class="content-box">
+    <div class=" cart-layout">
+      <!-- Nút mở quét barcode -->
+      <!--      <div class="cart-title">-->
+<!--        <i class="fa-solid fa-cart-shopping"> </i>-->
+<!--        <h2> {{ "THANH TOÁN" | translate }} </h2>-->
+<!--      </div>-->
+<!--      <p></p>-->
+
+<!--      <div class="scan-product ">-->
+<!--        <button class="btn btn-primary">-->
+<!--          <i class="fa-solid fa-barcode"></i> {{ "QUÉT SẢN PHẨM" | translate }}-->
+<!--        </button>-->
+<!--      </div>-->
+
+
+          <!-- Phần danh sách sản phẩm có thanh cuộn -->
+          <div class="cart-allProduct" id="cartContainer">
+            <!-- Thông báo lỗi nếu có -->
+            <div *ngIf="orderSuccessMessage" class="alert alert-success text-center fw-bold fs-2 mt-4 alert-center">
+               {{ orderSuccessMessage }}
+            </div>
+            <div *ngIf="orderFailedMessage" class="alert alert-danger text-center fw-bold fs-2 mt-4 alert-center">
+              {{ orderFailedMessage }}
+            </div>
+            <!-- Mỗi sản phẩm trong giỏ hàng -->
+            <div class="cart-product-item"
+                 tabindex="0"
+                 *ngFor="let cart of cartItems" [attr.id]="'cart-item-' + cart.id">
+
+              <ng-container *ngIf="getProductDetailByProductVariantId(cart.productVariantId) as productDetail">
+                <!-- Phần hình ảnh sản phẩm -->
+                <div class="item-layout-image">
+                  <div class="product-item-image">
+                    <img [src]="'http://localhost:8080/uploads/images/products/' + productDetail.variantImage" alt="Image">
+                  </div>
+                </div>
+
+                <!-- Phần thông tin sản phẩm -->
+                <div class="item-layout-infor">
+                  <!-- Tên sản phẩm -->
+                  <p class="item-name">{{ productDetail.name }}</p>
+
+                  <!-- Thông tin màu sắc, kích thước và số lượng -->
+                  <div class="item-inforColorSizeQty">
+                    <div class="item-details">
+                      <p class="item-size">
+                        <span>Color: <span class="text-size-color">{{ productDetail.color }}</span></span>
+                      </p>
+                      <p class="item-color">
+                        <span>Size: <span class="text-size-color">{{ productDetail.size }}</span></span>
+                      </p>
+                    </div>
+
+                    <div class="item-quantity">
+                      <div class="input-group input-group-qty">
+                    <span class="input-group-text btn-group-qty" (click)="updateQuantity(cart, cart.quantity - 1)">
+                      <i class="fa-solid fa-minus"></i>
+                    </span>
+                        <input class="input-qty"
+                               type="number"
+                               [(ngModel)]="cart.quantity"
+                               (blur)="updateQuantity(cart, cart.quantity)">
+                        <span class="input-group-text btn-group-qty" (click)="updateQuantity(cart, cart.quantity + 1)">
+                      <i class="fa-solid fa-plus"></i>
+                    </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Phần giá và nút xóa -->
+                  <div class="item-inforPrice_btnRemove">
+                    <span class="item-btnRemove text-danger" (click)="removeCartItem(cart.id)">Remove</span>
+
+                    <div class="item-price">
+                  <span class="textTotal">
+                    <span>Price: </span>
+                    <p>
+                      <span *ngIf="productDetail.basePrice === productDetail.salePrice" class="product-item-priceInit">
+                        {{ productDetail.basePrice | currency:'VND':''}} VND
+                      </span>
+                      <span *ngIf="productDetail.basePrice !== productDetail.salePrice">
+                        <span class="product-item-priceSale">
+                          {{ productDetail.salePrice | currency:'VND':''}} VND
+                        </span>
+                        <br>
+                        <span class="product-item-priceInit">
+                          {{ productDetail.basePrice | currency:'VND':''}} VND
+                        </span>
+                      </span>
+                    </p>
+                  </span>
+                    </div>
+
+                    <div class="item-price-subtotal">
+                  <span class="textTotal">
+                    <span>Total: </span>
+                    <p>
+                      <ng-container *ngIf="productDetail.basePrice === productDetail.salePrice">
+                        {{ productDetail.basePrice * cart.quantity | currency:'VND':'' }} VND
+                      </ng-container>
+                      <ng-container *ngIf="productDetail.basePrice !== productDetail.salePrice">
+                        {{ productDetail.salePrice * cart.quantity | currency:'VND':''}} VND
+                      </ng-container>
+                    </p>
+                  </span>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+        </div>
+
+
+          <div class="cart-order sticky-top">
+
+
+          <div class="manual-add mt-3">
+            <p *ngIf="productErrorMessage" class="priceBill total-decor-bold coupon-item p-0 ps-2  fs-5
+            text-danger mt-1">
+              {{ productErrorMessage }}
+            </p>
+            <div class="input-group mb-3">
+              <input
+                #manualInput
+                type="number"
+                class="form-control"
+                placeholder="Insert Variant ID"
+                (keyup.enter)="addProductManual(manualInput.value)" >
+              <button class="btn btn-primary" (click)="startScan()">
+                <i class="fa-solid fa-barcode"></i>
+                </button>
+            </div>
+          </div>
+
+<!--          <button class="btn btn-primary mb-3" >-->
+<!--            SCAN INSERT-->
+<!--          </button>-->
+          <div class="overlay-barcode " [ngClass]="{'d-none': !isScanning}">
+            <div class="scanner-container">
+              <div class="scanner-frame">
+                <video #scannerVideo class="hidden-video" autoplay playsinline></video>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-danger mb-3"
+                  [ngClass]="{'d-none': !isScanning}" (click)="stopScan()">
+            <i class="fa-solid fa-stop"></i> STOP SCAN
+          </button>
+            <div class="priceBill sticky-top">
+              <p class="total-decor-bold">
+                <span>TOTAL QUANTITY</span>
+                <span>{{ totalCartItems }}</span>
+              </p>
+              <hr>
+
+              <p class="total-decor">
+                <span>VAT</span>
+                <span>{{ vat | currency:'VND':'' }}</span>
+              </p>
+
+              <p class="total-decor">
+                <span>TOTAL</span>
+                <span>{{ totalPrice | currency:'VND':'' }}</span>
+              </p>
+
+              <!-- Hiển thị mã giảm giá nếu có -->
+              <p class="total-decor" *ngIf="couponDetails">
+                <span>COUPON</span>
+                <span class="ms-5 ps-5">
+
+      <ng-container *ngIf="couponDetails.discountType === 'PERCENTAGE'">
+        - {{ couponDetails?.discountValue }} %
+      </ng-container>
+    </span>
+                <br>
+                <span>- {{ discountAmount | currency:'VND':'' }}</span>
+              </p>
+
+              <hr>
+
+              <!-- Trường hợp không có coupon -->
+              <p class="total-decor-bold" *ngIf="!couponDetails">
+                <span>ORDER TOTAL</span>
+                <span>{{ (totalPrice + vat) | currency:'VND':'' }}</span>
+              </p>
+
+              <!-- Trường hợp có coupon -->
+              <p class="total-decor-bold" *ngIf="couponDetails">
+                <span>ORDER TOTAL</span>
+                <span style="text-decoration: line-through; color: gray;">
+      {{ (totalPrice + vat) | currency:'VND':'' }}
+    </span>
+                <span style="color: red; font-weight: bold;">
+      {{ orderTotal | currency:'VND':'' }}
+    </span>
+              </p>
+            </div>
+
+            <p class="priceBill total-decor-bold coupon-item p-0 ps-2  fs-5">COUPON </p>
+            <p *ngIf="couponErrorMessage" class="priceBill total-decor-bold coupon-item p-0 ps-2  fs-5
+            text-danger mt-1">{{ couponErrorMessage }}</p>
+            <p *ngIf="couponSuccessMessage && couponDetails" class="priceBill total-decor-bold
+            coupon-item p-0 ps-2 fs-5 text-success mt-1">
+              {{ couponSuccessMessage }}
+            </p>
+          <div class="priceBill d-flex pt-3">
+            <input type="text" class="border rounded-1 px-2"
+                   style="width: 350px"
+                   placeholder="Enter coupon code"
+                   [(ngModel)]="couponCode"
+                   (keyup.enter)="applyCoupon()">
+              <button class="btn btn-primary ms-2" (click)="startCouponScan()">
+                <i class="fa-solid fa-barcode"></i>
+              </button>
+          </div>
+            <video #couponScannerVideo autoplay playsinline
+                   class="hidden-video" [ngClass]="{'d-none': !isCouponScanning}"
+            ></video>
+            <button class="btn btn-danger mb-3" (click)="stopCouponScan()"
+                    [ngClass]="{'d-none': !isCouponScanning}">
+              <i class="fa-solid fa-stop"></i> STOP SCAN
+            </button>
+
+            <div class="payment-method">
+              <label class="priceBill total-decor-bold coupon-item p-0 ps-2 fs-5">
+                Payment Method
+              </label>
+
+              <div class="priceBill d-flex pt-3 justify-content-between">
+                <label class="ms-3">
+                  <input type="radio" name="paymentMethod"  value="4" [(ngModel)]="paymentMethod">
+                  Cash
+                </label>
+                <label class="me-3">
+                  <input type="radio" name="paymentMethod" value="3" [(ngModel)]="paymentMethod">
+                  Bank
+                </label>
+              </div>
+            </div>
+
+
+            <div class="priceBill">
+            <div class="btnBuyCart slide_leftbtnBuyCart" (click)="createOrder()"> CREATE ORDER </div>
+            <!-- <span class="hr-element-decor"><hr>or <hr></span -->
+            <hr>
+            <label class="priceBill total-decor-bold coupon-item p-0 ps-2 fs-5"
+            *ngIf="userId && isValidUser"
+            >User: {{userId}}</label>
+
+            <label class="priceBill total-decor-bold coupon-item p-0 ps-2 fs-5"
+                   *ngIf="!isValidUser"
+            >Null or Invalid User</label>
+
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Enter User ID"
+                       [(ngModel)]="userId"
+                       (input)="onUserIdChange()"
+                       (ngModelChange)="checkUserValid()"
+                >
+                <button class="btn btn-primary" (click)="startUserScan()"
+                        type="button"><i class="fa-solid fa-barcode"></i></button>
+                <video #userScannerVideo autoplay playsinline class="mt-3"
+                       [ngClass]="{'d-none': !isUserScanning}"
+                ></video>
+                <button class="btn btn-danger mb-3 mt-3" (click)="stopUserScan()"
+                        [ngClass]="{'d-none': !isUserScanning}">
+                  <i class="fa-solid fa-stop"></i> STOP SCAN
+                </button>
+
+              </div>
+
+          </div>
+
+          </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

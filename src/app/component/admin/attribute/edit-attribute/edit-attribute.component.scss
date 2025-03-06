@@ -1,0 +1,166 @@
+.custom-select {
+  position: relative;
+  width: 20%;
+  font-family: "Kanit", sans-serif;
+}
+
+.selected-item {
+  padding: 10px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.selected-item img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* Dropdown ẩn ban đầu */
+.dropdown {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #000000;
+  border-top: none;
+  background: white;
+  z-index: 1000;
+  max-height: 0; /* Ẩn dropdown */
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Khi dropdown mở */
+.custom-select:hover .dropdown {
+  max-height: 200px; /* Trượt xuống */
+  opacity: 1;
+}
+
+/* Input trong dropdown */
+.dropdown input {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  outline: none;
+}
+
+/* Danh sách dropdown */
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 130px;
+  overflow-y: auto; /* Cho phép cuộn */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome & Safari */
+.dropdown ul::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown li {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown li img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.dropdown li:hover {
+  background: #f1f1f1;
+}
+
+
+.custom-select {
+  position: relative;
+  width: 20%;
+  font-family: "Kanit", sans-serif;
+}
+
+.selected-item {
+  padding: 10px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.selected-item img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* Dropdown ẩn ban đầu */
+.dropdown {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #000000;
+  border-top: none;
+  background: white;
+  z-index: 1000;
+  max-height: 0; /* Ẩn dropdown */
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Khi dropdown mở */
+.custom-select:hover .dropdown {
+  max-height: 200px; /* Trượt xuống */
+  opacity: 1;
+}
+
+/* Input trong dropdown */
+.dropdown input {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  outline: none;
+}
+
+/* Danh sách dropdown */
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 130px;
+  overflow-y: auto; /* Cho phép cuộn */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome & Safari */
+.dropdown ul::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown li {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown li img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.dropdown li:hover {
+  background: #f1f1f1;
+}

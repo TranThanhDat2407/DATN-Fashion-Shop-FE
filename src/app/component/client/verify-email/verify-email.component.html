@@ -1,0 +1,22 @@
+<!-- Email Verification Page -->
+<div class="container-fluid pt-4">
+  <div class="background-box">
+    <div class="overlay"></div>
+  </div>
+
+  <div class="content-box">
+    <div class="verify-box">
+      <div class="verify-box-content">
+        <div class="verify-title">
+          <h2>XÁC THỰC EMAIL</h2>
+          <p>{{ message }}</p>
+        </div>
+
+        <div *ngIf="isSuccess" class="text-center success-message">
+          <p>Bạn sẽ được chuyển hướng đến trang đăng nhập...</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,152 @@
+// font-family: "Kanit", sans-serif;
+
+.background-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: fixed;
+  top: 0%;
+  left: 0;
+  z-index: -1;
+
+}
+
+.overlay {
+
+  position: absolute;
+  top: 0%;
+  left: 0;
+  width: 100%;
+  height: 106%;
+  background-color:
+    rgb(255, 255, 255,0.4); /* Màu trắng với độ mờ 50% */
+  z-index: 2; /* Đặt lớp phủ nằm trên ảnh nền */
+}
+.content-box {
+  position: relative;
+  z-index: 2; /* Giá trị cao hơn để hiển thị trên ảnh */
+  color: white; /* Tùy chọn màu chữ để tương phản với nền */
+  padding: 20px;
+  height: auto;
+}
+.signintext{
+  margin-top: -20px;
+}
+
+.signintext h2{
+  color: black;
+  font-family: "Kanit", sans-serif;
+}
+.signintext p{
+  font-size: 14px;
+  color: #a9a9a9;
+  font-family: "Kanit", sans-serif;
+}
+.form-design label{
+  color: black;
+  font-family: "Kanit", sans-serif;
+}
+.form-design input{
+  font-family: "Kanit", sans-serif;
+  font-size: 17px;
+
+  height: 50px;
+  border: 1px solid rgb(125, 125, 125);
+  border-radius: 3px;
+}
+
+
+.btnLogin {
+  font-weight: bolder;
+  background-color:rgb(130, 186, 211, 0.3);
+  text-align: center;
+  width: 230px;
+  color: #000000;
+  border: 2px solid #82bad3;
+  border-radius: 5px;
+  padding: 15px 36px;
+  display: inline-block;
+  font-family: "Kanit", sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 0 #82bad3;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+  height: 60px;
+}
+
+.slide_leftbtnLogin:hover {
+  color: white;
+  box-shadow: inset 0 0 0 50px #82bad3;
+}
+
+.btnLoginWithGoogle {
+  font-weight: bolder;
+  background-color: rgba(152, 244, 177, 0.3);
+  text-align: center;
+  width: 350px;
+  color: #000000;
+  border: 2px solid rgb(75, 244, 120);
+  border-radius: 5px;
+  padding: 15px 26px;
+  display: inline-block;
+  font-family: "Kanit", sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 0 #82bad3;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+  height: 60px;
+}
+
+.slide_leftbtnbtnLoginWithGoogle:hover {
+  color: white;
+  box-shadow: inset 0 0 0 50px rgb(152, 244, 177,0.7);
+}
+.ggText{
+  font-size: 22px;
+}
+
+.form-design h2{
+  margin-top: 20px;
+  font-family: "Kanit", sans-serif;
+
+  color: black
+}
+.form-design p{
+  font-family: "Kanit", sans-serif;
+
+  color: black
+}
+
+
+.btnSignin {
+  font-weight: bolder;
+  background-color:rgba(206, 227, 237, 0.3);
+
+  text-align: center;
+  width: 570px;
+  color: #000000;
+  border: 2px solid #82bad3;
+  border-radius: 5px;
+  padding: 15px 26px;
+  display: inline-block;
+  font-family: "Kanit", sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 0 #82bad3;
+  -webkit-transition: ease-out 0.4s;
+  -moz-transition: ease-out 0.4s;
+  transition: ease-out 0.4s;
+  height: 60px;
+}
+
+.slide_leftbtnSignin:hover {
+  color: white;
+  box-shadow: inset 0 0 0 50px #82bad3;
+}

@@ -1,0 +1,254 @@
+<div class="container" style="margin-top: 4rem">
+  <!-- Back to product link -->
+  <div class="container mt-3">
+    <a [routerLink]="['../detail_product']" href="#" class="text-decoration-underline fw-bold text-dark d-block mb-3">
+      {{ "QUAY LẠI CHI TIẾT SẢN PHẨM" | translate }}
+    </a>
+
+    <h2 class="fw-bold">{{dataDetailsProduct?.name}}</h2>
+
+    <p class="mt-3 text-muted">
+      {{"Để đăng bài đánh giá bằng Tiếng Anh, quý khách vui lòng truy cập vào trang web tiếng Anh. Trang web Tiếng Việt chỉ ghi nhận và hiển thị bài viết đánh giá bằng tiếng Việt." | translate}}
+    </p>
+
+    <a (click)="toggleLanguageAndCurrency()" class="text-decoration-underline fw-bold text-dark">
+      {{ "TRUY CẬP ĐẾN TRANG TIẾNG ANH" | translate }}
+    </a>
+  </div>
+
+  <!-- Viết Đánh Giá -->
+  <div class="row">
+    <!-- Phần bên trái -->
+    <div class="col-md-7">
+      <div class="container mt-4 border p-4">
+        <div class="d-flex justify-content-between">
+          <h3 class="fw-bold">{{ "VIẾT BÀI ĐÁNH GIÁ" | translate }}</h3>
+          <p class="text-success-emphasis">{{ "* Bắt buộc" | translate }}</p>
+        </div>
+
+        <!-- Form -->
+        <form   (ngSubmit)="onSubmit()">
+          <!-- Đánh giá -->
+          <div class="mb-4 d-flex align-items-center justify-content-between row mt-4">
+            <div class="col-md-3">
+              <label class="form-label fw-bold d-inline-block ">{{ "ĐÁNH GIÁ *" | translate }}</label>
+            </div>
+            <div class="col-md-9">
+              <div class="d-flex align-items-center gap-3">
+                <!-- Rating Stars -->
+                <div class="d-flex gap-2">
+                  <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                    <i class="fa"
+                       [ngClass]="{
+                          'fa-star': star <= selectedRating,
+                          'fa-star-o': star > selectedRating,
+                          'icon-color': star <= selectedRating,
+                          'text-muted': star > selectedRating
+                       }"
+                       (click)="setRating(star)" 
+                       style="cursor: pointer; font-size: 1.5rem;">
+                    </i>
+                  </ng-container>
+                </div>
+                <!-- Rating Text -->
+                <span class="text-muted fw-bold">{{ ratingText }}</span>
+              </div>
+              <input type="hidden" [value]="selectedRating" />
+            </div>
+          </div>
+
+          <!-- Dáng -->
+          <div class="fit-selector">
+            <div class="d-flex justify-content-between align-items-center row">
+              <div class="col-md-3">
+                <label class="form-label fw-bold mb-0">{{ "DÁNG *" | translate }}</label>
+              </div>
+              <div class="col-md-9">
+                <div class="fr-flitem col12">
+                  <div class="fr-fitting-label d-flex justify-content-between mb-2 fw-bold">
+                    <p class="fr-fitting-label-item" style="font-size: 14px;">{{ "CHẬT" | translate }}</p>
+                    <p class="fr-fitting-label-item" style="font-size: 14px;">{{ "HƠI CHẬT" | translate }}</p>
+                    <p class="fr-fitting-label-item" style="font-size: 14px;">{{ "ĐÚNG VỚI KÍCH THƯỚC" | translate }}</p>
+                    <p class="fr-fitting-label-item" style="font-size: 14px;">{{ "HƠI RỘNG" | translate }}</p>
+                    <p class="fr-fitting-label-item" style="font-size: 14px;">{{ "RỘNG" | translate }}</p>
+                  </div>
+                  <div class="fr-fitting-graph position-relative">
+                    <div class="fr-fitting-point d-flex justify-content-between position-relative">
+                      <span class="fr-dots" [class.selected]="fitValue === 1" (click)="setFitValue(1)">
+                        <span class="fr-implicit"></span>
+                      </span>
+                      <span class="fr-dots" [class.selected]="fitValue === 2" (click)="setFitValue(2)">
+                        <span class="fr-implicit"></span>
+                      </span>
+                      <span class="fr-dots" [class.selected]="fitValue === 3" (click)="setFitValue(3)">
+                        <span class="fr-implicit"></span>
+                      </span>
+                      <span class="fr-dots" [class.selected]="fitValue === 4" (click)="setFitValue(4)">
+                        <span class="fr-implicit"></span>
+                      </span>
+                      <span class="fr-dots" [class.selected]="fitValue === 5" (click)="setFitValue(5)">
+                        <span class="fr-implicit"></span>
+                      </span>
+                    </div>
+                    <input name="fit" type="range" step="1" min="1" max="5"   hidden />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tiêu đề -->
+          <div class="mb-4 title-row row mt-4">
+            <div class="col-md-3">
+              <label class="title-form-label" [class.activeValidationText]="errorFields.title">{{ "TIÊU ĐỀ *" | translate }}</label>
+            </div>
+            <div class="col-md-9">
+              <input type="text" class="title-form-control" [class.activeValidationInput]="errorFields.title" 
+                placeholder="Tóm tắt đánh giá của bạn" [(ngModel)]="reviewNew.title" name="title" />
+              <small class="title-text-muted">{{ "Tiêu đề của bạn phải ít hơn 100 ký tự." | translate }}</small>
+            </div>
+          </div>
+          
+
+          <!-- Bình luận -->
+          <div class="mb-4 row">
+            <div class="col-md-3">
+              <label class="form-label fw-bold" [class.activeValidationText]="errorFields.comment">{{ "BÌNH LUẬN *" | translate }}</label>
+            </div>
+            <div class="col-md-9">
+              <textarea class="form-control" [class.activeValidationInput]="errorFields.comment"
+                rows="4" placeholder="" [(ngModel)]="reviewNew.comment" name="comment"></textarea>
+            </div>
+          </div>
+          
+          <!-- Kích cỡ đã mua -->
+          <div class="mb-4">
+            <label class="form-label fw-bold" [class.activeValidationText]="errorFields.purchasedSize">{{ "KÍCH CỠ ĐÃ MUA *" | translate }}</label>
+            <select class="form-select" [(ngModel)]="reviewNew.purchasedSize" name="purchasedSize"
+              [class.activeValidationInput]="errorFields.purchasedSize">
+              <option value="">{{ "Chọn" | translate }}</option>
+              <option *ngFor="let size of dataSizes" [value]="size.valueName">{{ size.valueName }}</option>
+            </select>
+          </div>
+          
+
+          <!-- Biệt danh -->
+          <div class="mb-4">
+            <label class="form-label fw-bold">{{ "BIỆT DANH *" | translate }}</label>
+            <input type="text" class="form-control" placeholder="Vui lòng nhập tên đăng nhập" [(ngModel)]="reviewNew.nickname" name="nickname" />
+          </div>
+
+          <!-- Thông tin người mặc -->
+          <div class="mb-4">
+            <h6 class="fw-bold">{{ "THÔNG TIN NGƯỜI MẶC" | translate }}</h6>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-bold" [class.activeValidationText]="errorFields.gender">{{ "GIỚI TÍNH *" | translate }}</label>
+                <select class="form-select" [(ngModel)]="reviewNew.gender" name="gender" [class.activeValidationInput]="errorFields.gender">
+                  <option value="">{{ "Chọn" | translate }}</option>
+                  <option *ngFor="let g of genders" [value]="g.gender">{{ g.gender }}</option>
+                </select>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label fw-bold"   [class.activeValidationText]="bien">{{ "VỊ TRÍ *" | translate }}</label>
+                <div class="custom-select" [class.activeValidationInput]="bien">
+                  <div class="selected-item" (click)="isOpen = !isOpen">
+                    <span *ngIf="selectedItem">{{ selectedItem.name }}</span>
+                    <span *ngIf="!selectedItem">Choose Province</span>
+                  </div>
+
+                  <div class="dropdown" *ngIf="isOpen">
+                    <!-- Đã thêm [ngModelOptions]="{standalone: true}" -->
+                    <input type="text" [(ngModel)]="searchText"  [ngModelOptions]="{standalone: true}" placeholder="Tìm kiếm sản phẩm..." name="searchText" />
+                    <ul>
+                      <li *ngFor="let province of filteredProvinces" (click)="selectItem(province)">
+                        {{ province.name }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold" [class.activeValidationText]="errorFields.ageGroup">{{ "ĐỘ TUỔI *" | translate }}</label>
+                <select class="form-select" [(ngModel)]="reviewNew.ageGroup" name="ageGroup"
+                  [class.activeValidationInput]="errorFields.ageGroup">
+                  <option value="">{{ "Chọn" | translate }}</option>
+                  <option *ngFor="let a of ages" [value]="a.age">{{ a.age }}</option>
+                </select>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label fw-bold" [class.activeValidationText]="errorFields.height">{{ "CHIỀU CAO *" | translate }}</label>
+                <select class="form-select" [(ngModel)]="reviewNew.height" name="height"
+                  [class.activeValidationInput]="errorFields.height">
+                  <option value="">{{ "Chọn" | translate }}</option>
+                  <option *ngFor="let h of heights" [value]="h.height">{{ h.height }}</option>
+                </select>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label fw-bold" [class.activeValidationText]="errorFields.weight">{{ "CÂN NẶNG *" | translate }}</label>
+                <select class="form-select" [(ngModel)]="reviewNew.weight" name="weight"
+                  [class.activeValidationInput]="errorFields.weight">
+                  <option value="">{{ "Chọn" | translate }}</option>
+                  <option *ngFor="let w of weights" [value]="w.weight">{{ w.weight }}</option>
+                </select>
+              </div>
+              
+              <div class="col-md-6">
+                <label class="form-label fw-bold" [class.activeValidationText]="errorFields.shoeSize">{{ "CỠ GIÀY *" | translate }}</label>
+                <select class="form-select" [(ngModel)]="reviewNew.shoeSize" name="shoeSize"
+                  [class.activeValidationInput]="errorFields.shoeSize">
+                  <option value="">{{ "Chọn" | translate }}</option>
+                  <option *ngFor="let ss of shoeSizes" [value]="ss.size">{{ ss.size }}</option>
+                </select>
+              </div>
+              
+            </div>
+          </div>
+          <hr>
+          <!-- Điều khoản -->
+          <div class="review-form-container mt-4">
+            <h5 class="fw-bold" >{{ "ĐĂNG BÀI ĐÁNH GIÁ CỦA BẠN:" | translate }}</h5>
+            <ul class="review-form-text-muted">
+              <li>{{ "Bình luận đã đăng của bạn có thể được sử dụng cho mục đích quảng cáo." | translate }}</li>
+              <li>{{ "Chúng tôi không chấp nhận các yêu cầu đăng quảng cáo cho các thương hiệu, cá nhân, tổ chức khác. Ngoài ra, chúng tôi không thể đăng tình trạng còn hàng và kích cỡ sản phẩm." | translate }}</li>
+            </ul>
+
+            <div class="review-checkbox-container">
+              <input class="review-form-checkbox-input" [(ngModel)]="terms"  name="terms"  [class.activeValidationInput]="terms"
+              style="height: 1.3rem; width: 1.3rem" 
+              type="checkbox" id="terms" required />
+       
+              <label class="review-form-checkbox-label" for="terms">
+                {{ "Tôi đồng ý với" | translate }} <span class="review-form-link">{{ "ĐIỀU KHOẢN SỬ DỤNG CỦA BRAND" | translate }}</span>
+              </label>
+            </div>
+
+            <a href="#" class="review-form-link d-block mb-4 fw-bold">{{ "ĐIỀU KHOẢN SỬ DỤNG" | translate }}</a>
+
+            <div class="d-flex justify-content-between">
+              <button type="submit" class="btn btn-dark px-5 review-submit-btn fw-bold">{{ "GỬI" | translate }}</button>
+              <button type="button" class="btn btn-outline-dark px-5 review-back-btn fw-bold"
+              
+              [routerLink]="['/client', currentCurrency, currentLang,'detail_product', productId, colorId,sizeId
+           ]" 
+              >
+                {{ "QUAY LẠI CHI TIẾT SẢN PHẨM" | translate }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!----------------------END--------------------->
+    </div>
+    <!-- Hình ảnh bên phải -->
+    <div class="col-md-5 ">
+      <div class="container p-3 sticky-top">
+        <img src="https://image.uniqlo.com/UQ/ST3/vn/imagesgoods/456261/item/vngoods_10_456261_3x4.jpg?width=369" alt="Model Pose 1" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+</div>

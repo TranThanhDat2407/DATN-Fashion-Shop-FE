@@ -1,0 +1,52 @@
+<div class="container mb-2">
+    <div class="row">
+        <div class="col-lg-4">
+            <aside class="user-info-wrapper">
+                <div class="user-cover"
+                    style="background-image: url(https://www.oliveandcompany.com/wp-content/uploads/brand-names-1280x567.jpg);">
+                    <div class="info-label" data-toggle="tooltip" title=""
+                        data-original-title="You currently have 290 Reward Points to spend"><i
+                            class="icon-medal"></i>290 points</div>
+                </div>
+                <div class="user-info">
+<!--                    <div class="user-avatar">-->
+<!--                        <a class="edit-avatar" href="#"></a><img-->
+<!--                            src="https://cellphones.com.vn/sforum/wp-content/uploads/2023/10/avatar-trang-4.jpg"-->
+<!--                            alt="User">-->
+<!--                    </div>-->
+                    <div class="user-data">
+                        <h4>{{ userDetail.firstName }} {{userDetail.lastName}}</h4>
+                    </div>
+                </div>
+            </aside>
+            <nav class="list-group">
+                <a class="list-group-item" [routerLink]="['../profile/edit_profile']" routerLinkActive="active-link">
+                    <i class="fa fa-user"></i>Hồ Sơ
+                </a>
+                <a class="list-group-item with-badge" [routerLink]="['../profile/order_history']" routerLinkActive="active-link" >
+                    <i class="fa fa-th"></i>Lịch Sử Hóa Đơn
+
+                </a>
+                <a class="list-group-item" [routerLink]="['../profile/edit_address']" routerLinkActive="active-link">
+                    <i class="fa fa-map"></i>Địa Chỉ
+                </a>
+            </nav>
+
+        </div>
+        <div class="col-lg-8 p-0 m-0">
+            <div class="overlay" *ngIf="isLoading">
+                <div class="loading-spinner"></div> <!-- Đây là spinner bạn muốn hiển thị -->
+            </div>
+
+            <div class="main-content">
+                <router-outlet />
+            </div>
+
+            <!-- <hr class="mb-4">
+            <div class="custom-control custom-checkbox">
+                <input class="custom-control-input" type="checkbox" id="inform_me" checked="">
+                <label class="custom-control-label" for="inform_me">Inform me when item from my wishlist is available</label>
+            </div> -->
+        </div>
+    </div>
+</div>

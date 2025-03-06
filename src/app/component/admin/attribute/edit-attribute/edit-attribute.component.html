@@ -1,0 +1,28 @@
+<app-header-admin [title_header]="'Attribute'" />
+<div class="container">
+     
+    <div class="custom-select">
+        <div class="selected-item" (click)="isOpen = !isOpen">
+            <span *ngIf="selectedItem">
+                <img [src]="selectedItem.image" alt="Selected" />
+                {{ selectedItem.name }}
+            </span>
+            <span *ngIf="!selectedItem"><img src="../../../../../assets/images/color.png" width="30" alt="">
+                Choose Colors </span>
+        </div>
+    
+        <div class="dropdown" *ngIf="isOpen">
+            <input type="text" [(ngModel)]="searchText" placeholder="Tìm kiếm sản phẩm..." />
+            <ul>
+                <li *ngFor="let product of filteredProducts" (click)="selectItem(product)">
+                    <img [src]="product.image" alt="Product" />
+                    {{ product.name }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+     
+
+
+</div>

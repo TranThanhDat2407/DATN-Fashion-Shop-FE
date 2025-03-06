@@ -1,0 +1,361 @@
+<div class="container" style="margin-top: 4rem">
+  <div class="row">
+    <!-- Product Images (Left Section) -->
+    <div class="col-md-7 pe-5 ps-0">
+      <div class="row ">
+        <div class="col-6 position-relative p-0 " *ngIf="colorImage">
+          <img [src]="getImageProduct(colorImage.mediaUrl)">
+          <a [routerLink]="['/client', currentCurrency, currentLang,'imageDetail',colorImage.id]" class="image-icon"
+            *ngIf="colorImage.hasVariants">
+            <i class="fa-solid fa-mountain-sun"></i>
+          </a>
+        </div>
+
+        <video class="col-6 p-0" *ngFor="let video of dataVideoProduct" autoplay loop>
+          <source [src]="'http://localhost:8080/uploads/images/products/' + video.mediaUrl" type="video/mp4">
+          Trình duyệt của bạn không hỗ trợ phát video.
+        </video>
+
+        <div class="col-6 position-relative p-0" *ngFor="let img of noColorImages">
+          <img [src]="getImageProduct(img.mediaUrl)">
+          <a [routerLink]="['/client', currentCurrency, currentLang,'imageDetail',img.id]" class="image-icon"
+            *ngIf="img.hasVariants">
+            <i class="fa-solid fa-mountain-sun"></i>
+          </a>
+        </div>
+
+
+        <!-- <div class="col-6 position-relative">
+            <img src="https://image.uniqlo.com/UQ/ST3/vn/imagesgoods/456261/sub/vngoods_456261_sub7_3x4.jpg?width=369" alt="Model Pose 2" class="img-fluid rounded">
+            <a [routerLink]="['../imageDetail']" class="image-icon">
+              <i class="fa-solid fa-mountain-sun"></i>
+            </a>
+          </div> -->
+        <!-- {{getImageProduct()}} -->
+        <!-- <div *ngFor="let item of dataImagesProduct">{{item.mediaUrl}}</div> -->
+        <!-- <div class="col-6" *ngFor="let image of dataImagesProduct">
+            <img [src]="image.mediaUrl" [alt]="image.mediaType" class="img-fluid rounded">
+          </div>
+         -->
+      </div>
+
+      <div class="accordion mt-4 " id="productAccordion">
+        <h5 class="fw-bold">{{ "Mô tả" | translate }}</h5>
+        <p class="text-muted">{{ "Mã sản phẩm:" | translate }} {{ dataDetailsProduct?.id }}</p>
+        <hr>
+        <!-- Chi tiết -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingDetails">
+            <button class="accordion-button" type="button" [class.collapsed]="!isDetailsOpen"
+              (click)="toggleAccordion('details')" [attr.aria-expanded]="isDetailsOpen" aria-controls="collapseDetails">
+              {{ "Chi tiết" | translate }}
+            </button>
+          </h2>
+          <div id="collapseDetails" class="accordion-collapse collapse" [class.show]="isDetailsOpen"
+            aria-labelledby="headingDetails">
+            <div class="accordion-body">
+              <div class="details-content" data-test="overview-accordion-content">
+                {{dataDetailsProduct?.description}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chất liệu / Cách chăm sóc -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingCare">
+            <button class="accordion-button" type="button" [class.collapsed]="!isCareOpen"
+              (click)="toggleAccordion('care')" [attr.aria-expanded]="isCareOpen" aria-controls="collapseCare">
+              {{ "Chất liệu / Cách chăm sóc" | translate }}
+            </button>
+          </h2>
+          <div id="collapseCare" class="accordion-collapse collapse" [class.show]="isCareOpen"
+            aria-labelledby="headingCare">
+            <div class="accordion-body">
+              <div class="details-content" data-test="overview-accordion-content">
+                - {{dataDetailsProduct?.material}}
+                <br>
+                -{{dataDetailsProduct?.care}}
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!------------------------------Review-->
+      <div class="  mt-5">
+        <h5 class="fw-bold">{{ "Đánh giá" | translate }}</h5>
+        <div class="d-flex align-items-center mb-3">
+          <div class="stars">
+            <ng-container *ngFor="let star of getFullStars(reviewAverage)">
+              ★
+            </ng-container>
+            <ng-container *ngFor="let star of getEmptyStars(reviewAverage)">
+              ☆
+            </ng-container>
+          </div>
+
+          <span class="fw-bold ms-2">{{reviewAverage}}</span>
+          <a href="#" class="ms-2 text-primary">({{ reviewTotal }})</a>
+        </div>
+        <hr>
+
+        <!-- Dùng lặp lại cho danh sách đánh giá -->
+        <div *ngFor="let review of dataReviewDetailProduct" class="review-item mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="fw-bold">{{ review.title }}</h6>
+            <span class="text-muted">{{ review.createdAt | date:'dd/MM/yyyy' }}</span>
+
+          </div>
+          <div class="stars text-black mb-2">
+            <ng-container *ngFor="let star of getFullStars(review.reviewRate)">
+              ★
+            </ng-container>
+            <ng-container *ngFor="let star of getEmptyStars(review.reviewRate)">
+              ☆
+            </ng-container>
+          </div>
+          <p class="mb-1">
+            <span class="">{{ "Kích cỡ đã mua:" | translate }}</span> {{ review.purchasedSize }}<br>
+            <span class="">{{ "Quần áo có vừa không:" | translate }}</span> {{ review.fit }}
+          </p>
+          <p class="mb-3">
+            {{ review.comment }}
+          </p>
+          <p class="text-muted small">
+            {{ review.nickname }} · {{ review.gender }} · {{ review.ageGroup }} · Chiều cao: {{ review.height }} · Cân
+            nặng: {{
+            review.weight }} · Cỡ giày: {{ review.shoeSize }} · {{ review.location }}
+          </p>
+        </div>
+        <hr>
+      </div>
+      <!--Xem thêm review và nhập review-->
+      <div class="text-end mt-2 mb-2">
+        <a [routerLink]="['/client', currentCurrency, currentLang,'reviews', productId ]" style="cursor: pointer"
+          class="check-size-link d-flex align-items-center justify-content-end gap-2 text-dark text-decoration-none">
+          <span class="text-primary">{{ "Xem thêm" | translate }}</span>
+        </a>
+      </div>
+      <div class="text-end mt-2 mb-2" *ngIf="userId != 0">
+        <a [routerLink]="['/client', currentCurrency, currentLang,'review','new',productId, colorId, sizeId ]"
+          style="cursor: pointer"
+          class="check-size-link d-flex align-items-center justify-content-end gap-2 text-dark text-decoration-none">
+          <i class="fa-solid fa-pen"></i>
+          <span class="text-primary">{{ "Viết bài đánh giá" | translate }}</span>
+        </a>
+      </div>
+      <!----------------------------END------------------------------>
+    </div>
+    <!-- Product Details (Right Section) -->
+    <div class="col-md-5">
+      <div class="product-details sticky-top z-0">
+        <!--        product-name-->
+        <div class="product-name d-flex align-items-center">
+          <!-- Tên sản phẩm -->
+          <h3 class="product-title fw-normal">{{dataDetailsProduct?.name}}</h3>
+
+          <!-- Nút Hành động -->
+          <div class="action-buttons d-flex">
+            <!-- Nút Chia sẻ -->
+            <button class="btn btn-icon">
+              <i class="fa-solid fa-arrow-up-from-bracket"></i>
+            </button>
+            <!-- Nút Yêu thích -->
+            <button class="btn btn-icon"
+              (click)="toggleWishlist(userId,productId ?? 0,colorId ?? 0);checkWishlist(userId,productId ?? 0,colorId ?? 0)">
+              <i *ngIf="isWishlist" class="fa-solid fa-heart" style="color: #ff0000;"></i>
+              <i *ngIf="!isWishlist" class="fa-regular fa-heart"></i>
+            </button>
+          </div>
+        </div>
+        <div>
+          <!--        product-color-->
+          <div class="color-picker mt-3">
+            <dl class="color-picker-list">
+              <!-- Màu trắng -->
+              <div class="color-item" *ngFor="let color of dataColors" [attr.data-test]="color.valueName">
+                <dt>
+                  <input type="radio" [value]="color.id" name="product-color-picker"
+                    [id]="'product-color-picker' + color.id" class="color-input"
+                    (click)="selectColor(color);checkWishlist(userId,productId ?? 0,colorId ?? 0)"
+                    [checked]="color.id === selectedColorId">
+
+                  <label class="color-label" [for]="'product-color-picker' + color.id"
+                    [style.backgroundImage]="'url(' + getImageColor(color.valueImg) + ')'">
+
+                  </label>
+                </dt>
+              </div>
+
+
+            </dl>
+            <p class="color-selected">{{ "Màu sắc:" | translate }} {{selectedColorName}}</p>
+          </div>
+          <!--            product-size-->
+          <div class="size-picker">
+            <dl style="width: 70%;">
+              <div class="size-item" *ngFor="let size of dataSizes" [attr.data-test]="size.valueName">
+                <dt style="margin-bottom: 10px;">
+                  <input type="radio" [value]="size.id" name="product-size-picker"
+                    [id]="'product-size-picker' + size.valueName" class="color-input" (click)="selectSize(size)"
+                    [checked]="size.id === selectedSizeId && !isSizeOutOfStock(size)">
+
+                  <label class="fr-chip-label" [for]="'product-size-picker' + size.valueName"
+                    [class.ignore]="isSizeOutOfStock(size)"
+                    style="background-size: 50px; background-position: center center; width: 36px; height: 36px; display: flex; min-height: 0px; min-width: 0px;">
+                    <span class="fr-chip-text" role="img" [attr.aria-label]="size.valueName">{{ size.valueName }}</span>
+                  </label>
+                </dt>
+              </div>
+            </dl>
+
+
+
+            <div class="d-flex justify-content-between" style="width: auto;">
+              <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal">
+                <span class="">{{ "Kích cỡ:" | translate }}
+                  <span *ngIf=" dataCategoryParent?.length">
+                    <span class="product-item-categoryParent" *ngIf="dataCategoryParent?.length === 1">
+                      {{ dataCategoryParent?.[0]?.name ?? '' }}
+                    </span>
+                    <span class="product-item-categoryParent" *ngIf="(dataCategoryParent?.length || 0) > 1">
+                      Unisex
+                    </span>
+                  </span>
+                  {{selectedSizeName}}
+                </span>
+              </p>
+              <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal">Kích cỡ
+                tham khảo: -</p>
+            </div>
+          </div>
+        </div>
+        <!--        Kiểm tra kích cỡ-->
+        <div class="text-end mt-2 mb-2">
+          <a [routerLink]="['../size']"
+            class="check-size-link d-flex align-items-center justify-content-end gap-2 text-dark text-decoration-none"
+            style="cursor: pointer">
+            <svg width="24" height="24" viewBox="0 0 24 24" class="icon-size">
+              <path
+                d="M2.4 9.4V17.6H21.6V9.4H2.4ZM20.4 16.4H3.6V10.6H5.45V13H6.55V10.6H8.45V14H9.55V10.6H11.45V13H12.55V10.6H14.45V14H15.55V10.6H17.45V13H18.55V10.6H20.4V16.4Z">
+              </path>
+            </svg>
+            <span class="text-primary">{{ "Kiểm tra kích cỡ" | translate }}</span>
+          </a>
+        </div>
+        <!--            Giá SP - Đánh giá chất lượng-->
+        <div class="product-price-review d-flex justify-content-between">
+          <div class="price-container d-flex align-items-center justify-content-between">
+            <div class="product-price">
+              <!-- <span class="price">{{dataDetailsProduct?.basePrice}} <br>
+                <span class="sale-price " style="color: red;">{{salePrice}}</span>
+              </span> -->
+
+              <!-- Nếu basePrice === salePrice, chỉ hiển thị giá gốc -->
+              <span *ngIf="dataDetailsProduct?.basePrice === salePrice" class="product-item-priceInit">
+                {{ getCurrencyPrice(dataDetailsProduct?.basePrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1,
+                currentCurrencyDetail?.code ?? '' )}}
+              </span>
+
+              <!-- Nếu basePrice > salePrice, hiển thị cả giá gốc (gạch ngang) và giá khuyến mãi -->
+              <span *ngIf="(dataDetailsProduct?.basePrice ?? 0) > (salePrice ?? 0)">
+
+
+                <!-- Giá gốc (gạch ngang) -->
+                <span class="product-item-priceInit" style="text-decoration: line-through;">
+                  {{ getCurrencyPrice(dataDetailsProduct?.basePrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1,
+                  currentCurrencyDetail?.code ?? '' )}}
+                </span>
+                <br>
+
+                <!-- Giá khuyến mãi -->
+                <span class="product-item-priceSale" style="color: red;">
+                  {{ getCurrencyPrice(salePrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1,
+                  currentCurrencyDetail?.code ?? '' )}}
+                </span>
+
+                <!-- Nếu có khuyến mãi, hiển thị ngày hết hạn -->
+                <ng-container *ngIf="dataDetailsProduct?.promotion?.isActive">
+                  <br>
+                  <div class="product-item-coupon" style="font-size: 0.88rem; color: red;">
+                    <span class="fw-light">
+                      {{ "Giảm giá hết thời hạn" | translate }}
+                    </span>
+                    <span class="fw-bold">{{ dataDetailsProduct?.promotion?.endDate | date:'dd/MM/yyyy' }}</span>
+
+                  </div>
+                </ng-container>
+              </span>
+
+
+
+
+
+
+            </div>
+          </div>
+          <div class="review-container d-flex align-items-center">
+            <div class="review-stars">
+              <div class="stars text-black ">
+                <ng-container *ngFor="let star of getFullStars(reviewAverage)">
+                  ★
+                </ng-container>
+                <ng-container *ngFor="let star of getEmptyStars(reviewAverage)">
+                  ☆
+                </ng-container>
+              </div>
+            </div>
+            <span style="font-weight: 700; margin-left: 4px;"> {{reviewAverage}} </span><span
+              class="review-count">({{reviewTotal}})</span>
+          </div>
+        </div>
+        <div class="product-description">
+          <span>{{ "Sản phẩm được làm từ chất liệu tái chế" | translate }}</span>
+        </div>
+        <!-- product-quantity-->
+        <div class="product-actions mt-3">
+          <!-- Quantity Selector -->
+          <div class="quantity-selector d-flex align-items-center justify-content-start gap-2 " style="width: 40%;">
+            <button class="quantity-btn">-</button>
+            <input type="text" [(ngModel)]="qtyCart" name="qtyCart" id="" (input)="onInput($event)"
+              style="border: none; width: 50%; text-align: center; background-color: #f7f7f7;">
+
+            <button class="quantity-btn">+</button>
+          </div>
+          <div class="stock-status mt-2">
+
+            <span> {{quantityInStock?.quantityInStock}} {{"Trong kho" | translate}} </span>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <div class="add-to-cart mt-3  " (click)="createCart()">
+            <button class="btn-cart">
+              {{ "THÊM VÀO GIỎ HÀNG" | translate }}
+            </button>
+          </div>
+
+
+          <!-- Find Product in Inventory -->
+          <div class="inventory-check mt-3 text-end" [routerLink]="['/client', currentCurrency, currentLang,'store_inventory', dataDetailsProduct?.id,
+                                                                                    dataColors?.[0]?.id,
+                                                                                    dataSizes?.[0]?.id]">
+            <a style="cursor: pointer" class="link-inventory">{{ "Tìm sản phẩm còn hàng trong cửa hàng" |
+              translate }}</a>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+        <!------------------------END--------------------->
+      </div>
+    </div>
+  </div>
+</div>
+<app-nav-bottom></app-nav-bottom>

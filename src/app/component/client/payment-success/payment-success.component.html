@@ -1,0 +1,21 @@
+<div class="payment-container">
+  <div class="payment-card">
+    <div class="status-icon" [ngClass]="{'success': isSuccess, 'error': !isSuccess}">
+      <i class="fas" [ngClass]="isSuccess ? 'fa-check-circle' : 'fa-times-circle'"></i>
+    </div>
+    <h2>{{ isSuccess ? 'Thanh toán thành công!' : 'Thanh toán thất bại!' }}</h2>
+    <p *ngIf="isSuccess">Cảm ơn bạn đã mua hàng. Đơn hàng của bạn đang được xử lý.</p>
+    <p *ngIf="!isSuccess">Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại.</p>
+
+    <div class="payment-info">
+      <p><strong>Mã giao dịch:</strong> {{ paymentData.vnp_TransactionNo || 'N/A' }}</p>
+      <p><strong>Số tiền:</strong> {{ formatCurrency(paymentData.vnp_Amount) }}</p>
+      <p><strong>Ngân hàng:</strong> {{ paymentData.vnp_BankCode || 'Không xác định' }}</p>
+      <p><strong>Trạng thái:</strong> {{ getStatusText(paymentData.vnp_TransactionStatus) }}</p>
+    </div>
+
+    <button class="btn-home" [routerLink]="['/client', currentCurrency, currentLang ]">Quay về trang chủ</button>
+
+  </div>
+</div>
+

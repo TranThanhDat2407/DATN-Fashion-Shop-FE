@@ -1,0 +1,134 @@
+<div class="table-responsive wishlist-table margin-bottom-none p-3">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Chỉnh Sửa Thông Tin </th>
+      <th class="text-center">
+        <button class="btn btn-sm btn-outline-danger"
+                (click)="logout()"
+        >Đăng xuất</button>
+      </th>
+    </tr>
+    </thead>
+  </table>
+
+  <div class="card mb-3 rounded-0 mt-2">
+    <div class="card-body">
+      <!-- Họ và Tên -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-2">
+          <h6 class="mb-0">Họ và Tên:</h6>
+        </div>
+        <div class="col-sm-10 text-secondary d-flex flex-column flex-md-row w-md-100">
+          <input type="text" [(ngModel)]="userDetail.lastName" placeholder="Họ" class="flex-fill m-1"
+          >
+          <input type="text" [(ngModel)]="userDetail.firstName" placeholder="Tên" class="flex-fill m-1"
+          >
+        </div>
+      </div>
+      <hr>
+
+      <!-- Email -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-2">
+          <h6 class="mb-0">Email:</h6>
+        </div>
+        <div class="col-sm-10 text-secondary d-flex flex-column flex-md-row w-md-100">
+          <input type="email" [(ngModel)]="userDetail.email" placeholder="Email" class="flex-fill m-1"
+                 (ngModelChange)="validateEmail()"
+                 [disabled]="!updateEmail"
+          >
+        </div>
+      </div>
+      <div>
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+               (click)="onUpdateEmail()">
+        <label class="form-check-label fs-6" for="flexCheckDefault">
+          {{ "Thay đổi email" | translate }}
+        </label>
+      </div>
+      <div *ngIf="emailError" class="text-danger">
+        {{ emailError }}
+      </div>
+      <div *ngIf="emailExists" class="text-danger">
+        Email này đã được sử dụng.
+      </div>
+      <div *ngIf="updateEmail" class="text-danger">
+        Nếu thay đổi email sẽ cần phải đăng nhập lại
+      </div>
+      <hr>
+
+      <!-- Số Điện Thoại -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-2">
+          <h6 class="mb-0">Số Điện Thoại:</h6>
+        </div>
+        <div class="col-sm-10 text-secondary d-flex flex-column flex-md-row w-md-100">
+          <input type="text" [(ngModel)]="userDetail.phone" placeholder="Số Điện Thoại" class="flex-fill m-1"
+                 (ngModelChange)="validatePhone()">
+        </div>
+      </div>
+      <div *ngIf="phoneError" class="text-danger">
+        {{ phoneError }}
+      </div>
+      <div *ngIf="phoneExists" class="text-danger">
+        Số điện thoại này đã được sử dụng.
+      </div>
+      <hr>
+
+      <!-- Giới tính -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-2">
+          <h6 class="mb-0">Giới tính:</h6>
+        </div>
+        <div class="col-sm-10 text-secondary d-flex flex-column flex-md-row w-md-100">
+          <select class="form-control flex-fill m-1" [(ngModel)]="userDetail.gender">
+            <option value="M">Nam</option>
+            <option value="F">Nữ</option>
+            <option value="U">Khác</option>
+          </select>
+        </div>
+      </div>
+      <hr>
+
+      <!-- Ngày sinh -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-2">
+          <h6 class="mb-0">Sinh Nhật: </h6>
+        </div>
+        <div class="col-sm-10 text-secondary d-flex flex-column flex-md-row w-md-100">
+          <input type="string" [(ngModel)]="userDetail.dateOfBirth" class="flex-fill m-1" disabled>
+        </div>
+      </div>
+      <hr>
+
+      <!-- Mã khách hàng -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-2">
+          <h6 class="mb-0">Mã vạch thành viên: </h6>
+        </div>
+        <div class="col-sm-10 text-secondary d-flex flex-column flex-md-row w-md-100">
+          <ngx-barcode6
+            [bc-value]="String(userDetail.id)"
+            [bc-format]="'CODE128'"
+            [bc-display-value]="true"
+            [bc-width]="2"
+            [bc-height]="50">
+          </ngx-barcode6>
+        </div>
+      </div>
+      <hr>
+
+      <!-- Nút LƯU -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col-sm-12 text-secondary d-flex flex-column flex-row">
+          <button class="btnSave slide_leftbtnSave"
+                  (click)="onUpdateProfile()"
+                  [disabled]="emailError || phoneError"
+          >LƯU THÔNG TIN CHỈNH SỬA</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
