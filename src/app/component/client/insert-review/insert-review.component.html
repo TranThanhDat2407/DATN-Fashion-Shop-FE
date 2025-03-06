@@ -1,3 +1,6 @@
+
+<app-model-notify-succsess [isModalOpenaa]="notifySuccsess" />
+<app-modal-notify-error [isModalOpen]="notifyError"/>
 <div class="container" style="margin-top: 4rem">
   <!-- Back to product link -->
   <div class="container mt-3">
@@ -45,7 +48,7 @@
                           'icon-color': star <= selectedRating,
                           'text-muted': star > selectedRating
                        }"
-                       (click)="setRating(star)" 
+                       (click)="setRating(star)"
                        style="cursor: pointer; font-size: 1.5rem;">
                     </i>
                   </ng-container>
@@ -103,12 +106,12 @@
               <label class="title-form-label" [class.activeValidationText]="errorFields.title">{{ "TIÊU ĐỀ *" | translate }}</label>
             </div>
             <div class="col-md-9">
-              <input type="text" class="title-form-control" [class.activeValidationInput]="errorFields.title" 
+              <input type="text" class="title-form-control" [class.activeValidationInput]="errorFields.title"
                 placeholder="Tóm tắt đánh giá của bạn" [(ngModel)]="reviewNew.title" name="title" />
               <small class="title-text-muted">{{ "Tiêu đề của bạn phải ít hơn 100 ký tự." | translate }}</small>
             </div>
           </div>
-          
+
 
           <!-- Bình luận -->
           <div class="mb-4 row">
@@ -120,7 +123,7 @@
                 rows="4" placeholder="" [(ngModel)]="reviewNew.comment" name="comment"></textarea>
             </div>
           </div>
-          
+
           <!-- Kích cỡ đã mua -->
           <div class="mb-4">
             <label class="form-label fw-bold" [class.activeValidationText]="errorFields.purchasedSize">{{ "KÍCH CỠ ĐÃ MUA *" | translate }}</label>
@@ -130,7 +133,7 @@
               <option *ngFor="let size of dataSizes" [value]="size.valueName">{{ size.valueName }}</option>
             </select>
           </div>
-          
+
 
           <!-- Biệt danh -->
           <div class="mb-4">
@@ -149,7 +152,7 @@
                   <option *ngFor="let g of genders" [value]="g.gender">{{ g.gender }}</option>
                 </select>
               </div>
-              
+
               <div class="col-md-6">
                 <label class="form-label fw-bold"   [class.activeValidationText]="bien">{{ "VỊ TRÍ *" | translate }}</label>
                 <div class="custom-select" [class.activeValidationInput]="bien">
@@ -168,7 +171,7 @@
                     </ul>
                   </div>
                 </div>
-                
+
               </div>
               <div class="col-md-6">
                 <label class="form-label fw-bold" [class.activeValidationText]="errorFields.ageGroup">{{ "ĐỘ TUỔI *" | translate }}</label>
@@ -178,7 +181,7 @@
                   <option *ngFor="let a of ages" [value]="a.age">{{ a.age }}</option>
                 </select>
               </div>
-              
+
               <div class="col-md-6">
                 <label class="form-label fw-bold" [class.activeValidationText]="errorFields.height">{{ "CHIỀU CAO *" | translate }}</label>
                 <select class="form-select" [(ngModel)]="reviewNew.height" name="height"
@@ -187,7 +190,7 @@
                   <option *ngFor="let h of heights" [value]="h.height">{{ h.height }}</option>
                 </select>
               </div>
-              
+
               <div class="col-md-6">
                 <label class="form-label fw-bold" [class.activeValidationText]="errorFields.weight">{{ "CÂN NẶNG *" | translate }}</label>
                 <select class="form-select" [(ngModel)]="reviewNew.weight" name="weight"
@@ -196,7 +199,7 @@
                   <option *ngFor="let w of weights" [value]="w.weight">{{ w.weight }}</option>
                 </select>
               </div>
-              
+
               <div class="col-md-6">
                 <label class="form-label fw-bold" [class.activeValidationText]="errorFields.shoeSize">{{ "CỠ GIÀY *" | translate }}</label>
                 <select class="form-select" [(ngModel)]="reviewNew.shoeSize" name="shoeSize"
@@ -205,7 +208,7 @@
                   <option *ngFor="let ss of shoeSizes" [value]="ss.size">{{ ss.size }}</option>
                 </select>
               </div>
-              
+
             </div>
           </div>
           <hr>
@@ -219,9 +222,9 @@
 
             <div class="review-checkbox-container">
               <input class="review-form-checkbox-input" [(ngModel)]="terms"  name="terms"  [class.activeValidationInput]="terms"
-              style="height: 1.3rem; width: 1.3rem" 
+              style="height: 1.3rem; width: 1.3rem"
               type="checkbox" id="terms" required />
-       
+
               <label class="review-form-checkbox-label" for="terms">
                 {{ "Tôi đồng ý với" | translate }} <span class="review-form-link">{{ "ĐIỀU KHOẢN SỬ DỤNG CỦA BRAND" | translate }}</span>
               </label>
@@ -232,9 +235,9 @@
             <div class="d-flex justify-content-between">
               <button type="submit" class="btn btn-dark px-5 review-submit-btn fw-bold">{{ "GỬI" | translate }}</button>
               <button type="button" class="btn btn-outline-dark px-5 review-back-btn fw-bold"
-              
+
               [routerLink]="['/client', currentCurrency, currentLang,'detail_product', productId, colorId,sizeId
-           ]" 
+           ]"
               >
                 {{ "QUAY LẠI CHI TIẾT SẢN PHẨM" | translate }}
               </button>

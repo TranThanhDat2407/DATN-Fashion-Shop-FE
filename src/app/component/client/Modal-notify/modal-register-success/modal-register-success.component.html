@@ -1,12 +1,11 @@
-<!-- <div class="modal-backdrop" *ngIf="isModalOpen" (click)="closeModal()"></div> -->
 
-<div class="modal-container" [ngClass]="{'hide': !isModalOpen}">
+<div class="modal-container" *ngIf="isModalOpenaa || isFadingOut" [ngClass]="{'hide': isFadingOut}">
 
   <div class="icon-content"><i class="fa-solid fa-circle-check " style="color: white; font-size: 50px;"></i>  </div>
   <div class="modal-content">
     <span> {{ 'Hoàn Thành' | translate}} </span>
     <p>{{'Đăng kí Thành Công' | translate}}!</p>
-
+    <p>{{'Vui lòng xác thực email' | translate}}!</p>
   </div>
 </div>
 

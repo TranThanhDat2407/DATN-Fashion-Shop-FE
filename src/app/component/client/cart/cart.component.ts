@@ -42,12 +42,12 @@ import { SessionService } from '../../../services/session/session.service';
 export class CartComponent implements OnInit {
   currentLang: string = '';
   currentCurrency: string = '';
-  cookieValue?: string;
-  qtyTotal: number = 0;
+  notifySuccsess: boolean = false
+  notifyError: boolean = false
+
   userId?: number;
   sessionId?: string;
   currentCurrencyDetail?: Currency;
-  qtyNew?: number
   appliedCoupon: CouponLocalizedDTO | null = null;
 
   dataDetailsProduct: DetailProductDTO | null = null;
@@ -88,7 +88,14 @@ export class CartComponent implements OnInit {
     this.fetchCurrency();
   }
 
-
+  totalCartQty() : number{
+    if(this.cartItems.length === 0) return 0
+    let total = 0
+    this.cartItems.forEach(item => {
+      total += item.quantity
+    })
+    return total
+  }
 
 
   getSession(): void {
@@ -153,7 +160,10 @@ export class CartComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.cartService.clearCart(this.userId ?? 0, this.sessionId ?? '').subscribe(async response => {
-          this.dialog.open(ModalRegisterSuccessComponent);
+          this.notifySuccsess = false;
+          setTimeout(() => {
+            this.notifySuccsess = true;
+          }, 10);
           await this.fetchApiCart();
           const sessionId = this.sessionService.getSession();
           this.cartService.getQtyCart(this.userId ?? 0, sessionId ?? '');
@@ -166,10 +176,12 @@ export class CartComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.cartService.deleteCart(this.userId ?? 0, this.sessionId ?? '', cardId).subscribe(async response => {
-          // this.cartService.getQtyCart(this.userId ?? 0, this.sessionId ?? '').subscribe(total => {
-          //   this.cartService.totalCartSubject.next(total);  // Cập nhật tổng số lượng giỏ hàng
-          // });
-          this.dialog.open(ModelNotifySuccsessComponent);
+          this.notifySuccsess = false;
+          setTimeout(() => {
+            this.notifySuccsess = true;
+          }, 10);
+          const sessionId = this.sessionService.getSession();
+          this.cartService.getQtyCart(this.userId ?? 0, sessionId ?? '');
           await this.fetchApiCart();
 
         })
