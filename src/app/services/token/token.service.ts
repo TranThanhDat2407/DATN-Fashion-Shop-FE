@@ -19,6 +19,7 @@ export class TokenService {
 
   //getter/setter
   getToken(): string {
+
     return this.localStorage?.getItem(this.TOKEN_KEY) ?? '';
   }
 
@@ -30,7 +31,8 @@ export class TokenService {
   getUserId(): number {
     let token = this.getToken();
     if (!token) {
-      console.log("No token found in localStorage");
+      console.log("📌 Đang chạy trong môi trường:", typeof window !== 'undefined' ? "Trình duyệt" : "Server");
+      console.log("📜 Token hiện tại:", this.getToken());
       return 0; // Không có token
     }
 
