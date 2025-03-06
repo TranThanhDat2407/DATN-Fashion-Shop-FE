@@ -197,26 +197,29 @@
           </div>
           <!--            product-size-->
           <div class="size-picker">
-            <dl style="width: 70%;">
+            <div class="btn-group flex-wrap gap-2" role="group">
               <div class="size-item" *ngFor="let size of dataSizes" [attr.data-test]="size.valueName">
-                <dt style="margin-bottom: 10px;">
-                  <input type="radio" [value]="size.id" name="product-size-picker"
-                    [id]="'product-size-picker' + size.valueName" class="color-input" (click)="selectSize(size)"
-                    [checked]="size.id === selectedSizeId && !isSizeOutOfStock(size)">
+                <!-- Radio button -->
+                <input type="radio"
+                       class="btn-check"
+                       [value]="size.id"
+                       name="product-size-picker"
+                       [id]="'product-size-picker' + size.valueName"
+                       (click)="selectSize(size)"
+                       [checked]="size.id === selectedSizeId && !isSizeOutOfStock(size)"
+                       [disabled]="isSizeOutOfStock(size)">
 
-                  <label class="fr-chip-label" [for]="'product-size-picker' + size.valueName"
-                    [class.ignore]="isSizeOutOfStock(size)"
-                    style="background-size: 50px; background-position: center center; width: 36px; height: 36px; display: flex; min-height: 0px; min-width: 0px;">
-                    <span class="fr-chip-text" role="img" [attr.aria-label]="size.valueName">{{ size.valueName }}</span>
-                  </label>
-                </dt>
+                <!-- Nhãn hiển thị kích thước -->
+                <label class="btn btn-outline-dark size-label"
+                       [for]="'product-size-picker' + size.valueName"
+                       [ngClass]="{'ignore': isSizeOutOfStock(size)}">
+                  {{ size.valueName }}
+                </label>
               </div>
-            </dl>
-
-
-
-            <div class="d-flex justify-content-between" style="width: auto;">
-              <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal">
+            </div>
+          </div>
+          <div class="d-flex justify-content-between mt-3" style="width: auto;flex-direction: column;">
+            <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal">
                 <span class="">{{ "Kích cỡ:" | translate }}
                   <span *ngIf=" dataCategoryParent?.length">
                     <span class="product-item-categoryParent" *ngIf="dataCategoryParent?.length === 1">
@@ -228,10 +231,10 @@
                   </span>
                   {{selectedSizeName}}
                 </span>
-              </p>
-              <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal">Kích cỡ
-                tham khảo: -</p>
-            </div>
+            </p>
+            <br>
+            <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal">
+              Kích cỡ tham khảo: -</p>
           </div>
         </div>
         <!--        Kiểm tra kích cỡ-->

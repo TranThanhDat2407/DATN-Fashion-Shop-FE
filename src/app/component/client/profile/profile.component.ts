@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/co
 import { NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NavigationService } from '../../../services/Navigation/navigation.service';
 import {TokenService} from '../../../services/token/token.service';
-
+import { TranslateModule } from '@ngx-translate/core';
 import {UserService} from '../../../services/user/user.service';
 import {UserResponse} from '../../../dto/Response/user/user.response';
 import {UserDetailDTO} from '../../../dto/UserDetailDTO';
@@ -12,7 +12,7 @@ import {UserDetailDTO} from '../../../dto/UserDetailDTO';
   selector: 'app-profile',
   standalone: true,
   imports: [RouterOutlet, CommonModule
-    , RouterLink, RouterLinkActive],
+    , RouterLink, RouterLinkActive, TranslateModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -21,6 +21,8 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
   userDetail!: UserDetailDTO;
   isLoading = false;
   currentActiveElement: HTMLElement | null = null;
+  currentLang: string = '';
+  currentCurrency: string = '';
 
   constructor(
     private router: Router,
@@ -44,6 +46,14 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
   }
 
   ngOnInit(): void {
+    this.navigationService.currentLang$.subscribe((lang) => {
+      this.currentLang = lang;
+    });
+
+    this.navigationService.currentCurrency$.subscribe((currency) => {
+      this.currentCurrency = currency;
+    });
+
     this.userId = this.tokenService.getUserId();
     this.getUserDetails();
   }
@@ -60,6 +70,10 @@ export class ProfileComponent implements OnInit, AfterViewInit  {
     }
   }
 
+  logout(): void {
+    this.tokenService.removeToken();
+    this.router.navigate([`/client/${this.currentCurrency}/${this.currentLang}/login`]);
+  }
 
   getUserDetails(): void {
     const token = this.tokenService.getToken(); // Lấy token từ service

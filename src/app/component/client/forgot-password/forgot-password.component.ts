@@ -7,11 +7,14 @@ import {FormsModule, NgForm} from '@angular/forms';
 import {response} from 'express';
 import {error} from 'console';
 import {CommonModule} from '@angular/common';
+import {debounceTime, distinctUntilChanged, Subject, switchMap} from 'rxjs';
+import {UserService} from '../../../services/user/user.service';
+import {TranslateModule} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [RouterLink, FormsModule,CommonModule],
+  imports: [RouterLink, FormsModule,CommonModule, TranslateModule],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
@@ -26,7 +29,8 @@ export class ForgotPasswordComponent implements OnInit{
   constructor(
     private forgotPasswordService: ForgotPasswordService,
     private router: Router,
-    private navigationService: NavigationService
+    private navigationService: NavigationService,
+    private userService: UserService
   ) {}
 
   onSubmit() {
@@ -54,6 +58,24 @@ export class ForgotPasswordComponent implements OnInit{
     this.navigationService.currentCurrency$.subscribe((currency) => {
       this.currentCurrency = currency;
     });
+
+    this.emailCheck$.pipe(
+      debounceTime(500), // Giảm số lần gọi API
+      distinctUntilChanged(),
+      switchMap(email => this.userService.checkEmail(email))
+    ).subscribe(exists => {
+      this.emailExists = exists;
+    });
+  }
+
+
+  emailExists = false;
+  private emailCheck$ = new Subject<string>();
+
+  checkEmail() {
+    if (this.email) {
+      this.emailCheck$.next(this.email);
+    }
   }
 
 }
