@@ -1,3 +1,5 @@
+<app-modal-register-success [isModalOpenaa]="notifySuccsess"/>
+
 <!-- CONTENT -->
 <div class="container-fluid">
     <div class="background-box">
@@ -121,7 +123,7 @@
                             [disabled]="!registerForm.valid || passwordMismatch || emailExists || phoneExists || isSubmitting"
                             (click)="checkPasswordMatch()"
                     >
-                      {{ isSubmitting ? "Đang đăng ký..." : "ĐĂNG KÝ TÀI KHOẢN" | translate }}
+                      {{ isSubmitting ? "Đang đăng ký..." : "VUI LÒNG XÁC THỰC EMAIL" | translate }}
                     </button>
                   </form>
 
