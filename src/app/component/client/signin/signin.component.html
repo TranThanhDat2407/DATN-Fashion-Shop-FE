@@ -79,7 +79,11 @@
 
                     <!-- MẬT KHẨU -->
                     <label class="form-label fw-bold">{{ "MẬT KHẨU" | translate }}</label>
-                    <input class="form-control" name="password" [(ngModel)]="password" required pattern="^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$" #passwordCtrl="ngModel" />
+                    <input class="form-control"
+                           name="password"
+                           [type]="showPassword ? 'text' : 'password'"
+                           [(ngModel)]="password"
+                           required pattern="^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$" #passwordCtrl="ngModel" />
                     <div *ngIf="passwordCtrl.touched && passwordCtrl.invalid" class="error mt-2">
                       <div *ngIf="passwordCtrl.errors?.['required']" class="text-danger">{{ "Vui lòng nhập mật khẩu." | translate }}</div>
                       <div *ngIf="passwordCtrl.errors?.['pattern']" class="text-danger">{{ "Mật khẩu phải có ít nhất 6 ký tự, gồm chữ hoa và số." | translate }}</div>
@@ -88,6 +92,7 @@
                     <!-- XÁC NHẬN MẬT KHẨU -->
                     <label class="form-label fw-bold">{{ "XÁC NHẬN MẬT KHẨU" | translate }}</label>
                     <input class="form-control" name="retypePassword"
+                           [type]="showPassword ? 'text' : 'password'"
                            [(ngModel)]="retypePassword" required
                            #retypePasswordCtrl="ngModel"
                            (blur)="checkPasswordMatch()"
