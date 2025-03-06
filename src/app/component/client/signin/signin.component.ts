@@ -17,7 +17,7 @@ import {ModalRegisterFailComponent} from '../Modal-notify/modal-register-fail/mo
 @Component({
   selector: 'app-signin',
   standalone: true,
-  imports: [RouterLink, NgIf, CommonModule, FormsModule, TranslateModule],
+  imports: [RouterLink, NgIf, CommonModule, FormsModule, TranslateModule, ModalRegisterSuccessComponent],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })
@@ -28,9 +28,12 @@ export class SigninComponent implements OnInit{
               private userService: UserService,
               private dialog: MatDialog,
               private cdRef: ChangeDetectorRef,
-              ) {
+              )
+  {
   }
 
+  notifyError: boolean = false
+  notifySuccsess: boolean = false
 
   lastName = '';
   firstName = '';
@@ -117,7 +120,12 @@ export class SigninComponent implements OnInit{
 
     this.userService.register(userData).subscribe({
       next: (response) => {
-        this.dialog.open(ModalRegisterSuccessComponent)
+
+        this.notifySuccsess = false;
+        setTimeout(() => {
+          this.notifySuccsess = true;
+        }, 10);
+
         form.resetForm();
       },
       error: (error) => {
@@ -127,6 +135,12 @@ export class SigninComponent implements OnInit{
         this.isSubmitting = false;
       }
     });
+  }
+
+  showPassword = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
   }
 
 }
