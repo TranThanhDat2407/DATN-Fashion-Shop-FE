@@ -143,4 +143,31 @@ export class SigninComponent implements OnInit{
     this.showPassword = !this.showPassword;
   }
 
+  dobError: string | null = null;
+
+  validateDateOfBirth() {
+    if (!this.dateOfBirth) {
+      this.dobError = "Vui lòng chọn ngày sinh.";
+      return;
+    }
+
+    const dob = new Date(this.dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    const dayDiff = today.getDate() - dob.getDate();
+
+    // Điều chỉnh tuổi nếu chưa qua sinh nhật năm nay
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+
+    if (dob > today) {
+      this.dobError = "Ngày sinh không thể lớn hơn ngày hiện tại.";
+    } else if (age < 15) {
+      this.dobError = "Bạn phải đủ 15 tuổi.";
+    } else {
+      this.dobError = null;
+    }
+  }
 }

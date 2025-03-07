@@ -30,6 +30,9 @@
                 <a class="list-group-item" [routerLink]="['../profile/edit_address']" routerLinkActive="active-link">
                     <i class="fa fa-map"></i>Địa Chỉ
                 </a>
+              <a class="list-group-item" [routerLink]="['../profile/change-password']" routerLinkActive="active-link">
+                <i class="fa fa-map"></i>{{"Thay đổi mật khẩu" | translate}}
+              </a>
               <a class="list-group-item" style="color: red;cursor: pointer" (click)="logout()">
                 {{ "Đăng xuất" | translate }}
               </a>

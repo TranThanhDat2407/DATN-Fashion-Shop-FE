@@ -213,4 +213,19 @@ export class UserService {
     );
   }
 
+
+  changePassword(userId: number, currentPassword: string, newPassword: string, retypePassword: string): Observable<any> {
+    const params = new HttpParams().set('id', userId.toString());
+    const headers = new HttpHeaders({ 'Accept-Language': 'vi' });
+
+    const body = {
+      currentPassword,
+      newPassword,
+      retypePassword,
+      passwordMatching: newPassword === retypePassword
+    };
+
+    return this.http.post(`${this.userUrl}/change-password`, body, { headers, params });
+  }
+
 }
