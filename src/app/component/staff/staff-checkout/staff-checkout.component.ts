@@ -27,6 +27,11 @@ import {UserService} from '../../../services/user/user.service';
 import {StorePaymentRequest} from '../../../dto/StorePaymentRequest';
 import {StorePaymentResponse} from '../../../dto/StorePaymentResponse';
 import {OrderService} from '../../../services/order/order.service';
+import {StoreDetailDTO} from '../../../dto/StoreDetailDTO';
+import {StoreService} from '../../../services/client/store/store.service';
+// @ts-ignore
+import QRCode from 'qrcode';
+import {UserDetailDTO} from '../../../dto/UserDetailDTO';
 
 @Component({
   selector: 'app-staff-checkout',
@@ -63,6 +68,8 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
 
   paymentMethod: string = '4';
 
+  staffDetail!: UserDetailDTO;
+
   constructor(
     private tokenService: TokenService,
     private productService: ProductServiceService,
@@ -70,6 +77,7 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private couponService: CouponService,
     private orderService: OrderService,
+    private storeService: StoreService,
     private route: ActivatedRoute,
     private cd: ChangeDetectorRef,
   ) {}
@@ -84,6 +92,19 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
         this.storeId = +storeIdParam;
       }
     });
+    this.getStoreDetail(Number(this.storeId));
+
+    const token = this.tokenService.getToken();
+    if (this.staffId) {
+      this.userService.getUserDetail(token).subscribe({
+        next: (data) => {
+          this.staffDetail = data; // Lưu thông tin người dùng vào biến
+        },
+        error: (err) => {
+          console.error('Lỗi khi lấy thông tin người dùng:', err);
+        }
+      });
+    }
 
     await this.fetchApiCart();
     await this.loadProductDetails();
@@ -661,6 +682,8 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
 
   orderSuccessMessage?: string;
   orderFailedMessage?: string;
+  orderId?: number;
+  customerName?: String;
   createOrder(): void {
     if (!this.dataCart || this.cartItems.length === 0) {
       this.orderFailedMessage = "Empty cart!";
@@ -683,9 +706,15 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
     this.orderService.createStoreOrder(this.staffId, request).subscribe({
       next: (response: any) => {
         this.orderSuccessMessage = `Order #${response.data.orderId} placed successfully!`;
+        this.orderId = response.data.orderId;
+        console.log(response);
+        this.customerName = response.data.customerName;
+        this.printReceipt();
         this.couponDetails = null;
         this.userId = null;
+
         this.showErrorMessage = false;
+
         this.clearCart();
         setTimeout(() => (this.orderSuccessMessage = ""), 3000);
       },
@@ -704,7 +733,174 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.couponErrorMessage = '';
       this.productErrorMessage  = '';
+      this.orderFailedMessage = '';
+      this.orderSuccessMessage = '';
     }, 3000);
   }
+
+  store: StoreDetailDTO | null = null;
+
+  async printReceipt(): Promise<void>  {
+    if (!this.orderId) {
+      console.error('Order not found');
+      return;
+    }
+
+    const storeInfo = `
+    <div style="text-align: center; font-family: monospace; margin-bottom: 20px">
+      <h2>BRAND</h2>
+     <p style="margin-top: 5px"><b></b> #${this.orderId}</p>
+     <p style="margin-top: 5px"><b></b> ${new Date().toLocaleString()}</p>
+       <p style="margin-top: 5px">${this.store?.name}</p>
+      <p style="margin-top: 5px">${this.store?.fullAddress}</p>
+      <p style="margin-top: 5px">${this.store?.email}</p>
+    </div>
+  `;
+
+    let itemsHtml = `
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+    <tr>
+      <th style="text-align: left; width: 10%;">SP</th>
+      <th style="text-align: left; width: 40%;">Tên sản phẩm</th>
+      <th style="text-align: right; width: 10%;">SL</th>
+      <th style="text-align: right; width: 40%;">Giá</th>
+    </tr>
+    <tr><td colspan="4" style="border-bottom: 1px dashed #000;"></td></tr>
+  `;
+
+    let totalBeforeVAT = 0;
+
+    this.cartItems.forEach(item => {
+      const product = this.getProductDetailByProductVariantId(item.productVariantId);
+      const itemTotal = item.quantity * product.salePrice;
+      totalBeforeVAT += itemTotal;
+
+      itemsHtml += `
+        <tr>
+      <td style="white-space: nowrap;">${item.productVariantId}</td>
+      <td style="white-space: nowrap; padding-right: 5px;">${product.name}</td>
+      <td style="text-align: right; ">x${item.quantity}</td>
+      <td style="text-align: right;">${itemTotal.toLocaleString()}</td>
+       </tr>
+    `;
+    });
+
+    itemsHtml += '<tr><td colspan="4" style="border-bottom: 1px dashed #000;"></td></tr>';
+    itemsHtml += '<tr>' +
+      '<td colspan="2" style="font-weight: bold; font-size: 15px">Tổng cộng</td>' +
+      `<td style="text-align: right; font-weight: bold; font-size: 15px"">${this.totalCartItems}</td>` +
+      `<td style="text-align: right; font-weight: bold; font-size: 15px"">${this.totalPrice.toLocaleString()}</td>` +
+      '</tr>';
+
+    itemsHtml += '<tr>' +
+      '<td colspan="3" style="font-size: 15px">VAT (10%)</td>' +
+      `<td style="text-align: right;  font-size: 15px"">${this.vat.toLocaleString()}</td>` +
+      '</tr>';
+
+    if (this.couponDetails) {
+      itemsHtml += '<tr>' +
+        '<td colspan="3" style="font-size: 15px">Giảm giá</td>' +
+        `<td style="text-align: right; font-size: 15px; color: red;">- ${this.discountAmount.toLocaleString()}</td>` +
+        '</tr>';
+    }
+
+    itemsHtml += '<tr><td colspan="4" style="border-bottom: 1px dashed #000;"></td></tr>';
+
+    itemsHtml += '<tr>' +
+      '<td colspan="3" style="font-size: 16px; font-weight: bold; ">TỔNG HÓA ĐƠN</td>' +
+      `<td style="text-align: right; font-weight: bold; font-size: 16px"">${this.orderTotal.toLocaleString()}</td>` +
+      '</tr></table>';
+
+    const totals = `
+    <div style="margin-top: 20px; font-size: 14px;">
+      <p><b>Bạn được phục vụ bởi: ${this.staffDetail.lastName} || ID ${this.staffId}</b></p>
+    </div>
+  `;
+
+    const qrCodeDataUrl = await this.generateQRCode(String(this.orderId));
+    const receiptHtml = `
+    <html>
+    <head>
+      <title>Hóa Đơn</title>
+      <style>
+        @media print {
+          body {
+            width: 80mm;
+            font-family: monospace;
+            font-size: 14px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+            p {
+      margin: 2px 0; /* Giảm khoảng cách giữa các dòng */
+      line-height: 1.2; /* Giảm chiều cao dòng */
+            }
+          th, td {
+            padding: 5px 0;
+          }
+          .total {
+            font-size: 16px;
+            font-weight: bold;
+          }
+          .footer {
+            text-align: center;
+            margin-top: 10px;
+          }
+          .receipt-container {
+  border: 1px solid black; /* Viền đen 1px */
+  padding: 10px; /* Thêm khoảng cách bên trong */
+}
+        }
+      </style>
+    </head>
+    <body onload="window.print(); window.close();">
+      <div class="receipt-container">
+        ${storeInfo}
+        ${itemsHtml}
+        ${totals}
+        <p class="footer">
+          <br>
+            <p style="font-size: 14px; font-weight: bold;">Cảm ơn ${this.customerName ? this.customerName : 'Quý khách'} đã mua hàng!</p>
+  <p style="font-size: 13px; color: #555;">Hẹn gặp lại quý khách.</p>
+       <div style="text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px dashed #000;">
+  <img src="${qrCodeDataUrl}" width="120" height="120" style="margin-top: 10px;">
+</div>
+        </p>
+      </div>
+    </body>
+    </html>
+  `;
+
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(receiptHtml);
+      printWindow.document.close();
+    }
+  }
+
+  getStoreDetail(storeId: number): void {
+    this.storeService.getStoreDetail(storeId).subscribe(
+      (response) => {
+        if (response?.data) {
+          this.store = response.data;
+        }
+      },
+      (error) => {
+        console.error('Lỗi khi lấy dữ liệu cửa hàng:', error);
+      }
+    );
+  }
+
+  async generateQRCode(orderId: string): Promise<string> {
+    try {
+      return await QRCode.toDataURL(orderId);
+    } catch (error) {
+      console.error('Lỗi khi tạo mã QR:', error);
+      return '';
+    }
+  }
+
 
 }
