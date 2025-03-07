@@ -11,6 +11,8 @@ import {User} from '../../models/user';
 import {ApiResponse} from '../../dto/Response/ApiResponse';
 import {UserDetailDTO} from '../../dto/UserDetailDTO';
 import {TokenService} from '../token/token.service';
+import {PageResponse} from '../../dto/Response/page-response';
+import {UserAdminResponse} from '../../dto/user/userAdminResponse.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -212,5 +214,17 @@ export class UserService {
       map(response => response.data)
     );
   }
+  searchUsers(keyword: string): Observable<UserAdminResponse[]> {
+    let params = new HttpParams()
+      .set('size', '10') // Giới hạn số lượng user hiển thị
+      .set('roleId', '2'); // Chỉ lấy user có role khách hàng
 
+    if (keyword) {
+      params = params.set('firstName', keyword)
+        .set('lastName', keyword)
+        .set('email', keyword);
+    }
+    return this.http.get<ApiResponse<PageResponse<UserAdminResponse>>>(`${this.userUrl}/all`, { params })
+      .pipe(map(response => response.data.content));
+  }
 }

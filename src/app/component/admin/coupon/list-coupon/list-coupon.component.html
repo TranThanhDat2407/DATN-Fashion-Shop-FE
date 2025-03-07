@@ -13,11 +13,25 @@
   <!-- 🔍 Search Filters -->
   <div class="bg-white shadow-md rounded-lg p-4 mb-4">
     <input [(ngModel)]="searchKeyword"
-           (ngModelChange)="loadCoupons()"
+           (ngModelChange)="onSearch()"
            type="text"
            placeholder="Search anything..."
            class="p-2 border rounded w-full">
+    <!-- 🔍 Dropdown tìm user -->
+<!--    <div class="bg-white shadow-md rounded-lg p-4 mb-4">-->
+<!--      <mat-form-field class="full-width">-->
+<!--        <mat-label>Tìm khách hàng</mat-label>-->
+<!--        <input type="text" matInput [formControl]="userSearchCtrl" [matAutocomplete]="auto">-->
+<!--        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onUserSelected($event.option.value)">-->
+<!--          <mat-option *ngFor="let user of filteredUsers" [value]="user">-->
+<!--            {{ user.firstName }} {{ user.lastName }} - {{ user.email }}-->
+<!--          </mat-option>-->
+<!--        </mat-autocomplete>-->
+<!--      </mat-form-field>-->
+<!--    </div>-->
+
   </div>
+
 
 
 
@@ -27,7 +41,7 @@
              [currentPage]="currentPage"
              [tableData]="coupons?.content?.flat() || []"
              [dataPage]="coupons"
-             [tableHeaders]="['code', 'name','imageUrl','discountType','discountValue', 'expirationDate','userIds','description','button' ]"
+             [tableHeaders]="['code', 'name','imageUrl','discountType','discountValue','minOrderValue', 'expirationDate','userIds','description','button' ]"
              [routerLinkString]="'/admin/edit_coupon'"
              (pageChanged)="onPageChange($event)"
              [typeImage] = "'coupons'"
