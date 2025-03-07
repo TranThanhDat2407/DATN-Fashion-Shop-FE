@@ -34,6 +34,7 @@ import {OTPComponent} from './otp/otp.component';
 import {ResetPasswordComponent} from './reset-password/reset-password.component';
 import {VerifyEmailComponent} from './verify-email/verify-email.component';
 import {CheckoutConfirmationComponent} from './checkout-comfirmation/checkout-confirmation.component';
+import {ChangePasswordComponent} from './profile/change-password/change-password.component';
 
 
 export const clientRouter: Routes =[
@@ -103,10 +104,11 @@ export const clientRouter: Routes =[
                 component: ProfileComponent,
                 children: [
                     { path: 'order_history', component: OrderHistoryComponent },
-                     { path: 'order_history/order_detail/:id', component: OrderDetailComponent },
+                    { path: 'order_history/order_detail/:id', component: OrderDetailComponent },
                     { path: 'edit_profile', component: EditProfileComponent },
                     { path: 'order_history/order_detail', component: OrderDetailComponent  },
                     { path: 'edit_address', component: EditAddressComponent },
+                    { path: 'change-password', component: ChangePasswordComponent },
                 ],
               canActivate: [AuthGuardFn]
             },
