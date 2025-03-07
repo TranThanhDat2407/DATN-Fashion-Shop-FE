@@ -132,7 +132,8 @@ export class StoreService {
     }
 
     return this.http.get<ApiResponse<PageResponse<InventoryAudResponse>>>(
-      `${this.apiUrl}/store/inventory-history`,
+      `http://localhost:8080/api/v1/inventory/store/inventory-history
+`,
       { params }
     );
   }

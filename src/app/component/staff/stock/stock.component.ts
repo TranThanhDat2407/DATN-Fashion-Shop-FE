@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren} from 
 import {ListStoreStockDTO} from '../../../dto/ListStoreStockDTO';
 import {HttpClient} from '@angular/common/http';
 import {CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {StoreService} from '../../../services/client/store/store.service';
 import {ApiResponse} from '../../../dto/Response/ApiResponse';
 import {PageResponse} from '../../../dto/Response/page-response';
@@ -37,7 +37,8 @@ interface Category {
     StoreHeaderComponent,
     FormsModule,
     NgxBarcode6Module,
-    HeaderAdminComponent
+    HeaderAdminComponent,
+    RouterLink
   ],
   templateUrl: './stock.component.html',
   styleUrl: './stock.component.scss'
