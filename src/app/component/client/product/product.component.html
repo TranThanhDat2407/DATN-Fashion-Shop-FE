@@ -17,7 +17,16 @@
       <div class="container p-3  " style="background-color: rgba(255, 255, 255, 0.6);height: auto;">
         <div class="content-product-title">
         </div>
-        <div class="content-fiter-tools">
+        <div class="tool-search">
+          <div class="count-product">
+            <span>{{products.length}} Sản Phẩm</span>
+          </div>
+          <input type="text" class="form-control rounded-pill"
+                 [(ngModel)]="searchQuery"
+                 (input)="onSearchInput($event)"
+                 placeholder="Tìm kiếm theo từ khóa">
+        </div>
+        <div class="content-fiter-tools mb-3">
           <div class="tools-title">
             <i class="fa-solid fa-sort"></i>
             <span>{{ "Bộ lọc" | translate }}</span>
@@ -38,7 +47,7 @@
                 </option>
               </select>
             </div>
-            <div class="element-select text-end">
+            <div class="element-select" style="margin-left: auto;">
               <select class="form-select" (change)="onSortChange($event)">
                 <option value="" selected>Chọn sắp xếp</option>
                 <option value="priceAsc">Giá Tăng Dần</option>
@@ -48,15 +57,6 @@
             </div>
           </div>
 
-        </div>
-        <div class="tool-search">
-          <div class="count-product">
-            <span>{{products.length}} Sản Phẩm</span>
-          </div>
-          <input type="text" class="form-control rounded-pill"
-                 [(ngModel)]="searchQuery"
-                 (input)="onSearchInput($event)"
-                 placeholder="Tìm kiếm theo từ khóa">
         </div>
 
 

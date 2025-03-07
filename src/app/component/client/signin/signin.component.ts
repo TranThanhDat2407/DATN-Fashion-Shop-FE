@@ -17,7 +17,7 @@ import {ModalRegisterFailComponent} from '../Modal-notify/modal-register-fail/mo
 @Component({
   selector: 'app-signin',
   standalone: true,
-  imports: [RouterLink, NgIf, CommonModule, FormsModule, TranslateModule],
+  imports: [RouterLink, NgIf, CommonModule, FormsModule, TranslateModule, ModalRegisterSuccessComponent],
   templateUrl: './signin.component.html',
   styleUrl: './signin.component.scss'
 })
@@ -28,9 +28,12 @@ export class SigninComponent implements OnInit{
               private userService: UserService,
               private dialog: MatDialog,
               private cdRef: ChangeDetectorRef,
-              ) {
+              )
+  {
   }
 
+  notifyError: boolean = false
+  notifySuccsess: boolean = false
 
   lastName = '';
   firstName = '';
@@ -117,7 +120,12 @@ export class SigninComponent implements OnInit{
 
     this.userService.register(userData).subscribe({
       next: (response) => {
-        this.dialog.open(ModalRegisterSuccessComponent)
+
+        this.notifySuccsess = false;
+        setTimeout(() => {
+          this.notifySuccsess = true;
+        }, 10);
+
         form.resetForm();
       },
       error: (error) => {
@@ -129,4 +137,37 @@ export class SigninComponent implements OnInit{
     });
   }
 
+  showPassword = false;
+
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
+  dobError: string | null = null;
+
+  validateDateOfBirth() {
+    if (!this.dateOfBirth) {
+      this.dobError = "Vui lòng chọn ngày sinh.";
+      return;
+    }
+
+    const dob = new Date(this.dateOfBirth);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+    const dayDiff = today.getDate() - dob.getDate();
+
+    // Điều chỉnh tuổi nếu chưa qua sinh nhật năm nay
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+
+    if (dob > today) {
+      this.dobError = "Ngày sinh không thể lớn hơn ngày hiện tại.";
+    } else if (age < 15) {
+      this.dobError = "Bạn phải đủ 15 tuổi.";
+    } else {
+      this.dobError = null;
+    }
+  }
 }

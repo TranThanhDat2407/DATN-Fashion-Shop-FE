@@ -33,7 +33,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormsModule, NgModel } from '@angular/forms';
 import { ModelNotifySuccsessComponent } from '../Modal-notify/model-notify-succsess/model-notify-succsess.component';
 import { ModalNotifyErrorComponent } from '../Modal-notify/modal-notify-error/modal-notify-error.component';
-import {SessionService} from '../../../services/session/session.service';
+import { SessionService } from '../../../services/session/session.service';
 
 @Component({
   selector: 'app-detail-product',
@@ -73,6 +73,8 @@ export class DetailProductComponent implements OnInit {
   dataVariants: VariantsDetailProductDTO | null = null
   variantId?: number = 0
   quantityInStock?: InventoryDTO | null = null;
+  notifyError: boolean = false
+  notifySuccsess: boolean = false
 
   page: number = 0
   size: number = 3
@@ -97,8 +99,8 @@ export class DetailProductComponent implements OnInit {
     private tokenService: TokenService,
     private cartService: CartService,
     private cookieService: CookieService,
-    private sessionService: SessionService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sessionService: SessionService
 
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
@@ -111,7 +113,9 @@ export class DetailProductComponent implements OnInit {
     this.getIdsFromProductRouter();
     this.fetchCurrency();
     this.userId = this.tokenService.getUserId() ?? 0;
+    this.sessionId = this.sessionService.getSession() ?? ''
 
+    // this.cartService.getQtyCart(this.userId,this.sessionId);
     this.routerActi.params.subscribe(params => {
       this.productId = Number(params['productId']) || 0;
       this.colorId = Number(params['colorId']) || 0;
@@ -194,7 +198,6 @@ export class DetailProductComponent implements OnInit {
       }
     });
 
-
     if (this.colorId === 0 && this.dataColors.length > 0) {
       this.colorId = this.dataColors[0].id;
     }
@@ -225,7 +228,10 @@ export class DetailProductComponent implements OnInit {
   isValidToAddCart(): boolean {
     // Kiểm tra nếu số lượng giỏ hàng <= 0
     if (this.qtyCart <= 0) {
-      this.dialog.open(ModalNotifyErrorComponent);
+      this.notifyError = false;
+      setTimeout(() => {
+        this.notifyError = true;
+      }, 10);
       return false;
     }
     return true;
@@ -236,7 +242,10 @@ export class DetailProductComponent implements OnInit {
     this.getStatusQuantityInStock(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(item => {
 
       if (item?.quantityInStock === undefined || item?.quantityInStock === 0 || item?.quantityInStock < this.qtyCart) {
-        this.dialog.open(ModalNotifyErrorComponent);
+        this.notifyError = false;
+        setTimeout(() => {
+          this.notifyError = true;
+        }, 10);
         return;
       }
 
@@ -248,12 +257,12 @@ export class DetailProductComponent implements OnInit {
         if (this.cart.productVariantId !== 0 && this.cart.quantity !== 0) {
           console.log(`this.cart :`, this.cart);
           this.cartService.createCart(this.userId, this.sessionId ?? '', this.cart).subscribe((response) => {
-            this.dialog.open(ModelNotifySuccsessComponent);  // Hiển thị thông báo thành công
-            // this.cartService.getQtyCart(this.userId,this.sessionId  ?? '');
 
-            // this.cartService.getQtyCart(this.userId, this.sessionId ?? '').subscribe(total => {
-            //   this.cartService.totalCartSubject.next(total);
-            // });
+            this.notifySuccsess = false;
+            setTimeout(() => {
+              this.notifySuccsess = true;
+            }, 10);
+
             const sessionId = this.sessionService.getSession();
             this.cartService.getQtyCart(this.userId, sessionId ?? '');
           });
@@ -481,7 +490,6 @@ export class DetailProductComponent implements OnInit {
 
     this.changeImageOne(this.productId ?? 0, color.id).subscribe(images => {
       if (images) {
-        this.colorImage = images[0];
         this.dataImagesProduct[0].mediaUrl = images[0].mediaUrl; // Cập nhật danh sách ảnh
         this.cdr.detectChanges();
       }

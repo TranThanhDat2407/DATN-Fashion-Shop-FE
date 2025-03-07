@@ -5,6 +5,7 @@ import {UserService} from '../../../services/user/user.service';
 import {UserDetailDTO} from '../../../dto/UserDetailDTO';
 import {StoreService} from '../../../services/client/store/store.service';
 import {StoreDetailDTO} from '../../../dto/StoreDetailDTO';
+import {StaffService} from '../../../services/staff/staff.service';
 
 @Component({
   selector: 'app-store-header',
@@ -31,6 +32,7 @@ export class StoreHeaderComponent implements OnInit {
     private tokenService: TokenService,
     private userService: UserService,
     private storeService: StoreService,
+    private staffService: StaffService
   ) { }
 
   ngOnInit(): void {
@@ -39,6 +41,10 @@ export class StoreHeaderComponent implements OnInit {
     this.route.parent?.paramMap.subscribe(params => {
       this.storeId = params.get('storeId') ?? '0';
       console.log('Store ID trong header:', this.storeId);
+
+
+        this.checkUserInStore(this.userId, Number(this.storeId));
+
     });
 
     this.getStoreDetail(Number(this.storeId));
@@ -70,6 +76,24 @@ export class StoreHeaderComponent implements OnInit {
     );
   }
 
-
+  checkUserInStore(userId: number, storeId: number): void {
+    this.staffService.checkUserInStore(userId, storeId).subscribe({
+      next: (isInStore) => {
+        console.log(`🔍 Kiểm tra quyền truy cập store (${storeId}):`, isInStore);
+        if (!isInStore) {
+          console.warn('🚫 Người dùng không có quyền vào cửa hàng này!');
+          this.router.navigate(['/staff/0/login'], {
+            queryParams: { error: 'YOU DONT HAVE PERMISSION' }
+          });
+        }
+      },
+      error: (err) => {
+        console.error('❌ Lỗi khi kiểm tra quyền truy cập store:', err);
+        this.router.navigate(['/staff/0/login'], {
+          queryParams: { error: 'YOU DONT HAVE PERMISSION' }
+        });
+      }
+    });
+  }
 
 }

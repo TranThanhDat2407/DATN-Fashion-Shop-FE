@@ -15,78 +15,91 @@ import {EditCouponComponent} from './coupon/edit-coupon/edit-coupon.component';
 import {ListCouponComponent} from './coupon/list-coupon/list-coupon.component';
 
 import { ListAttributeComponent } from "./attribute/list-attribute/list-attribute.component";
+import { ListProductComponent } from "./product/list-product/list-product.component";
 
 export const adminRouter: Routes =[
-    {
-        path: '',
-         component: AdminComponent,
-         children:
-         [
-            {
-                path:'list_user',
-                component: ListUserComponent
-            },
-            {
-                path:'login_admin',
-                component: LoginAdminComponent
-            },
-            {
-                path:'edit_user',
-                component: EditUserComponent
-            },
-            {
-                path:'edit_user/:id',
-                component: EditUserComponent
-            },
-            {
-                path:'list_category',
-                component: ListCategoryComponent
-            },
-            {
-                path:'edit_category/:id',
-                component: EditCategoryComponent
-            },
-            {
-                path:'edit_category',
-                component: EditCategoryComponent
-            },
-            {
-                path:'dashboard',
-                component: DashboardComponent
-            },
-            {
-                path:'list_order',
-                component: ListOrderComponent
-            },
-            {
-                path:'edit_order',
-                component: EditOrderComponent
-            },
-            {
-                path:'edit_attribute',
-                component: EditAttributeComponent
-            },
-            {
-                path:'list_attribute',
-                component: ListAttributeComponent
-            },
-            {
-                path:'edit_product',
-                component: EditProductComponent
-            },
-           {
-             path:'edit_coupon',
-             component: EditCouponComponent
-           },
-           {
-             path:'list_coupon',
-             component: ListCouponComponent
-           },
-           {
-             path:'edit_coupon/:id',
-             component: EditCouponComponent
-           },
+  {
+    path: '',
+    component: AdminComponent,
+    children:
+      [
+        {
+          path:'list_user',
+          component: ListUserComponent
+        },
+        {
+          path:'login_admin',
+          component: LoginAdminComponent
+        },
+        {
+          path:'edit_user',
+          component: EditUserComponent
+        },
+        {
+          path:'edit_user/:id',
+          component: EditUserComponent
+        },
+        {
+          path:'list_category',
+          component: ListCategoryComponent
+        },
+        {
+          path:'edit_category/:id',
+          component: EditCategoryComponent
+        },
+        {
+          path:'edit_category',
+          component: EditCategoryComponent
+        },
+        {
+          path:'dashboard',
+          component: DashboardComponent
+        },
+        {
+          path:'list_order',
+          component: ListOrderComponent
+        },
+        {
+          path:'edit_order',
+          component: EditOrderComponent
+        },
+        {
+          path:'edit_attribute',
+          component: EditAttributeComponent
+        },
+        {
+          path:'edit_attribute/size/:id',
+          component: EditAttributeComponent
+        },
+        {
+          path:'edit_attribute/color/:id',
+          component: EditAttributeComponent
+        },
+        {
+          path:'list_attribute',
+          component: ListAttributeComponent
+        },
+        {
+          path:'edit_product',
+          component: EditProductComponent
+        },
+        {
+          path:'list_product',
+          component: ListProductComponent
+        },
+        {
+          path:'edit_coupon',
+          component: EditCouponComponent
+        },
+        {
+          path:'list_coupon',
+          component: ListCouponComponent
+        },
+        {
+          path:'edit_coupon/:id',
+          component: EditCouponComponent
+        },
 
-         ]
-    }
+      ]
+  }
 ]

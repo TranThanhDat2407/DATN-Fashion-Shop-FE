@@ -59,7 +59,7 @@ export class ProductComponent implements OnInit {
   })[] = [];
 
   currentPage: number = 1; // Trang hiện tại
-  pageSize: number = 8; // Số sản phẩm trên mỗi trang
+  pageSize: number = 2; // Số sản phẩm trên mỗi trang
   totalPages: number = 0; // Tổng số trang
   totalElements: number = 0; // Tổng số sản phẩm
   first: boolean = true;

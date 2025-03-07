@@ -21,11 +21,11 @@
 
     <!-- Nếu mediaUrl không phải là video, dùng img -->
     <ng-template #imageTemplate>
-      <img [src]="'http://localhost:8080/uploads/images/banners/media/' + banner.mediaUrl" alt="Image">
+      <img *ngIf="banner.isActive" [src]="'http://localhost:8080/uploads/images/banners/media/' + banner.mediaUrl" alt="Image">
     </ng-template>
 
     <div class="carousel-caption">
-      <div class="carousel-logo">
+      <div *ngIf="banner.isActive" class="carousel-logo">
         <img [src]="'http://localhost:8080/uploads/images/banners/logo_images/' + banner.logoUrl" alt="PUFFTECH">
       </div>
 
