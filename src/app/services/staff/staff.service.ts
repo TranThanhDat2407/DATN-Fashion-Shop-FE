@@ -115,6 +115,23 @@ export class StaffService {
     }
   }
 
+  checkUserInStore(userId: number, storeId: number): Observable<boolean> {
+    console.log(`📡 Gọi API kiểm tra user: userId=${userId}, storeId=${storeId}`);
+    return this.http.get<boolean>(`${this.userUrl}/check-user-store?userId=${userId}&storeId=${storeId}`)
+      .pipe(
+        map(response => {
+          console.log(`✅ API trả về: ${response}`);
+          return response;
+        }),
+        catchError(error => {
+          console.error('❌ API lỗi:', error);
+          return of(false);
+        })
+      );
+
+}
+
+
   // getUserProfile(): Observable<User> {
   //   return this.http.get<User>(`${this.userUrl}/profile`);
   // }

@@ -157,6 +157,14 @@ button {
   flex-wrap: wrap; // Hỗ trợ xuống dòng nếu quá nhiều size
   gap: 8px;
 }
+
+.size-label {
+  min-width: 50px; /* Điều chỉnh số này tùy vào độ dài chữ */
+  text-align: center;
+  border-radius: 0px;
+  font-size: 0.9rem;
+}
+
 /* Khi hết hàng (ignore) */
 .size-label.ignore {
   position: relative;

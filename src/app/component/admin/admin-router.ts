@@ -15,6 +15,7 @@ import {EditCouponComponent} from './coupon/edit-coupon/edit-coupon.component';
 import {ListCouponComponent} from './coupon/list-coupon/list-coupon.component';
 
 import { ListAttributeComponent } from "./attribute/list-attribute/list-attribute.component";
+import { ListProductComponent } from "./product/list-product/list-product.component";
 
 export const adminRouter: Routes =[
   {
@@ -81,6 +82,10 @@ export const adminRouter: Routes =[
         {
           path:'edit_product',
           component: EditProductComponent
+        },
+        {
+          path:'list_product',
+          component: ListProductComponent
         },
         {
           path:'edit_coupon',

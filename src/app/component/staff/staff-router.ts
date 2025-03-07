@@ -7,6 +7,7 @@ import {StoreDashboardComponent} from './store-dashboard/store-dashboard.compone
 import {AuthGuardFn} from '../../guards/auth.guard';
 import {StoreGuardFn} from '../../guards/store.guard';
 import {StockComponent} from './stock/stock.component';
+import {StockHistoryComponent} from './stock/stock-history/stock-history.component';
 
 
 export const staffRouter: Routes = [
@@ -27,6 +28,11 @@ export const staffRouter: Routes = [
       {
         path: "stock",
         component: StockComponent,
+        canActivate: [StoreGuardFn],
+      },
+      {
+        path: "stock-history",
+        component: StockHistoryComponent,
         canActivate: [StoreGuardFn],
       },
       {
