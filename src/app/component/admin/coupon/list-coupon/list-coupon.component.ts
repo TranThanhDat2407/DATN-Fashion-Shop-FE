@@ -1,19 +1,22 @@
 import {Component, OnInit} from '@angular/core';
 import {HeaderAdminComponent} from '../../header-admin/header-admin.component';
-import {NgIf} from '@angular/common';
+import {CommonModule, NgIf} from '@angular/common';
 import {TableComponent} from '../../table/table.component';
 import {CouponService} from '../../../../services/client/CouponService/coupon-service.service';
 import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {debounceTime, distinctUntilChanged, startWith, Subject, switchMap} from 'rxjs';
-import {MatInputModule} from '@angular/material/input';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+
 import {UserService} from '../../../../services/user/user.service';
 import {UserAdminResponse} from '../../../../dto/user/userAdminResponse.dto';
+import {MatInputModule} from '@angular/material/input';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-list-coupon',
   standalone: true,
-  imports: [HeaderAdminComponent, NgIf, TableComponent, FormsModule, MatInputModule, ReactiveFormsModule, MatAutocompleteModule],
+  imports: [HeaderAdminComponent, NgIf, TableComponent,CommonModule,
+    FormsModule, MatInputModule, ReactiveFormsModule,
+    MatAutocompleteModule],
   templateUrl: './list-coupon.component.html',
   styleUrl: './list-coupon.component.scss'
 })
@@ -25,8 +28,11 @@ export class ListCouponComponent implements OnInit {
   sortDirection = 'asc';
   searchKeyword = '';
   userSearchCtrl = new FormControl('');
-  filteredUsers: UserAdminResponse[] = [];
 
+  selectedUser!: UserAdminResponse;
+  searchUserKeyword: string = '';  // Từ khóa tìm kiếm
+  allUsers: UserAdminResponse[] = [];  // Danh sách gốc (không bị filter)
+  filteredUsers: UserAdminResponse[] = [];  // Danh sách hiển thị sau khi lọc
   // Biến tìm kiếm
   searchCode: string = '';
   searchExpirationDate: string = '';
@@ -46,27 +52,21 @@ export class ListCouponComponent implements OnInit {
       this.searchKeyword = keyword;
       this.loadCoupons();
     });
-    this.userService.searchUsers('').subscribe(
-      users => {
-        console.log('📌 Danh sách user từ API:', users); // Log danh sách user lấy từ API
-        this.filteredUsers = users; // Lưu danh sách vào biến filteredUsers
-      },
-      error => {
-        console.error('❌ Lỗi khi lấy danh sách user:', error); // Log nếu API lỗi
-      }
+
+    this.userService.searchUsers('').subscribe(users => {
+      this.allUsers = users;
+      this.filteredUsers = users;  // Ban đầu hiển thị tất cả
+    });
+  }
+
+// Hàm lọc danh sách theo searchKeyword
+  filterUsers() {
+    this.filteredUsers = this.allUsers.filter(user =>
+      user.email.toLowerCase().includes(this.searchKeyword.toLowerCase()) ||
+      user.firstName.toLowerCase().includes(this.searchKeyword.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(this.searchKeyword.toLowerCase())
     );
 
-    // // Xử lý tìm kiếm khi nhập vào ô input
-    // this.userSearchCtrl.valueChanges
-    //   .pipe(
-    //     startWith(''), // Mặc định hiển thị toàn bộ danh sách user
-    //     debounceTime(300),
-    //     distinctUntilChanged(),
-    //     switchMap(value => this.userService.searchUsers(value ?? '')) // Gọi API tìm kiếm user
-    //   )
-    //   .subscribe(users => {
-    //     this.filteredUsers = users;
-    //   });
 
   }
   loadCoupons() {

@@ -17,20 +17,34 @@
            type="text"
            placeholder="Search anything..."
            class="p-2 border rounded w-full">
-    <!-- 🔍 Dropdown tìm user -->
-<!--    <div class="bg-white shadow-md rounded-lg p-4 mb-4">-->
-<!--      <mat-form-field class="full-width">-->
-<!--        <mat-label>Tìm khách hàng</mat-label>-->
-<!--        <input type="text" matInput [formControl]="userSearchCtrl" [matAutocomplete]="auto">-->
-<!--        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onUserSelected($event.option.value)">-->
-<!--          <mat-option *ngFor="let user of filteredUsers" [value]="user">-->
-<!--            {{ user.firstName }} {{ user.lastName }} - {{ user.email }}-->
-<!--          </mat-option>-->
-<!--        </mat-autocomplete>-->
-<!--      </mat-form-field>-->
-<!--    </div>-->
+    <label for="searchUser">Nhập tên hoặc email nhân viên:</label>
+    <input
+      id="searchUser"
+      type="text"
+      [(ngModel)]="searchUserKeyword"
+      (input)="filterUsers()"
+      placeholder="Nhập email hoặc tên..."
+      class="form-control"
+    />
+
+    <!-- Dropdown chọn nhân viên -->
+    <label for="userSelect">Chọn nhân viên:</label>
+    <select
+      id="userSelect"
+      [(ngModel)]="selectedUser"
+      (change)="onUserSelected(selectedUser)"
+      class="form-control"
+    >
+      <option *ngFor="let user of filteredUsers" [ngValue]="user">
+        {{ user.email }} - {{ user.firstName }} {{ user.lastName }}
+      </option>
+    </select>
+
+
+
 
   </div>
+
 
 
 

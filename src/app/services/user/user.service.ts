@@ -215,17 +215,22 @@ export class UserService {
     );
   }
   searchUsers(keyword: string): Observable<UserAdminResponse[]> {
-    let params = new HttpParams()
-      .set('size', '10') // Giới hạn số lượng user hiển thị
-      .set('roleId', '2'); // Chỉ lấy user có role khách hàng
+    let params = new HttpParams().set('size', '10').set('roleId', '2');
 
     if (keyword) {
-      params = params.set('firstName', keyword)
-        .set('lastName', keyword)
-        .set('email', keyword);
+      params = params.set('email', keyword)
     }
+
+    console.log('🔎 API Request Params:', params.toString()); // Debug params
+
     return this.http.get<ApiResponse<PageResponse<UserAdminResponse>>>(`${this.userUrl}/all`, { params })
-      .pipe(map(response => response.data.content));
+      .pipe(
+        map(response => {
+          console.log('📌 Kết quả từ API:', response.data.content); // Debug dữ liệu trên console
+          return response.data.content;
+        })
+      );
+
   }
 
   changePassword(userId: number, currentPassword: string, newPassword: string, retypePassword: string): Observable<any> {
