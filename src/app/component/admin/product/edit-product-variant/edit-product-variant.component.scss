@@ -1,0 +1,188 @@
+.product-card {
+  max-width: 100%;
+  border: none;
+}
+.product-image{
+  width: 80%
+}
+.product-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+.product-details {
+  margin-top: 15px;
+  width: 32rem;
+}
+.product-details h6 {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+.product-item-priceSale{
+  font-weight: 700;
+  color: red;
+}
+.price {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #000;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+.product-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.product-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 0 10px 0;
+  
+}
+
+.title-color {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+
+.color-picker-list {
+  display: flex;
+  gap: 12px;
+  /* Khoảng cách giữa các màu */
+  padding: 0;
+  margin: 0;
+}
+
+/* Từng item màu sắc */
+.color-item {
+  position: relative;
+}
+
+/* Radio input (ẩn đi) */
+.color-input {
+  display: none;
+}
+
+/* Khi được chọn */
+.color-input:checked+.color-label {
+  border: 2px solid #fff;
+  /* Loại bỏ viền cũ */
+  box-shadow: 0 0 0 2px #000;
+  /* Tạo khoảng cách với viền đen */
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+/* Khi được chọn */
+.size-picker .color-input:checked+.fr-chip-label {
+  background-color: #000;
+  /* Nền đen */
+  color: #fff;
+  /* Chữ trắng */
+  border: 2px solid #fff;
+  /* Loại bỏ viền cũ */
+  box-shadow: 0 0 0 2px #000;
+  /* Tạo khoảng cách với viền đen */
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+
+/* Label hiển thị màu */
+.color-label {
+  width: 50px;
+  height: 50px;
+  display: block;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ccc;
+  /* Viền mặc định */
+  transition: border-color 0.2s ease-in-out;
+}
+.search-variant input{
+  width: 100%;
+  height: 40px;
+border-radius: 20px;
+border:  1px solid #c0c1c2;
+}
+.input-variant{
+  padding-left: 30px;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+/* Khi được chọn */
+.color-input:checked+.color-label {
+  border: 2px solid #fff;
+  /* Loại bỏ viền cũ */
+  box-shadow: 0 0 0 2px #000;
+  /* Tạo khoảng cách với viền đen */
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.color-label:hover {
+  border: 3px solid #fff;
+  /* Loại bỏ viền cũ */
+  box-shadow: 0 0 0 1px #818181;
+  /* Tạo khoảng cách với viền đen */
+  transition: box-shadow 0.2s ease-in-out;
+}
+@media (max-width: 1200px) {
+  //.product-details {
+  //  width: 25rem;
+  //}
+  .product-card {
+    flex-direction: row !important;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .product-details {
+    width: auto;
+    margin-left: 15px;
+  }
+}
+@media (max-width: 992px) {
+  //.product-details {
+  //  width: 19rem;
+  //}
+  .product-card {
+    flex-direction: row !important;
+    align-items: center;
+    margin-top: 5px;
+  }
+
+  .product-details {
+    width: auto;
+    margin-left: 15px;
+  }
+}
+@media (max-width: 768px) {
+  .product-card {
+    flex-direction: row !important;
+    align-items: center;
+    margin-top: 5px;
+  }
+  .product-image img {
+    width: 150px;
+    max-width: 100%;
+  }
+  .product-details {
+    width: auto;
+    margin-left: 15px;
+  }
+ /* Bộ chọn màu */
+ .color-picker-list {
+  flex-wrap: wrap;
+  /* Hiển thị dạng dòng khi không đủ chỗ */
+  gap: 8px;
+  /* Giảm khoảng cách giữa các màu */
+}
+
+}
