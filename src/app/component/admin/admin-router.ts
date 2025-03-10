@@ -16,6 +16,7 @@ import {ListCouponComponent} from './coupon/list-coupon/list-coupon.component';
 
 import { ListAttributeComponent } from "./attribute/list-attribute/list-attribute.component";
 import { ListProductComponent } from "./product/list-product/list-product.component";
+import { EditProductVariantComponent } from "./product/edit-product-variant/edit-product-variant.component";
 
 export const adminRouter: Routes =[
   {
@@ -80,8 +81,12 @@ export const adminRouter: Routes =[
           component: ListAttributeComponent
         },
         {
-          path:'edit_product',
+          path:'edit_product/:id',
           component: EditProductComponent
+        },
+        {
+          path:'edit_productVariant/:id/:productId',
+          component: EditProductVariantComponent
         },
         {
           path:'list_product',
