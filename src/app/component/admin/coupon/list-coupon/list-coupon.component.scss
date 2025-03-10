@@ -1,0 +1,35 @@
+mat-form-field {
+  width: 100%;
+  max-width: 400px; // Giới hạn chiều rộng
+  margin-bottom: 20px;
+
+  input {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+// Tuỳ chỉnh danh sách dropdown
+.mat-autocomplete-panel {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+// Tuỳ chỉnh từng item trong dropdown
+.mat-option {
+  font-size: 14px;
+  padding: 12px 16px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: #f5f5f5;
+  }
+
+  &.mat-active {
+    background: #e0f7fa;
+  }
+}
+.mat-autocomplete-panel {
+  border: 1px solid red !important;
+}

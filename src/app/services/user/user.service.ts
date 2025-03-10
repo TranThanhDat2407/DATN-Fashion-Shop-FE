@@ -11,6 +11,8 @@ import {User} from '../../models/user';
 import {ApiResponse} from '../../dto/Response/ApiResponse';
 import {UserDetailDTO} from '../../dto/UserDetailDTO';
 import {TokenService} from '../token/token.service';
+import {PageResponse} from '../../dto/Response/page-response';
+import {UserAdminResponse} from '../../dto/user/userAdminResponse.dto';
 @Injectable({
   providedIn: 'root'
 })
@@ -211,6 +213,38 @@ export class UserService {
     return this.http.get<ApiResponse<boolean>>(`${this.userUrl}/valid/${userId}`).pipe(
       map(response => response.data)
     );
+  }
+  searchUsers(keyword: string): Observable<UserAdminResponse[]> {
+    let params = new HttpParams().set('size', '10').set('roleId', '2');
+
+    if (keyword) {
+      params = params.set('email', keyword)
+    }
+
+    console.log('🔎 API Request Params:', params.toString()); // Debug params
+
+    return this.http.get<ApiResponse<PageResponse<UserAdminResponse>>>(`${this.userUrl}/all`, { params })
+      .pipe(
+        map(response => {
+          console.log('📌 Kết quả từ API:', response.data.content); // Debug dữ liệu trên console
+          return response.data.content;
+        })
+      );
+
+  }
+
+  changePassword(userId: number, currentPassword: string, newPassword: string, retypePassword: string): Observable<any> {
+    const params = new HttpParams().set('id', userId.toString());
+    const headers = new HttpHeaders({ 'Accept-Language': 'vi' });
+
+    const body = {
+      currentPassword,
+      newPassword,
+      retypePassword,
+      passwordMatching: newPassword === retypePassword
+    };
+
+    return this.http.post(`${this.userUrl}/change-password`, body, { headers, params });
   }
 
 }
