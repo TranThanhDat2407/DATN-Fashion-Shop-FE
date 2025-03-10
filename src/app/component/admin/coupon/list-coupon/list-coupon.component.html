@@ -13,11 +13,39 @@
   <!-- 🔍 Search Filters -->
   <div class="bg-white shadow-md rounded-lg p-4 mb-4">
     <input [(ngModel)]="searchKeyword"
-           (ngModelChange)="loadCoupons()"
+           (ngModelChange)="onSearch()"
            type="text"
            placeholder="Search anything..."
            class="p-2 border rounded w-full">
+    <label for="searchUser">Nhập tên hoặc email nhân viên:</label>
+    <input
+      id="searchUser"
+      type="text"
+      [(ngModel)]="searchUserKeyword"
+      (input)="filterUsers()"
+      placeholder="Nhập email hoặc tên..."
+      class="form-control"
+    />
+
+    <!-- Dropdown chọn nhân viên -->
+    <label for="userSelect">Chọn nhân viên:</label>
+    <select
+      id="userSelect"
+      [(ngModel)]="selectedUser"
+      (change)="onUserSelected(selectedUser)"
+      class="form-control"
+    >
+      <option *ngFor="let user of filteredUsers" [ngValue]="user">
+        {{ user.email }} - {{ user.firstName }} {{ user.lastName }}
+      </option>
+    </select>
+
+
+
+
   </div>
+
+
 
 
 
@@ -27,7 +55,7 @@
              [currentPage]="currentPage"
              [tableData]="coupons?.content?.flat() || []"
              [dataPage]="coupons"
-             [tableHeaders]="['code', 'name','imageUrl','discountType','discountValue', 'expirationDate','userIds','description','button' ]"
+             [tableHeaders]="['code', 'name','imageUrl','discountType','discountValue','minOrderValue', 'expirationDate','userIds','description','button' ]"
              [routerLinkString]="'/admin/edit_coupon'"
              (pageChanged)="onPageChange($event)"
              [typeImage] = "'coupons'"
