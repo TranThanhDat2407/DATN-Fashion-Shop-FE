@@ -17,28 +17,46 @@
            type="text"
            placeholder="Search anything..."
            class="p-2 border rounded w-full">
-    <label for="searchUser">Nhập tên hoặc email nhân viên:</label>
+    <div class="custom-select">
+      <div class="selected-item" (click)="isUserDropdownOpen = !isUserDropdownOpen">
+        <span *ngIf="selectedUser">{{ selectedUser.email }} - {{ selectedUser.firstName }} {{ selectedUser.lastName }}</span>
+        <span *ngIf="!selectedUser">Tìm kiếm theo khách hàng</span>
+      </div>
+
+      <div class="dropdown" *ngIf="isUserDropdownOpen">
+        <input type="text"
+               [(ngModel)]="searchUserKeyword"
+               (input)="filterUsers()"
+               placeholder="Tìm kiếm khách hàng..."
+               class="form-control"/>
+        <ul>
+          <button *ngIf="selectedUser" (click)="clearUserSelection()" class="clear-selection-btn">
+            Xóa lựa chọn
+          </button>
+
+          <li *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+            {{ user.email }} - {{ user.firstName }} {{ user.lastName }}
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+
+    <label for="expirationDate">Ngày hết hạn:</label>
     <input
-      id="searchUser"
-      type="text"
-      [(ngModel)]="searchUserKeyword"
-      (input)="filterUsers()"
-      placeholder="Nhập email hoặc tên..."
-      class="form-control"
+      type="date"
+      id="expirationDate"
+      [(ngModel)]="selectedExpirationDate"
+      (change)="onSearch()"
     />
 
-    <!-- Dropdown chọn nhân viên -->
-    <label for="userSelect">Chọn nhân viên:</label>
-    <select
-      id="userSelect"
-      [(ngModel)]="selectedUser"
-      (change)="onUserSelected(selectedUser)"
-      class="form-control"
-    >
-      <option *ngFor="let user of filteredUsers" [ngValue]="user">
-        {{ user.email }} - {{ user.firstName }} {{ user.lastName }}
-      </option>
-    </select>
+    <button (click)="toggleSortExpirationDate()" class="btn-sort">
+      Sắp xếp theo ngày hết hạn
+      <span *ngIf="sortBy === 'expirationDate'">
+    ({{ sortDirection === 'asc' ? '⬆️' : '⬇️' }})
+  </span>
+    </button>
 
 
 
