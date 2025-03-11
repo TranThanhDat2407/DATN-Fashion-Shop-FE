@@ -153,7 +153,7 @@ export class TableComponent implements OnInit {
         if (!isSecondCall) {
           setTimeout(() => {
             this.setPage(page, true);
-          }, 100);
+          }, 500);
         }
         break;
       }
