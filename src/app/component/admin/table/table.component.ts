@@ -27,6 +27,9 @@ export class TableComponent implements OnInit {
   @Input() tableData: any[] = [];
   @Input() eventClickDelete: (item: any) => void = () => { };
   @Input() routerLinkString: string = '';
+  @Input() routerLinkStringView: string = '';
+
+
   @Input() activeRouterLinkString: string = '';
   @Input() changePage: boolean = true;
   @Input() toggleCheckbox: (item: any) => void = () => { };
@@ -37,6 +40,7 @@ export class TableComponent implements OnInit {
   @Input() itemsPerPage: number = 10; // Số mục hiển thị mỗi trang
   @Input() currentPage: number = 1; // Trang hiện tại
   @Output() pageChanged = new EventEmitter<number>();
+
 
   page: number = 0
   sizeMap = new Map<number, string>();

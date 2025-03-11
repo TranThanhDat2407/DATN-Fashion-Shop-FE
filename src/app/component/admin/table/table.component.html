@@ -116,7 +116,8 @@
             </ng-container>
 
             <ng-container
-              *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' && header !== 'updatedAt'&& header !== 'dateOfBirth'">
+              *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' && 
+              header !== 'updatedAt'&& header !== 'dateOfBirth'">
               {{ item[header] }}
             </ng-container>
 
@@ -127,7 +128,15 @@
                 <button type="button" (click)="eventClickDelete(item.id)" class="button-89"
                   role="button">Delete</button>
               </div>
-
+            </ng-container>
+            
+            <ng-container *ngIf="header === 'button-order'">
+              <div class="button-container">
+                <button type="button" [routerLink]="[routerLinkString, item.id]"
+                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>
+                  <button type="button" [routerLink]="[routerLinkStringView, item.id]"
+                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">View</button>
+              </div>
             </ng-container>
 
             <ng-container *ngIf="header === 'colors' && colorMap.get(item.id)?.length !== 0">
