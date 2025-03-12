@@ -165,5 +165,11 @@ export class ProductServiceService {
   editProductVariant(mediaId: number,formData: FormData): Observable<any> {
     return this.http.put(`${this.apiUrl}/product-media/${mediaId}`, formData);
   }
-  
+
+  uploadMedia(productId: number,formData : FormData): Observable<any>{
+    return this.http.post(`${this.apiUrl}/upload-media/${productId}`, formData)
+  }
+  deleteImage(mediaId: number) : Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete-media/${mediaId}`)
+  }
 }

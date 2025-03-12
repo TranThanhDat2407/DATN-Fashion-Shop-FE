@@ -33,13 +33,18 @@ import { ApiResponse } from "../../../../dto/Response/ApiResponse";
 import { PageResponse } from "../../../../dto/Response/page-response";
 import { ReviewTotalDTO } from "../../../../dto/ReviewTotalDTO";
 import { ReviewAverageDTO } from "../../../../dto/ReviewAverageDTO";
+import { env } from "process";
+import { DialogComponent } from "../../dialog/dialog.component";
+import { ToastrService } from "ngx-toastr";
+import { response } from "express";
+import { error } from "console";
 
 
 @Component({
   selector: 'app-edit-product',
   standalone: true,
   imports: [CommonModule, RouterLink, TranslateModule, NavBottomComponent, ModalNotifyErrorComponent, NgClass,
-    FormsModule, ModelNotifySuccsessComponent, HeaderAdminComponent
+    FormsModule, ModelNotifySuccsessComponent, HeaderAdminComponent, DialogComponent
   ],
   templateUrl: './edit-product.component.html',
   styleUrl: './edit-product.component.scss'
@@ -75,7 +80,10 @@ export class EditProductComponent implements OnInit {
   quantityInStock?: InventoryDTO | null = null;
   notifyError: boolean = false
   notifySuccsess: boolean = false
-
+  selectedFiles: File[] = []; // Danh sách file được chọn
+  previewUrls: string[] = [];
+  imageUrl: string | ArrayBuffer | null =
+    'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg';
   page: number = 0
   size: number = 3
   sortBy: string = 'id'
@@ -100,7 +108,9 @@ export class EditProductComponent implements OnInit {
     private cartService: CartService,
     private cookieService: CookieService,
     private dialog: MatDialog,
-    private sessionService: SessionService
+    private sessionService: SessionService,
+    private diaLog: MatDialog,
+    private toastService: ToastrService
 
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
@@ -114,7 +124,7 @@ export class EditProductComponent implements OnInit {
     this.fetchCurrency();
     this.userId = this.tokenService.getUserId() ?? 0;
     this.sessionId = this.sessionService.getSession() ?? ''
-    
+
     this.loadProductId();
 
     // Lắng nghe sự kiện Back trên trình duyệt
@@ -129,7 +139,7 @@ export class EditProductComponent implements OnInit {
       console.log(this.productId)
       console.log(this.colorId)
       console.log(this.sizeId)
-      this.isValidToAddCart()
+
 
       this.getDataVariants(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(price => {
         this.variantId = price?.id;
@@ -229,79 +239,141 @@ export class EditProductComponent implements OnInit {
       this.cdr.detectChanges();
     });
 
-
-
-
   }
 
-  isValidToAddCart(): boolean {
-    // Kiểm tra nếu số lượng giỏ hàng <= 0
-    if (this.qtyCart <= 0) {
-      this.notifyError = false;
-      setTimeout(() => {
-        this.notifyError = true;
-      }, 10);
-      return false;
-    }
-    return true;
-  }
+  addImage = async (): Promise<void> => {
 
-  createCart() {
+    if(!this.validateColor()) return ;
 
-    this.getStatusQuantityInStock(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(item => {
-
-      if (item?.quantityInStock === undefined || item?.quantityInStock === 0 || item?.quantityInStock < this.qtyCart) {
-        this.notifyError = false;
-        setTimeout(() => {
-          this.notifyError = true;
-        }, 10);
-        return;
-      }
-
-
-      const qty = Number(this.qtyCart);
-      this.cart = { productVariantId: this.variantId ?? 0, quantity: qty };
-
-      if (this.isValidToAddCart()) {
-        if (this.cart.productVariantId !== 0 && this.cart.quantity !== 0) {
-          console.log(`this.cart :`, this.cart);
-          this.cartService.createCart(this.userId, this.sessionId ?? '', this.cart).subscribe((response) => {
-
-            this.notifySuccsess = false;
-            setTimeout(() => {
-              this.notifySuccsess = true;
-            }, 10);
-
-            const sessionId = this.sessionService.getSession();
-            this.cartService.getQtyCart(this.userId, sessionId ?? '');
-          });
+    const result = await firstValueFrom(
+      this.diaLog.open(DialogComponent, {
+        width: '400px',
+        data: { message: 'Are you sure you want to add image', confirm: 'ACCEPT' }
+      }).afterClosed()
+    );
+  
+    if (result === true) {
+      for (const item of this.selectedFiles) {
+        if (!item.type.startsWith('image/')) {
+          this.toastService.error('Invalid File', 'Only image files are allowed.', { timeOut: 1500 });
+          continue;  
+        }
+  
+        try {
+          const formData = new FormData();
+          formData.append('mediaFiles', item);
+  
+          await firstValueFrom(this.productService.uploadMedia(this.productId ?? 0, formData));
+        } catch (error) {
+          this.toastService.error('Error', 'There was an error uploading the image.', { timeOut: 1000 });
         }
       }
-    });
+      this.previewUrls = [];
+      this.fetchDetailProduct(this.productId ?? 0);
+      this.toastService.success('Success', 'Images added successfully!', { timeOut: 1000 });
+    } else {
+      console.log('User canceled image upload.');
+    }
+  };
+
+
+  removeImageproduct(imageId: number): void {
+    
+    const diaLog = this.diaLog.open(DialogComponent ,{
+      data : {message: 'Are you want to delete image ?'}
+    })
+
+    diaLog.afterClosed().subscribe( result =>{
+      if(result == true){
+        this.productService.deleteImage(imageId).subscribe({
+          next : response =>{
+            this.toastService.success('Success', 'Image Deleted successfully!', { timeOut: 3000 });
+            this.fetchDetailProduct(this.productId ?? 0);
+          },
+          error : error =>{
+            this.toastService.error('Error', 'There was an error deleting the Image.', { timeOut: 3000 });
+          }
+        })
+      }
+    })
+
+    console.log('clickkkk',imageId)
+    // const confirmDelete = confirm("Are you sure you want to delete this image?");
+    // if (confirmDelete) {
+    //   this.dataImagesProduct.splice(index, 1); // Xóa khỏi danh sách hiển thị
+      
+    //   // Gọi API để xóa ảnh khỏi database
+    //   this.productService.deleteImage(imageId).subscribe({
+    //     next: () => {
+    //       this.toastService.success("Success", "Image deleted successfully!", { timeOut: 1000 });
+    //     },
+    //     error: () => {
+    //       this.toastService.error("Error", "Failed to delete image!", { timeOut: 1000 });
+    //     }
+    //   });
+    // }
+  }
+  
+  validateColor(): boolean {
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    const maxSize = 5 * 1024 * 1024; // 5MB
+  
+    if (this.selectedFiles.length === 0) {
+      this.toastService.error("No files selected!", "Error", { timeOut: 3000 });
+      return false;
+    }
+  
+    for (const file of this.selectedFiles) {
+      if (!allowedTypes.includes(file.type)) {
+        this.toastService.error(`Invalid file type: ${file.name}. Only PNG, JPG, JPEG, WEBP allowed.`, "Error", { timeOut: 3000 });
+        return false;
+      }
+  
+      if (file.size > maxSize) {
+        this.toastService.error(`File ${file.name} exceeds the 5MB limit!`, "Error", { timeOut: 3000 });
+        return false;
+      }
+    }
+  
+  
+  
+    return true;
+  }
+  
+
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.selectedFiles = Array.from(input.files);
+      console.log(this.selectedFiles)
+      this.previewUrls = [];
+
+      for (let file of this.selectedFiles) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.previewUrls.push(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
   }
 
-  totalCart$!: Observable<number>;
-
-
-
-  onInput(event: any): void {
-    // Lọc chỉ cho phép nhập số
-    const inputValue = event.target.value;
-
-    // Chỉ giữ lại số, bỏ qua chữ và ký tự đặc biệt
-    const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-    // Cập nhật lại giá trị qtyCart chỉ với các chữ số
-    this.qtyCart = numericValue ? parseInt(numericValue, 10) : 0;
-
-    // Cập nhật lại giá trị input field
-    event.target.value = this.qtyCart;
+  removeImage(index: number): void {
+    this.selectedFiles.splice(index, 1); // Xóa file khỏi danh sách
+    this.previewUrls.splice(index, 1); // Xóa URL ảnh khỏi danh sách
   }
+
+
+
+
+
+
+
   getIdsFromProductRouter(): void {
     this.routerActi.params.pipe(take(1)).subscribe(params => {
       this.productId = Number(params['productId']) || 0;
-      this.colorId = Number(params['colorId']) || 0;
-      this.sizeId = Number(params['sizeId']) || 0;
+
     });
   }
 
@@ -568,7 +640,7 @@ export class EditProductComponent implements OnInit {
 
     this.location.replaceState(newUrl);
   }
- 
+
 
 
   checkWishlist(userId: number, productId: number, colorId: number) {
