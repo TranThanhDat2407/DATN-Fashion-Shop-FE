@@ -496,12 +496,12 @@ export class EditProductComponent implements OnInit {
       this.cdr.detectChanges(); // Cập nhật giao diện ngay khi có dữ liệu mới
     });
 
-    this.changeImageOne(this.productId ?? 0, color.id).subscribe(images => {
-      if (images) {
-        this.dataImagesProduct[0].mediaUrl = images[0].mediaUrl; // Cập nhật danh sách ảnh
-        this.cdr.detectChanges();
-      }
-    });
+    // this.changeImageOne(this.productId ?? 0, color.id).subscribe(images => {
+    //   if (images) {
+    //     this.dataImagesProduct[0].mediaUrl = images[0].mediaUrl;  
+    //     this.cdr.detectChanges();
+    //   }
+    // });
     this.getDataVariants(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(price => {
       this.variantId = price?.id;
       console.log('variantId : ' + this.variantId)

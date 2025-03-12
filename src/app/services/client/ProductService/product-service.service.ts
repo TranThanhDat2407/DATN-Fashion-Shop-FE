@@ -15,6 +15,7 @@ import { VariantsDetailProductDTO } from '../../../dto/VariantsDetailProductDTO'
 import { InventoryDTO } from '../../../dto/InventoryDTO';
 import {WishlistCheckResponse} from '../../../dto/WishlistCheckResponse';
 import {ProductSuggestDTO} from '../../../dto/ProductSuggestDTO';
+import { ProductVariantDTO } from '../../../dto/ProductVariantDTO';
 
 
 
@@ -155,5 +156,14 @@ export class ProductServiceService {
     );
   }
  
+  getProductVariants(name: string): Observable<ApiResponse<ProductVariantDTO[]>> {
+    const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
+    
+    return this.http.get<ApiResponse<ProductVariantDTO[]>>(`${this.apiUrl}/variants/by-product-name?languageCode=en${params}`);
+  }
+  
+  editProductVariant(mediaId: number,formData: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/product-media/${mediaId}`, formData);
+  }
   
 }
