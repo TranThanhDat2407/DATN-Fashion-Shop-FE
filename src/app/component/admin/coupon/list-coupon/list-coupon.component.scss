@@ -1,0 +1,148 @@
+/* Container chung */
+.bg-white {
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 12px; /* Khoảng cách giữa các phần */
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* Input và Select chung style */
+.input-group input[type="text"],
+.input-group select {
+  flex: 1;
+  min-width: 150px;
+  max-width: 200px; /* Tăng kích thước */
+  padding: 8px; /* Tăng padding để nhìn to hơn */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px; /* Tăng font-size */
+  transition: border-color 0.3s ease-in-out;
+}
+
+/* Chỉnh width riêng cho searchUser và userSelect */
+#searchUser,
+#userSelect {
+  width: 250px; /* Tăng chiều rộng */
+  font-size: 14px;
+  padding: 8px;
+}
+
+/* Focus effect */
+.input-group input[type="text"]:focus,
+.input-group select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+}
+
+/* Label */
+.input-group label {
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 16px; /* Tăng font-size */
+}
+
+/* Custom dropdown */
+.custom-select {
+  position: relative;
+  width: 250px; /* Tăng chiều rộng */
+}
+
+/* Ô chọn nhân viên */
+.selected-item {
+  padding: 10px; /* Tăng padding để ô rộng hơn */
+  font-size: 14px; /* Tăng kích thước chữ */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #fff;
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  width: 250px; /* Tăng chiều rộng */
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  max-height: 200px; /* Cho dropdown lớn hơn */
+  overflow-y: auto;
+  z-index: 10;
+  font-size: 14px; /* Tăng kích thước chữ */
+}
+
+/* Input trong dropdown */
+.dropdown input {
+  width: 100%;
+  padding: 8px; /* Tăng padding */
+  font-size: 14px; /* Tăng kích thước chữ */
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
+/* Danh sách user */
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown ul li {
+  padding: 10px; /* Tăng khoảng cách */
+  font-size: 14px; /* Tăng kích thước chữ */
+  cursor: pointer;
+}
+
+.dropdown ul li:hover {
+  background: #f0f0f0;
+}
+.clear-selection-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #dc3545; /* Màu đỏ */
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out, transform 0.2s;
+  margin: 5px;
+}
+
+.clear-selection-btn:hover {
+  background-color: #c82333; /* Màu đỏ đậm hơn khi hover */
+  transform: scale(1.05);
+}
+
+.clear-selection-btn:active {
+  transform: scale(0.95);
+}
+.btn-sort {
+  background-color: #007bff; // Màu xanh dương
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+
+  &:hover {
+    background-color: #0056b3; // Màu xanh đậm khi hover
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  span {
+    font-weight: bold;
+    margin-left: 5px;
+  }
+}

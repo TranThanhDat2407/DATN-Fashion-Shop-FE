@@ -1,4 +1,4 @@
-<app-header-admin [title_header]="'Product'" [routerLinkString]="'/admin/list_attribute'" />
+<app-header-admin [title_header]="'Product'" [routerLinkString]="'/admin/edit_product'" />
 <div class="d-flex flex-column">
     <div class="select-box">
         <div class="content-fiter-tools">
@@ -89,7 +89,7 @@
                 [currentPage]="page" 
                 [tableData]="dataFullElementProduct?.content?.flat() || []"
                  [dataPage]="dataFullElementProduct" [typeImage]="'products'" [tableHeaders]="header"
-                 [routerLinkString]="'/admin/edit_attribute/color'"
+                 [routerLinkString]="'/admin/edit_product'"
                  [toggleCheckbox]="toggleCheckbox"
                   (pageChanged)="onPageChange($event)">
 

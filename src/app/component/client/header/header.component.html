@@ -26,60 +26,25 @@
           'text-black': !isHome || isSearchActive
           }" class="bi bi-bell"
           ></i>
-          <span class="notif-badge">3</span>
+          <span
+            class="notif-badge"
+            *ngIf="(totalNotify$ | async) !== 0"
+          >
+            {{ totalNotify$ | async }}
+          </span>
         </button>
         <ul class="dropdown-menu notification-dropdown dropdown-menu-end p-2">
-          <li class="notification-item">
-            <img src="https://image.uniqlo.com/UQ/ST3/vn/imagesgoods/456261/item/vngoods_10_456261_3x4.jpg?width=369" alt="T-shirt">
+          <li *ngFor="let notify of notifications" class="notification-item">
+            <img [src]="'http://localhost:8080/uploads/images/products/' + notify.imageUrl" alt="Miffy">
             <div>
-              <p><strong>Giá mới Áo thun UT MAGIC</strong></p>
-              <span>Chỉ từ 195K - Săn ngay!</span>
-              <br><span class="text-danger">NEW</span> <span class="text-muted">4/3/2025</span>
-            </div>
-          </li>
-          <li class="notification-item">
-            <img src="https://via.placeholder.com/50" alt="Miffy">
-            <div>
-              <p><strong>Miffy đáng yêu đã có mặt</strong></p>
-              <span>BST UT Miffy nhân kỷ niệm 70 năm.</span>
-              <br><span class="text-danger">NEW</span> <span class="text-muted">3/3/2025</span>
-            </div>
-          </li>
-          <li class="notification-item">
-            <img src="https://via.placeholder.com/50" alt="Discount">
-            <div>
-              <p><strong>Mã giảm 100K UNIQLO</strong></p>
-              <span>Giảm 100K cho đơn từ 1 triệu!</span>
-              <br><span class="text-danger">NEW</span> <span class="text-muted">3/3/2025</span>
-            </div>
-          </li>
-          <li class="notification-item">
-            <img src="https://via.placeholder.com/50" alt="Discount">
-            <div>
-              <p><strong>Mã giảm 100K UNIQLO</strong></p>
-              <span>Giảm 100K cho đơn từ 1 triệu!</span>
-              <br><span class="text-danger">NEW</span> <span class="text-muted">3/3/2025</span>
-            </div>
-          </li>
-          <li class="notification-item">
-            <img src="https://via.placeholder.com/50" alt="Discount">
-            <div>
-              <p><strong>Mã giảm 100K UNIQLO</strong></p>
-              <span>Giảm 100K cho đơn từ 1 triệu!</span>
-              <br><span class="text-danger">NEW</span> <span class="text-muted">3/3/2025</span>
-            </div>
-          </li>
-          <li class="notification-item">
-            <img src="https://via.placeholder.com/50" alt="Discount">
-            <div>
-              <p><strong>Mã giảm 100K UNIQLO</strong></p>
-              <span>Giảm 100K cho đơn từ 1 triệu!</span>
-              <br><span class="text-danger">NEW</span> <span class="text-muted">3/3/2025</span>
+              <p><strong>{{notify.title}}</strong></p>
+              <span>{{notify.message}}</span>
             </div>
           </li>
 
           <li class="text-center py-2">
-            <a href="#" class="text-black">Xem tất cả thông báo</a>
+            <a [routerLink]="['/client', currentCurrency, currentLang,'notify']"
+               class="text-black">{{ "Xem tất cả thông báo" | translate }}</a>
           </li>
         </ul>
       </div>

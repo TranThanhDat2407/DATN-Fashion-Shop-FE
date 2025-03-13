@@ -182,7 +182,7 @@ input {
     width: 100%;
     font-family: "Kanit", sans-serif;
   }
-  
+
   .selected-item {
     padding: 10px;
     border: 1px solid #000000;
@@ -191,13 +191,13 @@ input {
     align-items: center;
     background: white;
   }
-  
+
   .selected-item img {
     width: 30px;
     height: 30px;
     margin-right: 10px;
   }
-  
+
   /* Dropdown ẩn ban đầu */
   .dropdown {
     position: absolute;
@@ -211,13 +211,13 @@ input {
     opacity: 0;
     transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
-  
+
   /* Khi dropdown mở */
   .custom-select:hover .dropdown {
     max-height: 200px; /* Trượt xuống */
     opacity: 1;
   }
-  
+
   /* Input trong dropdown */
   .dropdown input {
     width: 100%;
@@ -225,7 +225,7 @@ input {
     border: none;
     outline: none;
   }
-  
+
   /* Danh sách dropdown */
   .dropdown ul {
     list-style: none;
@@ -236,12 +236,12 @@ input {
     scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
     -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
   }
-  
+
   /* Ẩn thanh cuộn trên Chrome & Safari */
   .dropdown ul::-webkit-scrollbar {
     display: none;
   }
-  
+
   .dropdown li {
     padding: 10px;
     width: 100%;
@@ -249,24 +249,24 @@ input {
     align-items: center;
     cursor: pointer;
   }
-  
+
   .dropdown li img {
     width: 30px;
     height: 30px;
     margin-right: 10px;
   }
-  
+
   .dropdown li:hover {
     background: #f1f1f1;
   }
-  
-  
+
+
   .custom-select {
     position: relative;
     width: 20%;
     font-family: "Kanit", sans-serif;
   }
-  
+
   .selected-item {
     padding: 10px;
     border: 1px solid #000000;
@@ -275,13 +275,13 @@ input {
     align-items: center;
     background: white;
   }
-  
+
   .selected-item img {
     width: 30px;
     height: 30px;
     margin-right: 10px;
   }
-  
+
   /* Dropdown ẩn ban đầu */
   .dropdown {
     position: absolute;
@@ -295,13 +295,13 @@ input {
     opacity: 0;
     transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
-  
+
   /* Khi dropdown mở */
   .custom-select:hover .dropdown {
     max-height: 200px; /* Trượt xuống */
     opacity: 1;
   }
-  
+
   /* Input trong dropdown */
   .dropdown input {
     width: 100%;
@@ -309,7 +309,7 @@ input {
     border: none;
     outline: none;
   }
-  
+
   /* Danh sách dropdown */
   .dropdown ul {
     list-style: none;
@@ -320,12 +320,12 @@ input {
     scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
     -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
   }
-  
+
   /* Ẩn thanh cuộn trên Chrome & Safari */
   .dropdown ul::-webkit-scrollbar {
     display: none;
   }
-  
+
   .dropdown li {
     padding: 10px;
     width: 100%;
@@ -333,53 +333,53 @@ input {
     align-items: center;
     cursor: pointer;
   }
-  
+
   .dropdown li img {
     width: 30px;
     height: 30px;
     margin-right: 10px;
   }
-  
+
   .dropdown li:hover {
     background: #f1f1f1;
   }
-  
+
 
   .container-fluid {
     padding: 10px;
     background-color: #f5f5f5;
-  
+
     display: grid;
     grid-template-columns: 2.5fr 1fr;
     /* Đặt 2 cột với tỷ lệ khác nhau */
     grid-template-rows: auto auto;
     column-gap: 10px
   }
-  
+
   select {
     border-radius: 0;
   }
-  
+
   input {
     border-radius: 1px;
     font-family: 600;
     font-family: "Kanit", sans-serif;
-  
+
   }
-  
+
   option {
     border-radius: 1px;
     font-family: 600;
     font-family: "Kanit", sans-serif;
-  
+
   }
-  
+
   .custom-select {
     position: relative;
     width: 200px;
     font-family: Arial, sans-serif;
   }
-  
+
   .selected-option {
     display: flex;
     align-items: center;
@@ -388,14 +388,14 @@ input {
     border: 1px solid #ccc;
     cursor: pointer;
   }
-  
+
   .selected-option img.thumbnail,
   .options img.thumbnail {
     width: 20px;
     height: 20px;
     margin-right: 10px;
   }
-  
+
   .options {
     position: absolute;
     width: 100%;
@@ -406,53 +406,53 @@ input {
     margin: 0;
     z-index: 1000;
   }
-  
+
   .options li {
     display: flex;
     align-items: center;
     padding: 10px;
     cursor: pointer;
   }
-  
+
   .options li:hover {
     background-color: #e6e6e6;
   }
-  
+
   .form-label {
     font-family: "Inter", sans-serif;
     font-weight: 600;
     font-size: 0.9rem;
-  
-  
+
+
   }
-  
+
   .edit-category-form {
     padding: 20px;
     background-color: rgb(255, 255, 255);
     border-radius: 3px;
     border: 0.5px solid #e5e5e5;
     display: grid;
-  
+
     grid-template-rows: 0.2fr 0.2fr 0.2fr 1fr auto;
     row-gap: 12px;
-  
-  
+
+
   }
-  
+
   .edit-category-image {
     padding: 10px;
     background-color: rgb(255, 255, 255);
     border: 1px solid #ccc;
-  
+
     border-radius: 3px;
   }
-  
+
   .custom-select {
     position: relative;
     width: 100%;
     font-family: "Kanit", sans-serif;
   }
-  
+
   .selected-item {
     padding: 10px;
     border: 1px solid #000000;
@@ -461,13 +461,13 @@ input {
     align-items: center;
     background: white;
   }
-  
+
   .selected-item img {
     width: 30px;
     height: 30px;
     margin-right: 10px;
   }
-  
+
   /* Dropdown ẩn ban đầu */
   .dropdown {
     position: absolute;
@@ -482,14 +482,14 @@ input {
     opacity: 0;
     transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
-  
+
   /* Khi dropdown mở */
   .custom-select:hover .dropdown {
     max-height: 200px;
     /* Trượt xuống */
     opacity: 1;
   }
-  
+
   /* Input trong dropdown */
   .dropdown input {
     width: 100%;
@@ -497,7 +497,7 @@ input {
     border: none;
     outline: none;
   }
-  
+
   /* Danh sách dropdown */
   .dropdown ul {
     list-style: none;
@@ -511,12 +511,12 @@ input {
     -ms-overflow-style: none;
     /* Ẩn thanh cuộn trên IE và Edge */
   }
-  
+
   /* Ẩn thanh cuộn trên Chrome & Safari */
   .dropdown ul::-webkit-scrollbar {
     display: none;
   }
-  
+
   .dropdown li {
     padding: 10px;
     width: 100%;
@@ -524,28 +524,28 @@ input {
     align-items: center;
     cursor: pointer;
   }
-  
+
   .dropdown li img {
     width: 30px;
     height: 30px;
     margin-right: 10px;
   }
-  
+
   .dropdown li:hover {
     background: #f1f1f1;
   }
-  
+
   @media (max-width: 1000px) {
     label {
       font-size: 0.5px;
     }
-  
+
     .btn-box {
       display: flex;
       flex-direction: column;
       justify-content: start;
     }
-  
+
     .pushable {
       margin-bottom: 10px;
     }
