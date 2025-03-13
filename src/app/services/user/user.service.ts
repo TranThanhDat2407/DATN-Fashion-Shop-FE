@@ -221,12 +221,12 @@ export class UserService {
       params = params.set('email', keyword)
     }
 
-    console.log('🔎 API Request Params:', params.toString()); // Debug params
+    // console.log('🔎 API Request Params:', params.toString()); // Debug params
 
     return this.http.get<ApiResponse<PageResponse<UserAdminResponse>>>(`${this.userUrl}/all`, { params })
       .pipe(
         map(response => {
-          console.log('📌 Kết quả từ API:', response.data.content); // Debug dữ liệu trên console
+          // console.log('📌 Kết quả từ API:', response.data.content); // Debug dữ liệu trên console
           return response.data.content;
         })
       );

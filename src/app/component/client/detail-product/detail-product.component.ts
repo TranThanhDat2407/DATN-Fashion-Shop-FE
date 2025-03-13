@@ -219,6 +219,17 @@ export class DetailProductComponent implements OnInit {
       this.cdr.detectChanges();
     });
 
+    this.changeImageOne(this.productId ?? 0, this.colorId ?? 0).subscribe(images => {
+      if (images) {
+        this.dataImagesProduct[0].mediaUrl = images[0].mediaUrl; // Cập nhật danh sách ảnh
+        this.mediaId = images[0].id
+        this.checkMedia = images[0].hasVariants
+
+        console.log('mediaId : ' + this.mediaId)
+
+        this.cdr.detectChanges();
+      }
+    });
 
 
     this.updateUrl(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0);
@@ -470,7 +481,8 @@ export class DetailProductComponent implements OnInit {
 
     this.updateUrl(this.productId ?? 0, this.colorId ?? 0, size.id);
   }
-
+  mediaId: number = 0
+  checkMedia: boolean = false
   selectColor(color: ColorDTO): void {
     this.selectedColorId = color.id;
     this.colorId = color.id;
@@ -491,12 +503,16 @@ export class DetailProductComponent implements OnInit {
     this.changeImageOne(this.productId ?? 0, color.id).subscribe(images => {
       if (images) {
         this.dataImagesProduct[0].mediaUrl = images[0].mediaUrl; // Cập nhật danh sách ảnh
+        this.mediaId = images[0].id
+        this.checkMedia = images[0].hasVariants
+
+        console.log('mediaId : ' + this.mediaId)
+
         this.cdr.detectChanges();
       }
     });
     this.getDataVariants(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(price => {
       this.variantId = price?.id;
-      console.log('variantId : ' + this.variantId)
 
       this.cdr.detectChanges();
     });
