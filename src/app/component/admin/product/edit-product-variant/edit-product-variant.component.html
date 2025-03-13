@@ -1,0 +1,123 @@
+<app-header-admin [title_header]="'Product Variant Edit'" />
+<div class="container mt-5">
+    <div class="container">
+        <h1 class="mt-5 pt-3 fs-3">DETAIL IMAGE </h1>
+        <hr>
+        <div class="mt-3 row">
+            <div class="col-md-4">
+                <img [src]="'http://localhost:8080/uploads/images/products/'+ dataMediaInfo?.mediaUrl" width="85%"
+                    [alt]="dataMediaInfo?.mediaType">
+                <div class="mt-5">
+                    <app-button [nameButton]="'APPLY'" [eventClickBtnAdd]="updateProductVariant" />
+                </div>
+            </div>
+
+
+            <div class="col-md-8">
+                <span class="title-color search-variant">Height Model (cm) : <input class="input-height"
+                        [(ngModel)]="modelHeight" name="modelHeight" type="number"></span>
+                <!-- {{dataMediaInfo?.modelHeight}} cm -->
+                <br>
+                <div class="row mb-3">
+                    <div class="col-md-3 content-colors">
+                        <span class="title-color">COLOR :</span> <br>
+                        <span>{{ selectedColorName }}</span>
+                    </div>
+                    <div class="col-md-9 ">
+                        <div class="color-picker mt-1">
+                            <dl class="color-picker-list">
+                                <!-- Màu trắng -->
+                                <div class="color-item" *ngFor="let color of dataColors"
+                                    [attr.data-test]="color.valueName">
+                                    <dt>
+                                        <input type="radio" [value]="color.id" name="product-color-picker"
+                                            [id]="'product-color-picker' + color.id" class="color-input"
+                                            (click)="selectColor(color)" [checked]="color.id === selectedColorId">
+
+                                        <label class="color-label" [for]="'product-color-picker' + color.id"
+                                            [style.backgroundImage]="'url(' + getImageColor(color.valueImg) + ')'">
+
+                                        </label>
+                                    </dt>
+                                </div>
+
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <span> <span class="title-color ">Selected Prodduct Variant : </span><span class="pr_varaint_select" *ngFor="let item of selectedProductVariants">{{item}}</span></span>
+                
+
+
+                <ul>
+                    <li>
+                        <hr>
+                        <div class="search-variant">
+                            <span (click)="resetForm()"><i class="fa-solid fa-rotate-right"></i></span>
+                            <input class="input-variant" type="text" [(ngModel)]="nameSearch"
+                                (change)="searchProductItem()" (keyup.enter)="searchProductItem()">
+
+                        </div>
+                        <div class="row variant-all " style="padding: 0 10px 0px 0px;">
+                            <label class="col-md-6 mt-2 p-0 ms-3 mb-2 variantItem"
+                                style=" border-radius: 20px; border: 1px solid rgb(83, 82, 82); width: 47%;height: 40%;"
+                                *ngFor="let item of dataProductVariant" [for]="item.productVariantId"
+                                (click)="toggleCheckbox(item.productVariantId)">
+
+                                <div class="row ">
+                                    <div class="col-1 d-flex ps-3 pe-3" style="  padding: 30px 0 30px 0;">
+                                        <div class="d-flex "
+                                            style=" padding: 30px 10px 30px 10px; border-right: 1px solid black;">
+                                            <input type="checkbox" [id]="item.productVariantId"
+                                                [checked]="selectedProductVariants.includes(item.productVariantId)"
+                                                (click)="$event.stopPropagation()">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-11">
+                                        <div class="container d-flex ">
+                                            <div class="  product-card">
+                                                <div class="product-image">
+                                                    <img [src]="'http://localhost:8080/uploads/images/products/' + item.productImage "
+                                                        alt="Product Image">
+                                                </div>
+                                            </div>
+                                            <div class="card-body product-details">
+                                                <div class="ps-0">
+
+                                                    <p class="text-uppercase fw-bolder">{{item.productName}}</p>
+                                                    <p><strong>{{ "Màu" | translate }}:
+                                                            <img [src]="'http://localhost:8080/uploads/images/products/colors/' + item.colorImage"
+                                                                width="33" alt="">
+                                                        </strong> </p>
+                                                    <p><strong>{{ "Kích thước" | translate }}: </strong>
+                                                        {{item.sizeName}}</p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </label>
+
+
+
+                        </div>
+
+                    </li>
+
+                </ul>
+                <hr>
+                <div class="d-flex ms-3 mb-3">
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

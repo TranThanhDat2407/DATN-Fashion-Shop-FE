@@ -30,18 +30,25 @@ export class CouponService {
   }
   searchCoupons(
     keyword: string | null,
-    page: number = 0,
-    size: number = 10,
+    page: number ,
+    size: number ,
     sortBy: string = 'createdAt',
-    sortDirection: string = 'asc'
+    sortDirection: string = 'asc',
+  userId?: number,
+    expirationDate?: string
   ): Observable<ApiResponse<any>> {
     let params: any = { page, size, sortBy, sortDirection };
 
     if (keyword && keyword.trim() !== '') {
       params.code = keyword.trim();
     }
-
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/search`, { params });
+    if (userId) {
+      params.userId = userId; // Thêm userId vào request nếu có
+    }
+    if (expirationDate) {
+      params.expirationDate = expirationDate;
+    }
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/search`, { params });
   }
 
 

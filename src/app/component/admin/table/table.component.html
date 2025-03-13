@@ -3,50 +3,50 @@
   <div class="table-content">
     <table class="table table-hover">
       <thead class="thead-light">
-      <tr>
-        <th>#</th>
+        <tr>
+          <th>#</th>
 
-        <th>
-          <input type="checkbox" disabled>
-        </th>
-        <th *ngFor="let header of tableHeaders">
-          <ng-container *ngIf="header === 'imageUrl' || header === 'valueImg' ">
-            Image
-          </ng-container>
-          <ng-container *ngIf="header === 'isActive'">
-            Is Active
-          </ng-container>
-          <ng-container *ngIf="header === 'createdAt'">
-            Created At
-          </ng-container>
-          <ng-container *ngIf="header === 'dateOfBirth'">
-            Date Of Birth
-          </ng-container>
-          <ng-container *ngIf="header === 'updatedAt'">
-            Updated At
-          </ng-container>
-          <ng-container *ngIf="header === 'parentsID'">
-            Parents ID
-          </ng-container>
-          <ng-container *ngIf="header === 'parentsName'">
-            Parents Name
-          </ng-container>
-          <ng-container *ngIf="header === 'createdBy'">
-            Created By
-          </ng-container>
-          <ng-container *ngIf="header === 'updatedBy'">
-            Updated By
-          </ng-container>
-          <ng-container *ngIf="header === 'firstName'">
-            First Name
-          </ng-container>
-          <ng-container *ngIf="header === 'lastName'">
-            Last Name
-          </ng-container>
-          <ng-container *ngIf="header === 'valueName'">
-            Image Name
-          </ng-container>
-          <ng-container *ngIf="
+          <th>
+            <input type="checkbox" disabled>
+          </th>
+          <th *ngFor="let header of tableHeaders">
+            <ng-container *ngIf="header === 'imageUrl' || header === 'valueImg' ">
+              Image
+            </ng-container>
+            <ng-container *ngIf="header === 'isActive'">
+              Is Active
+            </ng-container>
+            <ng-container *ngIf="header === 'createdAt'">
+              Created At
+            </ng-container>
+            <ng-container *ngIf="header === 'dateOfBirth'">
+              Date Of Birth
+            </ng-container>
+            <ng-container *ngIf="header === 'updatedAt'">
+              Updated At
+            </ng-container>
+            <ng-container *ngIf="header === 'parentsID'">
+              Parents ID
+            </ng-container>
+            <ng-container *ngIf="header === 'parentsName'">
+              Parents Name
+            </ng-container>
+            <ng-container *ngIf="header === 'createdBy'">
+              Created By
+            </ng-container>
+            <ng-container *ngIf="header === 'updatedBy'">
+              Updated By
+            </ng-container>
+            <ng-container *ngIf="header === 'firstName'">
+              First Name
+            </ng-container>
+            <ng-container *ngIf="header === 'lastName'">
+              Last Name
+            </ng-container>
+            <ng-container *ngIf="header === 'valueName'">
+              Image Name
+            </ng-container>
+            <ng-container *ngIf="
                                 header !== 'imageUrl'
                              && header !== 'isActive'
                              && header !== 'parentsID'
@@ -60,84 +60,122 @@
 
                              && header !== 'createdAt' && header !== 'updatedAt'
                              && header !== 'dateOfBirth'">
-            {{ header }}
-          </ng-container>
+              {{ header }}
+            </ng-container>
 
-        </th>
-      </tr>
+          </th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of tableData; let i = index">
-        <td (click)="toggleCheckbox(item)">{{i + 1}}</td>
-        <td (click)="toggleCheckbox(item)">
-          <input type="checkbox" [checked]="item.checked" style="margin-top: 5px;">
-        </td>
-        <td *ngFor="let header of tableHeaders">
-          <ng-container *ngIf="header === 'imageUrl' || header === 'valueImg'">
-            <ng-container *ngIf="typeImage === 'categories'">
-              <img *ngIf="item[header]"
-                   [src]="'http://localhost:8080/uploads/images/categories/'+item[header]" alt="Image"
-                   class="avatar rounded-circle" style="width: 50px; height: 50px;">
+        <tr *ngFor="let item of tableData; let i = index">
+          <td (click)="toggleCheckbox(item)">{{i + 1}}</td>
+          <td (click)="toggleCheckbox(item)">
+            <input type="checkbox" [checked]="item.checked" style="margin-top: 5px;">
+          </td>
+          <td *ngFor="let header of tableHeaders">
+
+
+            <ng-container *ngIf="header === 'imageUrl' || header === 'valueImg'">
+              <ng-container *ngIf="typeImage === 'categories'">
+                <img *ngIf="item[header]" [src]="'http://localhost:8080/uploads/images/categories/'+item[header]"
+                  alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
+              </ng-container>
+
+              <ng-container *ngIf="typeImage === 'products'">
+                <img *ngIf="item[header]" [src]="'http://localhost:8080/uploads/images/products/'+item[header]"
+                  alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
+              </ng-container>
+              <ng-container *ngIf="typeImage === 'coupons'">
+                <img *ngIf="item[header]" [src]="'http://localhost:8080/uploads/images/coupons/' +item[header]"
+                  alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
+              </ng-container>
+
+              <ng-container *ngIf="typeImage === 'coupons'">
+                <img *ngIf="item[header]" [src]="'http://localhost:8080/uploads/images/coupons/'+item[header]"
+                  alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
+              </ng-container>
+              <ng-container *ngIf="typeImage === 'colors'">
+                <img *ngIf="item[header]" [src]="'http://localhost:8080/uploads/images/products/colors/'+item[header]"
+                  alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
+              </ng-container>
+
+
+
             </ng-container>
 
-            <ng-container *ngIf="typeImage === 'products'">
-              <img *ngIf="item[header]"
-                   [src]="'http://localhost:8080/uploads/images/products/'+item[header]" alt="Image"
-                   class="avatar rounded-circle" style="width: 50px; height: 50px;">
-            </ng-container>
-            <ng-container *ngIf="typeImage === 'coupons'">
-              <img *ngIf="item[header]"
-                   [src]="'http://localhost:8080/uploads/images/coupons/' +item[header]" alt="Image"
-                   class="avatar rounded-circle" style="width: 50px; height: 50px;">
+            <ng-container *ngIf="header === 'isActive'">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                  (change)="changeActive(item)" [checked]="item[header]">
+              </div>
             </ng-container>
 
-            <ng-container *ngIf="typeImage === 'coupons'">
-              <img *ngIf="item[header]"
-                   [src]="'http://localhost:8080/uploads/images/coupons/'+item[header]" alt="Image"
-                   class="avatar rounded-circle" style="width: 50px; height: 50px;">
-            </ng-container>
-            <ng-container *ngIf="typeImage === 'colors'">
-              <img *ngIf="item[header]"
-                   [src]="'http://localhost:8080/uploads/images/products/colors/'+item[header]" alt="Image"
-                   class="avatar rounded-circle" style="width: 50px; height: 50px;">
+            <ng-container *ngIf="header === 'createdAt' || header === 'updatedAt'|| header === 'dateOfBirth'">
+              {{ item[header] | date:'dd-MM-yyyy' }}
+
             </ng-container>
 
+            <ng-container
+              *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' && 
+              header !== 'updatedAt'&& header !== 'dateOfBirth'">
+              {{ item[header] }}
+            </ng-container>
+
+            <ng-container *ngIf="header === 'button'">
+              <div class="button-container">
+                <button type="button" [routerLink]="[routerLinkString, item.id]"
+                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>
+                <button type="button" (click)="eventClickDelete(item.id)" class="button-89"
+                  role="button">Delete</button>
+              </div>
+            </ng-container>
+            
+            <ng-container *ngIf="header === 'button-order'">
+              <div class="button-container">
+                <button type="button" [routerLink]="[routerLinkString, item.id]"
+                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>
+                  <button type="button" [routerLink]="[routerLinkStringView, item.id]"
+                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">View</button>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="header === 'colors' && colorMap.get(item.id)?.length !== 0">
+              <div *ngIf="colorMap.get(item.id) as colorImages">
+                <img *ngFor="let img of colorImages"
+                  [src]="'http://localhost:8080/uploads/images/products/colors/' + img" [alt]="img"
+                  style="width: 40px; height: 40px; margin-right: 5px;">
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="header === 'sizes'">
+              {{ dataSizes(item.id) }}
+            </ng-container>
+
+            <ng-container *ngIf="header === 'promotions'">
+              <ng-container *ngIf="(dataPromotion(item.id) | async) as detailProduct">
+                <ng-container *ngIf="detailProduct.promotion !== null">
+                  <div class="promotion-container" style="padding-left: 20px;">
+                    <span class="start-date">
+                      {{ detailProduct.promotion?.startDate | date:'dd/MM/yyyy HH:mm' }}
+                    </span>
+                    <span class="end-date">
+                      {{ detailProduct.promotion?.endDate | date:'dd/MM/yyyy HH:mm' }}
+                    </span>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="detailProduct.promotion === null">
+                  <p style="font-weight: 600;">None</p>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+            
 
 
-          </ng-container>
 
-          <ng-container *ngIf="header === 'isActive'">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
-                     (change)="changeActive(item)" [checked]="item[header]">
-            </div>
-          </ng-container>
 
-          <ng-container
-            *ngIf="header === 'createdAt' || header === 'updatedAt'|| header === 'dateOfBirth'">
-            {{ item[header] | date:'dd-MM-yyyy' }}
+          </td>
 
-          </ng-container>
-
-          <ng-container
-            *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' && header !== 'updatedAt'&& header !== 'dateOfBirth'">
-            {{ item[header] }}
-          </ng-container>
-
-          <ng-container *ngIf="header === 'button'">
-            <div class="button-container">
-              <button type="button" [routerLink]="[routerLinkString, item.id]"
-                      [routerLinkActive]="activeRouterLinkString" class="button-89"
-                      role="button">Edit</button>
-              <button type="button" (click)="eventClickDelete(item.id)" class="button-89"
-                      role="button">Delete</button>
-            </div>
-
-          </ng-container>
-
-        </td>
-
-      </tr>
+        </tr>
 
       </tbody>
 
@@ -156,7 +194,7 @@
 
             <!-- Page Numbers -->
             <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
-                [class.active]="currentPage === i">
+              [class.active]="currentPage === i">
               <a class="page-link" (click)="setPage(i)">{{ i +1 }}</a>
             </li>
 
