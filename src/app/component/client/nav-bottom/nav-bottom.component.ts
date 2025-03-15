@@ -117,7 +117,7 @@ export class NavBottomComponent implements OnInit{
         categoryId: categoryId,
         isActive: true,
         page: 0,
-        size: 10,
+        size: 2,
         sortBy: 'id',
         sortDir: 'asc'
       }

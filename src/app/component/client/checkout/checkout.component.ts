@@ -19,7 +19,9 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'app-checkout',
   standalone: true,
   imports: [
-    RouterOutlet, ShippingComponent, PaymentComponent, ReviewOrderComponent, NgIf, RouterLink, TranslatePipe, CurrencyPipe
+    RouterOutlet,
+    ShippingComponent,
+    PaymentComponent, ReviewOrderComponent, NgIf, RouterLink, TranslatePipe, CurrencyPipe
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'

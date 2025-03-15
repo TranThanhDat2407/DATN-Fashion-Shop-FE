@@ -75,14 +75,18 @@ export class CartComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
-
     this.userId = this.tokenService.getUserId() ?? 0;
     console.log('this.userId  this.userId +')
     this.sessionId = this.sessionService.getSession()
     if(!this.sessionId){
       this.getSession()
     }
-
+    this.appliedCoupon = this.couponService.getCouponDTO();
+    if (this.appliedCoupon) {
+      console.log('🎉 Coupon áp dụng:', this.appliedCoupon);
+    } else {
+      console.log('⚠️ Không có mã giảm giá nào!');
+    }
     await this.fetchApiCart();
     await this.loadProductDetails();
     this.fetchCurrency();
@@ -357,6 +361,7 @@ export class CartComponent implements OnInit {
   getTotalAfterDiscount(): number {
     return Math.max((this.dataCart?.totalPrice ?? 0) - this.getDiscountAmount(), 0); // Đảm bảo không bị âm
   }
+
 
 
 }

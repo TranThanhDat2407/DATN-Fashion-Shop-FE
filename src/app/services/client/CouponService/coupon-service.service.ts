@@ -28,17 +28,29 @@ export class CouponService {
   getCouponDTO(): CouponLocalizedDTO | null {
     return this.couponDTO;
   }
-
   searchCoupons(
     keyword: string | null,
-    page: number = 0,
-    size: number = 10,
+    page: number ,
+    size: number ,
     sortBy: string = 'createdAt',
-    sortDirection: string = 'asc'
+    sortDirection: string = 'asc',
+  userId?: number,
+    expirationDate?: string
   ): Observable<ApiResponse<any>> {
-    let params: any = { keyword, page, size, sortBy, sortDirection };
-    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/search`, { params });
+    let params: any = { page, size, sortBy, sortDirection };
+
+    if (keyword && keyword.trim() !== '') {
+      params.code = keyword.trim();
+    }
+    if (userId) {
+      params.userId = userId; // Thêm userId vào request nếu có
+    }
+    if (expirationDate) {
+      params.expirationDate = expirationDate;
+    }
+      return this.http.get<ApiResponse<any>>(`${this.apiUrl}/search`, { params });
   }
+
 
 
   // applyCoupon(userId: number, requestBody: { code: string }): Observable<ApiResponse<boolean>> {

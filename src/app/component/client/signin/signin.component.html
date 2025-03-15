@@ -58,9 +58,20 @@
 
                     <!-- NGÀY SINH -->
                     <label class="form-label fw-bold">{{ "NGÀY SINH" | translate }}</label>
-                    <input class="form-control" type="date" name="dateOfBirth" [(ngModel)]="dateOfBirth" required #dobCtrl="ngModel" />
+                    <input
+                      class="form-control"
+                      type="date"
+                      name="dateOfBirth"
+                      [(ngModel)]="dateOfBirth"
+                      required
+                      (change)="validateDateOfBirth()"
+                      #dobCtrl="ngModel"
+                    />
                     <div *ngIf="dobCtrl.touched && dobCtrl.invalid" class="text-danger">
                       {{ "Vui lòng chọn ngày sinh." | translate }}
+                    </div>
+                    <div *ngIf="dobError" class="text-danger">
+                      {{ dobError }}
                     </div>
 
                     <!-- EMAIL -->
@@ -120,7 +131,7 @@
                     <!-- NÚT ĐĂNG KÝ -->
                     <button type="submit" class="btnSignin slide_leftbtnSignin mt-3"
                             [class.disabled]="!registerForm.valid || passwordMismatch || emailExists || phoneExists || isSubmitting"
-                            [disabled]="!registerForm.valid || passwordMismatch || emailExists || phoneExists || isSubmitting"
+                            [disabled]="!registerForm.valid || passwordMismatch || emailExists || phoneExists || isSubmitting || dobError"
                             (click)="checkPasswordMatch()"
                     >
                       {{ isSubmitting ? "Đang đăng ký..." : "VUI LÒNG XÁC THỰC EMAIL" | translate }}

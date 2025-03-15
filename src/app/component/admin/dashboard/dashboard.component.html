@@ -28,7 +28,7 @@
                 <span *ngIf="percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday) < 0">
                     <span style="color: #f44336;">
                         {{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday) | number: '1.2-2' }}%
-                    </span> <span style="color: #212529;"> decrease compared to yesterday</span>
+                    </span> <span style="color: #212529;">less than yesterday</span>
                 </span>
                 <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
                     | number: '1.2-2' }}% </span> than last week -->
@@ -65,7 +65,7 @@
                     <span *ngIf="percent(dataCustomerAccountToday?.totalCustomerCreateToday ?? 0, dataCustomerAccountYesterday) < 0">
                         <span style="color: #f44336;">
                             {{ percent(dataCustomerAccountToday?.totalCustomerCreateToday ?? 0, dataCustomerAccountYesterday) | number: '1.2-2' }}%
-                        </span> <span style="color: #212529;"> decrease compared to yesterday</span>
+                        </span> <span style="color: #212529;"> less than yesterday</span>
                     </span>
                     <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
                         | number: '1.2-2' }}% </span> than last week -->
@@ -100,8 +100,8 @@
                 </span>
                 <span *ngIf="percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) < 0">
                     <span style="color: #f44336;">
-                        {{ percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) | number: '1.2-2' }}
-                    </span> <span style="color: #212529;">%decrease compared to yesterday</span>
+                        {{ percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) | number: '1.2-2' }}%
+                    </span> <span style="color: #212529;">less than yesterday</span>
                 </span>
                 <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
                         | number: '1.2-2' }}% </span> than last week -->
