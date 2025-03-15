@@ -4,6 +4,7 @@ import {BehaviorSubject, map, Observable} from 'rxjs';
 import {AddressDTO} from '../../dto/address/AddressDTO';
 import {HttpClient} from '@angular/common/http';
 import {ApiResponse} from '../../dto/Response/ApiResponse';
+import {ClickAndCollectOrderRequest} from '../../dto/ClickAndCollectOrderRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +24,8 @@ export class CheckoutService {
   constructor(private http: HttpClient) {}
 
   setShippingFee(shippingInfo: any): void {
-
     this.shippingInfo.next(shippingInfo);
   }
-
 
   setPaymentInfo(data: any) {
     this.paymentInfo.next(data);
@@ -64,7 +63,6 @@ export class CheckoutService {
     };
   }
 
-
   placeOrder(orderRequest: any): Observable<any> {
     return this.http.post<ApiResponse<any>>('http://localhost:8080/api/v1/orders/create-order', orderRequest) .pipe(
       map((response: ApiResponse<any>) => {
@@ -80,5 +78,51 @@ export class CheckoutService {
     );
   }
 
+  // getClickAndCollectCheckoutData(): ClickAndCollectOrderRequest {
+  //   if (!this.cartData.value?.userId) {
+  //     throw new Error("Không tìm thấy userId!");
+  //   }
+  //
+  //   if (!this.shippingInfo.value?.storeId) {
+  //     throw new Error("Vui lòng chọn cửa hàng để nhận hàng!");
+  //   }
+  //
+  //   if (!this.paymentInfo.value?.paymentMethodId) {
+  //     throw new Error("Vui lòng chọn phương thức thanh toán!");
+  //   }
+  //
+  //   const checkoutData: ClickAndCollectOrderRequest = {
+  //     userId: this.cartData.value.userId,
+  //     storeId: this.shippingInfo.value.storeId,
+  //     couponId: this.cartData.value?.couponId ?? null,
+  //     paymentMethodId: this.paymentInfo.value.paymentMethodId
+  //   };
+  //
+  //   console.log("✅ Click & Collect Checkout Data:", checkoutData);
+  //   return checkoutData;
+  // }
+  //
+  //
+  // placeClickAndCollectOrder(): Observable<any> {
+  //   try {
+  //     const orderData = this.getClickAndCollectCheckoutData();
+  //
+  //     return this.http.post<ApiResponse<any>>(`${this.apiUrl}/create-click-and-collect-order`, orderData).pipe(
+  //       map((response: ApiResponse<any>) => {
+  //         if (response.status && response.data) {
+  //           return {
+  //             orderId: response.data.orderId,
+  //             paymentUrl: response.data.paymentUrl || null
+  //           };
+  //         } else {
+  //           throw new Error(response.message || 'Không thể tạo đơn hàng Click & Collect.');
+  //         }
+  //       })
+  //     );
+  //   } catch (error) {
+  //     console.error("❌ Lỗi khi tạo đơn hàng Click & Collect:", error);
+  //     throw error;
+  //   }
+  // }
 
 }

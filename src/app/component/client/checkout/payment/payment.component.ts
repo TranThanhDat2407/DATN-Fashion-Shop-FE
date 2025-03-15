@@ -28,6 +28,7 @@ export class PaymentComponent implements OnInit {
         this.selectedMethod = payment.paymentMethodId;
       }
     });
+
   }
 
   onSelectionChange(method: number) {

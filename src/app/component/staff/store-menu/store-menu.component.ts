@@ -20,7 +20,6 @@ export class StoreMenuComponent implements OnInit {
   @Input() isActive: boolean = false;
   storeId!: string;
 
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,

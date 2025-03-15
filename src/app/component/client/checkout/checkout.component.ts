@@ -118,6 +118,4 @@ export class CheckoutComponent implements OnInit {
     // return Math.max((this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(), 0); // Đảm bảo không bị âm
   }
 
-
-
 }
