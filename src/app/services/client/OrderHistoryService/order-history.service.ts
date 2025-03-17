@@ -11,7 +11,7 @@ import { OrderHistoryDTO } from '../../../models/OrderHistory/OrderHistory';
   providedIn: 'root'
 })
 export class OrderHistoryService {
-  private apiUrl = 'http://localhost:8080/api/v1/orders/history'; // Thay bằng URL API của bạn
+  private apiUrl = 'http://localhost:8080/api/v1/orders/history';
 
   constructor(private http: HttpClient) {}
 
