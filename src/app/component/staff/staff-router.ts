@@ -14,6 +14,8 @@ import {
 } from './store-inventory-tranfer/store-inventory-transfer-detail/store-inventory-transfer-detail.component';
 import {StoreOrderComponent} from './store-order/store-order.component';
 import {StoreOrderDetailComponent} from './store-order/store-order-detail/store-order-detail.component';
+import {ManagerComponent} from './manager/manager.component';
+import {StaffDetailComponent} from './manager/staff-detail/staff-detail.component';
 
 
 export const staffRouter: Routes = [
@@ -59,6 +61,16 @@ export const staffRouter: Routes = [
       {
         path: "store-order/:id",
         component: StoreOrderDetailComponent,
+        canActivate: [StoreGuardFn],
+      },
+      {
+        path: "staff-manager",
+        component: ManagerComponent,
+        canActivate: [StoreGuardFn],
+      },
+      {
+        path: "staff-manager/:userId",
+        component: StaffDetailComponent,
         canActivate: [StoreGuardFn],
       },
       {

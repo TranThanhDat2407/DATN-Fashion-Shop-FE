@@ -11,6 +11,8 @@ import {UserResponse} from '../../dto/Response/user/user.response';
 import {ApiResponse} from '../../dto/Response/ApiResponse';
 import {StaffLoginDto} from '../../dto/staff/staff-login.dto';
 import {LoginResponse} from '../../dto/staff/staff-login-response.dto';
+import {PageResponse} from '../../dto/Response/page-response';
+import {StaffResponse} from '../../dto/staff/StaffResponse';
 @Injectable({
   providedIn: 'root'
 })
@@ -130,6 +132,44 @@ export class StaffService {
       );
 
 }
+
+  getStaffList(
+    storeId?: number,
+    id?: number,
+    name?: string,
+    startDate?: string,
+    endDate?: string,
+    roleId?: number,
+    sortBy: string = 'createdAt',
+    sortDir: string = 'desc',
+    page: number = 0,
+    size: number = 10
+  ): Observable<ApiResponse<PageResponse<StaffResponse>>> {
+    let params = new HttpParams()
+      .set('sortBy', sortBy)
+      .set('sortDir', sortDir)
+      .set('page', page)
+      .set('size', size);
+
+    if (storeId) params = params.set('storeId', storeId);
+    if (id) params = params.set('id', id);
+    if (name) params = params.set('name', name);
+    if (startDate) params = params.set('startDate', startDate);
+    if (endDate) params = params.set('endDate', endDate);
+    if (roleId) params = params.set('roleId', roleId);
+
+    return this.http.get<ApiResponse<PageResponse<StaffResponse>>>(
+      `${this.userUrl}/list-staff`, { params }
+    );
+  }
+
+  getStaffByUserId(userId: number): Observable<ApiResponse<StaffResponse>> {
+    return this.http.get<ApiResponse<StaffResponse>>(`${this.userUrl}/${userId}`);
+  }
+
+  updateStaffStatus(userId: number, isActive: boolean): Observable<ApiResponse<string>> {
+    return this.http.patch<ApiResponse<string>>(`${this.userUrl}/${userId}/status?isActive=${isActive}`, {});
+  }
 
 
   // getUserProfile(): Observable<User> {

@@ -10,6 +10,7 @@ import {StoreInventoryDTO} from '../../../dto/StoreInventoryDTO';
 import {StoreDetailDTO} from '../../../dto/StoreDetailDTO';
 import {ListStoreStockDTO} from '../../../dto/ListStoreStockDTO';
 import {InventoryAudResponse} from '../../../dto/Response/inventory/InventoryAudResponse';
+import {TopProduct} from '../../../component/staff/store-dashboard/top-products-table/top-products-table.component';
 
 @Injectable({
   providedIn: 'root'
@@ -137,5 +138,16 @@ export class StoreService {
       { params }
     );
   }
+
+  getTopProducts(storeId: number, page: number, size: number): Observable<TopProduct[]> {
+    return this.http.get<TopProduct[]>(`${this.apiUrl}/dashboard/${storeId}/top-products?page=${page}&size=${size}`);
+  }
+
+  getLatestOrders(storeId: number, page: number, size: number) {
+    return this.http.get<any>(
+      `${this.apiUrl}/dashboard/${storeId}/latest-orders?page=${page}&size=${size}`
+    );
+  }
+
 
 }
