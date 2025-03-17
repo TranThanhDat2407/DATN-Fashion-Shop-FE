@@ -35,6 +35,18 @@
                    style="border-top: 1px solid rgb(224, 224, 224); padding: 28px 20px;">
 
                 <div class="mb-m pr-s">
+                  <span class="fr-radio fr-radio-primary bold-with-subtext">
+                    <input type="radio" id="payinstore" name="paymentMethod" value="3"
+                           (change)="onSelectionChange(5)" [checked]="selectedMethod === 5" />
+                    <label for="payinstore" class="content-wrapper">
+                      <span class="content-text">
+                        <span class="title">Thanh Toán Tại Cửa Hàng</span>
+                      </span>
+                    </label>
+                  </span>
+                </div>
+
+                <div class="mb-m pr-s">
                     <span class="fr-radio fr-radio-primary bold-with-subtext">
                       <input type="radio" id="cod" name="paymentMethod" value="1"
                              (change)="onSelectionChange(1)" [checked]="selectedMethod === 1"/>
@@ -58,9 +70,13 @@
                   </span>
                 </div>
 
+
+
               </div>
               <hr>
               <!-- Nội dung tương ứng -->
+
+
 
 
 
@@ -106,6 +122,21 @@
                   </div>
                 </div>
 
+              </div>
+
+
+              <div *ngIf="selectedMethod === 5">
+                <div class="fr-contents-card">
+                  <div class="fr-text">
+                    <h5><b>1. Thanh Toán Trong Vòng 120 Phút</b></h5>
+                    Đưa mã vạch Thanh toán tại cửa hàng cho nhân viên thu ngân.
+                  </div>
+                  <div class="fr-text">
+                    <h5><b>2. Hãy Đưa Vạch Của Bạn</b></h5>
+                    Vui lòng yêu cầu nhân viên thu ngân quét mã vạch.
+                  </div>
+                  <button [routerLink]="['../review']" class="fr-btn fr-btn w4-f">Tiếp tục</button>
+                </div>
               </div>
 
             </div>

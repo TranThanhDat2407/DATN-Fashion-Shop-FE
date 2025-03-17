@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {CheckoutService} from '../../../../services/checkout/checkout.service';
-import {CommonModule, NgClass, NgIf} from "@angular/common";
+import {CommonModule, isPlatformBrowser, Location, NgClass, NgIf} from "@angular/common";
 import {AddressDTO} from '../../../../dto/address/AddressDTO';
 import {NavigationService} from '../../../../services/Navigation/navigation.service';
 import {HttpClient} from '@angular/common/http';
@@ -12,6 +12,9 @@ import {ApiResponse} from '../../../../dto/Response/ApiResponse';
 import {FormsModule} from '@angular/forms';
 import {ShippingService} from '../../../../services/client/ShippingService/shipping-service.service';
 import {CartDTO} from '../../../../dto/CartDTO';
+import {StoreService} from '../../../../services/client/store/store.service';
+import {ListStoreDTO} from '../../../../dto/ListStoreDTO';
+import {StoreDetailDTO} from '../../../../dto/StoreDetailDTO';
 
 @Component({
   selector: 'app-shipping',
@@ -24,6 +27,8 @@ import {CartDTO} from '../../../../dto/CartDTO';
   styleUrl: './shipping.component.scss'
 })
 export class ShippingComponent implements OnInit{
+  currentLang: string = '';
+  currentCurrency: string = '';
 
   shippingFee: any | null;
   cartData: CartDTO | null = null;
@@ -59,6 +64,16 @@ export class ShippingComponent implements OnInit{
   ];
 
 
+  showMoreButton = false;
+  pageSize = 2;
+  currentPage = 1;
+
+  stores: (ListStoreDTO & { quantity?: number })[] = [];
+  userLatitude!: number;
+  userLongitude!: number;
+  searchQuery: string = '';
+  loading: boolean = true;
+  selectedStore?: StoreDetailDTO ;
 
   constructor(private router: Router, private checkoutService: CheckoutService,
               private navigationService: NavigationService,
@@ -66,8 +81,20 @@ export class ShippingComponent implements OnInit{
               private addressService: AddressServiceService,
               private tokenService: TokenService,
               private locationService: LocationServiceService,
-              private shippingService : ShippingService
-  ) {}
+              private shippingService : ShippingService,
+              private storeService: StoreService,
+              private route: ActivatedRoute,
+              private location: Location,
+              @Inject(PLATFORM_ID) private platformId: object
+  ) {
+    this.navigationService.currentLang$.subscribe((lang) => {
+      this.currentLang = lang;
+    });
+
+    this.navigationService.currentCurrency$.subscribe((currency) => {
+      this.currentCurrency = currency;
+    });
+  }
 
   ngOnInit() {
     this.getProvinces();
@@ -79,6 +106,7 @@ export class ShippingComponent implements OnInit{
 
 
 
+    this.fetchStores();
   }
 
 
@@ -326,12 +354,16 @@ export class ShippingComponent implements OnInit{
 
   selectShippingMethod(methodId: number) {
     this.selectedShippingMethod = methodId;
-    this.updateShippingInfo();
-    this.getShippingFee();
+    if(this.selectedShippingMethod == 1){
+      this.updateShippingInfo();
+      this.getShippingFee();
+    }else if(this.selectedShippingMethod == 2){
+      this.fetchStores();
+    }
   }
 
   updateShippingInfo() {
-    if (this.selectedAddressId && this.selectedShippingMethod) {
+    if (this.selectedAddressId && this.selectedShippingMethod === 1) {
       const selectedAddress = this.address?.find(a => a.id === this.selectedAddressId);
 
       const shippingData = ({
@@ -344,12 +376,16 @@ export class ShippingComponent implements OnInit{
       console.log('ShippingComponent - Gửi shippingFee:', shippingData);
       this.checkoutService.setShippingFee(shippingData);
     }
+
+    else if (this.selectedShippingMethod === 2 && this.selectedStore) {
+      const shippingData = {
+        storeId: this.selectedStore.id,
+        shippingMethodId: this.selectedShippingMethod,
+        shippingFee: 0
+      };
+      this.checkoutService.setShippingFee(shippingData);
+    }
   }
-
-
-
-
-
 
   confirmCheckout() {
     if (!this.selectedAddressId) {
@@ -360,7 +396,68 @@ export class ShippingComponent implements OnInit{
     console.log("Địa chỉ giao hàng:", selectedAddress?.street ); // Lấy địa chỉ street
   }
 
+  getUserLocation(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            this.userLatitude = position.coords.latitude;
+            this.userLongitude = position.coords.longitude;
+            this.fetchStores();
+          },
+          (error) => {
+            console.error("Lỗi khi lấy vị trí:", error);
+            this.loading = false;
+            this.fetchStores();
+          }
+        );
+      } else {
+        console.error("Trình duyệt không hỗ trợ Geolocation.");
+        this.loading = false;
+        this.fetchStores();
+      }
+    } else {
+      this.loading = false;
+      this.fetchStores();
+    }
+  }
 
+  selectStore(store: any) {
+    this.selectedStore = store;
+    console.log(this.selectedStore)
+  }
+
+  fetchStores(): void {
+    this.loading = true;
+
+    // Truyền userLatitude và userLongitude vào API
+    this.storeService
+      .getStores(
+        this.currentPage - 1,
+        this.pageSize,
+        this.searchQuery,  // Tìm kiếm theo name
+        this.userLatitude, // Truyền latitude của người dùng
+        this.userLongitude // Truyền longitude của người dùng
+      )
+      .subscribe((response) => {
+        if (response?.data) {
+          this.stores = response.data.content.map((store) => ({
+            ...store,
+            distance: store.distance,
+          }));
+
+          this.showMoreButton = response.data.content.length ===
+            this.pageSize && response.data.pageNo < response.data.totalPages - 1;
+        }
+
+        this.loading = false;
+      });
+  }
+
+  showMoreStore(){
+    this.pageSize = this.pageSize + 5;
+    this.fetchStores()
+  }
 
 
 

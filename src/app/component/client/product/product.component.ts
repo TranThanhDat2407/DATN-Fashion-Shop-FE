@@ -103,6 +103,11 @@ export class ProductComponent implements OnInit {
       this.sortDir = params['sortDir'] === 'desc' ? 'desc' : 'asc';
       this.onlyPromotion = !!params['promotionId']; // ✅ Giữ trạng thái lọc theo promotion
 
+      if (categoryId !== undefined && this.categoryId !== categoryId) {
+        this.categoryId = categoryId;
+        this.categoryName$ = this.categoryService.getNameCategory(this.currentLang, categoryId);
+      }
+      
       // Nếu có promotionId, lấy dữ liệu theo promotion
       if (this.onlyPromotion) {
         this.fetchProducts(this.categoryId, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir, parseInt(params['promotionId'], 10));
@@ -110,10 +115,7 @@ export class ProductComponent implements OnInit {
         this.fetchProducts(this.categoryId, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir);
       }
 
-      if (categoryId !== undefined && this.categoryId !== categoryId) {
-        this.categoryId = categoryId;
-        this.categoryName$ = this.categoryService.getNameCategory(this.currentLang, categoryId);
-      }
+      
     });
 
   }

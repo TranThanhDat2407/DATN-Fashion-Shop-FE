@@ -1,0 +1,65 @@
+<div class="table-responsive">
+  <table class="table table-hover align-middle text-center">
+    <thead class="table-primary">
+    <tr>
+      <th>Image</th>
+      <th>Product</th>
+      <th>Color</th>
+      <th>Size</th>
+      <th>Sold Quantity</th>
+      <th>Revenue</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of products" class="table-light">
+      <td>
+        <img
+          [src]="'http://localhost:8080/uploads/images/products/' + product.imageUrl"
+          alt="{{ product.productName }}"
+          class="rounded shadow-sm"
+          style="width: 60px; height: 60px; object-fit: contain;">
+      </td>
+      <td class="fw-semibold">{{ product.productName }}</td>
+      <td>
+        <img
+          [src]="'http://localhost:8080/uploads/images/products/colors/' + product.colorImage"
+          alt="{{ product.color }}"
+          class="rounded-circle border shadow-sm"
+          width="30" height="30">
+        <span class="ms-2">{{ product.color }}</span>
+      </td>
+      <td>
+        <span class="badge bg-secondary px-3 py-2">{{ product.size }}</span>
+      </td>
+      <td>
+          <span class="fw-bold text-success">
+            {{ product.totalSold }}
+          </span>
+      </td>
+      <td>
+          <span class="fw-bold text-danger">
+            {{ product.totalRevenue | currency:'VND':'' }}
+            VND
+          </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <nav *ngIf="totalPages > 1">
+    <ul class="pagination justify-content-end mt-3">
+      <li class="page-item" [class.disabled]="page === 0">
+        <button class="page-link" (click)="goToPage(page - 1)">Previous</button>
+      </li>
+
+      <li *ngFor="let i of [].constructor(totalPages); let index = index"
+          class="page-item" [class.active]="page === index">
+        <button class="page-link" (click)="goToPage(index)">{{ index + 1 }}</button>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPages - 1">
+        <button class="page-link" (click)="goToPage(page + 1)">Next</button>
+      </li>
+    </ul>
+  </nav>
+</div>

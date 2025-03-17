@@ -1,0 +1,216 @@
+<app-store-header title_header="Order Detail"></app-store-header>
+
+<div class="container mt-4">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Order #{{ order?.orderId }}</h5>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <!-- Cột 1: Thông tin đơn hàng -->
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h6 class="fw-bold text-primary">Order Information</h6>
+
+              <!-- Trạng thái đơn hàng -->
+              <!-- Trạng thái đơn hàng -->
+              <p class="mt-3"><strong>Status:</strong></p>
+              <div>
+  <span class="badge fw-bold w-100 px-3 py-2 rounded-3 d-block text-center border"
+        [ngClass]="{
+          'bg-success text-white border-success': order?.orderStatus?.statusName === 'DONE',
+          'bg-danger text-white border-danger': order?.orderStatus?.statusName === 'CANCELLED',
+          'bg-warning text-dark border-warning': order?.orderStatus?.statusName === 'PENDING',
+          'bg-info text-white border-info': order?.orderStatus?.statusName === 'READY-TO-PICKUP',
+          'bg-light text-dark border-secondary': !order?.orderStatus?.statusName
+        }">
+    {{ order?.orderStatus?.statusName || 'N/A' }}
+  </span>
+              </div>
+
+              <!-- Nút thay đổi trạng thái -->
+              <div *ngIf="['PENDING', 'READY-TO-PICKUP'].includes(order?.orderStatus?.statusName ?? '') || (order?.shippingMethod?.methodName === 'Click & Collect')"
+                   class="d-flex flex-wrap gap-2 my-3">
+
+                <button class="btn btn-sm w-100 p-2 rounded-3 fw-bold"
+                        [ngClass]="{
+            'btn-outline-success': order?.orderStatus?.statusName !== 'DONE',
+            'btn-success text-white': order?.orderStatus?.statusName === 'DONE'
+          }"
+                        (click)="updateOrderStatus('DONE')"
+                        [disabled]="order?.paymentMethod?.methodName === 'Pay-in-store'">
+                   DONE
+                </button>
+
+                <button class="btn btn-sm btn-outline-danger w-100 p-2 rounded-3 fw-bold"
+                        (click)="updateOrderStatus('CANCELED')">
+                   CANCEL
+                </button>
+
+                <button *ngIf="order?.shippingMethod?.methodName === 'Click & collect' && order?.orderStatus?.statusName !== 'READY-TO-PICKUP'"
+                        class="btn btn-sm btn-outline-warning w-100 p-2 rounded-3 fw-bold"
+                        (click)="updateOrderStatus('READY-TO-PICKUP')">
+                   READY-TO-PICKUP
+                </button>
+              </div>
+
+              <!-- Phương thức thanh toán -->
+              <p class="mt-3"><strong>Payment:</strong></p>
+              <div>
+  <span class="badge fw-bold w-100 px-3 py-2 rounded-3 d-block text-center border text-uppercase"
+        [ngClass]="{
+          'bg-primary text-white border-primary': order?.paymentMethod?.methodName === 'Cash',
+          'bg-secondary text-white border-secondary': order?.paymentMethod?.methodName === 'Bank',
+          'bg-warning text-dark border-warning': order?.paymentMethod?.methodName === 'Pay-in-store'
+        }">
+     {{ order?.paymentMethod?.methodName || 'N/A' }}
+  </span>
+              </div>
+
+              <!-- Nếu Payment là PayInStore thì hiện nút chọn Cash/Bank -->
+              <div *ngIf="order?.paymentMethod?.methodName === 'Pay-in-store'" class="d-flex flex-wrap gap-2 my-2">
+                <button class="btn btn-sm btn-outline-primary w-100 p-2 rounded-3 fw-bold text-uppercase"
+                        (click)="updatePaymentMethod('Cash')">
+                   Cash
+                </button>
+                <button class="btn btn-sm btn-outline-secondary w-100 p-2 rounded-3 fw-bold text-uppercase"
+                        (click)="updatePaymentMethod('Bank')">
+                   Bank Transfer
+                </button>
+              </div>
+
+
+
+              <!-- Phương thức giao hàng -->
+              <p class="mt-3"><strong>Shipping:</strong></p>
+              <div>
+        <span class="badge text-dark w-100 px-3 py-2 rounded-2 border d-block text-center text-uppercase">
+          {{ order?.shippingMethod?.methodName || 'N/A' }}
+        </span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Cột 2: Thông tin khách hàng -->
+        <div class="col-lg-4 col-md-6 col-12" *ngIf="order?.user">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h6 class="fw-bold text-primary">Customer Details</h6>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Name:</strong> {{ order?.user?.firstName }} {{ order?.user?.lastName }}</li>
+                <li class="list-group-item"><strong>Phone:</strong> {{ order?.user?.phone }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ order?.user?.email }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cột 3: Thông tin đơn hàng mở rộng -->
+        <div class="col-lg-4 col-md-6 col-12">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h6 class="fw-bold text-primary">Order Details</h6>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Created At:</strong> {{ order?.createdAt ? (order?.createdAt | date:'dd/MM/yyyy HH:mm') : 'N/A' }}</li>
+                <li class="list-group-item"><strong>Updated At:</strong> {{ order?.updatedAt ? (order?.updatedAt | date:'dd/MM/yyyy HH:mm') : 'N/A' }}</li>
+                <li class="list-group-item"><strong>Created By:</strong> {{ order?.createdBy ? order?.createdBy : 'System' }}</li>
+                <li class="list-group-item"><strong>Updated By:</strong> {{ order?.updatedBy ? order?.updatedBy : 'System' }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-2">
+          <p class="fw-bold text-primary m-0">Address </p>{{ order?.shippingAddress || 'N/A' }}
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Danh sách sản phẩm -->
+      <h5 class="fw-bold text-primary">Order Items</h5>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark text-center">
+          <tr>
+            <th>No.</th>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Color</th>
+            <th>Size</th>
+            <th>Quantity</th>
+            <th>Price (VND)</th>
+            <th>Total (VND)</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of order?.orderDetails; let i = index" class="text-center">
+            <td>{{ i + 1 }}</td>
+            <td>
+              <img [src]="'http://localhost:8080/uploads/images/products/' + item.productImage"
+                   alt="Product Image" class="img-thumbnail" width="60" height="60">
+            </td>
+            <td class="fw-bold">{{ item.productName }}</td>
+            <td>
+              <img [src]="'http://localhost:8080/uploads/images/products/colors/' + item.colorImage"
+                   alt="Color" class="rounded-circle border border-secondary" width="35" height="35">
+              <br>
+              <span>{{ item.colorName }}</span>
+            </td>
+            <td class="fw-semibold">{{ item.sizeName }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unitPrice | number }} VND</td>
+            <td>{{ item.totalPrice | number }} VND</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr>
+      <!-- Tổng tiền -->
+      <h5 class="fw-bold text-primary">Order Summary</h5>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+          <tbody class="text-end">
+          <tr class="bg-light">
+            <td class="fw-bold text-start">Total Quantity:</td>
+            <td class="fw-bold text-primary">{{ order?.totalAmount }}</td>
+          </tr>
+          <tr>
+            <td class="fw-bold text-start">Subtotal:</td>
+            <td class="fw-bold">{{ getSubtotal() | number }} VND</td>
+          </tr>
+          <tr class="bg-light">
+            <td class="fw-bold text-start">Tax (VAT):</td>
+            <td class="fw-bold">{{ order?.taxAmount | number }} VND</td>
+          </tr>
+
+          <!-- Nếu có coupon, hiển thị giảm giá -->
+          <tr class="bg-light" *ngIf="order?.coupon">
+            <td class="fw-bold text-start">
+              Coupon ({{ order?.coupon?.code }}) -
+              <span *ngIf="order?.coupon?.discountType === 'PERCENTAGE'">
+            {{ order?.coupon?.discountValue }}%
+          </span>
+              <span *ngIf="order?.coupon?.discountType === 'FIXED'">
+            {{ order?.coupon?.discountValue | number }} VND
+          </span>
+            </td>
+            <td class="fw-bold text-danger">-{{ getDiscountValue() | number }} VND</td>
+          </tr>
+
+          <tr class="table-dark text-white">
+            <td class="fw-bold text-start fs-5">Order Total:</td>
+            <td class="fw-bold fs-5">{{ order.totalPrice | number }} VND</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+    </div>
+  </div>
+</div>
