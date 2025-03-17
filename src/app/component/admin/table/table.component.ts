@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {end} from '@popperjs/core';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { ProductServiceService } from '../../../services/client/ProductService/product-service.service';
 import { SizeDTO } from '../../../models/sizeDTO';
@@ -11,6 +9,7 @@ import { ColorDTO } from '../../../models/colorDTO';
 import { DetailProductDTO } from '../../../dto/DetailProductDTO';
 import { DetailProductService } from '../../../services/client/DetailProductService/detail-product-service.service';
 import { Promotion } from '../../../models/Product/Promotion';
+import {NavigationService} from '../../../services/Navigation/navigation.service';
 
 @Component({
   selector: 'app-table',
@@ -22,20 +21,24 @@ import { Promotion } from '../../../models/Product/Promotion';
 export class TableComponent implements OnInit {
   constructor(
     private productService: ProductServiceService,
-    private detailProductService: DetailProductService
-  ) { }
+    private detailProductService: DetailProductService,
+    private navigationService: NavigationService
+  ) {
+  }
 
   @Input() tableHeaders: string[] = [];
   @Input() tableData: any[] = [];
-  @Input() eventClickDelete: (item: any) => void = () => { };
+  @Input() eventClickDelete: (item: any) => void = () => {
+  };
   @Input() routerLinkString: string = '';
-  @Input() routerLinkStringView: string = '';
 
 
   @Input() activeRouterLinkString: string = '';
   @Input() changePage: boolean = true;
-  @Input() toggleCheckbox: (item: any) => void = () => { };
-  @Input() changeActive: (item: boolean) => void = () => { };
+  @Input() toggleCheckbox: (item: any) => void = () => {
+  };
+  @Input() changeActive: (item: boolean) => void = () => {
+  };
   @Input() typeImage: string = '';
   @Input() routerLinkStringView: string = '/admin/order_detail';
 
@@ -49,7 +52,6 @@ export class TableComponent implements OnInit {
   sizeMap = new Map<number, string>();
 
 
-
   async ngOnInit(): Promise<void> {
     this.loadAllColors();
   }
@@ -61,12 +63,11 @@ export class TableComponent implements OnInit {
     if (!productId) return of(null);
 
     if (!this.promotionMap.has(productId)) {
-      this.promotionMap.set(productId, this.getDetailsProduct('en',productId));
+      this.promotionMap.set(productId, this.getDetailsProduct('en', productId));
     }
 
     return this.promotionMap.get(productId)!;
   }
-
 
 
   dataSizes(productId: number): string {
@@ -103,6 +104,7 @@ export class TableComponent implements OnInit {
       catchError(() => of([]))
     );
   }
+
   getColors(productId: number): Observable<ColorDTO[]> {
     return this.productService.getColorNameProduct(productId).pipe(
       map((response: ApiResponse<ColorDTO[]>) => response.data || []),
@@ -141,59 +143,7 @@ export class TableComponent implements OnInit {
   }
 
 
-  // setPage(page: number) {
-  //   this.loadAllColors();
-  //   this.currentPage = page;
-  //   this.page = page
-  //   this.pageChanged.emit(page);  // Phát sự kiện
-
-  // }
-  async setPage(page: number, isSecondCall: boolean = false) {
-
-  page : let number = 0
-  this.setPage(page: number) {
-    this.currentPage = page;
-    this.page = page;
-    this.pageChanged.emit(page);
-
-    for (const item of this.tableHeaders) {
-      if (item === 'colors') {
-        await this.loadAllColors();
-        console.log('Tao la color')
-        if (!isSecondCall) {
-          setTimeout(() => {
-            this.setPage(page, true);
-          }, 500);
-        }
-        break;
-      }
-    }
-  }
-
-
-
-
-  get paginatedData() {
-    const start = (this.currentPage - 1) * this.itemsPerPage;
-    const end = start + this.itemsPerPage;
-    return this.dataPage.content.slice(start, end); // Lấy dữ liệu từ content
-  }
-
-
-
-
-
-  get totalPages() {
-    return this.dataPage?.totalPages ? Math.ceil(this.dataPage.totalPages) : 0;
-  }
-
-  get totalElements() {
-    return this.dataPage.totalElements; // Lấy tổng số phần tử từ dữ liệu
-  }
-  // logRouterLink(orderId: number) {
-  //   console.log("Router Link:", `/admin/order_detail/${orderId}`);
-  // }
-
 
 
 }
+
