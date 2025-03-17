@@ -46,20 +46,13 @@
     </tbody>
   </table>
 
-  <nav *ngIf="totalPages > 1">
-    <ul class="pagination justify-content-end mt-3">
-      <li class="page-item" [class.disabled]="page === 0">
-        <button class="page-link" (click)="goToPage(page - 1)">Previous</button>
-      </li>
-
-      <li *ngFor="let i of [].constructor(totalPages); let index = index"
-          class="page-item" [class.active]="page === index">
-        <button class="page-link" (click)="goToPage(index)">{{ index + 1 }}</button>
-      </li>
-
-      <li class="page-item" [class.disabled]="page === totalPages - 1">
-        <button class="page-link" (click)="goToPage(page + 1)">Next</button>
-      </li>
-    </ul>
-  </nav>
+  <div class="d-flex justify-content-end mt-3">
+    <button class="btn btn-outline-primary me-2" [disabled]="page === 0" (click)="goToPage(page - 1)">
+      Previous
+    </button>
+    <span class="align-self-center">Page {{ page + 1 }} of {{ totalPages }}</span>
+    <button class="btn btn-outline-primary ms-2" [disabled]="page >= totalPages - 1" (click)="goToPage(page + 1)">
+      Next
+    </button>
+  </div>
 </div>

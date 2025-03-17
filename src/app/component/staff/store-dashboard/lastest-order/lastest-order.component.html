@@ -3,7 +3,7 @@
     <thead class="table-primary">
     <tr>
       <th>Order ID</th>
-      <th>Customer</th>
+      <th>Customer Email</th>
       <th>Image</th>
       <th>Product</th>
       <th>Color</th>
@@ -17,7 +17,7 @@
     <tbody>
     <tr *ngFor="let order of orders" class="table-light">
       <td>{{ order.orderId }}</td>
-      <td>{{ order.user.firstName }}</td>
+      <td>{{ order.user.email }}</td>
       <td>
         <img [src]="'http://localhost:8080/uploads/images/products/' + order.productImage"
              alt="{{ order.productName }}" class="rounded shadow-sm"
@@ -36,7 +36,7 @@
 
       <td>
         <span class="fw-bold">
-          {{ order.unitPrice }}
+          {{ order.unitPrice  | currency:'VND':'' }} VND
         </span>
       </td>
       <td>
@@ -58,7 +58,7 @@
     </tbody>
   </table>
 
-  <div class="d-flex justify-content-center mt-3">
+  <div class="d-flex justify-content-end mt-3">
     <button class="btn btn-outline-primary me-2" [disabled]="page === 0" (click)="goToPage(page - 1)">
       Previous
     </button>
