@@ -15,6 +15,7 @@ import { VariantsDetailProductDTO } from '../../../dto/VariantsDetailProductDTO'
 import { InventoryDTO } from '../../../dto/InventoryDTO';
 import {WishlistCheckResponse} from '../../../dto/WishlistCheckResponse';
 import {ProductSuggestDTO} from '../../../dto/ProductSuggestDTO';
+import { ProductVariantDTO } from '../../../dto/ProductVariantDTO';
 
 
 
@@ -39,39 +40,31 @@ export class ProductServiceService {
     name?: string,
     minPrice?: number,
     maxPrice?: number,
+    promotionId?: number, // Thêm promotionId
     page: number = 0,
-    size: number = 0,
+    size: number = 10, // API mặc định size = 10
     sortBy: string = 'id',
     sortDir: 'asc' | 'desc' = 'asc'
   ): Observable<ApiResponse<PageResponse<ProductListDTO[]>>> {
-    let params = new HttpParams()
-    if (categoryId !== undefined) {
-      params = params.set('categoryId', categoryId.toString());
-    }
+    let params = new HttpParams();
+
+    // Các tham số bắt buộc
     params = params.set('isActive', isActive.toString())
       .set('page', page.toString())
       .set('size', size.toString())
-      .set('sortBy', sortBy);
+      .set('sortBy', sortBy)
+      .set('sortDir', sortDir);
 
-    // Kiểm tra sortDir có giá trị hợp lệ trước khi set
-    if (sortDir) {
-      params = params.set('sortDir', sortDir.toString());
-    }
-
-    // Kiểm tra minPrice và maxPrice trước khi gọi .toString()
-    if (minPrice !== undefined && minPrice !== null) {
-      params = params.set('minPrice', minPrice.toString());
-    }
-    if (maxPrice !== undefined && maxPrice !== null) {
-      params = params.set('maxPrice', maxPrice.toString());
-    }
-
-    if (name) {
-      params = params.set('name', name);
-    }
+    // Các tham số tùy chọn (chỉ thêm nếu có giá trị)
+    if (categoryId !== undefined) params = params.set('categoryId', categoryId.toString());
+    if (minPrice !== undefined) params = params.set('minPrice', minPrice.toString());
+    if (maxPrice !== undefined) params = params.set('maxPrice', maxPrice.toString());
+    if (name) params = params.set('name', name);
+    if (promotionId !== undefined) params = params.set('promotionId', promotionId.toString());
 
     return this.http.get<ApiResponse<PageResponse<ProductListDTO[]>>>(`${this.apiUrl}/${languageCode}`, { params });
   }
+
 
   //lấy chi tiết sản phẩm
   getProductDertail(lang: string, productId: number, userId?: number): Observable<ApiResponse<ProductVariantDetailDTO>> {
@@ -155,5 +148,20 @@ export class ProductServiceService {
     );
   }
 
-  
+  getProductVariants(name: string): Observable<ApiResponse<ProductVariantDTO[]>> {
+    const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
+
+    return this.http.get<ApiResponse<ProductVariantDTO[]>>(`${this.apiUrl}/variants/by-product-name?languageCode=en${params}`);
+  }
+
+  editProductVariant(mediaId: number,formData: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/product-media/${mediaId}`, formData);
+  }
+
+  uploadMedia(productId: number,formData : FormData): Observable<any>{
+    return this.http.post(`${this.apiUrl}/upload-media/${productId}`, formData)
+  }
+  deleteImage(mediaId: number) : Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete-media/${mediaId}`)
+  }
 }
