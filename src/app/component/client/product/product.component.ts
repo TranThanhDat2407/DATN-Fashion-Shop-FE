@@ -48,7 +48,6 @@ export class ProductComponent implements OnInit {
   sortDir: 'asc' | 'desc' = 'asc';
   categoryName$: Observable<string> = of(''); // Giá trị mặc định
 
-
   currentCurrencyDetail?: Currency;
   products: (
     ProductListDTO & {
@@ -107,7 +106,7 @@ export class ProductComponent implements OnInit {
         this.categoryId = categoryId;
         this.categoryName$ = this.categoryService.getNameCategory(this.currentLang, categoryId);
       }
-      
+
       // Nếu có promotionId, lấy dữ liệu theo promotion
       if (this.onlyPromotion) {
         this.fetchProducts(this.categoryId, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir, parseInt(params['promotionId'], 10));
@@ -115,7 +114,7 @@ export class ProductComponent implements OnInit {
         this.fetchProducts(this.categoryId, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir);
       }
 
-      
+
     });
 
   }
