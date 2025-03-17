@@ -5,7 +5,7 @@ import { ListCategoryComponent } from "./categoty/list-category/list-category.co
 import { EditCategoryComponent } from "./categoty/edit-category/edit-category.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ListOrderComponent } from "./order/list-order/list-order.component";
-import { EditOrderComponent } from "./order/edit-order/edit-order.component";
+
 import { ListUserComponent } from "./user/list-user/list-user.component";
 import { EditUserComponent } from "./user/edit-user/edit-user.component";
 import { EditAttributeComponent } from "./attribute/edit-attribute/edit-attribute.component";
@@ -16,6 +16,7 @@ import {ListCouponComponent} from './coupon/list-coupon/list-coupon.component';
 
 import { ListAttributeComponent } from "./attribute/list-attribute/list-attribute.component";
 import { ListProductComponent } from "./product/list-product/list-product.component";
+import {OrderDetailComponent} from './order/order-detail/order-detail.component';
 
 export const adminRouter: Routes =[
   {
@@ -60,8 +61,8 @@ export const adminRouter: Routes =[
           component: ListOrderComponent
         },
         {
-          path:'edit_order',
-          component: EditOrderComponent
+          path:'order_detail/:orderId',
+          component: OrderDetailComponent
         },
         {
           path:'edit_attribute',

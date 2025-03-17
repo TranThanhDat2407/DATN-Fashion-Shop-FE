@@ -113,14 +113,21 @@
             </div>
           </ng-container>
 
+          <ng-container *ngIf="header === 'totalAmount'">
+            {{ (item[header] | currency:'VND':'') }} VNĐ
+          </ng-container>
+
+
+
           <ng-container
             *ngIf="header === 'createdAt' || header === 'updatedAt'|| header === 'dateOfBirth'">
+
             {{ item[header] | date:'dd-MM-yyyy' }}
 
           </ng-container>
 
           <ng-container
-            *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' && header !== 'updatedAt'&& header !== 'dateOfBirth'">
+            *ngIf="header !== 'imageUrl' && header !== 'totalAmount' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' && header !== 'updatedAt'&& header !== 'dateOfBirth'">
             {{ item[header] }}
           </ng-container>
 
@@ -133,6 +140,17 @@
                       role="button">Delete</button>
             </div>
 
+          </ng-container>
+          <ng-container *ngIf="header === 'button-order'">
+            <div class="button-container">
+              <button type="button" [routerLink]="[routerLinkStringView, item.orderId]"
+                      [routerLinkActive]="activeRouterLinkString"
+                      class="button-89">Edit</button>
+
+              <button type="button"
+                      [routerLink]="[routerLinkStringView, item.orderId]"
+                      [routerLinkActive]="activeRouterLinkString" class="button-89">View</button>
+            </div>
           </ng-container>
 
         </td>

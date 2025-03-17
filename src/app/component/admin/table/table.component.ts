@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {end} from '@popperjs/core';
 
 @Component({
   selector: 'app-table',
@@ -19,13 +20,15 @@ export class TableComponent {
   @Input() toggleCheckbox: (item: any) => void = () => { };
   @Input() changeActive: (item: boolean) => void = () => { };
   @Input() typeImage: string = '';
+  @Input() routerLinkStringView: string = '/admin/order_detail';
 
   @Input() dataPage: any = {}; // Dữ liệu bảng
   @Input() itemsPerPage: number = 10; // Số mục hiển thị mỗi trang
-  @Input() currentPage: number = 1; // Trang hiện tại
+  @Input() currentPage: number = 0; // Trang hiện tại
   @Output() pageChanged = new EventEmitter<number>();
 
-  page : number = 0 
+
+  page : number = 0
   setPage(page: number) {
     this.currentPage = page;
     this.page =page
@@ -55,13 +58,20 @@ export class TableComponent {
     }
   }
 
-  
+
+
 
   get totalPages() {
     return this.dataPage?.totalPages ? Math.ceil(this.dataPage.totalPages) : 0;
   }
-  
+
   get totalElements() {
     return this.dataPage.totalElements; // Lấy tổng số phần tử từ dữ liệu
   }
+  // logRouterLink(orderId: number) {
+  //   console.log("Router Link:", `/admin/order_detail/${orderId}`);
+  // }
+
+
+
 }
