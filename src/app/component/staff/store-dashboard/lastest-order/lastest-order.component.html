@@ -1,0 +1,70 @@
+<div class="table-responsive">
+  <table class="table table-hover align-middle text-center">
+    <thead class="table-primary">
+    <tr>
+      <th>Order ID</th>
+      <th>Customer</th>
+      <th>Image</th>
+      <th>Product</th>
+      <th>Color</th>
+      <th>Size</th>
+      <th>Unit Price</th>
+      <th>Quantity</th>
+      <th>Total Price</th>
+      <th>Updated At</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let order of orders" class="table-light">
+      <td>{{ order.orderId }}</td>
+      <td>{{ order.user.firstName }}</td>
+      <td>
+        <img [src]="'http://localhost:8080/uploads/images/products/' + order.productImage"
+             alt="{{ order.productName }}" class="rounded shadow-sm"
+             style="width: 60px; height: 60px; object-fit: contain;">
+      </td>
+      <td class="fw-semibold">{{ order.productName }}</td>
+      <td>
+        <img [src]="'http://localhost:8080/uploads/images/products/colors/' + order.colorImage"
+             alt="{{ order.colorImage }}" class="rounded-circle border shadow-sm"
+             width="30" height="30">
+        <span class="ms-2">{{ order.colorName }}</span>
+      </td>
+      <td>
+        <span class="badge bg-secondary px-3 py-2">{{ order.sizeName }}</span>
+      </td>
+
+      <td>
+        <span class="fw-bold">
+          {{ order.unitPrice }}
+        </span>
+      </td>
+      <td>
+        <span class="fw-bold text-success">
+          {{ order.quantity }}
+        </span>
+      </td>
+      <td>
+        <span class="fw-bold text-danger">
+          {{ order.totalPrice | currency:'VND':'' }} VND
+        </span>
+      </td>
+      <td>
+        <span class="text-muted">
+          {{ order.updatedAt | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center mt-3">
+    <button class="btn btn-outline-primary me-2" [disabled]="page === 0" (click)="goToPage(page - 1)">
+      Previous
+    </button>
+    <span class="align-self-center">Page {{ page + 1 }} of {{ totalPages }}</span>
+    <button class="btn btn-outline-primary ms-2" [disabled]="page >= totalPages - 1" (click)="goToPage(page + 1)">
+      Next
+    </button>
+  </div>
+</div>
