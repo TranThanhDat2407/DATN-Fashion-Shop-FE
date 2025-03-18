@@ -206,10 +206,10 @@
                             aria-hidden="true"></span></span></div>
                         </a>
                         <div class="fr-wrapper mt-m w4-f" style="width: auto;">
-<!--                          <button class="fr-btn primary disabled wundefined-f" type="button"-->
-<!--                                  data-test="lấy-hàng-tại-cửa-hàng-này-button" fdprocessedid="40frbwg" disabled="">Lấy-->
-<!--                            hàng tại cửa hàng này-->
-<!--                          </button>-->
+                          <button *ngIf="selectedStore" [routerLink]="['../payment']" class="fr-btn primary  wundefined-f" type="button"
+                                  data-test="lấy-hàng-tại-cửa-hàng-này-button">Lấy
+                            hàng tại cửa hàng này
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -222,11 +222,11 @@
 
 
             <!-- Danh sách địa chỉ -->
-            <div class="fr-h-rule full">
+            <div class="fr-h-rule full" >
               <hr style="color: rgb(224, 224, 224)">
             </div>
             <div>
-              <div class="fr-contents-card">
+              <div *ngIf="selectedShippingMethod === 1" class="fr-contents-card">
                 <div>
                   <div>
                     <div>
