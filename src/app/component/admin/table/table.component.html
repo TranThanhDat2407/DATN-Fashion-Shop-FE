@@ -139,7 +139,7 @@
               <div class="button-container">
                 <button type="button" [routerLink]="[routerLinkString, item.id]"
                   [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>
-                  <button type="button" [routerLink]="[routerLinkStringView, item.id]"
+                <button type="button" [routerLink]="[routerLinkStringView, item.id]"
                   [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">View</button>
               </div>
             </ng-container>
@@ -176,8 +176,9 @@
                       {{ detailProduct.promotion?.startDate | date:'dd/MM/yyyy HH:mm' }}
                     </span>
                     <span class="end-date">
-                      {{ detailProduct.promotion?.endDate | date:'dd/MM/yyyy HH:mm' }}
+                      {{ detailProduct.promotion?.endDate | date:'dd/MM/yyyy HH:mm' }} <br>
                     </span>
+                    <span class="description-date"  > {{ detailProduct.promotion?.description }}</span>
                   </div>
                 </ng-container>
                 <ng-container *ngIf="detailProduct.promotion === null">

@@ -183,13 +183,22 @@ export class DetailProductComponent implements OnInit {
     this.quantityInStock = response.quantityInStock
     this.dataVideoProduct = response.dataVideoProduct
     this.dataReviewDetailProduct = response.dataReviewDetailProduct
-    // console.log("dataQuantityInStock : " + this.dataReviewDetailProduct[0].comment)
-    console.log("object : " + this.dataVariants?.id)
-
     if (this.dataImagesProduct?.length) {
       this.colorImage = this.dataImagesProduct.find(img => img.colorId);
-      this.noColorImages = this.dataImagesProduct.filter(img => !img.colorId);
+    
+      const groupedImages = this.dataImagesProduct.reduce((acc, img) => {
+        if (!acc[img.colorId]) {
+          acc[img.colorId] = [];
+        }
+        acc[img.colorId].push(img);
+        return acc;
+      }, {} as Record<string, typeof this.dataImagesProduct>);
+    
+      this.noColorImages = Object.values(groupedImages).flatMap(group => group.slice(1));
     }
+    
+
+
 
     this.changeImageOne(this.productId ?? 0, this.colorId ?? 0).subscribe(images => {
       if (images) {
@@ -225,7 +234,6 @@ export class DetailProductComponent implements OnInit {
         this.mediaId = images[0].id
         this.checkMedia = images[0].hasVariants
 
-        console.log('mediaId : ' + this.mediaId)
 
         this.cdr.detectChanges();
       }
@@ -266,7 +274,6 @@ export class DetailProductComponent implements OnInit {
 
       if (this.isValidToAddCart()) {
         if (this.cart.productVariantId !== 0 && this.cart.quantity !== 0) {
-          console.log(`this.cart :`, this.cart);
           this.cartService.createCart(this.userId, this.sessionId ?? '', this.cart).subscribe((response) => {
 
             this.notifySuccsess = false;
