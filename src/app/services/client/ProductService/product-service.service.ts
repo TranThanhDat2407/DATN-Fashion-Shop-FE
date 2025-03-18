@@ -16,6 +16,7 @@ import { InventoryDTO } from '../../../dto/InventoryDTO';
 import {WishlistCheckResponse} from '../../../dto/WishlistCheckResponse';
 import {ProductSuggestDTO} from '../../../dto/ProductSuggestDTO';
 import { ProductVariantDTO } from '../../../dto/ProductVariantDTO';
+import { EditProduct } from '../../../component/admin/product/edit-product/edit-product.component';
 
 
 
@@ -163,5 +164,13 @@ export class ProductServiceService {
   }
   deleteImage(mediaId: number) : Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete-media/${mediaId}`)
+  }
+
+  createProduct(formData : FormData) : Observable<any>{
+    return this.http.post(`${this.apiUrl}`,formData)
+  }
+
+  editProduct(productId : number) : Observable<ApiResponse<EditProduct>>{
+    return this.http.get<ApiResponse<EditProduct>>(`${this.apiUrl}/edit/${productId}`)
   }
 }

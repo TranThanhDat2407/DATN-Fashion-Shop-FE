@@ -11,6 +11,10 @@
     font-family: 'Source Sans Pro', sans-serif;
     color: #333;
   }
+  .product-details {
+    background-color: #fff;
+  
+  }
   // @media (min-width: 600px) {
   //   body {
   //     padding: 60px 10px;
@@ -56,7 +60,16 @@
     color: #7f7f7f;
     transition: background 0.1s, color 0.1s;
   }
-  
+  .product-name {
+    display: flex;
+    /* Sử dụng flexbox */
+    justify-content: space-between;
+    /* Căn đều hai đầu */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    height: 7rem;
+    font-size: 3rem;
+  }
   .label:hover {
     background: #d8d8d8;
   }
@@ -86,6 +99,21 @@
       order: 99;
     }
   }
+  @media (max-width: 768px) {
+    .product-details {
+      margin-top: 2rem;
+      /* Thêm khoảng cách trên */
+    }
+
+  }
+  @media (max-width: 1200px) {
+ 
+  
+    .product-details {
+      padding: 1rem;
+    }
+  }
+
   .input:checked + .label + .panel {
     display: block;
   }

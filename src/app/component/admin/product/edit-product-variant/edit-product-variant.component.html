@@ -46,8 +46,9 @@
                     </div>
                 </div>
 
-                <span> <span class="title-color ">Selected Prodduct Variant : </span><span class="pr_varaint_select" *ngFor="let item of selectedProductVariants">{{item}}</span></span>
-                
+                <span> <span class="title-color ">Selected Prodduct Variant : </span><span class="pr_varaint_select"
+                        *ngFor="let item of selectedProductVariants">{{item}}</span></span>
+
 
 
                 <ul>
@@ -61,51 +62,56 @@
                         </div>
                         <div class="row variant-all " style="padding: 0 10px 0px 0px;">
                             <label class="col-md-6 mt-2 p-0 ms-3 mb-2 variantItem"
-                                style=" border-radius: 20px; border: 1px solid rgb(83, 82, 82); width: 47%;height: 40%;"
-                                *ngFor="let item of dataProductVariant" [for]="item.productVariantId"
-                                (click)="toggleCheckbox(item.productVariantId)">
-
-                                <div class="row ">
-                                    <div class="col-1 d-flex ps-3 pe-3" style="  padding: 30px 0 30px 0;">
-                                        <div class="d-flex "
-                                            style=" padding: 30px 10px 30px 10px; border-right: 1px solid black;">
-                                            <input type="checkbox" [id]="item.productVariantId"
-                                                [checked]="selectedProductVariants.includes(item.productVariantId)"
-                                                (click)="$event.stopPropagation()">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-11">
-                                        <div class="container d-flex ">
-                                            <div class="  product-card">
-                                                <div class="product-image">
-                                                    <img [src]="'http://localhost:8080/uploads/images/products/' + item.productImage "
-                                                        alt="Product Image">
-                                                </div>
-                                            </div>
-                                            <div class="card-body product-details">
-                                                <div class="ps-0">
-
-                                                    <p class="text-uppercase fw-bolder">{{item.productName}}</p>
-                                                    <p><strong>{{ "Màu" | translate }}:
-                                                            <img [src]="'http://localhost:8080/uploads/images/products/colors/' + item.colorImage"
-                                                                width="33" alt="">
-                                                        </strong> </p>
-                                                    <p><strong>{{ "Kích thước" | translate }}: </strong>
-                                                        {{item.sizeName}}</p>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
+                                   style="border-radius: 20px; border: 1px solid rgb(83, 82, 82); width: 47%; height: 40%;"
+                                   *ngFor="let item of dataProductVariant" 
+                                   [for]="item.productVariantId"
+                                   (click)="toggleCheckbox(item.productVariantId)">
+                              <div class="row">
+                                <div class="col-1 d-flex ps-3 pe-3" style="padding: 30px 0 30px 0;">
+                                  <div class="d-flex " style="padding: 30px 10px 30px 10px; border-right: 1px solid black;">
+                                    <input type="checkbox" [id]="item.productVariantId"
+                                           [checked]="selectedProductVariants.includes(item.productVariantId)"
+                                           (click)="$event.stopPropagation()">
+                                  </div>
                                 </div>
-
-
+                                <div class="col-11">
+                                  <div class="container d-flex ">
+                                    <div class="product-card">
+                                      <div class="product-image">
+                                        <img [src]="'http://localhost:8080/uploads/images/products/' + item.productImage" alt="Product Image">
+                                      </div>
+                                    </div>
+                                    <div class="card-body product-details">
+                                      <div class="ps-0">
+                                        <p class="text-uppercase fw-bolder">{{ item.productName }}</p>
+                                        <p><strong>Color :
+                                            <img [src]="'http://localhost:8080/uploads/images/products/colors/' + item.colorImage"
+                                                 width="33" alt="">
+                                        </strong></p>
+                                        <p><strong>Size : </strong>{{ item.sizeName }}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </label>
-
-
-
+                          </div>
+                          
+                          <!-- Pagination -->
+                          <div class="pagination" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+                            <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0">« Prev</button>
+                            
+                            <input type="number"   
+                             [(ngModel)]="inputPage" (keydown.enter)="goToPage(inputPage)"  (change)="goToPage(inputPage)"
+                                   min="1" [max]="totalPages" style="width: 50px; text-align: center; height: 30px; 
+                               
+                                   ">
+                            <span>/ {{ totalPages }}</span>
+                        
+                            <button (click)="changePage(currentPage + 1)" [disabled]="currentPage >= totalPages - 1">Next »</button>
                         </div>
+                        
+                          
 
                     </li>
 
