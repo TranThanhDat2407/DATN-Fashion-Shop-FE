@@ -180,7 +180,6 @@ export class HeaderComponent implements OnInit {
     this.notificationService.getUserNotifications(this.userId, 'vi', 0, 5, 'id', 'desc').subscribe(response => {
       this.notifications = response.data.content;
     });
-
   }
 
 

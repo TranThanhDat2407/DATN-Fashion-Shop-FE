@@ -8,6 +8,7 @@ import {AuthGuardFn} from '../../guards/auth.guard';
 import {StoreGuardFn} from '../../guards/store.guard';
 import {StockComponent} from './stock/stock.component';
 import {StockHistoryComponent} from './stock/stock-history/stock-history.component';
+import {NotificationComponent} from './notification/notification.component';
 
 
 export const staffRouter: Routes = [
@@ -38,6 +39,11 @@ export const staffRouter: Routes = [
       {
         path: "login",
         component: StoreLoginComponent
+      },
+      {
+        path: "notify",
+        component: NotificationComponent,
+        canActivate: [StoreGuardFn],
       }
     ]
   }
