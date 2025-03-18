@@ -66,8 +66,6 @@ export class ProductServiceService {
     return this.http.get<ApiResponse<PageResponse<ProductListDTO[]>>>(`${this.apiUrl}/${languageCode}`, { params });
   }
 
-<<<<<<< HEAD
-=======
   
   getProductsAdmin(
     languageCode: string,
@@ -107,7 +105,6 @@ export class ProductServiceService {
     console.log(`${this.apiUrl}/${languageCode}${params}`)
     return this.http.get<ApiResponse<PageResponse<ProductListDTO[]>>>(`${this.apiUrl}/${languageCode}${params}`);
   }
->>>>>>> manh
 
   //lấy chi tiết sản phẩm
   getProductDertail(lang: string, productId: number, userId?: number): Observable<ApiResponse<ProductVariantDetailDTO>> {
@@ -191,15 +188,6 @@ export class ProductServiceService {
     );
   }
 
-<<<<<<< HEAD
-  getProductVariants(name: string): Observable<ApiResponse<ProductVariantDTO[]>> {
-    const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
-
-    return this.http.get<ApiResponse<ProductVariantDTO[]>>(`${this.apiUrl}/variants/by-product-name?languageCode=en${params}`);
-  }
-
-  editProductVariant(mediaId: number,formData: FormData): Observable<any> {
-=======
   getProductVariants(name: string, page: number, size: number): Observable<ApiResponse<PageResponse<ProductVariantDTO[]>>> {
     const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
 
@@ -207,7 +195,6 @@ export class ProductServiceService {
   }
 
   editProductVariant(mediaId: number, formData: FormData): Observable<any> {
->>>>>>> manh
     return this.http.put(`${this.apiUrl}/product-media/${mediaId}`, formData);
   }
 
