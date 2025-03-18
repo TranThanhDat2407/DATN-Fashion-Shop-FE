@@ -1,8 +1,16 @@
 import {UserResponse} from '../Response/user/user.response';
-import {StoreOrderDetailResponse} from './StoreOrderDetailResponse';
-import {StoreOrderStatusResponse} from './StoreOrderStatusResponse';
+import {BaseResponse} from '../Response/base-response';
 
-export interface StoreShippingMethodResponse  {
-  id: number;
-  methodName: string;
+
+export interface LatestOrderDetailResponse extends BaseResponse {
+  orderId: number;
+  user: UserResponse;
+  productImage: string;
+  productName: string;
+  colorName: string;
+  sizeName: string;
+  colorImage: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
 }
