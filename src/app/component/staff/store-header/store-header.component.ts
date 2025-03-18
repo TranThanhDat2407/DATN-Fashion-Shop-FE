@@ -53,8 +53,7 @@ export class StoreHeaderComponent implements OnInit {
       this.storeId = params.get('storeId') ?? '0';
       console.log('Store ID trong header:', this.storeId);
 
-
-        this.checkUserInStore(this.userId, Number(this.storeId));
+      this.checkUserInStore(this.userId, Number(this.storeId));
 
     });
 
@@ -96,12 +95,12 @@ export class StoreHeaderComponent implements OnInit {
     this.staffService.checkUserInStore(userId, storeId).subscribe({
       next: (isInStore) => {
         console.log(`🔍 Kiểm tra quyền truy cập store (${storeId}):`, isInStore);
-        if (!isInStore) {
-          console.warn('🚫 Người dùng không có quyền vào cửa hàng này!');
-          this.router.navigate(['/staff/0/login'], {
-            queryParams: { error: 'YOU DONT HAVE PERMISSION' }
-          });
-        }
+        // if (!isInStore) {
+        //   console.warn('🚫 Người dùng không có quyền vào cửa hàng này!');
+        //   this.router.navigate(['/staff/0/login'], {
+        //     queryParams: { error: 'YOU DONT HAVE PERMISSION' }
+        //   });
+        // }
       },
       error: (err) => {
         console.error('❌ Lỗi khi kiểm tra quyền truy cập store:', err);

@@ -49,7 +49,6 @@ export class ProductComponent implements OnInit {
   sortDir: 'asc' | 'desc' = 'asc';
   categoryName$: Observable<string> = of(''); // Giá trị mặc định
 
-
   currentCurrencyDetail?: Currency;
   products: (
     ProductListDTO & {

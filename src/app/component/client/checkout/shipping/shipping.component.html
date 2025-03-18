@@ -40,7 +40,7 @@
                         <span class="text-label">Phí vận chuyển</span>
                         <strong class="text-price-num">
                           <span class="fr-price-currency">
-                            <span>Miễn phí</span>
+<!--                            <span>Miễn phí</span>-->
                           </span>
                         </strong>
                       </span>
@@ -97,15 +97,22 @@
                           class="title">Tìm một cửa hàng</span></h4></div>
                         <div class="fr-textfield"><label class="fr-textfield-label">
                           <div class="fr-flbox middle">
-                            <div class="fr-form-label" style="margin-bottom: 0px;">Quận, tỉnh hoặc mã bưu chính&nbsp;
+                            <div class="fr-form-label" style="margin-bottom: 0px;">Nhập tỉnh/ thành phố
                             </div>
-                            <input class="fr-textfield-input" placeholder="Quận, tỉnh hoặc mã bưu chính"
-                                   autocomplete="on" type="text" fdprocessedid="hs86rf"></div>
+                            <input class="fr-textfield-input"
+                                   [(ngModel)]="searchQuery"
+                                   placeholder="Nhập tỉnh/ thành phố "
+                                   autocomplete="on" type="text" fdprocessedid="hs86rf">
+                          </div>
                         </label></div>
                         <div style="margin-left: 30%;">
                           <div class="fr-wrapper mt-m mb-xl" style="width: auto;">
-                            <button fdprocessedid="a60y9" style="background-color: #ffffff">
-                              <div class="fr-link link-text-left"><span class="inner"><div class="text">Sử dụng vị trí hiện tại</div></span>
+                            <button fdprocessedid="a60y9" style="background-color: #ffffff" (click)="getUserLocation()">
+                              <div class="fr-link link-text-left"><span class="inner">
+                                <div class="text">
+                                  Sử dụng vị trí hiện tại
+                                </div>
+                              </span>
                               </div>
                             </button>
                           </div>
@@ -113,12 +120,14 @@
                         <div class="fr-flbox">
                           <div class="mr-l searchButton w4-f" data-test="searchButton">
                             <button class="fr-btn primary wundefined-f" type="button" data-test="tìm-địa-điểm-button"
-                                    fdprocessedid="31su3z">Tìm địa điểm
+                                    fdprocessedid="31su3z"
+                                    (click)="fetchStores()"
+                            >Tìm địa điểm
                             </button>
                           </div>
                         </div>
                         <ul  class="fr-list bordered-bottom-with-pd mt-l mb-xl">
-                          <li class="">
+                          <li class="" *ngFor="let store of stores">
                             <div>
                               <div class="fr-panel">
                                 <div class="panel-inner">
@@ -126,63 +135,55 @@
                                     <div class="fr-showmore close">
                                       <div>
                                         <div><h4  class="fr-head h4"><span
-                                          class="title">UNIQLO Vạn Hạnh Mall</span></h4></div>
+                                          class="title">{{ store.name }}</span></h4></div>
                                         <div class="mt-xxs">
-                                          <div class="fr-text bold">Tầng 1, Số 11, Đ. Sư Vạn Hạnh, Phường 12, Quận 10,
-                                            TP Hồ Chí Minh ● Tel 028 3535 2680
+                                          <span class="title-search fs-5 mt-2" *ngIf="store.distance">
+                                            {{ store.distance | number:'1.0-0' }} KM</span>
+                                          <div class="fr-text bold">● Email: {{ store.email }}
+                                          </div>
+                                          <div class="fr-text bold">● Tel: {{ store.phone }}
                                           </div>
                                         </div>
                                         <div class="mt-xxs">
-                                          <div class="fr-text">Van Hanh Mall, 11 Sư Vạn Hạnh, Phường 12, Quận 10,, Hồ
-                                            Chí Minh, 70000, VN
+                                          <div class="fr-text">
+                                            <div class="fr-text bold"> {{store.fullAddress}}
+                                            </div>
                                           </div>
                                         </div>
                                         <div class="mt-xxs"><h4 class="fr-head h4"><span
                                           class="title">Giờ mở cửa</span></h4></div>
                                         <div class="mt-xxs">
-                                          <div class="fr-text">T2 09:30 AM - 10:00 PM</div>
+                                          <div class="fr-text">
+                                            {{ store.openHour }}{{ +store.openHour.split(':')[0] < 12 ? ' AM' : ' PM' }} -
+                                            {{ store.closeHour }}{{ +store.closeHour.split(':')[0] < 12 ? ' AM' : ' PM' }}
+                                          </div>
                                         </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">T.Ba 09:30 AM - 10:00 PM</div>
-                                        </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">T.Tư 09:30 AM - 10:00 PM</div>
-                                        </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">T.Năm 09:30 AM - 10:00 PM</div>
-                                        </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">Thứ 6 09:30 AM - 10:00 PM</div>
-                                        </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">T.Bảy 09:30 AM - 10:00 PM</div>
-                                        </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">C.Nhật 09:30 AM - 10:00 PM</div>
-                                        </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">Ngày lễ 09:30 AM - 10:00 PM</div>
-                                        </div>
+
                                         <!--                                        <div class="mt-xxs">-->
                                         <!--                                          <div class="fr-text"></div>-->
                                         <!--                                          <div class="fr-text"></div>-->
-                                        <!--                                        </div>-->
-                                        <div class="mt-xxs"><h4  class="fr-head h4"><span
-                                          class="title">Bãi đậu xe</span></h4></div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">Có bãi đậu xe</div>
-                                        </div>
+
                                       </div>
-                                      <p class="button"><a class="">Đọc thêm</a></p></div>
+<!--                                      <p class="button" ><a class="">Đọc thêm</a></p>-->
+                                    </div>
                                     <div class="panel-action"
-                                         style="width: 50%; display: flex; flex-direction: column; align-items: flex-end; padding-left: 20px; justify-content: flex-start;">
+                                         style="width: 30%; display: flex; flex-direction: column; align-items: flex-end; padding-left: 20px; justify-content: flex-start;">
                                       <div class="mb-xs">
-                                        <button class="fr-btn small fr-btn panel-action-button w2-f" type="button"
-                                                data-test="chọn-button" >Chọn
+                                        <button *ngIf="selectedStore?.id !== store.id"
+                                                class="fr-btn small fr-btn panel-action-button w2-f"
+                                                (click)="selectStore(store)">
+                                          Chọn
+                                        </button>
+
+                                        <button *ngIf="selectedStore?.id === store.id"
+                                                class="fr-btn small fr-btn panel-action-button w2-f btn-selected" disabled>
+                                          ✅ Đã chọn
                                         </button>
                                       </div>
                                       <div class="mb-xs">
-                                        <button class=" icon relative small panel-action-button w2-f btn-text fr-btn"  data-test="chi-tiết-button">
+                                        <button class=" icon relative small panel-action-button w2-f btn-text fr-btn"
+                                                [routerLink]="['/client', currentCurrency, currentLang,'store_detail', store.id]"
+                                                data-test="chi-tiết-button">
                                           <!--                                        <div class="fr-btn small panel-action-button w2-f"></div>Chi tiết-->
                                           Chi tiết
                                         </button>
@@ -197,16 +198,18 @@
                         </ul>
                         <!--                        <div data-test="loadingIndicator" class=""><span-->
                         <!--                          class="_2vJqfSRj93G2OKjQYIF5OI" style="animation-delay: 0s;"></span></div>-->
-                        <a class="" href="#" target="_self">
-                          <div class="fr-load-more noborder"><span class="text">Xem thêm</span><span class="arrow"><span
+                        <a class=""  target="_self">
+                          <div class="fr-load-more noborder"
+                               *ngIf="showMoreButton" (click)="showMoreStore()"
+                          ><span class="text">Xem thêm</span><span class="arrow"><span
                             class="fr-icon chevron_updown" style="font-size: 24px;" role="img" aria-label="View more"
                             aria-hidden="true"></span></span></div>
                         </a>
                         <div class="fr-wrapper mt-m w4-f" style="width: auto;">
-                          <button class="fr-btn primary disabled wundefined-f" type="button"
-                                  data-test="lấy-hàng-tại-cửa-hàng-này-button" fdprocessedid="40frbwg" disabled="">Lấy
-                            hàng tại cửa hàng này
-                          </button>
+<!--                          <button class="fr-btn primary disabled wundefined-f" type="button"-->
+<!--                                  data-test="lấy-hàng-tại-cửa-hàng-này-button" fdprocessedid="40frbwg" disabled="">Lấy-->
+<!--                            hàng tại cửa hàng này-->
+<!--                          </button>-->
                         </div>
                       </div>
                     </div>

@@ -22,22 +22,28 @@
         class="menu-mini">Stock</span>
       </div>
 
-      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'transfer']"
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'stock-transfer']"
            routerLinkActive="active-routerLink">
         <img src="../../../../assets/images/value.png" width="18" alt=""><span
         class="menu-mini">Inventory Transfer</span>
       </div>
 
-      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'transfer']"
-           routerLinkActive="active-routerLink">
-        <img src="../../../../assets/images/value.png" width="18" alt=""><span
-        class="menu-mini">Staff Manager</span>
-      </div>
-
-      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'transfer']"
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'store-order']"
            routerLinkActive="active-routerLink">
         <img src="../../../../assets/images/value.png" width="18" alt=""><span
         class="menu-mini">Order</span>
+      </div>
+
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'staff-manager']"
+           routerLinkActive="active-routerLink">
+        <img src="../../../../assets/images/value.png" width="18" alt=""><span
+        class="menu-mini">Staff</span>
+      </div>
+
+      <div class="menu-item" [class.activeRespone]="isActive" [routerLink]="['/staff', storeId, 'statistic']"
+           routerLinkActive="active-routerLink">
+        <img src="../../../../assets/images/value.png" width="18" alt=""><span
+        class="menu-mini">Statistic</span>
       </div>
 
 
