@@ -16,6 +16,7 @@ import { InventoryDTO } from '../../../dto/InventoryDTO';
 import {WishlistCheckResponse} from '../../../dto/WishlistCheckResponse';
 import {ProductSuggestDTO} from '../../../dto/ProductSuggestDTO';
 import { ProductVariantDTO } from '../../../dto/ProductVariantDTO';
+import { EditProduct } from '../../../component/admin/product/edit-product/edit-product.component';
 
 
 
@@ -142,7 +143,7 @@ export class ProductServiceService {
           timestamp: new Date().toISOString(),
           status: 500,
           message: 'Lỗi kết nối đến server',
-          data: { isInWishList: false }, // ✅ Nếu lỗi, trả về giá trị mặc định hợp lệ
+          data: { isInWishList: false }, 
           errors: null
         });
       })
@@ -156,10 +157,10 @@ export class ProductServiceService {
     );
   }
  
-  getProductVariants(name: string): Observable<ApiResponse<ProductVariantDTO[]>> {
+  getProductVariants(name: string,page: number, size : number): Observable<ApiResponse<PageResponse<ProductVariantDTO[]>>> {
     const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
     
-    return this.http.get<ApiResponse<ProductVariantDTO[]>>(`${this.apiUrl}/variants/by-product-name?languageCode=en${params}`);
+    return this.http.get<ApiResponse<PageResponse<ProductVariantDTO[]>>>(`${this.apiUrl}/variants/by-product-name?languageCode=en&page=${page}&size=${size}${params}`);
   }
   
   editProductVariant(mediaId: number,formData: FormData): Observable<any> {
@@ -171,5 +172,13 @@ export class ProductServiceService {
   }
   deleteImage(mediaId: number) : Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete-media/${mediaId}`)
+  }
+
+  createProduct(formData : FormData) : Observable<any>{
+    return this.http.post(`${this.apiUrl}`,formData)
+  }
+
+  editProduct(productId : number) : Observable<ApiResponse<EditProduct>>{
+    return this.http.get<ApiResponse<EditProduct>>(`${this.apiUrl}/edit/${productId}`)
   }
 }

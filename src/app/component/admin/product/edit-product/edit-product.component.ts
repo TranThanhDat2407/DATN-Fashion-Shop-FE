@@ -38,7 +38,20 @@ import { DialogComponent } from "../../dialog/dialog.component";
 import { ToastrService } from "ngx-toastr";
 import { response } from "express";
 import { error } from "console";
+import { LanguageDTO } from "../../../../dto/LanguageDTO";
+import { TranslationDTO } from "../../../../dto/CategoryAdminDTO";
+import { LanguagesService } from "../../../../services/LanguagesService/languages.service";
+import { Translation } from "../create-product/create-product.component";
+ 
 
+export interface EditProduct {
+  id :  number,
+  status: string,
+  basePrice: number,
+  isActive: boolean,
+  translations: Translation[]
+
+}
 
 @Component({
   selector: 'app-edit-product',
@@ -88,9 +101,30 @@ export class EditProductComponent implements OnInit {
   size: number = 3
   sortBy: string = 'id'
   sortDir: string = 'desc'
+  dataEditProduct : EditProduct | null= null
 
   isWishlist: boolean = false;
   sessionId?: string;
+
+  dataLanguage: LanguageDTO[] = []
+  translationsName: TranslationDTO[] = this.dataLanguage.map(lang => ({
+    languageCode: lang.code,
+    name: ''
+  }));
+
+  translationsDescription: TranslationDTO[] = this.dataLanguage.map(lang => ({
+    languageCode: lang.code,
+    name: 'sstrrtg'
+  }));
+  translationsMaterial: TranslationDTO[] = this.dataLanguage.map(lang => ({
+    languageCode: lang.code,
+    name: ''
+  }));
+  translationsCare: TranslationDTO[] = this.dataLanguage.map(lang => ({
+    languageCode: lang.code,
+    name: ''
+  }));
+
   cart: CreateCartDTO = { productVariantId: 0, quantity: 0 };
 
   constructor(
@@ -103,14 +137,12 @@ export class EditProductComponent implements OnInit {
     private reviewService: ReviewServiceService,
     private currencySevice: CurrencyService,
     private cdr: ChangeDetectorRef,
-    private wishlistService: WishlistService,
     private tokenService: TokenService,
-    private cartService: CartService,
     private cookieService: CookieService,
-    private dialog: MatDialog,
     private sessionService: SessionService,
     private diaLog: MatDialog,
-    private toastService: ToastrService
+    private toastService: ToastrService,
+    private languagesService: LanguagesService
 
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
@@ -125,8 +157,7 @@ export class EditProductComponent implements OnInit {
     this.userId = this.tokenService.getUserId() ?? 0;
     this.sessionId = this.sessionService.getSession() ?? ''
 
-    this.loadProductId();
-
+ 
     // Lắng nghe sự kiện Back trên trình duyệt
     window.addEventListener('popstate', () => {
       this.loadProductId();
@@ -154,13 +185,16 @@ export class EditProductComponent implements OnInit {
         this.selectedColorId = this.colorId ?? 0; // Đánh dấu size được chọn
       });
 
-
-      // this.changeImageOne(this.productId ?? 0,this.colorId ?? 0);
-      this.userId = this.tokenService.getUserId();
-      this.checkWishlist(this.userId, this.productId ?? 0, this.colorId ?? 0);
-
+      this.translationsName = this.dataLanguage.map(lang => ({
+        languageCode: 'vi',
+        name: 'srehthgsrehthg'
+      }));
+ 
     });
   }
+
+  
+  
   loadProductId() {
     this.routerActi.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
@@ -181,13 +215,15 @@ export class EditProductComponent implements OnInit {
         salePrice: this.getSalePrice(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).pipe(catchError(() => of(0))),
         dataVariants: this.getDataVariants(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).pipe(catchError(() => of(null))),
         dataColors: this.getColorNameProduct(productId).pipe(catchError(() => of([]))),
-        dataDetailsProduct: this.getDetailsProduct(this.currentLang, productId).pipe(catchError(() => of(null))),
+        dataDetailsProduct: this.getDetailsProduct('en', productId).pipe(catchError(() => of(null))),
         dataQuantityInStock: this.getQuantityInStock(productId, this.colorId ?? 0).pipe(catchError(() => of([]))),
         reviewTotal: this.getReviewTotal(productId).pipe(catchError(() => of(0))),
-        reviewAverage: this.getReviewAverage(productId).pipe(catchError(() => of(0))),
-        quantityInStock: this.getStatusQuantityInStock(productId, this.colorId ?? 0, this.sizeId ?? 0).pipe(catchError(() => of(null))),
         dataVideoProduct: this.getVideosProduct(productId).pipe(catchError(() => of([]))),
-        dataReviewDetailProduct: this.getReviewDetailProduct(productId, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of([])))
+        dataReviewDetailProduct: this.getReviewDetailProduct(productId, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of([]))),
+        dataLanguage: this.getLanguages().pipe(catchError(() => of([]))),
+        dataEditProduct : this.editProduct(productId).pipe(catchError(() => of(null)))
+
+      
       })
     );
 
@@ -196,15 +232,16 @@ export class EditProductComponent implements OnInit {
     this.salePrice = response.salePrice;
     this.dataVariants = response.dataVariants
     this.dataColors = response.dataColors;
-    this.reviewAverage = response.reviewAverage;
     this.reviewTotal = response.reviewTotal;
     this.dataDetailsProduct = response.dataDetailsProduct
     this.dataQuantityInStock = response.dataQuantityInStock
-    this.quantityInStock = response.quantityInStock
     this.dataVideoProduct = response.dataVideoProduct
     this.dataReviewDetailProduct = response.dataReviewDetailProduct
+    this.dataLanguage = response.dataLanguage;
+    this.dataEditProduct = response.dataEditProduct
+
     // console.log("dataQuantityInStock : " + this.dataReviewDetailProduct[0].comment)
-    console.log("object : " + this.dataVariants?.id)
+    console.log("object : " , this.dataEditProduct)
 
     if (this.dataImagesProduct?.length) {
       this.colorImage = this.dataImagesProduct.find(img => img.colorId);
@@ -241,9 +278,17 @@ export class EditProductComponent implements OnInit {
 
   }
 
+  editProduct(productId: number) : Observable<EditProduct | null>{
+    return this.productService.editProduct(productId).pipe(
+      map((response : ApiResponse<EditProduct>)  =>  response.data || null),
+      catchError(() => of(null))
+    )
+  }
+
+
   addImage = async (): Promise<void> => {
 
-    if(!this.validateColor()) return ;
+    if (!this.validateColor()) return;
 
     const result = await firstValueFrom(
       this.diaLog.open(DialogComponent, {
@@ -251,18 +296,18 @@ export class EditProductComponent implements OnInit {
         data: { message: 'Are you sure you want to add image', confirm: 'ACCEPT' }
       }).afterClosed()
     );
-  
+
     if (result === true) {
       for (const item of this.selectedFiles) {
         if (!item.type.startsWith('image/')) {
           this.toastService.error('Invalid File', 'Only image files are allowed.', { timeOut: 1500 });
-          continue;  
+          continue;
         }
-  
+
         try {
           const formData = new FormData();
           formData.append('mediaFiles', item);
-  
+
           await firstValueFrom(this.productService.uploadMedia(this.productId ?? 0, formData));
         } catch (error) {
           this.toastService.error('Error', 'There was an error uploading the image.', { timeOut: 1000 });
@@ -276,32 +321,72 @@ export class EditProductComponent implements OnInit {
     }
   };
 
+  getLanguages(): Observable<LanguageDTO[]> {
+    return this.languagesService.getLanguages().pipe(
+      map((response: ApiResponse<LanguageDTO[]>) => response.data || []),
+      catchError(() => of([]))
+    );
+  }
+
+  getTranslationByCodeName(code: string): TranslationDTO {
+    let translation = this.translationsName.find(item => item.languageCode === code);
+    if (!translation) {
+      translation = { languageCode: code, name: '' };
+      this.translationsName.push(translation);
+    }
+    return translation;
+  }
+
+  getTranslationByCodeDescription(code: string): TranslationDTO {
+    let translation = this.translationsDescription.find(item => item.languageCode === code);
+    if (!translation) {
+      translation = { languageCode: code, name: '' };
+      this.translationsDescription.push(translation);
+    }
+    return translation;
+  }
+  getTranslationByCodeMaterial(code: string): TranslationDTO {
+    let translation = this.translationsMaterial.find(item => item.languageCode === code);
+    if (!translation) {
+      translation = { languageCode: code, name: '' };
+      this.translationsMaterial.push(translation);
+    }
+    return translation;
+  }
+  getTranslationByCodeCare(code: string): TranslationDTO {
+    let translation = this.translationsCare.find(item => item.languageCode === code);
+    if (!translation) {
+      translation = { languageCode: code, name: '' };
+      this.translationsCare.push(translation);
+    }
+    return translation;
+  }
 
   removeImageproduct(imageId: number): void {
-    
-    const diaLog = this.diaLog.open(DialogComponent ,{
-      data : {message: 'Are you want to delete image ?'}
+
+    const diaLog = this.diaLog.open(DialogComponent, {
+      data: { message: 'Are you want to delete image ?' }
     })
 
-    diaLog.afterClosed().subscribe( result =>{
-      if(result == true){
+    diaLog.afterClosed().subscribe(result => {
+      if (result == true) {
         this.productService.deleteImage(imageId).subscribe({
-          next : response =>{
+          next: response => {
             this.toastService.success('Success', 'Image Deleted successfully!', { timeOut: 3000 });
             this.fetchDetailProduct(this.productId ?? 0);
           },
-          error : error =>{
+          error: error => {
             this.toastService.error('Error', 'There was an error deleting the Image.', { timeOut: 3000 });
           }
         })
       }
     })
 
-    console.log('clickkkk',imageId)
+    console.log('clickkkk', imageId)
     // const confirmDelete = confirm("Are you sure you want to delete this image?");
     // if (confirmDelete) {
     //   this.dataImagesProduct.splice(index, 1); // Xóa khỏi danh sách hiển thị
-      
+
     //   // Gọi API để xóa ảnh khỏi database
     //   this.productService.deleteImage(imageId).subscribe({
     //     next: () => {
@@ -313,33 +398,33 @@ export class EditProductComponent implements OnInit {
     //   });
     // }
   }
-  
+
   validateColor(): boolean {
     const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
     const maxSize = 5 * 1024 * 1024; // 5MB
-  
+
     if (this.selectedFiles.length === 0) {
       this.toastService.error("No files selected!", "Error", { timeOut: 3000 });
       return false;
     }
-  
+
     for (const file of this.selectedFiles) {
       if (!allowedTypes.includes(file.type)) {
         this.toastService.error(`Invalid file type: ${file.name}. Only PNG, JPG, JPEG, WEBP allowed.`, "Error", { timeOut: 3000 });
         return false;
       }
-  
+
       if (file.size > maxSize) {
         this.toastService.error(`File ${file.name} exceeds the 5MB limit!`, "Error", { timeOut: 3000 });
         return false;
       }
     }
-  
-  
-  
+
+
+
     return true;
   }
-  
+
 
 
   onFileSelected(event: Event): void {
