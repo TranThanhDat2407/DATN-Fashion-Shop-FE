@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import {catchError, map, Observable, of, tap} from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { Product } from '../../../models/Product/product';
 import { ApiResponse } from '../../../dto/Response/ApiResponse';
 import { PageResponse } from '../../../dto/Response/page-response';
@@ -13,8 +13,8 @@ import { CategoryParentDTO } from '../../../dto/CategoryParentDTO';
 import { ImagesDetailProductDTO } from '../../../dto/ImagesDetailProductDTO';
 import { VariantsDetailProductDTO } from '../../../dto/VariantsDetailProductDTO';
 import { InventoryDTO } from '../../../dto/InventoryDTO';
-import {WishlistCheckResponse} from '../../../dto/WishlistCheckResponse';
-import {ProductSuggestDTO} from '../../../dto/ProductSuggestDTO';
+import { WishlistCheckResponse } from '../../../dto/WishlistCheckResponse';
+import { ProductSuggestDTO } from '../../../dto/ProductSuggestDTO';
 import { ProductVariantDTO } from '../../../dto/ProductVariantDTO';
 import { EditProduct } from '../../../component/admin/product/edit-product/edit-product.component';
 
@@ -75,6 +75,46 @@ export class ProductServiceService {
     return this.http.get<ApiResponse<PageResponse<ProductListDTO[]>>>(`${this.apiUrl}/${languageCode}`, { params });
   }
 
+  
+  getProductsAdmin(
+    languageCode: string,
+    name?: string,
+    isActive?: any,
+    minPrice?: number,
+    maxPrice?: number,
+    page?: number,
+    size?: number,
+    sortBy?: string,
+    sortDir: 'asc' | 'desc' = 'asc',
+
+  ): Observable<ApiResponse<PageResponse<ProductListDTO[]>>> {
+    let params = `?page=${page}&size=${size}`;
+
+    // if (categoryId !== undefined && categoryId !== null) {
+    //   params += `&categoryId=${encodeURIComponent(categoryId)}`;
+    // }
+    if (name) {
+      params += `&name=${encodeURIComponent(name)}`;
+    }
+    if (isActive !== undefined && isActive !== null) {
+      params += `&isActive=${isActive}`;
+    }
+    if (minPrice !== undefined && minPrice !== null) {
+      params += `&minPrice=${encodeURIComponent(minPrice)}`;
+    }
+    if (maxPrice !== undefined && maxPrice !== null) {
+      params += `&maxPrice=${encodeURIComponent(maxPrice)}`;
+    }
+    if (sortBy) {
+      params += `&sortBy=${encodeURIComponent(sortBy)}`;
+    }
+    if (sortDir) {
+      params += `&sortDir=${encodeURIComponent(sortDir)}`;
+    }
+    console.log(`${this.apiUrl}/${languageCode}${params}`)
+    return this.http.get<ApiResponse<PageResponse<ProductListDTO[]>>>(`${this.apiUrl}/${languageCode}${params}`);
+  }
+
   //lấy chi tiết sản phẩm
   getProductDertail(lang: string, productId: number, userId?: number): Observable<ApiResponse<ProductVariantDetailDTO>> {
     let params = new HttpParams();
@@ -102,10 +142,10 @@ export class ProductServiceService {
     return `${environment.apiBaseUrl}/attribute_values/color/${fileName}`;
   }
   // lấy category parent nha
-  getCategoryParent(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>>{
+  getCategoryParent(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>> {
     return this.http.get<ApiResponse<CategoryParentDTO[]>>(`${this.apiUrl}/${lang}/${productId}/categories/root`)
   }
-  getAllImageProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>>{
+  getAllImageProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>> {
     return this.http.get<ApiResponse<ImagesDetailProductDTO[]>>(`${this.apiUrl}/images/${productId}`)
   }
   getSalePrice(productId: number, colorId: number, sizeId: number): Observable<ApiResponse<VariantsDetailProductDTO>> {
@@ -113,20 +153,20 @@ export class ProductServiceService {
       `${this.apiUrl}/variants/${productId}?colorId=${colorId}&sizeId=${sizeId}`
     );
   }
-  getChangeImageOne(productId: number, colorId: number) : Observable<ApiResponse<ImagesDetailProductDTO[]>>{
+  getChangeImageOne(productId: number, colorId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>> {
     return this.http.get<ApiResponse<ImagesDetailProductDTO[]>>(`${this.apiUrl}/media/${productId}/${colorId}`)
   }
 
-  getQuantityInStock(productId : number, colorId : number) : Observable<ApiResponse<InventoryDTO[]>>{
+  getQuantityInStock(productId: number, colorId: number): Observable<ApiResponse<InventoryDTO[]>> {
     return this.http.get<ApiResponse<InventoryDTO[]>>(`${this.apiUrl}/${productId}/inventory?colorId=${colorId}`)
   }
-  getStatusQuantityInStock(productId: number, colorId: number, sizeId: number):  Observable<ApiResponse<InventoryDTO>>{
+  getStatusQuantityInStock(productId: number, colorId: number, sizeId: number): Observable<ApiResponse<InventoryDTO>> {
     return this.http.get<ApiResponse<InventoryDTO>>(`${this.apiUrl}/${productId}/${colorId}/${sizeId}/inventory`)
   }
-  getVideosProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>>{
+  getVideosProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>> {
     return this.http.get<ApiResponse<ImagesDetailProductDTO[]>>(`${this.apiUrl}/videos/${productId}`)
   }
-  getProductVariant(lang : string,productVariantId : number): Observable<ApiResponse<ProductVariantDetailDTO>>{
+  getProductVariant(lang: string, productVariantId: number): Observable<ApiResponse<ProductVariantDetailDTO>> {
     return this.http.get<ApiResponse<ProductVariantDetailDTO>>(`${this.apiUrl}/variants/${lang}/${productVariantId}`)
   }
 
@@ -143,7 +183,7 @@ export class ProductServiceService {
           timestamp: new Date().toISOString(),
           status: 500,
           message: 'Lỗi kết nối đến server',
-          data: { isInWishList: false }, 
+          data: { isInWishList: false },
           errors: null
         });
       })
@@ -156,29 +196,33 @@ export class ProductServiceService {
       map(response => response.data || [])
     );
   }
- 
-  getProductVariants(name: string,page: number, size : number): Observable<ApiResponse<PageResponse<ProductVariantDTO[]>>> {
+
+  getProductVariants(name: string, page: number, size: number): Observable<ApiResponse<PageResponse<ProductVariantDTO[]>>> {
     const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
-    
+
     return this.http.get<ApiResponse<PageResponse<ProductVariantDTO[]>>>(`${this.apiUrl}/variants/by-product-name?languageCode=en&page=${page}&size=${size}${params}`);
   }
-  
-  editProductVariant(mediaId: number,formData: FormData): Observable<any> {
+
+  editProductVariant(mediaId: number, formData: FormData): Observable<any> {
     return this.http.put(`${this.apiUrl}/product-media/${mediaId}`, formData);
   }
 
-  uploadMedia(productId: number,formData : FormData): Observable<any>{
+  uploadMedia(productId: number, formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/upload-media/${productId}`, formData)
   }
-  deleteImage(mediaId: number) : Observable<any> {
+  deleteImage(mediaId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete-media/${mediaId}`)
   }
 
-  createProduct(formData : FormData) : Observable<any>{
-    return this.http.post(`${this.apiUrl}`,formData)
+  createProduct(formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, formData)
   }
 
-  editProduct(productId : number) : Observable<ApiResponse<EditProduct>>{
+  editProduct(productId: number): Observable<ApiResponse<EditProduct>> {
     return this.http.get<ApiResponse<EditProduct>>(`${this.apiUrl}/edit/${productId}`)
+  }
+
+  updateProduct(productId : number, formData : FormData ) : Observable<any>{
+    return this.http.put(`${this.apiUrl}/${productId}`,formData)
   }
 }
