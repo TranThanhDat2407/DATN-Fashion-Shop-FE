@@ -28,6 +28,7 @@
     "@ngx-translate/http-loader": "^16.0.1",
     "@popperjs/core": "^2.11.8",
     "@zxing/browser": "^0.1.5",
+    "@zxing/ngx-scanner": "^19.0.0",
     "apexcharts": "^4.3.0",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.7",

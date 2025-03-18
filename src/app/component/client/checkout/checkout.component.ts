@@ -19,7 +19,9 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'app-checkout',
   standalone: true,
   imports: [
-    RouterOutlet, ShippingComponent, PaymentComponent, ReviewOrderComponent, NgIf, RouterLink, TranslatePipe, CurrencyPipe
+    RouterOutlet,
+    ShippingComponent,
+    PaymentComponent, ReviewOrderComponent, NgIf, RouterLink, TranslatePipe, CurrencyPipe
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
@@ -117,7 +119,5 @@ export class CheckoutComponent implements OnInit {
     return Math.max(0, total + (this.shippingInfo?.shippingFee ?? 0));
     // return Math.max((this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(), 0); // Đảm bảo không bị âm
   }
-
-
 
 }

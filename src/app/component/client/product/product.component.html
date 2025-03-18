@@ -26,29 +26,57 @@
                  (input)="onSearchInput($event)"
                  placeholder="Tìm kiếm theo từ khóa">
         </div>
-        <div class="content-fiter-tools mb-3">
-          <div class="tools-title">
-            <i class="fa-solid fa-sort"></i>
-            <span>{{ "Bộ lọc" | translate }}</span>
+        <div class="content-filter-tools mb-3 p-3 border rounded">
+          <div class="d-flex align-items-center mb-2">
+            <i class="fa-solid fa-filter me-2"></i>
+            <span class="fw-bold">Bộ lọc</span>
           </div>
-          <div class="tool-elements">
-            <div class="element-select">
-              <select class="form-select" (change)="onPriceRangeChange($event)">
-                <option value="">Khoảng giá</option>
-                <option value="600000-700000">
-                  {{ getCurrencyPrice(600000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
-                  -
-                  {{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
-                </option>
-                <option value="700000-800000">
-                  {{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
-                  -
-                  {{ getCurrencyPrice(800000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}
-                </option>
+          <div class="d-flex flex-wrap gap-3">
+            <!-- Khoảng giá -->
+            <div class="flex-grow-1">
+              <label for="priceRange" class="form-label">Khoảng giá</label>
+              <select class="form-select" id="priceRange" (change)="onPriceRangeChange($event)">
+                <option value="">Chọn khoảng giá</option>
+                <option value="600000-700000">{{ getCurrencyPrice(600000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="700000-800000">{{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(800000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="800000-900000">{{ getCurrencyPrice(800000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(900000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="900000-1000000">{{ getCurrencyPrice(900000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(1000000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="1000000-1200000">{{ getCurrencyPrice(1000000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(1200000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
               </select>
             </div>
-            <div class="element-select" style="margin-left: auto;">
-              <select class="form-select" (change)="onSortChange($event)">
+
+            <!-- Chương trình khuyến mãi -->
+            <div>
+              <label class="form-label">Chương trình khuyến mãi</label>
+              <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="promoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  Chọn khuyến mãi
+                </button>
+                <ul class="dropdown-menu p-2" aria-labelledby="promoDropdown">
+                  <li class="dropdown-item">
+                    <input class="form-check-input me-2" type="checkbox" id="onlyPromotion" (change)="onPromotionFilterChange($event)">
+                    <label class="form-check-label" for="onlyPromotion">Chỉ hiển thị sản phẩm có khuyến mãi</label>
+                  </li>
+<!--                  <li class="dropdown-item">-->
+<!--                    <input class="form-check-input me-2" type="checkbox" value="new" id="new">-->
+<!--                    <label class="form-check-label" for="new">New</label>-->
+<!--                  </li>-->
+<!--                  <li class="dropdown-item">-->
+<!--                    <input class="form-check-input me-2" type="checkbox" value="coming_soon" id="coming_soon">-->
+<!--                    <label class="form-check-label" for="coming_soon">Coming Soon</label>-->
+<!--                  </li>-->
+<!--                  <li class="dropdown-item">-->
+<!--                    <input class="form-check-input me-2" type="checkbox" value="recycled" id="recycled">-->
+<!--                    <label class="form-check-label" for="recycled">Sản phẩm từ chất liệu tái chế</label>-->
+<!--                  </li>-->
+                </ul>
+              </div>
+            </div>
+
+            <!-- Chọn sắp xếp -->
+            <div class="flex-grow-1">
+              <label for="sortSelect" class="form-label">Chọn sắp xếp</label>
+              <select class="form-select" id="sortSelect" (change)="onSortChange($event)">
                 <option value="" selected>Chọn sắp xếp</option>
                 <option value="priceAsc">Giá Tăng Dần</option>
                 <option value="priceDesc">Giá Giảm Dần</option>
@@ -56,7 +84,6 @@
               </select>
             </div>
           </div>
-
         </div>
 
 

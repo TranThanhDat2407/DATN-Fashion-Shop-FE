@@ -28,6 +28,8 @@ import {AuthService} from '../../../services/Auth/auth.service';
 import {ModalService} from '../../../services/Modal/modal.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModelNotifySuccsessComponent } from '../Modal-notify/model-notify-succsess/model-notify-succsess.component';
+import {PromotionResponse} from '../../../dto/PromotionResponse';
+import {PromotionService} from '../../../services/promotion/promotion.service';
 
 @Component({
   selector: 'app-product',
@@ -41,7 +43,8 @@ export class ProductComponent implements OnInit {
   currentCurrency: string ='' ; // Tiền tệ mặc định
   userId: number = 0;
 
-  categoryId : number = 0;
+  categoryId ?: number;
+  name?: string;
   sortBy: string = 'id';
   sortDir: 'asc' | 'desc' = 'asc';
   categoryName$: Observable<string> = of(''); // Giá trị mặc định
@@ -55,11 +58,10 @@ export class ProductComponent implements OnInit {
     categoryParent?: CategoryParentDTO[],
     reviewTotal?: number,
     reviewAverage?: number
-
   })[] = [];
 
-  currentPage: number = 1; // Trang hiện tại
-  pageSize: number = 2; // Số sản phẩm trên mỗi trang
+  currentPage: number = 0; // Trang hiện tại
+  pageSize: number = 0; // Số sản phẩm trên mỗi trang
   totalPages: number = 0; // Tổng số trang
   totalElements: number = 0; // Tổng số sản phẩm
   first: boolean = true;
@@ -78,7 +80,7 @@ export class ProductComponent implements OnInit {
     private categoryService: CategoryService,
     private authService: AuthService,
     private modalService: ModalService,
-    private dialog : MatDialog
+    private promotionService: PromotionService,
   ) {
     // Subscribe để nhận giá trị từ service
     this.navigationService.setSearchActive(false);
@@ -91,79 +93,107 @@ export class ProductComponent implements OnInit {
     this.fetchCurrency()
     this.userId = this.tokenService.getUserId();
     this.wishlistService.getWishlistTotal(this.userId);
+    this.fetchActivePromotion();
     this.route.queryParams.subscribe(params => {
       const categoryId = params['categoryId'] ? parseInt(params['categoryId'], 10) : undefined;
-      const isActive = params['isActive'] === 'true';
-      const page = params['page'] ? parseInt(params['page'], 10) : 0;
-      const size = params['size'] ? parseInt(params['size'], this.pageSize) : 10;
-      const sortBy = params['sortBy'] || 'id';
-      const sortDir: 'asc' | 'desc' = params['sortDir'] === 'desc' ? 'desc' : 'asc';
+
+      this.currentPage = params['page'] ? parseInt(params['page'], 10) : 0;
+      this.pageSize = params['size'] ? parseInt(params['size'], 10) : 10;
+      this.sortBy = params['sortBy'] || 'id';
+      this.sortDir = params['sortDir'] === 'desc' ? 'desc' : 'asc';
+      this.onlyPromotion = !!params['promotionId']; // ✅ Giữ trạng thái lọc theo promotion
+      this.name = params['name'] || '';
 
       if (categoryId !== undefined && this.categoryId !== categoryId) {
         this.categoryId = categoryId;
         this.categoryName$ = this.categoryService.getNameCategory(this.currentLang, categoryId);
       }
 
-      this.route.queryParams.subscribe(params => {
-        this.searchQuery = params['name'] || ''; // Nếu không có, gán chuỗi rỗng
-      });
+      // Nếu có promotionId, lấy dữ liệu theo promotion
+      if (this.onlyPromotion) {
+        this.fetchProducts(this.categoryId,this.name, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir, parseInt(params['promotionId'], 10));
+      } else {
+        this.fetchProducts(this.categoryId,this.name, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir);
+      }
 
-      this.fetchProducts(categoryId, isActive, page, size, sortBy, sortDir);
+
     });
+
   }
-eventClick(){
-  this.dialog.open(ModelNotifySuccsessComponent)
-}
+
+
   fetchProducts(
     categoryId: number | undefined,
+    name: string | undefined, // ✅ Thêm name để tìm sản phẩm theo tên
     isActive: boolean,
     page: number,
     size: number,
     sortBy: string,
-    sortDir: 'asc' | 'desc'
+    sortDir: 'asc' | 'desc',
+    promotionId?: number
   ): void {
-    this.productService.getProducts(this.currentLang, categoryId, isActive, undefined, undefined, undefined, page, size, sortBy, sortDir)
-      .subscribe(
-        (response: ApiResponse<PageResponse<ProductListDTO[]>>) => {
-          if (response.data && Array.isArray(response.data.content)) {
-            const productList = response.data.content.flat();
-            this.searchResults = [...this.products];
-            // Gọi API lấy chi tiết sản phẩm & màu song song
-            const productRequests = productList.map(product =>
-              forkJoin({
-                detail: this.getProductDetail(product.id).pipe(catchError(() => of(null))),
-                colors: this.getColorNameProduct(product.id).pipe(catchError(() => of([]))),
-                sizes: this.getSizeProduct(product.id).pipe(catchError(() => of([]))),
-                categoryParent: this.getCategoryParent(this.currentLang, product.id).pipe(catchError(() => of([]))),
-                reviewTotal: this.getReviewTotal(product.id).pipe(catchError(() => of(0))),
-                reviewAverage: this.getReviewAverage(product.id).pipe(catchError(()=> of(0)))
-              }).pipe(
-                map(({ detail, colors, sizes, categoryParent, reviewTotal ,reviewAverage}) =>
-                  ({ ...product, detail, colors, sizes, categoryParent, reviewTotal ,reviewAverage}))
-              )
-            );
+    console.log('Fetching products with:', { categoryId, name, isActive, page, size, sortBy, sortDir, promotionId });
 
-            // Chờ tất cả API hoàn thành và cập nhật danh sách sản phẩm
-            forkJoin(productRequests).subscribe(updatedProducts => {
-              this.products = updatedProducts;
-            });
+    this.productService.getProducts(
+      this.currentLang,
+      categoryId,
+      isActive,
+      name, // ✅ Truyền name nếu không có categoryId
+      undefined, // minPrice (không lọc)
+      undefined, // maxPrice (không lọc)
+      promotionId,
+      page,
+      size,
+      sortBy,
+      sortDir
+    ).subscribe(
+      (response: ApiResponse<PageResponse<ProductListDTO[]>>) => {
+        console.log('API Response:', response);
+        if (response.data && Array.isArray(response.data.content)) {
+          const productList = response.data.content.flat();
+          console.log("Products from API:", productList);
 
-            // Cập nhật thông tin phân trang
-            this.currentPage = response.data.pageNo;
-            this.pageSize = response.data.pageSize;
-            this.totalPages = response.data.totalPages;
-            this.totalElements = response.data.totalElements;
-            this.first = response.data.first;
-            this.last = response.data.last;
-          }
-          this.errorMessage = '';  // Xóa lỗi nếu có trước đó
-        },
-        (error) => {
-          console.error('Error fetching products:', error);
-          this.errorMessage = error.message || 'Đã xảy ra lỗi khi tải danh sách sản phẩm.';
+          // Gọi API lấy thông tin chi tiết sản phẩm
+          const productRequests = productList.map(product =>
+            forkJoin({
+              detail: this.getProductDetail(product.id).pipe(catchError(() => of(null))),
+              colors: this.getColorNameProduct(product.id).pipe(catchError(() => of([]))),
+              sizes: this.getSizeProduct(product.id).pipe(catchError(() => of([]))),
+              categoryParent: this.getCategoryParent(this.currentLang, product.id).pipe(catchError(() => of([]))),
+              reviewTotal: this.getReviewTotal(product.id).pipe(catchError(() => of(0))),
+              reviewAverage: this.getReviewAverage(product.id).pipe(catchError(() => of(0)))
+            }).pipe(
+              map(({ detail, colors, sizes, categoryParent, reviewTotal, reviewAverage }) =>
+                ({ ...product, detail, colors, sizes, categoryParent, reviewTotal, reviewAverage }))
+            )
+          );
+
+          // Chờ tất cả API hoàn thành và cập nhật danh sách sản phẩm
+          forkJoin(productRequests).subscribe(updatedProducts => {
+            this.products = updatedProducts;
+          });
+
+          // Cập nhật thông tin phân trang
+          this.currentPage = response.data.pageNo;
+          this.pageSize = response.data.pageSize;
+          this.totalPages = response.data.totalPages;
+          this.totalElements = response.data.totalElements;
+          this.first = response.data.first;
+          this.last = response.data.last;
         }
-      );
+        this.errorMessage = '';  // Xóa lỗi nếu có trước đó
+      },
+      (error) => {
+        console.error('Error fetching products:', error);
+        this.errorMessage = error.message || 'Đã xảy ra lỗi khi tải danh sách sản phẩm.';
+      }
+    );
   }
+
+
+
+
+
 
   fetchCurrency() {
     this.getCurrency().subscribe(({ data }) => {
@@ -298,6 +328,8 @@ eventClick(){
     });
   }
 
+  onlyPromotion: boolean = false; // Mặc định hiển thị tất cả
+
   getFilteredProducts() {
     return this.products.filter(product => {
       const price = product.detail?.salePrice ?? 0;
@@ -310,10 +342,15 @@ eventClick(){
       // ✅ Lọc theo từ khóa tìm kiếm (nếu có)
       const matchesSearch = !this.searchQuery || name.includes(this.searchQuery.toLowerCase());
 
-      // ✅ Chỉ giữ sản phẩm thỏa mãn cả hai điều kiện
-      return matchesPrice && matchesSearch;
+      // ✅ Lọc theo promotion nếu checkbox được chọn
+      const matchesPromotion = !this.onlyPromotion || (product.promotion && product.promotion.id);
+
+      // ✅ Trả về sản phẩm thỏa mãn cả ba điều kiện
+      return matchesPrice && matchesSearch && matchesPromotion;
     });
   }
+
+
 
   selectedPriceRange: { min: number, max: number } | null = null;
 
@@ -339,7 +376,16 @@ eventClick(){
       this.sortBy = 'createdAt';
       this.sortDir = 'asc';
     } else if(criteria === ''){
-      this.fetchProducts(this.categoryId, true, this.currentPage, this.pageSize,this.sortBy,this.sortDir);
+      this.fetchProducts(
+        this.categoryId,
+        this.name,
+        true,
+        this.currentPage,
+        this.pageSize,
+        this.sortBy,
+        this.sortDir,
+        this.onlyPromotion ? this.promotion?.id : undefined // ✅ Truyền promotionId nếu có
+      );
     }
 
   }
@@ -364,9 +410,8 @@ eventClick(){
     return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
-  changePage(newPage: number) {
+  changePage(newPage: number): void {
     if (newPage >= 0 && newPage < this.totalPages) {
-      console.log('🔄 Chuyển sang trang:', newPage);
       this.router.navigate([], {
         queryParams: {
           categoryId: this.categoryId,
@@ -374,13 +419,27 @@ eventClick(){
           page: newPage,
           size: this.pageSize,
           sortBy: this.sortBy,
-          sortDir: this.sortDir
+          sortDir: this.sortDir,
+          promotionId: this.onlyPromotion ? this.promotion?.id : undefined // ✅ Giữ promotionId nếu checkbox được chọn
         },
-        queryParamsHandling: 'merge'
+        queryParamsHandling: 'merge' // ✅ Giữ các query params cũ
       });
-      this.fetchProducts(this.categoryId, true, newPage, this.pageSize, this.sortBy, this.sortDir);
+
+      // Gọi lại API với promotionId nếu đang lọc theo promotion
+      this.fetchProducts(
+        this.categoryId,
+        this.name,
+        true,
+        newPage,
+        this.pageSize,
+        this.sortBy,
+        this.sortDir,
+        this.onlyPromotion ? this.promotion?.id : undefined // ✅ Truyền promotionId nếu có
+      );
     }
   }
+
+
 
   // Tìm kiếm
 
@@ -399,6 +458,35 @@ eventClick(){
   onSearchInput(event: Event) {
     const inputElement = event.target as HTMLInputElement;
     this.searchQuery = inputElement.value.trim().toLowerCase();
+  }
+
+  promotion?: PromotionResponse; // Biến lưu trữ khuyến mãi hiện tại
+
+
+  fetchActivePromotion() {
+    this.promotionService.getActivePromotion().subscribe({
+      next: (promotion) => {
+        this.promotion = promotion;
+      },
+      error: (error) => {
+        console.error('Error fetching active promotion:', error);
+        this.promotion = undefined;
+      }
+    });
+  }
+
+  onPromotionFilterChange(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    this.onlyPromotion = checkbox.checked; // Cập nhật trạng thái checkbox
+
+    console.log("Chỉ hiển thị sản phẩm có promotion:", this.onlyPromotion);
+
+    // Gọi lại API với promotionId nếu checkbox được chọn
+    if (this.onlyPromotion) {
+      this.fetchProducts(this.categoryId,this.name, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir, this.promotion?.id);
+    } else {
+      this.fetchProducts(this.categoryId,this.name, true, this.currentPage, this.pageSize, this.sortBy, this.sortDir);
+    }
   }
 
 

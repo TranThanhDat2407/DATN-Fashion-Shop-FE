@@ -15,6 +15,8 @@ import { TotalQty } from '../../../dto/TotalQty';
 import { CartService } from '../../../services/client/CartService/cart.service';
 import { ApiResponse } from '../../../dto/Response/ApiResponse';
 import { SessionService } from '../../../services/session/session.service';
+import {NotificationService} from '../../../services/Notification/notification.service';
+import {NotificationDTO} from '../../../models/NotificationDTO';
 
 @Component({
   selector: 'app-header',
@@ -39,7 +41,9 @@ export class HeaderComponent implements OnInit {
   userId: number = 0;
   totalWishlist$!: Observable<number>;
   totalCart$!: Observable<number>;
+  totalNotify$ !: Observable<number>
 
+  notifications: NotificationDTO[] = [];
 
   constructor(private router: Router,
               private navigationService: NavigationService,
@@ -48,7 +52,8 @@ export class HeaderComponent implements OnInit {
               private cookieService: CookieService,
               private cartService: CartService,
               private sessionService: SessionService,
-              private tokenService: TokenService) {
+              private tokenService: TokenService,
+              private notificationService: NotificationService,) {
     // Lắng nghe sự kiện NavigationEnd để kiểm tra URL hiện tại
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -90,11 +95,14 @@ export class HeaderComponent implements OnInit {
     this.getCategoriesParent(this.currentLang);
     this.categoryService.loadCategories(this.currentLang, 1);
     this.totalWishlist$ = this.wishlistService.totalWishlist$;
+    this.totalNotify$ = this.notificationService.totalNotify$;
     this.userId = this.tokenService.getUserId();
     if (this.userId) {
-      this.wishlistService.getWishlistTotal(this.userId)
+      this.wishlistService.getWishlistTotal(this.userId);
+      this.notificationService.getNotifyTotal(this.userId);
+      this.getNotification(this.userId);
     }
-
+    console.log("totalNotify: "+this.totalNotify$);
 
   }
 
@@ -166,6 +174,12 @@ export class HeaderComponent implements OnInit {
     });
     // lấy category theo ngôn ngữ và parentId
     this.categoryService.loadCategories(this.currentLang, parentId);
+  }
+
+  getNotification(userId: number){
+    this.notificationService.getUserNotifications(this.userId, 'vi', 0, 5, 'id', 'desc').subscribe(response => {
+      this.notifications = response.data.content;
+    });
   }
 
 

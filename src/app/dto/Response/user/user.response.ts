@@ -2,7 +2,8 @@ import { Role } from '../../../models/role';
 
 export interface UserResponse {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   facebook_account_id: number;

@@ -1,0 +1,138 @@
+/* Container chính */
+.content-box {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+/* Tiêu đề thông báo */
+.wishlist-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 10px;
+  border-radius: 20px;
+  font-family: "Kanit", sans-serif;
+  font-size: 1.5rem;
+  color: black;
+}
+
+.wishlist-title i {
+  font-size: 2rem;
+  margin-right: 10px;
+}
+
+/* Layout thông báo */
+.wishlist-allProduct {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+/* Thông báo từng mục */
+.wishlist-product-item {
+  display: flex;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  padding: 15px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ảnh sản phẩm */
+.product-item-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Nội dung thông báo */
+.item-layout-infor {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.item-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: black;
+  margin-bottom: 5px;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.item-inforColorSizeQty p {
+  font-size: 0.9rem;
+  color: #555;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Nút Xóa */
+.item-btnRemove a {
+  font-style: italic;
+  color: red;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.item-btnRemove a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Fix */
+@media (max-width: 768px) {
+  .wishlist-product-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .product-item-image img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .item-layout-infor {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+}
+
+/* Container cho nút "Xóa tất cả" */
+.delete-all-container {
+  display: flex;
+  justify-content: flex-end; /* Đặt ở góc phải */
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+
+/* Nút "Xóa tất cả" */
+.delete-all-btn {
+  background-color: #dc3545; /* Màu đỏ Bootstrap */
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.delete-all-btn:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* Responsive - căn giữa trên mobile */
+@media (max-width: 576px) {
+  .delete-all-container {
+    justify-content: center; /* Căn giữa trên màn hình nhỏ */
+  }
+}

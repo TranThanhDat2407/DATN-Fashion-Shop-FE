@@ -8,14 +8,14 @@
                 <img [src]="'http://localhost:8080/uploads/images/products/'+ dataMediaInfo?.mediaUrl" width="85%"
                     [alt]="dataMediaInfo?.mediaType">
                 <div class="mt-5">
-                    <app-button [nameButton]="'ADD'" [eventClickBtnAdd]="editProductVariant" />
+                    <app-button [nameButton]="'APPLY'" [eventClickBtnAdd]="updateProductVariant" />
                 </div>
             </div>
 
 
             <div class="col-md-8">
                 <span class="title-color search-variant">Height Model (cm) : <input class="input-height"
-                        [(ngModel)]="modelHeight" type="number"></span>
+                        [(ngModel)]="modelHeight" name="modelHeight" type="number"></span>
                 <!-- {{dataMediaInfo?.modelHeight}} cm -->
                 <br>
                 <div class="row mb-3">

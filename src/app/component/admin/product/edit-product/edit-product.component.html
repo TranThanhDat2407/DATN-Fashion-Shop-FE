@@ -1,5 +1,7 @@
-<app-header-admin  [title_header]="'Edit Product'" />
-<div class="container"  >
+<app-header-admin [title_header]="'Edit Product'" />
+
+
+<div class="container">
   <div class="row">
     <!-- Product Images (Left Section) -->
     <div class="col-md-7 pe-5 ps-0">
@@ -10,22 +12,50 @@
             *ngIf="colorImage.hasVariants">
             <i class="fa-solid fa-mountain-sun"></i>
           </a>
+          
         </div> -->
+
+        <div class="row mt-2 g-2"> <!-- g-2 giúp giảm khoảng cách giữa ảnh -->
+          <button class="btn-save" *ngIf="previewUrls.length !==0 " (click)="addImage()" >SAVE IMAGE</button>
+          <div *ngFor="let url of previewUrls; let i = index" class="col-3 position-relative">
+            <div class="position-relative">
+              <img [src]="url" class="img-fluid rounded border shadow-sm"
+                style="width: 100%; height: auto; padding: 5px;">
+
+              <!-- Nút X để xóa ảnh -->
+              <button (click)="removeImage(i)" class="btn   btn-sm position-absolute"
+                style="top: 5px; right: 5px; border-radius: 50%;">
+                ❌
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-6 position-relative p-0 product-variant-edit"
+          style="background-repeat: no-repeat; 
+               background-size: 90% 90%; background-image: url('https://static.thenounproject.com/png/187803-200.png');" (click)="fileInput.click()">
+          <input type="file" #fileInput class="d-none" (change)="onFileSelected($event)" multiple>
+        </div>
+
 
         <video class="col-6 p-0" *ngFor="let video of dataVideoProduct" autoplay loop>
           <source [src]="'http://localhost:8080/uploads/images/products/' + video.mediaUrl" type="video/mp4">
           Trình duyệt của bạn không hỗ trợ phát video.
         </video>
 
-        <div class="col-6 position-relative p-0 product-variant-edit" *ngFor="let img of dataImagesProduct"
-        [routerLink]="['/admin/edit_productVariant/', img.id, productId]"
-        >
-          <img [src]="getImageProduct(img.mediaUrl)">
-          <!-- <a class="image-icon"
-            *ngIf="img.hasVariants">
-            <i class="fa-solid fa-mountain-sun"></i>
-          </a> -->
+        <div class="col-6 position-relative p-0 product-variant-edit" *ngFor="let img of dataImagesProduct ">
+          <a [routerLink]="['/admin/edit_productVariant/', img.id, productId]">
+            <img [src]="getImageProduct(img.mediaUrl)" class="img-fluid" style="width: 100%; height: auto;">
+          </a>
+        
+          <!-- Nút X để xóa ảnh -->
+          <button (click)="removeImageproduct(img.id)" class="btn  btn-sm position-absolute"
+                  style="top: 5px; right: 5px; border-radius: 50%;">
+            ❌
+          </button>
         </div>
+        
 
 
         <!-- <div class="col-6 position-relative">
@@ -41,10 +71,10 @@
           </div>
          -->
       </div>
- 
+
     </div>
     <!-- Product Details (Right Section) -->
-    <div class="col-md-5"  >
+    <div class="col-md-5">
       <div class="product-details sticky-top z-0">
         <!--        product-name-->
         <div class="product-name d-flex align-items-center" style="background-color: #f5f5f5;">
@@ -58,7 +88,7 @@
               <i class="fa-solid fa-arrow-up-from-bracket"></i>
             </button>
             <!-- Nút Yêu thích -->
-            
+
           </div>
         </div>
         <div>
@@ -69,8 +99,7 @@
               <div class="color-item" *ngFor="let color of dataColors" [attr.data-test]="color.valueName">
                 <dt>
                   <input type="radio" [value]="color.id" name="product-color-picker"
-                    [id]="'product-color-picker' + color.id" class="color-input"
-                    (click)="selectColor(color)"
+                    [id]="'product-color-picker' + color.id" class="color-input" (click)="selectColor(color)"
                     [checked]="color.id === selectedColorId">
 
                   <label class="color-label" [for]="'product-color-picker' + color.id"
@@ -89,42 +118,38 @@
             <div class="btn-group flex-wrap gap-2" role="group">
               <div class="size-item" *ngFor="let size of dataSizes" [attr.data-test]="size.valueName">
                 <!-- Radio button -->
-                <input type="radio"
-                       class="btn-check"
-                       [value]="size.id"
-                       name="product-size-picker"
-                       [id]="'product-size-picker' + size.valueName"
-                       (click)="selectSize(size)"
-                       [checked]="size.id === selectedSizeId && !isSizeOutOfStock(size)"
-                       [disabled]="isSizeOutOfStock(size)">
+                <input type="radio" class="btn-check" [value]="size.id" name="product-size-picker"
+                  [id]="'product-size-picker' + size.valueName" (click)="selectSize(size)"
+                  [checked]="size.id === selectedSizeId && !isSizeOutOfStock(size)" [disabled]="isSizeOutOfStock(size)">
 
                 <!-- Nhãn hiển thị kích thước -->
-                <label class="btn btn-outline-dark size-label"
-                       [for]="'product-size-picker' + size.valueName"
-                       [ngClass]="{'ignore': isSizeOutOfStock(size)}">
+                <label class="btn btn-outline-dark size-label" [for]="'product-size-picker' + size.valueName"
+                  [ngClass]="{'ignore': isSizeOutOfStock(size)}">
                   {{ size.valueName }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="d-flex justify-content-between " style="width: auto;flex-direction: column; background-color: #f5f5f5;">
-            <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal" style="background-color: #f5f5f5;">
-                <span class="">{{ "Kích cỡ:" | translate }}
-                  <span *ngIf=" dataCategoryParent?.length">
-                    <span class="product-item-categoryParent" *ngIf="dataCategoryParent?.length === 1">
-                      {{ dataCategoryParent?.[0]?.name ?? '' }}
-                    </span>
-                    <span class="product-item-categoryParent" *ngIf="(dataCategoryParent?.length || 0) > 1">
-                      Unisex
-                    </span>
+          <div class="d-flex justify-content-between "
+            style="width: auto;flex-direction: column; background-color: #f5f5f5;">
+            <p class="hintText hintTextPicker hint-text--color-secondary textAlignLeft text-transform-normal"
+              style="background-color: #f5f5f5;">
+              <span class="">{{ "Kích cỡ:" | translate }}
+                <span *ngIf=" dataCategoryParent?.length">
+                  <span class="product-item-categoryParent" *ngIf="dataCategoryParent?.length === 1">
+                    {{ dataCategoryParent?.[0]?.name ?? '' }}
                   </span>
-                  {{selectedSizeName}}
+                  <span class="product-item-categoryParent" *ngIf="(dataCategoryParent?.length || 0) > 1">
+                    Unisex
+                  </span>
                 </span>
+                {{selectedSizeName}}
+              </span>
             </p>
           </div>
-        </div>       
-    
-      
+        </div>
+
+
         <!------------------------END--------------------->
       </div>
     </div>

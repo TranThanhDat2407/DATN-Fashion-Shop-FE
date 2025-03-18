@@ -71,7 +71,7 @@ export class ListProductComponent implements OnInit {
     size: number = 0,
     sortBy?: string,
     sortDir: 'asc' | 'desc' = 'asc'): Observable<PageResponse<ProductListDTO[]> | null> {
-    return this.productService.getProducts(languageCode, undefined, true, name, minPrice, maxPrice, page, size, sortBy, sortDir).pipe(
+    return this.productService.getProducts(languageCode, undefined, true, name, minPrice, maxPrice, undefined, page, size, sortBy, sortDir).pipe(
       map((response: ApiResponse<PageResponse<ProductListDTO[]>>) => response.data || null),
       catchError(() => of(null))
     )

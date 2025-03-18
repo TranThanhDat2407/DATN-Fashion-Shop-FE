@@ -36,7 +36,7 @@ export class EditProductVariantComponent implements OnInit {
   productId!: number;
   checkedItem: number[] = [];
 
-
+  dataDetailMedia: DetailMediaDTO[] = [];
   dataMediaInfo: MediaInfoDTO | null = null;
   dataColors: ColorDTO[] = [];
   selectedColorId!: number;
@@ -69,6 +69,7 @@ export class EditProductVariantComponent implements OnInit {
     });
 
     await this.fetchImageDetail(this.mediaId)
+    this.editProductVariant()
   }
 
   async fetchImageDetail(mediaId: number): Promise<void> {
@@ -78,6 +79,7 @@ export class EditProductVariantComponent implements OnInit {
     }
 
     const callApis = {
+
       dataMediaInfo: this.getMediaInfo(mediaId).pipe(catchError(() => of(null))),
       dataDetailMedia: this.getDetailMedia(mediaId).pipe(catchError(() => of([]))),
       dataColors: this.getColorNameProduct(this.productId).pipe(catchError(() => of([]))),
@@ -88,8 +90,12 @@ export class EditProductVariantComponent implements OnInit {
 
     const response = await firstValueFrom(forkJoin(callApis));
     this.dataMediaInfo = response.dataMediaInfo;
+    this.dataDetailMedia = response.dataDetailMedia ?? []
     this.dataColors = response.dataColors;
     this.dataProductVariant = response.dataProductVariant
+
+    console.log("object : ", this.dataDetailMedia)
+   
 
 
 
@@ -105,6 +111,7 @@ export class EditProductVariantComponent implements OnInit {
       catchError(() => of([]))
     )
   }
+
 
 
 
@@ -132,8 +139,19 @@ export class EditProductVariantComponent implements OnInit {
 
     this.fetchImageDetail(this.mediaId);
   }
+  editProductVariant() {
+    this.modelHeight = this.dataMediaInfo?.modelHeight ?? 0;
+    this.selectedColorId = this.dataMediaInfo?.colorId ?? 0
+    let listIdProductVariant: number[] = []
+    listIdProductVariant = this.dataDetailMedia.map(item => item.id);
 
-  editProductVariant = () => {
+    this.checkedItem = listIdProductVariant
+    this.selectedProductVariants = this.checkedItem
+    console.log('checkedItem', listIdProductVariant)
+
+  }
+ 
+  updateProductVariant = () => {
     const sampleProductVariant: ProductVariantModel = {
       sortOrder: 1,
       modelHeight: this.modelHeight,
@@ -155,7 +173,6 @@ export class EditProductVariantComponent implements OnInit {
     this.productService.editProductVariant(this.mediaId, formData).subscribe({
       next: response => {
         this.toastService.success('Success', 'Product Variant edit successfully!', { timeOut: 3000 });
-        this.resetForm();
       },
       error: error => {
         this.toastService.error('Error', 'There was an error creating the Product Variant.', { timeOut: 3000 });
@@ -170,10 +187,9 @@ export class EditProductVariantComponent implements OnInit {
       colorValueId: 0,
       productVariantIds: []
     }
-    this.nameSearch = ''
+    // this.nameSearch = ''
     this.selectedProductVariants = []
-    this.modelHeight = 0
-    this.selectedColorId = 0
+    // this.modelHeight = 0
   }
   getColorNameProduct(productId: number): Observable<ColorDTO[]> {
     return this.productService.getColorNameProduct(productId).pipe(
