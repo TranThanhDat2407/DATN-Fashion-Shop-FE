@@ -346,7 +346,9 @@
                         (change)="onProvinceChange($event)"
                         [ngClass]="{'is-invalid': province.invalid && province.touched}">
                   <option value="">Chọn tỉnh/thành</option>
-                  <option *ngFor="let province of provinces" [value]="province.code">{{ province.name }}</option>
+                  <option *ngFor="let province of provinces" [value]="province.ProvinceID">
+                    {{ province.ProvinceName }}
+                  </option>
                 </select>
                 <div *ngIf="province.invalid && province.touched" class="invalid-feedback">
                   <small>Vui lòng chọn tỉnh/thành.</small>
@@ -354,21 +356,17 @@
               </div>
             </div>
 
-            <!-- Quận/Huyện -->
+
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label">Quận/Huyện:</label>
               <div class="col-sm-9">
-                <select
-                  class="form-select"
-                  required
-                  [(ngModel)]="selectedDistrict"
-                  #district="ngModel"
-                  (change)="onDistrictChange($event)"
-                  [disabled]="!selectedProvince"
-                  [ngClass]="{'is-invalid': district.invalid && district.touched}">
+                <select class="form-select" required [(ngModel)]="selectedDistrict" #district="ngModel"
+                        (change)="onDistrictChange($event)"
+                        [disabled]="!selectedProvince"
+                        [ngClass]="{'is-invalid': district.invalid && district.touched}">
                   <option value="">Chọn quận/huyện</option>
-                  <option *ngFor="let district of districts" [value]="district.code">
-                    {{ district.name }}
+                  <option *ngFor="let district of districts" [value]="district.DistrictID">
+                    {{ district.DistrictName }}
                   </option>
                 </select>
                 <div *ngIf="district.invalid && district.touched" class="invalid-feedback">
@@ -376,21 +374,18 @@
                 </div>
               </div>
             </div>
+
             <!-- Phường/Xã -->
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label">Phường/Xã:</label>
               <div class="col-sm-9">
-                <select
-                  class="form-select"
-                  required
-                  [(ngModel)]="selectedWard"
-                  #ward="ngModel"
-                  (change)="onWardChange($event)"
-                  [disabled]="!selectedDistrict"
-                  [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
+                <select class="form-select" required [(ngModel)]="selectedWard" #ward="ngModel"
+                        (change)="onWardChange($event)"
+                        [disabled]="!selectedDistrict"
+                        [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
                   <option value="">Chọn phường/xã</option>
-                  <option *ngFor="let ward of wards" [value]="ward.code">
-                    {{ ward.name }}
+                  <option *ngFor="let ward of wards" [value]="ward.WardCode">
+                    {{ ward.WardName }}
                   </option>
                 </select>
                 <div *ngIf="ward.invalid && ward.touched" class="invalid-feedback">
@@ -398,6 +393,7 @@
                 </div>
               </div>
             </div>
+
 
 
             <div class="row mb-3">

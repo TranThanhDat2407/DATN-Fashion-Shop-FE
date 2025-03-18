@@ -58,6 +58,11 @@ export class ShippingComponent implements OnInit{
     isDefault: false
   };
 
+  shippingMethods = [
+    { id: 1, name: 'Giao hàng nhanh' },
+    { id: 2, name: 'Nhận tại cửa hàng' },
+  ];
+
 
   showMoreButton = false;
   pageSize = 2;
@@ -119,7 +124,8 @@ export class ShippingComponent implements OnInit{
   getProvinces() {
     this.locationService.getProvinces().subscribe(
       (response) => {
-        this.provinces = response;
+        this.provinces = response.data;
+        console.log(this.provinces)
 
       },
       (error) => {
@@ -169,11 +175,18 @@ export class ShippingComponent implements OnInit{
     // Gọi API lấy danh sách quận/huyện
     if (this.selectedProvince) {
       this.locationService.getDistricts(this.selectedProvince).subscribe(
-        data => {
-          this.districts = data.districts || [];
+        (response) => {
+          if (response && response.data) {
+            this.districts = response.data; // API trả về object chứa `data`
+          } else {
+            this.districts = response.districts || []; // Kiểm tra fallback
+          }
+
+          console.log("🏠 Danh sách quận/huyện:", this.districts);
         },
-        error => {
-          console.error("Lỗi khi lấy danh sách quận/huyện:", error);
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách quận/huyện:", error);
+          this.districts = []; // Reset danh sách khi lỗi
         }
       );
     }
@@ -186,24 +199,40 @@ export class ShippingComponent implements OnInit{
     this.wards = [];
 
     // Gán tên quận vào NewAddress.district
-    const selectedDistrictObj = this.districts.find(d => d.code == districtCode);
-    this.NewAddress.district = selectedDistrictObj ? selectedDistrictObj.name : '';
+    const selectedDistrictObj = this.districts.find(d => d.DistrictID == districtCode);
+    this.NewAddress.district = selectedDistrictObj ? selectedDistrictObj.DistrictName : '';
     // Gọi API lấy danh sách phường/xã
     if (this.selectedDistrict) {
-      this.locationService.getWards(this.selectedDistrict).subscribe(data => {
-        this.wards = data.wards || [];
-      });
+      console.log("🏙 Quận/Huyện đã chọn:", this.selectedDistrict);
+
+      this.locationService.getWards(this.selectedDistrict).subscribe(
+        (response) => {
+          if (response && response.data) {
+            this.wards = response.data; // API trả về object chứa `data`
+          } else {
+            this.wards = response.wards || []; // Kiểm tra fallback
+          }
+
+          console.log("📍 Danh sách phường/xã:", this.wards);
+        },
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách phường/xã:", error);
+          this.wards = []; // Reset danh sách khi lỗi
+        }
+      );
     }
   }
   onWardChange(event: any) {
     const wardCode = (event.target.value)
     if (!wardCode || this.selectedWard === wardCode) return;
     this.selectedWard = wardCode;
+    console.log(this.selectedWard)
     // Gán tên phường vào NewAddress.ward
-    const selectedWardObj = this.wards.find(w => w.code == wardCode);
-    this.NewAddress.ward = selectedWardObj ? selectedWardObj.name : '';
+    const selectedWardObj = this.wards.find(w => w.WardCode == wardCode);
+    this.NewAddress.ward = selectedWardObj ? selectedWardObj.WardName : '';
     console.log(this.NewAddress)
   }
+
 
   updateAddress() {
     if (!this.userId || !this.NewAddress.id) {
@@ -398,8 +427,8 @@ export class ShippingComponent implements OnInit{
       this.updateShippingInfo();
       this.getShippingFee();
       this.fetchStores();
+    }
 
-  }
 
   updateShippingInfo() {
     if (this.selectedShippingMethod === 1) {
@@ -430,6 +459,8 @@ export class ShippingComponent implements OnInit{
       console.error("⚠️ Không thể cập nhật shippingInfo vì thiếu thông tin!");
     }
   }
+
+
 
 
   confirmCheckout() {

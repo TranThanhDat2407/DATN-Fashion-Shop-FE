@@ -16,6 +16,7 @@ import {StoreOrderComponent} from './store-order/store-order.component';
 import {StoreOrderDetailComponent} from './store-order/store-order-detail/store-order-detail.component';
 import {ManagerComponent} from './manager/manager.component';
 import {StaffDetailComponent} from './manager/staff-detail/staff-detail.component';
+import {NotificationComponent} from './notification/notification.component';
 
 
 export const staffRouter: Routes = [
@@ -76,6 +77,11 @@ export const staffRouter: Routes = [
       {
         path: "login",
         component: StoreLoginComponent
+      },
+      {
+        path: "notify",
+        component: NotificationComponent,
+        canActivate: [StoreGuardFn],
       }
     ]
   }

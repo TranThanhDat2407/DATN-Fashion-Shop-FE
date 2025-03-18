@@ -139,7 +139,7 @@
                           (change)="onProvinceChange($event)"
                           [ngClass]="{'is-invalid': province.invalid && province.touched}">
                     <option value="">Chọn tỉnh/thành</option>
-                    <option *ngFor="let province of provinces" [value]="province.code">{{ province.name }} </option>
+                    <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{ province.ProvinceName }} </option>
                   </select>
                   <div *ngIf="province.invalid && province.touched" class="invalid-feedback">
                     <small>Vui lòng chọn tỉnh/thành.</small>
@@ -160,8 +160,8 @@
                     [disabled]="!selectedProvince"
                     [ngClass]="{'is-invalid': district.invalid && district.touched}">
                     <option value="">Chọn quận/huyện</option>
-                    <option *ngFor="let district of districts" [value]="district.code">
-                      {{ district.name }}
+                    <option *ngFor="let district of districts" [value]="district.DistrictID">
+                      {{ district.DistrictName }}
                     </option>
                   </select>
 
@@ -185,8 +185,8 @@
                     [disabled]="!selectedDistrict"
                     [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
                     <option value="">Chọn phường/xã</option>
-                    <option *ngFor="let ward of wards" [value]="ward.code">
-                      {{ ward.name }}
+                    <option *ngFor="let ward of wards" [value]="ward.WardCode">
+                      {{ ward.WardName }}
                     </option>
                   </select>
                   <div *ngIf="ward.invalid && ward.touched" class="invalid-feedback">
