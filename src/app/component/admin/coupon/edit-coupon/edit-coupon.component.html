@@ -1,68 +1,59 @@
-<!--<div class="coupon-management">-->
-<!--  <h2>Quản lý Mã Giảm Giá Tự Động</h2>-->
+<form (ngSubmit)="onSubmit()" #couponForm="ngForm" enctype="multipart/form-data">
+  <!-- Chọn loại mã giảm giá -->
+  <div class="form-group">
+    <label>Loại mã giảm giá</label>
+    <select [(ngModel)]="couponData.type" name="type" class="form-control" required>
+      <option value="birthday">Mã sinh nhật</option>
+      <option value="holiday">Mã ngày lễ</option>
+      <option value="new_user">Mã cho user mới</option>
+    </select>
+  </div>
+  <!-- Dropdown chọn ngày lễ -->
+  <div class="form-group">
+    <label>Chọn ngày lễ</label>
+    <select [(ngModel)]="holidays" name="holidayId" class="form-control">
+      <option [value]="null">Không áp dụng ngày lễ</option>
+      <option *ngFor="let holiday of holidays" [value]="holiday.id">
+        {{ holiday.holidayName }}
+      </option>
+    </select>
+  </div>
 
-<!--  &lt;!&ndash; Nút Thêm Mã Giảm Giá &ndash;&gt;-->
-<!--  <button mat-button color="primary" (click)="openAddCouponDialog()">+ Thêm Mã Giảm Giá</button>-->
 
-<!--  &lt;!&ndash; Bảng danh sách mã giảm giá &ndash;&gt;-->
-<!--  <table mat-table [dataSource]="coupons" class="mat-elevation-z8">-->
+  <!-- Loại giảm giá -->
+  <div class="form-group">
+    <label>Loại giảm giá</label>
+    <select [(ngModel)]="couponData.discountType" name="discountType" class="form-control" required>
+      <option value="PERCENTAGE">Phần trăm</option>
+      <option value="FIXED_AMOUNT">Số tiền cố định</option>
+    </select>
+  </div>
 
-<!--    &lt;!&ndash; Cột Loại Mã &ndash;&gt;-->
-<!--    <ng-container matColumnDef="type">-->
-<!--      <th mat-header-cell *matHeaderCellDef> Loại Mã </th>-->
-<!--      <td mat-cell *matCellDef="let coupon"> {{ coupon.type }} </td>-->
-<!--    </ng-container>-->
+  <!-- Giá trị giảm -->
+  <div class="form-group">
+    <label>Giá trị giảm (%) / VNĐ</label>
+    <input type="number" [(ngModel)]="couponData.discountValue" name="discountValue" class="form-control" required />
+  </div>
 
-<!--    &lt;!&ndash; Cột Mã Giảm Giá &ndash;&gt;-->
-<!--    <ng-container matColumnDef="code">-->
-<!--      <th mat-header-cell *matHeaderCellDef> Mã Giảm Giá </th>-->
-<!--      <td mat-cell *matCellDef="let coupon"> {{ coupon.code }} </td>-->
-<!--    </ng-container>-->
+  <!-- Giá trị đơn hàng tối thiểu -->
+  <div class="form-group">
+    <label>Giá trị đơn hàng tối thiểu (VNĐ)</label>
+    <input type="number" [(ngModel)]="couponData.minOrderValue" name="minOrderValue" class="form-control" required />
+  </div>
 
-<!--    &lt;!&ndash; Cột Giá Trị Giảm &ndash;&gt;-->
-<!--    <ng-container matColumnDef="discount">-->
-<!--      <th mat-header-cell *matHeaderCellDef> Giá Trị Giảm </th>-->
-<!--      <td mat-cell *matCellDef="let coupon"> {{ coupon.discount }}% </td>-->
-<!--    </ng-container>-->
+  <!-- Số ngày hết hạn -->
+  <div class="form-group">
+    <label>Số ngày hết hạn</label>
+    <input type="number" [(ngModel)]="couponData.expirationDays" name="expirationDays" class="form-control" required />
+  </div>
 
-<!--    &lt;!&ndash; Cột Điều Kiện Áp Dụng &ndash;&gt;-->
-<!--    <ng-container matColumnDef="condition">-->
-<!--      <th mat-header-cell *matHeaderCellDef> Điều Kiện </th>-->
-<!--      <td mat-cell *matCellDef="let coupon"> {{ coupon.condition }} </td>-->
-<!--    </ng-container>-->
+  <!-- Ảnh -->
+  <div class="form-group">
+    <label>Chọn ảnh</label>
+    <input type="file" (change)="onFileSelected($event)" class="form-control" />
+  </div>
 
-<!--    &lt;!&ndash; Cột Ngày Bắt Đầu - Ngày Kết Thúc &ndash;&gt;-->
-<!--    <ng-container matColumnDef="dateRange">-->
-<!--      <th mat-header-cell *matHeaderCellDef> Ngày Áp Dụng </th>-->
-<!--      <td mat-cell *matCellDef="let coupon"> {{ coupon.startDate }} - {{ coupon.endDate }} </td>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Cột Trạng Thái &ndash;&gt;-->
-<!--    <ng-container matColumnDef="status">-->
-<!--      <th mat-header-cell *matHeaderCellDef> Trạng Thái </th>-->
-<!--      <td mat-cell *matCellDef="let coupon">-->
-<!--        <mat-chip [color]="coupon.active ? 'primary' : 'warn'">-->
-<!--          {{ coupon.active ? 'Hoạt động' : 'Không hoạt động' }}-->
-<!--        </mat-chip>-->
-<!--      </td>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Cột Hành Động &ndash;&gt;-->
-<!--    <ng-container matColumnDef="actions">-->
-<!--      <th mat-header-cell *matHeaderCellDef> Hành Động </th>-->
-<!--      <td mat-cell *matCellDef="let coupon">-->
-<!--        <button mat-icon-button color="accent" (click)="editCoupon(coupon)">-->
-<!--          <mat-icon>edit</mat-icon>-->
-<!--        </button>-->
-<!--        <button mat-icon-button color="warn" (click)="deleteCoupon(coupon)">-->
-<!--          <mat-icon>delete</mat-icon>-->
-<!--        </button>-->
-<!--      </td>-->
-<!--    </ng-container>-->
-
-<!--    &lt;!&ndash; Header và Row Definitions &ndash;&gt;-->
-<!--    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
-<!--    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
-<!--  </table>-->
-<!--</div>-->
-
+  <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+    {{ isLoading ? 'Đang gửi...' : 'Tạo mã giảm giá' }}
+  </button>
+</form>
