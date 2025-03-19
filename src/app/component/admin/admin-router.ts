@@ -16,6 +16,7 @@ import {ListCouponComponent} from './coupon/list-coupon/list-coupon.component';
 
 import { ListAttributeComponent } from "./attribute/list-attribute/list-attribute.component";
 import { ListProductComponent } from "./product/list-product/list-product.component";
+import {OrderDetailComponent} from './order/order-detail/order-detail.component';
 import { EditProductVariantComponent } from "./product/edit-product-variant/edit-product-variant.component";
 import { CreateProductComponent } from "./product/create-product/create-product.component";
 import {ShippingComponent} from '../client/checkout/shipping/shipping.component';
@@ -66,8 +67,8 @@ export const adminRouter: Routes =[
           component: ListOrderComponent
         },
         {
-          path:'edit_order',
-          component: EditOrderComponent
+          path:'order_detail/:orderId',
+          component: OrderDetailComponent
         },
         {
           path:'edit_attribute',

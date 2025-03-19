@@ -57,10 +57,10 @@ export class CheckoutComponent implements OnInit {
       this.currentStep = lastSegment || 'shipping';
     });
 
-    this.checkoutService.shippingInfo$.subscribe(info => {
-      if(info){
-        this.shippingInfo = info;
-        console.log('CheckoutComponent -  Nhận shippingInfo:', info );
+    this.checkoutService.shippingInfo$.subscribe(shippingInfo => {
+      if(shippingInfo){
+        this.shippingInfo = shippingInfo;
+        console.log('CheckoutComponent -  Nhận shippingInfo:', shippingInfo );
       }
 
     });

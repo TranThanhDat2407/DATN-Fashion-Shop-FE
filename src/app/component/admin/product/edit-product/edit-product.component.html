@@ -81,13 +81,25 @@
 
       <div class="product-details sticky-top z-0">
         <!--        product-name-->
+        <button class="btn-save" (click)="updateProduct()">SAVE PRODUCT</button>
+
         <div class="product-names  " style="background-color: #f5f5f5;">
           <!-- Tên sản phẩm -->
           <h3 class="product-title fw-normal">{{dataDetailsProduct?.name}}</h3>
 
-            <!-- <label class="flex-1">Base Price</label> -->
-            <input [ngModel]="dataEditProduct?.basePrice"  type="number" class="form-control" style="width: 30%; margin: 10px 10px 10px 0;" placeholder="Base Price" required>
+          <!-- <label class="flex-1">Base Price</label> -->
+          <input [(ngModel)]="basePrice" type="number" class="form-control"
+            style="width: 30%; margin: 10px 10px 10px 0;" placeholder="Base Price" required>
+          <div class="d-flex">
+            <span class="me-3">Is Active : </span>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked"
+                [checked]="dataDetailsProduct?.isActive" (change)="onCheckboxChange($event)">
 
+
+            </div>
+          </div>
+          <!-- (change)="changeActive(item)" -->
           <!-- Nút Hành động -->
 
         </div>

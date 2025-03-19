@@ -32,7 +32,7 @@ import { LanguagesService } from "../../../../services/LanguagesService/language
 import { TranslationDTO } from "../../../../dto/CategoryAdminDTO";
 import { response } from "express";
 
- export interface Translation {
+ export interface TranslationCreate  {
   name: string,
   description: string,
   material: string,
@@ -41,11 +41,11 @@ import { response } from "express";
 }
 
 
-interface CreateProduct {
+ export interface CreateProduct {
   status: string,
   basePrice: number,
   isActive: boolean,
-  translations: Translation[]
+  translations: TranslationCreate[]
 
 }
 @Component({
@@ -151,7 +151,7 @@ export class CreateProductComponent implements OnInit {
   createProduct(): void {
     if (!this.validateTranslations()) return;
 
-    let translations: Translation[] = [];
+    let translations: TranslationCreate[] = [];
 
     this.dataLanguage.forEach(item => {
       let nameData = this.translationsName.find(t => t.languageCode === item.code);

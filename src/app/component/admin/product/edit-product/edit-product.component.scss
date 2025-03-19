@@ -474,6 +474,20 @@ button {
   font-size: 0.9rem;
 }
 
+.btn-save {
+  width: 100%;
+  border-radius: 25px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 700;
+  height: 33px;
+  background-color: white;
+}
+
+.btn-save:hover {
+  background-color: #3251ad;
+  color: white;
+  border: none;
+}
 /*------------------------------ Decripsion */
 /* Tăng khoảng cách dòng và căn chỉnh */
 .details-content {

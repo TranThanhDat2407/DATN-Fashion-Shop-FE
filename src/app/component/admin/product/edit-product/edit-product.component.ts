@@ -9,7 +9,7 @@ import { ColorDTO } from "../../../../models/colorDTO";
 import { Currency } from "../../../../models/Currency";
 import { SizeDTO } from "../../../../models/sizeDTO";
 import { NavigationService } from "../../../../services/Navigation/navigation.service";
-import {ActivatedRoute, Router, RouterLink, RouterOutlet} from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ProductServiceService } from "../../../../services/client/ProductService/product-service.service";
 import { DetailProductService } from "../../../../services/client/DetailProductService/detail-product-service.service";
 import { ReviewServiceService } from "../../../../services/client/ReviewService/review-service.service";
@@ -41,12 +41,20 @@ import { error } from "console";
 import { LanguageDTO } from "../../../../dto/LanguageDTO";
 import { TranslationDTO } from "../../../../dto/CategoryAdminDTO";
 import { LanguagesService } from "../../../../services/LanguagesService/languages.service";
+import { CreateProduct, TranslationCreate } from "../create-product/create-product.component";
 import { Translation } from "../create-product/create-product.component";
 import {EditCategoryForProductComponent} from './edit-category-for-product/edit-category-for-product.component';
 
 
+interface Translation {
+  name: string,
+  description: string,
+  material: string,
+  care: string,
+  languageCode: string
+}
 export interface EditProduct {
-  id :  number,
+  id: number,
   status: string,
   basePrice: number,
   isActive: boolean,
@@ -102,8 +110,10 @@ export class EditProductComponent implements OnInit {
   size: number = 3
   sortBy: string = 'id'
   sortDir: string = 'desc'
-  dataEditProduct : EditProduct | null= null
-
+  dataEditProduct: EditProduct | null = null
+  dataEditProductDetail: Translation[] = []
+  basePrice: number = 0
+isActive : boolean =false
   isWishlist: boolean = false;
   sessionId?: string;
 
@@ -213,16 +223,13 @@ export class EditProductComponent implements OnInit {
       forkJoin({
         allImagesProduct: this.getAllImagesProduct(productId).pipe(catchError(() => of([]))),
         dataSizes: this.getSizeProduct(productId).pipe(catchError(() => of([]))),
-        salePrice: this.getSalePrice(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).pipe(catchError(() => of(0))),
-        dataVariants: this.getDataVariants(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).pipe(catchError(() => of(null))),
         dataColors: this.getColorNameProduct(productId).pipe(catchError(() => of([]))),
         dataDetailsProduct: this.getDetailsProduct('en', productId).pipe(catchError(() => of(null))),
-        dataQuantityInStock: this.getQuantityInStock(productId, this.colorId ?? 0).pipe(catchError(() => of([]))),
         reviewTotal: this.getReviewTotal(productId).pipe(catchError(() => of(0))),
         dataVideoProduct: this.getVideosProduct(productId).pipe(catchError(() => of([]))),
         dataReviewDetailProduct: this.getReviewDetailProduct(productId, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of([]))),
         dataLanguage: this.getLanguages().pipe(catchError(() => of([]))),
-        dataEditProduct : this.editProduct(productId).pipe(catchError(() => of(null)))
+        dataEditProduct: this.editProduct(productId).pipe(catchError(() => of(null)))
 
 
       })
@@ -230,19 +237,15 @@ export class EditProductComponent implements OnInit {
 
     this.dataImagesProduct = response.allImagesProduct;
     this.dataSizes = response.dataSizes;
-    this.salePrice = response.salePrice;
-    this.dataVariants = response.dataVariants
     this.dataColors = response.dataColors;
     this.reviewTotal = response.reviewTotal;
     this.dataDetailsProduct = response.dataDetailsProduct
-    this.dataQuantityInStock = response.dataQuantityInStock
     this.dataVideoProduct = response.dataVideoProduct
     this.dataReviewDetailProduct = response.dataReviewDetailProduct
     this.dataLanguage = response.dataLanguage;
     this.dataEditProduct = response.dataEditProduct
-
-    // console.log("dataQuantityInStock : " + this.dataReviewDetailProduct[0].comment)
-    console.log("object : " , this.dataEditProduct)
+    this.dataEditProductDetail = response.dataEditProduct?.translations.flat() ?? []
+    this.convertDataEdit()
 
     if (this.dataImagesProduct?.length) {
       this.colorImage = this.dataImagesProduct.find(img => img.colorId);
@@ -264,26 +267,134 @@ export class EditProductComponent implements OnInit {
       this.sizeId = this.dataSizes[0].id;
     }
 
-    this.getQuantityInStock(this.productId ?? 0, this.colorId ?? 0).subscribe(colorList => {
-      this.dataQuantityInStock = colorList
-    })
-    this.getStatusQuantityInStock(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(qty => {
-      this.quantityInStock = qty;
-      this.cdr.detectChanges(); // Cập nhật giao diện ngay khi có dữ liệu mới
-    });
 
-    this.getSalePrice(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(price => {
-      this.salePrice = price;
-      this.cdr.detectChanges();
-    });
+
 
   }
 
-  editProduct(productId: number) : Observable<EditProduct | null>{
+  editProduct(productId: number): Observable<EditProduct | null> {
     return this.productService.editProduct(productId).pipe(
-      map((response : ApiResponse<EditProduct>)  =>  response.data || null),
+      map((response: ApiResponse<EditProduct>) => response.data || null),
       catchError(() => of(null))
     )
+  }
+  updateProduct(): void {
+    if (!this.validateTranslations()) return;
+
+    let translations: TranslationCreate[] = [];
+
+    this.dataLanguage.forEach(item => {
+      let nameData = this.translationsName.find(t => t.languageCode === item.code);
+      let descriptionData = this.translationsDescription.find(t => t.languageCode === item.code);
+      let materialData = this.translationsMaterial.find(t => t.languageCode === item.code);
+      let careData = this.translationsCare.find(t => t.languageCode === item.code);
+
+      if (nameData || descriptionData || materialData || careData) {
+        translations.push({
+          langCode: item.code,
+          name: nameData?.name || '',
+          description: descriptionData?.name || '',
+          material: materialData?.name || '',
+          care: careData?.name || ''
+        });
+      }
+    });
+
+    let product: CreateProduct = {
+      status: "active",
+      basePrice: this.basePrice,
+      isActive: this.isActive,
+      translations: translations
+    };
+
+
+
+    const formData = new FormData();
+
+    formData.append('product', new Blob([JSON.stringify(product)], { type: 'application/json' }));
+
+
+
+    console.log("Product Data: ", product);
+
+    this.productService.updateProduct(this.productId ?? 0,formData).subscribe(
+      {
+        next: response => {
+          this.toastService.success('Success', 'Product updated successfully!', { timeOut: 3000 });
+          // this.resetForm()
+        },
+        error: error => {
+          this.toastService.error('Error', 'There was an error updated the Product.', { timeOut: 3000 });
+          console.log(error);
+        }
+      }
+    )
+  }
+  onCheckboxChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const isChecked = inputElement.checked; // Lấy giá trị true/false của checkbox
+    this.isActive = isChecked
+    console.log('Checkbox value:', this.isActive);
+  }
+
+  validateTranslations(): boolean {
+    const checkEmptyFields = (translations: TranslationDTO[], fieldName: string): boolean => {
+      if (translations.every(t => t.name.trim() === '')) {
+        this.toastService.error(`${fieldName} cannot be empty in all languages!`, 'Validation Error', { timeOut: 1600 });
+        return false;
+      }
+      return true;
+    };
+
+    const isValidName = checkEmptyFields(this.translationsName, 'Name');
+    const isValidDescription = checkEmptyFields(this.translationsDescription, 'Description');
+    const isValidMaterial = checkEmptyFields(this.translationsMaterial, 'Material');
+    const isValidCare = checkEmptyFields(this.translationsCare, 'Care');
+
+    if (!isValidName || !isValidDescription || !isValidMaterial || !isValidCare) {
+      return false;
+    }
+
+    return true;
+  }
+  createProduct(): void {
+    // if (!this.validateTranslations()) return;
+
+
+  }
+  convertDataEdit(): void {
+    this.translationsName = [];
+    this.translationsDescription = [];
+    this.translationsMaterial = [];
+    this.translationsCare = [];
+
+
+    this.basePrice = this.dataEditProduct?.basePrice ?? 0
+    this.dataLanguage.forEach(lang => {
+      console.log(this.dataEditProductDetail)
+      let item = this.dataEditProductDetail.find(detail => detail.languageCode === lang.code);
+
+      this.translationsName.push({
+        languageCode: lang.code,
+        name: item?.name || ''
+      });
+
+      this.translationsDescription.push({
+        languageCode: lang.code,
+        name: item?.description || ''
+      });
+
+      this.translationsMaterial.push({
+        languageCode: lang.code,
+        name: item?.material || ''
+      });
+
+      this.translationsCare.push({
+        languageCode: lang.code,
+        name: item?.care || ''
+      });
+    });
+
   }
 
 
