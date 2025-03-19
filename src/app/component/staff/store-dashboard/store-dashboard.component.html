@@ -3,22 +3,11 @@
   <div class="col-12 col-md-6 col-xl-3 ">
     <div class="statis-item  ">
       <div class="row">
-        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2  ">
-          <span>Today's Money</span>
-          <strong>$53</strong>
-        </div>
-        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4 ">
-          <div class="item-icon">
-            <img src="https://img.icons8.com/?size=100&id=9gf6ZL61hgEI&format=png&color=ffffff"
-                 alt="icon item Dashboard" width="30" height="30">
-          </div>
-        </div>
-      </div>
+        <div class="col-12 d-flex flex-column ps-4 pt-2  p-3">
+          <span>Today Revenue</span>
+          <strong>{{ totalRevenueToday | currency:'VND':'' }} VND</strong>
 
-      <hr class=" mt-1 my-0 ms-4 me-4"
-          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-      <div class="item-statis-time">
-        <span style="color: #4caf50;">+55% </span> than last week
+        </div>
       </div>
     </div>
 
@@ -26,22 +15,10 @@
   <div class="col-12 col-md-6 col-xl-3 ">
     <div class="statis-item  ">
       <div class="row">
-        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
-          <span>Today's Users</span>
-          <strong>2300</strong>
+        <div class="col-12 d-flex flex-column ps-4 pt-2 p-3">
+          <span>Month Revenue</span>
+          <strong>{{ totalRevenueThisMonth | currency:'VND':'' }} VND</strong>
         </div>
-        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
-          <div class="item-icon">
-            <img src="https://img.icons8.com/?size=100&id=98957&format=png&color=ffffff"
-                 alt="icon item Dashboard" width="30" height="30">
-          </div>
-        </div>
-      </div>
-
-      <hr class=" mt-1 my-0 ms-4 me-4"
-          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-      <div class="item-statis-time">
-        <span style="color: #4caf50;">+55% </span> than last week
       </div>
     </div>
 
@@ -49,22 +26,10 @@
   <div class="col-12 col-md-6 col-xl-3 ">
     <div class="statis-item  ">
       <div class="row">
-        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
-          <span>Today's Order</span>
-          <strong>$53</strong>
+        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 p-3">
+          <span>Today Total Orders</span>
+          <strong>{{ totalOrdersToday }}</strong>
         </div>
-        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
-          <div class="item-icon">
-            <img src="https://img.icons8.com/?size=100&id=4255&format=png&color=ffffff"
-                 alt="icon item Dashboard" width="30" height="30">
-          </div>
-        </div>
-      </div>
-
-      <hr class=" mt-1 my-0 ms-4 me-4"
-          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-      <div class="item-statis-time">
-        <span style="color: #f44335;">-2% </span> than yesterday
       </div>
     </div>
 
@@ -72,25 +37,61 @@
   <div class="col-12 col-md-6 col-xl-3 ">
     <div class="statis-item  ">
       <div class="row">
-        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
-          <span>Today's Cancel Order</span>
-          <strong>3</strong>
-        </div>
-        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
-          <div class="item-icon">
-            <img src="https://img.icons8.com/?size=100&id=114052&format=png&color=ffffff"
-                 alt="icon item Dashboard" width="30" height="30">
-          </div>
+        <div class="col-12 d-flex flex-column ps-4 pt-2 p-3">
+          <span>This Month Total Orders</span>
+          <strong>{{ totalOrdersThisMonth }}</strong>
         </div>
       </div>
 
-      <hr class=" mt-1 my-0 ms-4 me-4"
-          style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-      <div class="item-statis-time">
-        <span style="color: #4caf50;">+55% </span> than last week
-      </div>
+
     </div>
 
+  </div>
+
+  <div class="col-12">
+    <div class="chart-content line-chart-box ">
+      <span>{{currentYear}} Revenue</span>
+      <span>Total: {{totalMonthlyRevenue | currency:'VND':''}} VND</span>
+      <app-monthly-revenue-chart
+        [revenueData]="monthlyRevenueData"
+        [labels]="monthlyLabels">
+      </app-monthly-revenue-chart>
+
+    </div>
+  </div>
+
+  <div class="row">
+  <div class="col-6">
+    <div class="chart-content line-chart-box ">
+      <span>Weekly Revenue</span>
+      <span>Total: {{totalWeeklyRevenue | currency:'VND':''}} VND</span>
+      <app-weekly-revenue-chart
+        [revenueData]="weeklyRevenueData"
+        [labels]="weeklyLabels">
+      </app-weekly-revenue-chart>
+
+    </div>
+  </div>
+
+  <div class="col-3 ">
+    <div class="chart-content line-chart-box " style="height: 360px">
+      <span>{{currentYear}} Order Comparison</span>
+  <app-order-comparison-chart
+    [customerOrder]="customerOrder"
+    [guessOrder]="guessOrder">
+  </app-order-comparison-chart>
+</div>
+</div>
+
+  <div class="col-3">
+    <div class="chart-content line-chart-box " style="height: 360px">
+      <span>{{currentYear}} Payment Comparison</span>
+      <app-payment-comparison-chart
+        [bankTransfer]="bankTransfer"
+        [cash]="cash">
+      </app-payment-comparison-chart>
+    </div>
+  </div>
   </div>
 
   <div class="col-12 ">
@@ -108,7 +109,7 @@
 
     <div class="col-12">
       <div class="chart-content line-chart-box ">
-        <span>Lastest Order</span>
+        <span>Latest Order</span>
 
     <app-lastest-order
       [orders]="orders"
@@ -118,9 +119,6 @@
     </app-lastest-order>
       </div>
   </div>
-
-
-
 
 
 

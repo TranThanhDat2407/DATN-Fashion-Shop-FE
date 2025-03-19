@@ -16,6 +16,9 @@ import {StoreOrderComponent} from './store-order/store-order.component';
 import {StoreOrderDetailComponent} from './store-order/store-order-detail/store-order-detail.component';
 import {ManagerComponent} from './manager/manager.component';
 import {StaffDetailComponent} from './manager/staff-detail/staff-detail.component';
+import {StoreStatisticComponent} from './store-statistic/store-statistic.component';
+import {DateRangeStatisticComponent} from './store-statistic/date-range-statistic/date-range-statistic.component';
+import {DailyChartComponent} from './store-statistic/daily-chart/daily-chart.component';
 
 
 export const staffRouter: Routes = [
@@ -72,6 +75,21 @@ export const staffRouter: Routes = [
         path: "staff-manager/:userId",
         component: StaffDetailComponent,
         canActivate: [StoreGuardFn],
+      },
+      {
+        path: "store-statistic",
+        component: StoreStatisticComponent,
+        canActivate: [StoreGuardFn],
+        children: [
+          {
+            path: "date-range-statistic",
+            component: DateRangeStatisticComponent,
+          },
+          {
+            path: "daily-statistic",
+            component: DailyChartComponent,
+          }
+        ],
       },
       {
         path: "login",
