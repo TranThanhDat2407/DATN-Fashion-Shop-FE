@@ -37,7 +37,7 @@ export class ProductServiceService {
   getProducts(
     languageCode: string,
     categoryId?: number,
-    isActive: boolean = true,
+    isActive?: boolean,
     name?: string,
     minPrice?: number,
     maxPrice?: number,
@@ -50,13 +50,14 @@ export class ProductServiceService {
     let params = new HttpParams();
 
     // Các tham số bắt buộc
-    params = params.set('isActive', isActive.toString())
+    params = params
       .set('page', page.toString())
       .set('size', size.toString())
       .set('sortBy', sortBy)
       .set('sortDir', sortDir);
 
     // Các tham số tùy chọn (chỉ thêm nếu có giá trị)
+    if (isActive) params = params.set('isActive', isActive.toString());
     if (categoryId !== undefined) params = params.set('categoryId', categoryId.toString());
     if (minPrice !== undefined) params = params.set('minPrice', minPrice.toString());
     if (maxPrice !== undefined) params = params.set('maxPrice', maxPrice.toString());
@@ -97,6 +98,11 @@ export class ProductServiceService {
   getCategoryParent(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>>{
     return this.http.get<ApiResponse<CategoryParentDTO[]>>(`${this.apiUrl}/${lang}/${productId}/categories/root`)
   }
+
+  getCategoryForProduct(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>>{
+    return this.http.get<ApiResponse<CategoryParentDTO[]>>(`${this.apiUrl}/${lang}/${productId}/categories`)
+  }
+
   getAllImageProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>>{
     return this.http.get<ApiResponse<ImagesDetailProductDTO[]>>(`${this.apiUrl}/images/${productId}`)
   }
@@ -149,10 +155,9 @@ export class ProductServiceService {
     );
   }
 
-  getProductVariants(name: string): Observable<ApiResponse<ProductVariantDTO[]>> {
+  getProductVariants(name: string,page: number, size : number): Observable<ApiResponse<PageResponse<ProductVariantDTO[]>>> {
     const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
-
-    return this.http.get<ApiResponse<ProductVariantDTO[]>>(`${this.apiUrl}/variants/by-product-name?languageCode=en${params}`);
+    return this.http.get<ApiResponse<PageResponse<ProductVariantDTO[]>>>(`${this.apiUrl}/variants/by-product-name?languageCode=en&page=${page}&size=${size}${params}`);
   }
 
   editProductVariant(mediaId: number,formData: FormData): Observable<any> {
@@ -172,5 +177,35 @@ export class ProductServiceService {
 
   editProduct(productId : number) : Observable<ApiResponse<EditProduct>>{
     return this.http.get<ApiResponse<EditProduct>>(`${this.apiUrl}/edit/${productId}`)
+  }
+
+  removeCategoryFromProduct(productId: number, categoryId: number, lang: string = 'en'): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(
+      `${this.apiUrl}/remove-category`,
+      {
+        params: {
+          productId: productId.toString(),
+          categoryId: categoryId.toString(),
+        },
+        headers: {
+          'Accept-Language': lang
+        }
+      }
+    );
+  }
+
+  setCategoryForProduct(productId: number, categoryId: number, lang: string = 'en'): Observable<ApiResponse<any>> {
+    const requestBody = {
+      id: productId,
+      categoryId: categoryId
+    };
+
+    return this.http.post<ApiResponse<any>>(
+      `${this.apiUrl}/set-categories`,
+      requestBody,
+      {
+        headers: { 'Accept-Language': lang }
+      }
+    );
   }
 }
