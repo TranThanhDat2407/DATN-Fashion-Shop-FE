@@ -34,6 +34,7 @@ export class OrderServiceAdmin {
 
     if (orderId != null) params = params.set('orderId', orderId.toString());
     if (status?.trim()) params = params.set('status', status.trim());
+    if (shippingAddress?.trim()) params = params.set('shippingAddress', shippingAddress.trim());
     if (minPrice != null) params = params.set('minPrice', minPrice.toString());
     if (maxPrice != null) params = params.set('maxPrice', maxPrice.toString());
 
@@ -50,6 +51,7 @@ export class OrderServiceAdmin {
 
     return this.http.get<ApiResponse<PageResponse<OrderAdmin[]>>>(`${this.apiUrl}/filter`, { params });
   }
+
 
 
 

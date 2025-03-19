@@ -10,6 +10,7 @@ import {Chart} from 'chart.js/auto';
 import {FormsModule} from '@angular/forms';
 import {OrderServiceAdmin} from '../../../../services/admin/OrderService/order-serviceAdmin.service';
 import {ToastrService} from 'ngx-toastr';
+import {timeout} from 'rxjs';
 
 
 @Component({
@@ -64,52 +65,51 @@ export class OrderDetailComponent implements OnInit, OnChanges, AfterViewInit {
         if (response.status === 200 && response.data?.length > 0) {
           this.orderDetailsAdmin = response.data;
           this.orderDetails = this.orderDetailsAdmin[0];
-          // Gán giá trị đơn hàng từ dữ liệu nhận được
+          // this.toastService.success('Tải chi tiết đơn hàng thành công!', 'Thành công', { timeOut: 2000 });
         } else {
-          console.warn("Không có dữ liệu đơn hàng.");
+          this.toastService.warning('Không có dữ liệu đơn hàng.', 'Cảnh báo');
           this.orderDetailsAdmin = [];
           this.orderDetails = null;
         }
       },
       error => {
         console.error('Lỗi khi lấy chi tiết đơn hàng:', error);
+        this.toastService.error('Không thể lấy dữ liệu đơn hàng!', 'Lỗi');
         this.orderDetailsAdmin = [];
         this.orderDetails = null;
-
       }
     );
   }
 
+
   updateOrderStatus(newStatus: string | undefined): void {
     if (!newStatus) {
-      console.error('Trạng thái mới không hợp lệ!');
+      this.toastService.error('Trạng thái mới không hợp lệ!', 'Lỗi');
       return;
     }
 
     if (!this.orderId) {
-      console.error('Không tìm thấy orderId!');
+      this.toastService.error('Không tìm thấy orderId!', 'Lỗi');
       return;
     }
 
     this.orderServiceAdmin.updateOrderStatus(this.orderId, newStatus).subscribe(
       (response) => {
         if (response.status === 200) {
-          console.log('Cập nhật trạng thái đơn hàng thành công:', response);
-          alert('Cập nhật trạng thái thành công!');
+          this.toastService.success('Cập nhật trạng thái thành công!', 'Thành công');
 
           // Cập nhật lại chi tiết đơn hàng sau khi cập nhật trạng thái
           this.fetchOrderDetailsAdmin();
         } else {
-          console.error('Lỗi cập nhật trạng thái:', response);
-          alert('Lỗi cập nhật trạng thái!');
+          this.toastService.error('Lỗi cập nhật trạng thái!', 'Lỗi');
         }
       },
       (error) => {
-        console.error('Lỗi khi gửi yêu cầu cập nhật trạng thái:', error);
-        alert('Đã xảy ra lỗi, vui lòng thử lại!');
+        this.toastService.error('Đã xảy ra lỗi, vui lòng thử lại!', 'Lỗi');
       }
     );
   }
+
 
   getFilteredOrderStatuses(): string[] {
     if (this.orderDetails?.paymentStatus === 'UNPAID') {

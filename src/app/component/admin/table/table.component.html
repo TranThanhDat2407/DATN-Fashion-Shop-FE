@@ -107,21 +107,21 @@
               </div>
             </ng-container>
 
-          <ng-container *ngIf="header === 'totalAmount'">
+          <ng-container *ngIf="header === 'totalPrice' ">
             {{ (item[header] | currency:'VND':'') }} VNĐ
           </ng-container>
 
 
 
           <ng-container
-            *ngIf="header === 'createdAt' || header === 'updatedAt'|| header === 'dateOfBirth'">
+            *ngIf="header === 'orderTime' || header === 'createdAt' || header === 'updatedAt'|| header === 'dateOfBirth'">
 
             {{ item[header] | date:'dd-MM-yyyy' }}
 
             </ng-container>
 
             <ng-container
-              *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' &&
+              *ngIf=" header !== 'paymentMethod' && header !== 'orderTime' && header !== 'totalPrice' && header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' &&
               header !== 'updatedAt'&& header !== 'dateOfBirth'">
               {{ item[header] }}
             </ng-container>
@@ -135,14 +135,14 @@
               </div>
             </ng-container>
 
-            <ng-container *ngIf="header === 'button-order'">
-              <div class="button-container">
-                <button type="button" [routerLink]="[routerLinkString, item.id]"
-                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>
-                  <button type="button" [routerLink]="[routerLinkStringView, item.id]"
-                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">View</button>
-              </div>
-            </ng-container>
+<!--            <ng-container *ngIf="header === 'button-order'">-->
+<!--              <div class="button-container">-->
+<!--                <button type="button" [routerLink]="[routerLinkString, item.id]"-->
+<!--                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>-->
+<!--                  <button type="button" [routerLink]="[routerLinkStringView, item.id]"-->
+<!--                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">View</button>-->
+<!--              </div>-->
+<!--            </ng-container>-->
 
 
           <ng-container *ngIf="header === 'button-order'">

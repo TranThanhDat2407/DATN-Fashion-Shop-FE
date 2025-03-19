@@ -1,15 +1,26 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { HeaderAdminComponent } from '../../header-admin/header-admin.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule} from '@angular/forms';
 import {TableComponent} from "../../table/table.component";
 import {PageResponse} from '../../../../dto/Response/page-response';
 import {OrderServiceAdmin} from '../../../../services/admin/OrderService/order-serviceAdmin.service';
 import {OrderAdmin} from '../../../../models/OrderAdmin/OrderAdmin';
-import {catchError, firstValueFrom, forkJoin, map, Observable, of} from 'rxjs';
-
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  firstValueFrom,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  switchMap
+} from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import {ApiResponse} from '../../../../dto/Response/ApiResponse';
 import {HttpClient} from '@angular/common/http';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-list-order',
@@ -21,7 +32,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class ListOrderComponent implements OnInit {
   dataOrders: PageResponse<OrderAdmin[]> | null = null;
-  header: string[] = ['orderId', 'orderTime', 'customerName', 'customerPhone', 'orderStatus', 'paymentStatus', 'totalAmount', 'button-order'];
+  header: string[] = ['orderId', 'orderTime', 'customerName', 'customerPhone', 'orderStatus', 'paymentStatus', 'totalPrice', 'button-order'];
 
   // Các tham số lọc
   orderId?: number;
@@ -53,7 +64,12 @@ export class ListOrderComponent implements OnInit {
   filteredCitiesList: string[] = [];
 
 
-  constructor(private orderService: OrderServiceAdmin, private http: HttpClient) { }
+  constructor(
+    private orderService: OrderServiceAdmin,
+    private http: HttpClient,
+    private toastService: ToastrService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
     this.fetchOrdersList();
@@ -61,42 +77,45 @@ export class ListOrderComponent implements OnInit {
   }
 
   async fetchOrdersList(): Promise<void> {
-    const callApis = {
-      dataOrder: this.getFilteredOrders().pipe(catchError(() => of(null)))
-    };
+    const response = await firstValueFrom(
+      this.getFilteredOrders().pipe(catchError(() => of(null)))
 
-    const response = await firstValueFrom(forkJoin(callApis));
-    this.dataOrders = response.dataOrder;
-    console.log("dataOrder: ", this.dataOrders);
+    );
+    this.dataOrders = response;
+    console.log('Dữ liệu trả về sau khi lọc:', response);
+    this.cdr.detectChanges();
+  }
+
+  private formatDate(date: string | undefined, isStartDate: boolean): string | undefined {
+    return date ? `${date}T${isStartDate ? '00:00:00' : '23:59:59'}` : undefined;
   }
 
   getFilteredOrders() {
-    const formatDate = (date?: string) => date ? new Date(date).toISOString().split('T')[0] : undefined;
-
-    return this.orderService.getFilteredOrders(
-      this.orderId,
-      this.status,
-      this.shippingAddress,
-      this.minPrice,
-      this.maxPrice,
-      formatDate(this.fromDate),
-      formatDate(this.toDate),
-      formatDate(this.updateFromDate),
-      formatDate(this.updateToDate),
-      this.page,
-      this.size,
-      this.sortBy,
-      this.sortDirection
-    ).pipe(
-      map((response) => response.data),
-      catchError(() => of(null))
-    );
+    console.log("📌 Trước khi gọi API, shippingAddress:", this.shippingAddress);
+    return this.orderService
+      .getFilteredOrders(
+        this.orderId,
+        this.status,
+        this.shippingAddress,
+        this.minPrice,
+        this.maxPrice,
+        this.formatDate(this.fromDate, true),
+        this.formatDate(this.toDate, false),
+        this.formatDate(this.updateFromDate, true),
+        this.formatDate(this.updateToDate, false),
+        this.page,
+        this.size,
+        this.sortBy,
+        this.sortDirection
+      )
+      .pipe(
+        map((response) => response.data),
+        catchError(() => of(null))
+      );
   }
-
 
   toggleCheckboxOrder(item: any): void {
     item.checked = !item.checked;
-
     if (item.checked) {
       if (!this.checkedItemOrder.includes(item.id)) {
         this.checkedItemOrder.push(item.id);
@@ -112,89 +131,104 @@ export class ListOrderComponent implements OnInit {
     this.fetchOrdersList();
   }
 
-
-  // Hiển thị/tắt bộ lọc
   toggleFilter(): void {
     this.isFilterVisible = !this.isFilterVisible;
   }
 
-  // Áp dụng bộ lọc
+
   applyFilter(): void {
+    // Kiểm tra nếu chưa chọn bộ lọc
+    if (!this.selectedFilter) {
+      this.toastService.error('Vui lòng chọn điều kiện lọc!', 'Lỗi', { timeOut: 2000 });
+      return;
+    }
+
     switch (this.selectedFilter) {
       case 'status':
         this.status = this.selectedCondition;
         break;
+
       case 'date':
-        if (this.selectedDate) {
-          if (!this.fromDate) {
-            this.fromDate = this.selectedDate;
-          } else if (!this.toDate) {
-            this.toDate = this.selectedDate;
-          }
+        if (!this.fromDate || !this.toDate) {
+          this.toastService.warning('Vui lòng chọn đầy đủ ngày bắt đầu và ngày kết thúc!', 'Cảnh báo', { timeOut: 2000 });
+          return;
         }
 
+        const from = new Date(this.fromDate);
+        const to = new Date(this.toDate);
+
+        if (from > to) {
+          this.toastService.error('Ngày bắt đầu không thể lớn hơn ngày kết thúc!', 'Lỗi', { timeOut: 2000 });
+          return;
+        }
         break;
+
       case 'address':
-        this.shippingAddress = this.searchKeyword;
+        if (!this.searchKeyword || this.searchKeyword.trim().length < 3) {
+          this.toastService.warning('Vui lòng nhập ít nhất 3 ký tự để tìm kiếm!', 'Cảnh báo', { timeOut: 2000 });
+          return;
+        }
+        this.shippingAddress = this.searchKeyword.trim();
         break;
+
+
       case 'price':
-        if (this.minPrice && this.maxPrice && this.minPrice > this.maxPrice) {
-          alert('Khoảng giá không hợp lệ!');
+        if (!this.minPrice || !this.maxPrice) {
+          this.toastService.warning('Vui lòng nhập khoảng giá hợp lệ!', 'Cảnh báo', { timeOut: 2000 });
+          return;
+        }
+
+        if (this.minPrice > this.maxPrice) {
+          this.toastService.error('Khoảng giá không hợp lệ! Giá tối thiểu không thể lớn hơn giá tối đa.', 'Lỗi', { timeOut: 2000 });
           return;
         }
         break;
     }
+    console.log('📌 Địa chỉ lọc cuối cùng:', this.shippingAddress);
 
-    this.getFilteredOrders().subscribe((data) => {
-      this.dataOrders = data;
-    });
+    // Gọi API lấy danh sách đơn hàng sau khi kiểm tra hợp lệ
+    this.fetchOrdersList();
+    this.toastService.success('Bộ lọc đã được áp dụng!', 'Thành công', { timeOut: 2000 });
   }
 
 
 
-
-  // Reset bộ lọc
   resetFilter(): void {
     this.selectedFilter = '';
     this.selectedCondition = '';
     this.fromDate = undefined;
     this.toDate = undefined;
-    this.selectedDate = '';
-    this.shippingAddress = '';
+    this.shippingAddress = undefined;
     this.minPrice = undefined;
     this.maxPrice = undefined;
+    this.page = 0;
+
     this.fetchOrdersList();
   }
 
-
-  // Tìm kiếm đơn hàng
   searchOrders(): void {
     this.orderId = this.searchText ? parseInt(this.searchText, 10) : undefined;
     this.fetchOrdersList();
   }
 
-  // Sắp xếp đơn hàng
   sortOrders(): void {
     this.sortDirection = this.sortOrder;
     this.fetchOrdersList();
   }
 
-  // Gọi API lấy danh sách tỉnh/thành phố
   fetchCities(): void {
     this.http.get<any[]>('https://provinces.open-api.vn/api/?depth=1').subscribe(response => {
       this.cities = response.map(city => city.name);
-      this.filteredCitiesList = [...this.cities]; // Sao chép danh sách để lọc
+      this.filteredCitiesList = [...this.cities];
     });
   }
 
-  // Lọc danh sách tỉnh/thành phố theo từ khóa tìm kiếm
   filteredCities(): string[] {
     return this.searchKeyword
       ? this.cities.filter(city => city.toLowerCase().includes(this.searchKeyword.toLowerCase()))
       : this.cities;
   }
 
-  // Chọn tỉnh/thành phố
   toggleCitySelection(city: string): void {
     this.shippingAddress = city;
   }

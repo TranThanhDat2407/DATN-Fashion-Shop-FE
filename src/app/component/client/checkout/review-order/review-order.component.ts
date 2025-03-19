@@ -133,7 +133,7 @@ export class ReviewOrderComponent implements OnInit {
     console.log("📌 selectedShippingMethod:", this.selectedShippingMethod);
     console.log("📌 paymentMethodId:", this.paymentInfo.paymentMethodId);
 
-    if (this.selectedShippingMethod === 2) {
+    if (this.shippingInfo.shippingMethodId === 2) {
       // Click & Collect: Gọi API khác
       const clickAndCollectRequest = this.checkoutService.getClickAndCollectCheckoutData();
       console.log("📤 Gửi đơn hàng Click & Collect:", clickAndCollectRequest);
@@ -161,7 +161,9 @@ export class ReviewOrderComponent implements OnInit {
         }
       );
 
-    } else {
+    }
+
+    else {
       // Giao đến địa chỉ
       const orderRequest = this.checkoutService.getCheckoutData();
       console.log("📤 Gửi đơn hàng:", orderRequest);
