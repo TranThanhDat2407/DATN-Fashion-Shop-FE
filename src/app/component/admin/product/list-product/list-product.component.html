@@ -1,4 +1,4 @@
-<app-header-admin [title_header]="'Product'" [routerLinkString]="'/admin/edit_product'" />
+<app-header-admin [title_header]="'Product'" [routerLinkString]="'/admin/create_product'" />
 <div class="d-flex flex-column">
     <div class="select-box">
         <div class="content-fiter-tools">
@@ -8,12 +8,12 @@
                 <span>Filter</span>
             </div>
             <div class="tool-elements  ">
-                <select class="form-select">
-                    <!-- [(ngModel)]="isActive" (change)="onIsActiveChange()" -->
-                    <option [value]="null" selected>--</option>
-                    <option [value]="true">Active</option>
-                    <option [value]="false">Non Avtive</option>
+                <select class="form-select" [(ngModel)]="isActive" (change)="onIsActiveChange()">
+                    <option [ngValue]="null" selected>--</option>
+                    <option [ngValue]="true">Active</option>
+                    <option [ngValue]="false">Non Active</option>
                 </select>
+
             </div>
         </div>
 
@@ -33,9 +33,9 @@
                 </div>
                 <div class="col-9" style="margin-left: 4px;">
                     <div class="search-product">
-                        <input type="text" placeholder=" Search Category Name">
-                        <!-- [(ngModel)]="nameSearch" name="nameSearch"
-                   (ngModelChange)="onNameChange($event)"  -->
+                        <input type="text" placeholder=" Search Category Name" [(ngModel)]="nameSearch"
+                            name="nameSearch" (ngModelChange)="onNameChange($event)">
+                        <!--   -->
                     </div>
                 </div>
                 <div class="col-1">
@@ -58,21 +58,18 @@
     (ngModelChange)="searchParentIdCategory($event)" placeholder=" Search Parent Id">
 </div> -->
                 <div class="element-select ms-1 ">
-                    <select style="height: 30px;">
-                        <!-- [(ngModel)]="sortBy" (change)="onCreateAtChange()" -->
+                    <select style="height: 30px;" [(ngModel)]="sortBy" (change)="onCreateAtChange()">
                         <option [value]="'id'" selected>Id</option>
                         <option [value]="'createdAt'">Created At</option>
                     </select>
                 </div>
 
                 <div class="element-select d-flex justify-content-end   ">
-                    <select class=" ">
-                        <!-- [(ngModel)]="sortDir" (change)="onSortDirChange()" -->
+                    <select class=" " [(ngModel)]="sortDir" (change)="onSortDirChange()">
                         <option [value]="'asc'" selected>&uarr;</option>
                         <option [value]="'desc'" selected>&darr;</option>
                     </select>
                 </div>
-
             </div>
         </div>
     </div>
@@ -85,13 +82,10 @@
 
 
 <div class="container-list">
-    <app-table *ngIf="dataFullElementProduct" 
-                [currentPage]="page" 
-                [tableData]="dataFullElementProduct?.content?.flat() || []"
-                 [dataPage]="dataFullElementProduct" [typeImage]="'products'" [tableHeaders]="header"
-                 [routerLinkString]="'/admin/edit_product'"
-                 [toggleCheckbox]="toggleCheckbox"
-                  (pageChanged)="onPageChange($event)">
+    <app-table *ngIf="dataFullElementProduct" [currentPage]="page"
+        [tableData]="dataFullElementProduct?.content?.flat() || []" [dataPage]="dataFullElementProduct"
+        [typeImage]="'products'" [tableHeaders]="header" [routerLinkString]="'/admin/edit_product'"
+        [toggleCheckbox]="toggleCheckbox" (pageChanged)="onPageChange($event)">
 
-      </app-table>
+    </app-table>
 </div>

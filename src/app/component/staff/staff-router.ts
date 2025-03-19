@@ -19,6 +19,7 @@ import {StaffDetailComponent} from './manager/staff-detail/staff-detail.componen
 import {StoreStatisticComponent} from './store-statistic/store-statistic.component';
 import {DateRangeStatisticComponent} from './store-statistic/date-range-statistic/date-range-statistic.component';
 import {DailyChartComponent} from './store-statistic/daily-chart/daily-chart.component';
+import {NotificationComponent} from './notification/notification.component';
 
 
 export const staffRouter: Routes = [
@@ -94,6 +95,11 @@ export const staffRouter: Routes = [
       {
         path: "login",
         component: StoreLoginComponent
+      },
+      {
+        path: "notify",
+        component: NotificationComponent,
+        canActivate: [StoreGuardFn],
       }
     ]
   }

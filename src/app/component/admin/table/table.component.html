@@ -90,10 +90,7 @@
                   alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
               </ng-container>
 
-              <ng-container *ngIf="typeImage === 'coupons'">
-                <img *ngIf="item[header]" [src]="'http://localhost:8080/uploads/images/coupons/'+item[header]"
-                  alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
-              </ng-container>
+
               <ng-container *ngIf="typeImage === 'colors'">
                 <img *ngIf="item[header]" [src]="'http://localhost:8080/uploads/images/products/colors/'+item[header]"
                   alt="Image" class="avatar rounded-circle" style="width: 50px; height: 50px;">
@@ -110,13 +107,21 @@
               </div>
             </ng-container>
 
-            <ng-container *ngIf="header === 'createdAt' || header === 'updatedAt'|| header === 'dateOfBirth'">
-              {{ item[header] | date:'dd-MM-yyyy' }}
+          <ng-container *ngIf="header === 'totalAmount'">
+            {{ (item[header] | currency:'VND':'') }} VNĐ
+          </ng-container>
+
+
+
+          <ng-container
+            *ngIf="header === 'createdAt' || header === 'updatedAt'|| header === 'dateOfBirth'">
+
+            {{ item[header] | date:'dd-MM-yyyy' }}
 
             </ng-container>
 
             <ng-container
-              *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' && 
+              *ngIf="header !== 'imageUrl' && header !== 'valueImg' && header !== 'isActive' && header !== 'createdAt' &&
               header !== 'updatedAt'&& header !== 'dateOfBirth'">
               {{ item[header] }}
             </ng-container>
@@ -129,16 +134,28 @@
                   role="button">Delete</button>
               </div>
             </ng-container>
-            
+
             <ng-container *ngIf="header === 'button-order'">
               <div class="button-container">
                 <button type="button" [routerLink]="[routerLinkString, item.id]"
                   [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>
-                  <button type="button" [routerLink]="[routerLinkStringView, item.id]"
+                <button type="button" [routerLink]="[routerLinkStringView, item.id]"
                   [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">View</button>
               </div>
             </ng-container>
 
+
+          <ng-container *ngIf="header === 'button-order'">
+            <div class="button-container">
+              <button type="button" [routerLink]="[routerLinkStringView, item.orderId]"
+                      [routerLinkActive]="activeRouterLinkString"
+                      class="button-89">Edit</button>
+
+              <button type="button"
+                      [routerLink]="[routerLinkStringView, item.orderId]"
+                      [routerLinkActive]="activeRouterLinkString" class="button-89">View</button>
+            </div>
+          </ng-container>
             <ng-container *ngIf="header === 'colors' && colorMap.get(item.id)?.length !== 0">
               <div *ngIf="colorMap.get(item.id) as colorImages">
                 <img *ngFor="let img of colorImages"
@@ -159,8 +176,9 @@
                       {{ detailProduct.promotion?.startDate | date:'dd/MM/yyyy HH:mm' }}
                     </span>
                     <span class="end-date">
-                      {{ detailProduct.promotion?.endDate | date:'dd/MM/yyyy HH:mm' }}
+                      {{ detailProduct.promotion?.endDate | date:'dd/MM/yyyy HH:mm' }} <br>
                     </span>
+                    <span class="description-date"  > {{ detailProduct.promotion?.description }}</span>
                   </div>
                 </ng-container>
                 <ng-container *ngIf="detailProduct.promotion === null">
@@ -168,7 +186,7 @@
                 </ng-container>
               </ng-container>
             </ng-container>
-            
+
 
 
 

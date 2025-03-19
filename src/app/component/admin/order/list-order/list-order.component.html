@@ -1,22 +1,107 @@
-<app-header-admin [title_header]="'Order'" [routerLinkString]="'/admin/edit_order'" />
+<app-header-admin [title_header]="'Order'" [routerLinkString]="'/admin/order_detail'" />
 
-
-<div class="custom-select">
-    <div class="selected-item" (click)="isOpen = !isOpen">
-        <span *ngIf="selectedItem">
-            <img [src]="selectedItem.image" alt="Selected" />
-            {{ selectedItem.name }}
-        </span>
-        <span *ngIf="!selectedItem">Chọn sản phẩm</span>
+<div class="row mt-3 align-items-start">  <!-- Thêm align-items-start -->
+  <!-- Cột bộ lọc -->
+  <div class="col-md-4">
+    <div class="tools-title d-flex align-items-center p-2 bg-light rounded" (click)="toggleFilter()">
+      <i class="fa-solid fa-sort me-2"></i>
+      <span class="fw-bold">Add Filter</span>
     </div>
 
-    <div class="dropdown" *ngIf="isOpen">
-        <input type="text" [(ngModel)]="searchText" placeholder="Tìm kiếm sản phẩm..." />
-        <ul>
-            <li *ngFor="let product of filteredProducts" (click)="selectItem(product)">
-                <img [src]="product.image" alt="Product" />
-                {{ product.name }}
-            </li>
-        </ul>
+    <div class="card mt-2 shadow-sm filter-container" [ngClass]="{'show': isFilterVisible}">
+      <div class="card-body">
+        <label class="mb-2 fw-semibold">Fill all order</label>
+        <select class="form-select mb-2" [(ngModel)]="selectedFilter">
+          <option value="">-- Click action --</option>
+          <option value="status">Orders status</option>
+          <option value="date">Create at</option>
+          <option value="address">Shipping Address</option>
+          <option value="price">About price</option>
+        </select>
+
+        <div *ngIf="selectedFilter">
+          <select class="form-select mb-2" [(ngModel)]="selectedCondition" *ngIf="selectedFilter === 'status'">
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="shipped">Delivery</option>
+            <option value="cancelled">Cancel</option>
+            <option value="done">Done</option>
+          </select>
+
+          <div *ngIf="selectedFilter === 'date'">
+            <label class="fw-semibold">From Date</label>
+            <input class="form-control mb-2" type="date" [(ngModel)]="fromDate">
+
+            <label class="fw-semibold">To Date</label>
+            <input class="form-control mb-2" type="date" [(ngModel)]="toDate">
+          </div>
+
+          <div *ngIf="selectedFilter === 'address'">
+            <label class="fw-semibold">Province/City</label>
+            <input class="form-control mb-2" type="text" placeholder="Search province/City" [(ngModel)]="searchKeyword" (input)="filteredCitiesList = filteredCities()">
+            <div class="address-list">
+              <div *ngFor="let city of filteredCitiesList" class="form-check">
+                <input class="form-check-input" type="checkbox" [value]="city" (change)="toggleCitySelection(city)">
+                <label class="form-check-label">{{ city }}</label>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="d-flex gap-2" *ngIf="selectedFilter === 'price'">
+            <input class="form-control" type="number" placeholder="To" [(ngModel)]="minPrice">
+            <input class="form-control" type="number" placeholder="From" [(ngModel)]="maxPrice">
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button class="btn btn-secondary me-2" (click)="resetFilter()">Cancel</button>
+          <button class="btn btn-primary" (click)="applyFilter()">Filter</button>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Cột tìm kiếm và sắp xếp -->
+  <div class="col-md-8 d-flex justify-content-between">
+    <div class="col-md-5">
+      <div class="tool-searchs">
+        <div class="search-product">
+          <i class="fa fa-search search-icon"></i>
+          <input type="text" class="form-control search-input" placeholder="Search order..." [(ngModel)]="searchText" (input)="searchOrders()">
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-3">
+      <div class="sortBox">
+        <span class="me-2">Sort</span>
+        <select [(ngModel)]="sortOrder" (change)="sortOrders()">
+          <option value="asc">Increase &uarr;</option>
+          <option value="desc">Descending &darr;</option>
+        </select>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
+
+<!-- Bảng danh sách đơn hàng -->
+<div class="container mt-4">
+  <app-table *ngIf="dataOrders"
+             [tableData]="dataOrders?.content?.flat() || []"
+             [dataPage]="dataOrders"
+             [tableHeaders]="header"
+             [routerLinkString]="'/admin/order_detail'"
+             [toggleCheckbox]="toggleCheckboxOrder"
+             (pageChanged)="onPageChangeOrder($event)">
+
+  </app-table>
+</div>
+
+
+
+

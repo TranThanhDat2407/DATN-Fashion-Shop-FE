@@ -206,10 +206,10 @@
                             aria-hidden="true"></span></span></div>
                         </a>
                         <div class="fr-wrapper mt-m w4-f" style="width: auto;">
-<!--                          <button class="fr-btn primary disabled wundefined-f" type="button"-->
-<!--                                  data-test="lấy-hàng-tại-cửa-hàng-này-button" fdprocessedid="40frbwg" disabled="">Lấy-->
-<!--                            hàng tại cửa hàng này-->
-<!--                          </button>-->
+                          <button *ngIf="selectedStore" [routerLink]="['../payment']" class="fr-btn primary  wundefined-f" type="button"
+                                  data-test="lấy-hàng-tại-cửa-hàng-này-button">Lấy
+                            hàng tại cửa hàng này
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -222,11 +222,11 @@
 
 
             <!-- Danh sách địa chỉ -->
-            <div class="fr-h-rule full">
+            <div class="fr-h-rule full" >
               <hr style="color: rgb(224, 224, 224)">
             </div>
             <div>
-              <div class="fr-contents-card">
+              <div *ngIf="selectedShippingMethod === 1" class="fr-contents-card">
                 <div>
                   <div>
                     <div>
@@ -257,7 +257,7 @@
                                       <button class="icon relative small panel-action-button w2-f btn-text fr-btn" type="button"
                                               *ngIf="addr.id === selectedAddressId">
                                         <div class="absolute fr-icon check_large center-vertical" aria-hidden="true"></div>
-                                        <div>Đã chọn</div>
+                                        <div>✅ Đã chọn</div>
                                       </button>
                                       <!-- Nếu địa chỉ này chưa được chọn -->
                                       <button class="icon relative small panel-action-button w2-f btn-text fr-btn"
@@ -346,7 +346,9 @@
                         (change)="onProvinceChange($event)"
                         [ngClass]="{'is-invalid': province.invalid && province.touched}">
                   <option value="">Chọn tỉnh/thành</option>
-                  <option *ngFor="let province of provinces" [value]="province.code">{{ province.name }}</option>
+                  <option *ngFor="let province of provinces" [value]="province.ProvinceID">
+                    {{ province.ProvinceName }}
+                  </option>
                 </select>
                 <div *ngIf="province.invalid && province.touched" class="invalid-feedback">
                   <small>Vui lòng chọn tỉnh/thành.</small>
@@ -354,21 +356,17 @@
               </div>
             </div>
 
-            <!-- Quận/Huyện -->
+
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label">Quận/Huyện:</label>
               <div class="col-sm-9">
-                <select
-                  class="form-select"
-                  required
-                  [(ngModel)]="selectedDistrict"
-                  #district="ngModel"
-                  (change)="onDistrictChange($event)"
-                  [disabled]="!selectedProvince"
-                  [ngClass]="{'is-invalid': district.invalid && district.touched}">
+                <select class="form-select" required [(ngModel)]="selectedDistrict" #district="ngModel"
+                        (change)="onDistrictChange($event)"
+                        [disabled]="!selectedProvince"
+                        [ngClass]="{'is-invalid': district.invalid && district.touched}">
                   <option value="">Chọn quận/huyện</option>
-                  <option *ngFor="let district of districts" [value]="district.code">
-                    {{ district.name }}
+                  <option *ngFor="let district of districts" [value]="district.DistrictID">
+                    {{ district.DistrictName }}
                   </option>
                 </select>
                 <div *ngIf="district.invalid && district.touched" class="invalid-feedback">
@@ -376,21 +374,18 @@
                 </div>
               </div>
             </div>
+
             <!-- Phường/Xã -->
             <div class="row mb-3">
               <label class="col-sm-3 col-form-label">Phường/Xã:</label>
               <div class="col-sm-9">
-                <select
-                  class="form-select"
-                  required
-                  [(ngModel)]="selectedWard"
-                  #ward="ngModel"
-                  (change)="onWardChange($event)"
-                  [disabled]="!selectedDistrict"
-                  [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
+                <select class="form-select" required [(ngModel)]="selectedWard" #ward="ngModel"
+                        (change)="onWardChange($event)"
+                        [disabled]="!selectedDistrict"
+                        [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
                   <option value="">Chọn phường/xã</option>
-                  <option *ngFor="let ward of wards" [value]="ward.code">
-                    {{ ward.name }}
+                  <option *ngFor="let ward of wards" [value]="ward.WardCode">
+                    {{ ward.WardName }}
                   </option>
                 </select>
                 <div *ngIf="ward.invalid && ward.touched" class="invalid-feedback">
@@ -398,6 +393,7 @@
                 </div>
               </div>
             </div>
+
 
 
             <div class="row mb-3">
