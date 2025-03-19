@@ -11,6 +11,10 @@ import {StoreDetailDTO} from '../../../dto/StoreDetailDTO';
 import {ListStoreStockDTO} from '../../../dto/ListStoreStockDTO';
 import {InventoryAudResponse} from '../../../dto/Response/inventory/InventoryAudResponse';
 import {TopProduct} from '../../../component/staff/store-dashboard/top-products-table/top-products-table.component';
+import {StoreOrderComparisonResponse} from '../../../dto/store/StoreOrderComparisonResponse';
+import {StorePaymentComparisonResponse} from '../../../dto/store/StorePaymentComparisonResponse';
+import {StoreRevenueByDateRangeResponse} from '../../../dto/store/StoreRevenueByDateRangeResponse';
+import {StoreDailyRevenueResponse} from '../../../dto/store/StoreDailyRevenueResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -149,5 +153,106 @@ export class StoreService {
     );
   }
 
+  getMonthlyRevenue(storeId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/dashboard/monthly-revenue?storeId=${storeId}`);
+  }
 
+  getWeeklyRevenue(storeId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/dashboard/weekly-revenue?storeId=${storeId}`);
+  }
+
+  getOrderComparison(storeId: number): Observable<StoreOrderComparisonResponse> {
+    return this.http.get<StoreOrderComparisonResponse>(`${this.apiUrl}/dashboard/order-comparison/${storeId}`);
+  }
+
+  getPaymentComparison(storeId: number): Observable<StorePaymentComparisonResponse> {
+    return this.http.get<StorePaymentComparisonResponse>(`${this.apiUrl}/dashboard/payment-comparison/${storeId}`);
+  }
+
+
+  getTotalRevenueToday(storeId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.apiUrl}/dashboard/revenue/today`,
+      { params: { storeId: storeId.toString() } }
+    );
+  }
+
+  getTotalRevenueThisMonth(storeId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.apiUrl}/dashboard/revenue/month`,
+      { params: { storeId: storeId.toString() } }
+    );
+  }
+
+  getTotalOrdersToday(storeId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.apiUrl}/dashboard/orders/today`,
+      { params: { storeId: storeId.toString() } }
+    );
+  }
+
+  getTotalOrdersThisMonth(storeId: number): Observable<number> {
+    return this.http.get<number>(
+      `${this.apiUrl}/dashboard/orders/month`,
+      { params: { storeId: storeId.toString() } }
+    );
+  }
+
+  getRevenueByDateRange(
+    storeId: number,
+    startDate: string,
+    endDate: string
+  ): Observable<StoreRevenueByDateRangeResponse[]> {
+    const params = new HttpParams()
+      .set('storeId', storeId.toString())
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+
+    return this.http.get<StoreRevenueByDateRangeResponse[]>(`${this.apiUrl}/revenue-by-date-range`, { params });
+  }
+
+  getDailyRevenue(
+    storeId: number,
+    month: number,
+    year: number
+  ): Observable<StoreDailyRevenueResponse[]> {
+    const params = new HttpParams()
+      .set('storeId', storeId.toString())
+      .set('month', month)
+      .set('year', year);
+
+    return this.http.get<StoreDailyRevenueResponse[]>(`${this.apiUrl}/daily-revenue`, { params });
+  }
+
+  exportRevenueByDateRange(
+    storeId: number,
+    startDate: string,
+    endDate: string
+  ): Observable<Blob> {
+    const params = new HttpParams()
+      .set('storeId', storeId.toString())
+      .set('startDate', startDate)
+      .set('endDate', endDate);
+
+    return this.http.get(`${this.apiUrl}/export-revenue-by-date-range`, {
+      params,
+      responseType: 'blob',
+    });
+  }
+
+  exportDailyRevenueByMonthAndYear(
+    storeId: number,
+    month: number,
+    year: number
+  ): Observable<Blob> {
+    const params = new HttpParams()
+      .set('storeId', storeId.toString())
+      .set('month', month)
+      .set('year', year);
+
+    return this.http.get(`${this.apiUrl}/export-daily-revenue-by-month-and-year`, {
+      params,
+      responseType: 'blob',
+    });
+  }
 }

@@ -4,7 +4,7 @@ import { Product } from './product';
 export class Promotion extends BaseEntity {
   id: number;
   discountPercentage: number;
-  descriptions?: string;
+  description?: string;
   startDate: Date;
   endDate: Date;
   isActive: boolean;
@@ -14,7 +14,7 @@ export class Promotion extends BaseEntity {
     super(data);
     this.id = data?.id || 0;
     this.discountPercentage = data?.discountPercentage || 0;
-    this.descriptions = data?.descriptions || '';
+    this.description = data?.description || '';
     this.startDate = data?.startDate ? new Date(data.startDate) : new Date();
     this.endDate = data?.endDate ? new Date(data.endDate) : new Date();
     this.isActive = data?.isActive ?? false;
