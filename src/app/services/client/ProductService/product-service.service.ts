@@ -216,4 +216,16 @@ export class ProductServiceService {
   updateProduct(productId : number, formData : FormData ) : Observable<any>{
     return this.http.put(`${this.apiUrl}/${productId}`,formData)
   }
+
+
+  insertVariant(productId: number, colorValueId: number, sizeValueId: number, salePrice: number){
+    const formData = new FormData();
+    formData.append('productId', productId.toString());  // Chuyển số thành chuỗi
+    formData.append('colorValueId', colorValueId.toString());
+    formData.append('sizeValueId', sizeValueId.toString());
+    formData.append('salePrice', salePrice.toString());
+
+
+      return this.http.post(`${this.apiUrl}/insert-variant/${productId}`,formData)
+  }
 }
