@@ -1,6 +1,8 @@
 <app-header-admin [title_header]="'Edit Product'" />
 
 
+<router-outlet></router-outlet>
+
 <div class="container">
   <div class="row">
     <!-- Product Images (Left Section) -->
@@ -12,7 +14,7 @@
             *ngIf="colorImage.hasVariants">
             <i class="fa-solid fa-mountain-sun"></i>
           </a>
-          
+
         </div> -->
 
         <div class="row mt-2 g-2"> <!-- g-2 giúp giảm khoảng cách giữa ảnh -->
@@ -33,7 +35,7 @@
 
 
         <div class="col-6 position-relative p-0 product-variant-edit"
-          style="background-repeat: no-repeat; 
+          style="background-repeat: no-repeat;
                background-size: 90% 90%; background-image: url('https://static.thenounproject.com/png/187803-200.png');" (click)="fileInput.click()">
           <input type="file" #fileInput class="d-none" (change)="onFileSelected($event)" multiple>
         </div>
@@ -75,6 +77,8 @@
     </div>
     <!-- Product Details (Right Section) -->
     <div class="col-md-8">
+      <button class="btn btn-outline-primary" (click)="openModal()">Edit Category</button>
+
       <div class="product-details sticky-top z-0">
         <!--        product-name-->
         <button class="btn-save" (click)="updateProduct()">SAVE PRODUCT</button>

@@ -19,6 +19,10 @@ import { ListProductComponent } from "./product/list-product/list-product.compon
 import {OrderDetailComponent} from './order/order-detail/order-detail.component';
 import { EditProductVariantComponent } from "./product/edit-product-variant/edit-product-variant.component";
 import { CreateProductComponent } from "./product/create-product/create-product.component";
+import {ShippingComponent} from '../client/checkout/shipping/shipping.component';
+import {
+  EditCategoryForProductComponent
+} from './product/edit-product/edit-category-for-product/edit-category-for-product.component';
 
 export const adminRouter: Routes =[
   {
@@ -92,7 +96,10 @@ export const adminRouter: Routes =[
         },
         {
           path:'edit_product/:id',
-          component: EditProductComponent
+          component: EditProductComponent,
+          children: [
+            { path: 'edit-category-for-product', component: EditCategoryForProductComponent },
+          ],
         },
         {
           path:'edit_productVariant/:id/:productId',

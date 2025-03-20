@@ -9,7 +9,7 @@ import { ColorDTO } from "../../../../models/colorDTO";
 import { Currency } from "../../../../models/Currency";
 import { SizeDTO } from "../../../../models/sizeDTO";
 import { NavigationService } from "../../../../services/Navigation/navigation.service";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
 import { ProductServiceService } from "../../../../services/client/ProductService/product-service.service";
 import { DetailProductService } from "../../../../services/client/DetailProductService/detail-product-service.service";
 import { ReviewServiceService } from "../../../../services/client/ReviewService/review-service.service";
@@ -45,6 +45,8 @@ import { CreateProduct, TranslationCreate } from "../create-product/create-produ
 import { Color } from "../../../../models/AttributeValue/Color";
 import { AttributeService } from "../../../../services/admin/AttributeService/attribute.service";
 import { Size } from "../../../../models/AttributeValue/Size";
+import {EditCategoryForProductComponent} from './edit-category-for-product/edit-category-for-product.component';
+
 
 interface Translation {
   name: string,
@@ -66,7 +68,7 @@ export interface EditProduct {
   selector: 'app-edit-product',
   standalone: true,
   imports: [CommonModule, RouterLink, TranslateModule, NavBottomComponent, ModalNotifyErrorComponent, NgClass,
-    FormsModule, ModelNotifySuccsessComponent, HeaderAdminComponent, DialogComponent
+    FormsModule, ModelNotifySuccsessComponent, HeaderAdminComponent, DialogComponent, EditCategoryForProductComponent, RouterOutlet
   ],
   templateUrl: './edit-product.component.html',
   styleUrl: './edit-product.component.scss'
@@ -125,7 +127,6 @@ export class EditProductComponent implements OnInit {
 
 
   dataLanguage: LanguageDTO[] = []
-
   translationsName: TranslationDTO[] = this.dataLanguage.map(lang => ({
     languageCode: lang.code,
     name: ''
@@ -1048,7 +1049,7 @@ export class EditProductComponent implements OnInit {
 
     // this.changeImageOne(this.productId ?? 0, color.id).subscribe(images => {
     //   if (images) {
-    //     this.dataImagesProduct[0].mediaUrl = images[0].mediaUrl;  
+    //     this.dataImagesProduct[0].mediaUrl = images[0].mediaUrl;
     //     this.cdr.detectChanges();
     //   }
     // });
@@ -1143,6 +1144,8 @@ export class EditProductComponent implements OnInit {
 
 
 
-
+  openModal() {
+    this.router.navigate([`../admin/edit_product/${this.productId}/edit-category-for-product`], { relativeTo: this.router.routerState.root });
+  }
 
 }

@@ -57,7 +57,17 @@ export class StoreOrderComponent implements OnInit {
       if (storeIdParam) {
         this.storeId = Number(storeIdParam);
         if (!isNaN(this.storeId)) {
+
+          this.route.queryParams.subscribe(queryParams => {
+            if (queryParams['startDate'] && queryParams['endDate']) {
+              this.filterForm.patchValue({
+                startDate: queryParams['startDate'].split('T')[0],
+                endDate: queryParams['endDate'].split('T')[0]
+              });
+            }
           this.fetchStoreOrders();
+          });
+
         } else {
           console.error('Lỗi: storeId không hợp lệ:', storeIdParam);
         }
