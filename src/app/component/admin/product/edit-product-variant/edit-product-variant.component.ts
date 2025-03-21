@@ -16,6 +16,7 @@ import { ProductVariantDTO } from '../../../../dto/ProductVariantDTO';
 import { response } from 'express';
 import { ButtonComponent } from "../../button/button.component";
 import { ToastrService } from 'ngx-toastr';
+import { PageResponse } from '../../../../dto/Response/page-response';
 
 interface ProductVariantModel {
   sortOrder: number;
@@ -41,8 +42,14 @@ export class EditProductVariantComponent implements OnInit {
   dataColors: ColorDTO[] = [];
   selectedColorId!: number;
   colorId?: number;
-  dataProductVariant: ProductVariantDTO[] = []
+  dataProductVariantPage: PageResponse<ProductVariantDTO[]> | null = null
+  dataProductVariant:  ProductVariantDTO[] = []
   modelHeight: number = 0
+
+  currentPage: number = 0;
+  pageSize: number = 15;
+  totalPages: number = 0;
+  
 
   nameSearch: string = ''
   selectedProductVariants: number[] = [];
@@ -52,7 +59,7 @@ export class EditProductVariantComponent implements OnInit {
     colorValueId: 0,
     productVariantIds: []
   }
-
+ 
   constructor(private route: ActivatedRoute, private router: Router,
     private imageDetailService: ImageDetailService,
     private productService: ProductServiceService,
@@ -71,7 +78,24 @@ export class EditProductVariantComponent implements OnInit {
     await this.fetchImageDetail(this.mediaId)
     this.editProductVariant()
   }
+  inputPage: number = 1;
+  changePage(page: number) {
+    if (page >= 0 && page < this.totalPages) {
+      this.currentPage = page;
+      this.inputPage = page + 1; // Cập nhật giá trị input
+      this.fetchImageDetail(this.mediaId)
 
+    }
+  }
+
+  goToPage(page: number) {
+    const pageIndex = page - 1; // Chuyển đổi thành chỉ mục 0-based
+    if (pageIndex >= 0 && pageIndex < this.totalPages) {
+      this.changePage(pageIndex);
+    } else {
+      this.inputPage = this.currentPage + 1; // Reset nếu nhập sai
+    }
+  }
   async fetchImageDetail(mediaId: number): Promise<void> {
     if (!mediaId) {
       console.log('mediaId error');
@@ -83,7 +107,7 @@ export class EditProductVariantComponent implements OnInit {
       dataMediaInfo: this.getMediaInfo(mediaId).pipe(catchError(() => of(null))),
       dataDetailMedia: this.getDetailMedia(mediaId).pipe(catchError(() => of([]))),
       dataColors: this.getColorNameProduct(this.productId).pipe(catchError(() => of([]))),
-      dataProductVariant: this.getProductVariant(this.nameSearch).pipe(catchError(() => of([])))
+      dataProductVariant: this.getProductVariant(this.nameSearch,this.currentPage,this.pageSize).pipe(catchError(() => of(null)))
 
 
     };
@@ -92,10 +116,15 @@ export class EditProductVariantComponent implements OnInit {
     this.dataMediaInfo = response.dataMediaInfo;
     this.dataDetailMedia = response.dataDetailMedia ?? []
     this.dataColors = response.dataColors;
-    this.dataProductVariant = response.dataProductVariant
+    this.dataProductVariantPage = response.dataProductVariant  
+    this.dataProductVariant = response.dataProductVariant?.content.flat() ?? []
+
+    this.totalPages = response.dataProductVariant?.totalPages ?? 0;
+
+    
 
     console.log("object : ", this.dataDetailMedia)
-   
+
 
 
 
@@ -105,10 +134,11 @@ export class EditProductVariantComponent implements OnInit {
     console.log(this.nameSearch)
     this.fetchImageDetail(this.mediaId)
   }
-  getProductVariant(name: string): Observable<ProductVariantDTO[]> {
-    return this.productService.getProductVariants(name).pipe(
-      map((response: ApiResponse<ProductVariantDTO[]>) => response.data || []),
-      catchError(() => of([]))
+ 
+  getProductVariant(name: string, page: number, size: number): Observable<PageResponse<ProductVariantDTO[]> | null> {
+    return this.productService.getProductVariants(name, page, size).pipe(
+      map((response: ApiResponse<PageResponse<ProductVariantDTO[]>>) => response.data || null),
+      catchError(() => of(null))
     )
   }
 
@@ -150,7 +180,7 @@ export class EditProductVariantComponent implements OnInit {
     console.log('checkedItem', listIdProductVariant)
 
   }
- 
+
   updateProductVariant = () => {
     const sampleProductVariant: ProductVariantModel = {
       sortOrder: 1,

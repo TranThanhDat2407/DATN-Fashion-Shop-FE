@@ -47,6 +47,7 @@ export class ListCouponComponent implements OnInit {
     ).subscribe(keyword => {
       this.searchKeyword = keyword;
       this.loadCoupons();
+
     });
 
     this.loadUsers();
@@ -73,7 +74,7 @@ export class ListCouponComponent implements OnInit {
         response => {
 
           this.coupons = response?.data || { content: [], totalPages: 0, totalElements: 0 };
-
+      console.log(this.coupons);
           // Nếu API trả về page khác pageIndex, cập nhật lại currentPage
           if (response?.data?.number !== pageIndex) {
             this.currentPage = response?.data?.number + 1;

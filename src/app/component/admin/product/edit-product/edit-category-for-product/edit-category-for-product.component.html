@@ -1,0 +1,155 @@
+<!-- Modal Bootstrap -->
+<div class="modal fade show d-block" id="categoryModal" tabindex="-1" role="dialog" aria-labelledby="categoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="categoryModalLabel">Edit Category</h5>
+        <button type="button" (click)="closeModal()"
+                aria-label="Close" class="btn btn-outline-danger"
+                style="margin-left: auto">
+          Close
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Giữ nguyên nội dung cũ -->
+        <div class="item-category-select" style="width: 100%;">
+          <div class="row">
+            <!-- Chọn Category Parent -->
+            <div class="item-category-select  " style=" width:80%;">
+
+              <div class=" row">
+                <!-- Chọn Category Parent -->
+                <div class="col-md-3">
+                  <!-- <label class="form-label">Category Parent</label> -->
+                  <div class="custom-select">
+                    <div class="selected-item" (click)="isOpenCategoryParent = !isOpenCategoryParent">
+                <span *ngIf="selectedCategoryParent">
+                  <img
+                    [src]="selectedCategoryParent.image ? selectedCategoryParent.image : 'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg'"
+                    alt="{{ selectedCategoryParent.name }}" width="30" />
+                  {{ selectedCategoryParent.name }}
+                </span>
+                      <span *ngIf="!selectedCategoryParent" style="width: 100%;">
+                  <img src="https://img.icons8.com/?size=100&id=qJfY9WJ3Qpuk&format=png&color=000000" width="25 "
+                       alt="Default" />
+                  Find Category Child
+                </span>
+                    </div>
+                    <div class="dropdown" *ngIf="isOpenCategoryParent">
+                      <input type="text" [(ngModel)]="searchTextCategoryParent" placeholder="Tìm kiếm category..." />
+                      <ul>
+                        <li *ngFor="let category of filteredCategoriesParent()" (click)="selectCategoryParent(category)">
+                          <img
+                            [src]="category.image ?'http://localhost:8080/uploads/images/categories/' + category.image :'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg'"
+                            alt="{{ category.name }}" width="30" />
+                          {{ category.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <!-- Chọn Category Child -->
+                <div class="col-md-3" *ngIf="categoryChildren && categoryChildren.length > 0">
+                  <!-- <label class="form-label">Category Child</label> -->
+                  <div class="custom-select">
+                    <div class="selected-item" (click)="isOpenCategoryChild = !isOpenCategoryChild">
+                <span *ngIf="selectedCategoryChild">
+                  <img
+                    [src]="selectedCategoryChild.image ? 'http://localhost:8080/uploads/images/categories/'+selectedCategoryChild.image : 'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg'"
+                    alt="{{ selectedCategoryChild.name }}" width="30" />
+                  {{ selectedCategoryChild.name }}
+                </span>
+                      <span *ngIf="!selectedCategoryChild" style="width: 100%;">
+                  <img src="https://img.icons8.com/?size=100&id=qJfY9WJ3Qpuk&format=png&color=000000" width="25"
+                       alt=" " />
+                  Find Category Child
+                </span>
+                    </div>
+                    <div class="dropdown" *ngIf="isOpenCategoryChild">
+                      <input type="text" [(ngModel)]="searchTextCategoryChild" placeholder="Tìm kiếm category..." />
+                      <ul>
+                        <li *ngFor="let category of filteredCategoriesChild()" (click)="selectCategoryChild(category)">
+                          <img
+                            [src]="category.image ? 'http://localhost:8080/uploads/images/categories/'+ category.image :'https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg'"
+                            alt="{{ category.name }}" width="30" />
+                          {{ category.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-md-3" *ngIf="categorySubChildren && categorySubChildren.length > 0">
+                  <!-- <label class="form-label">Category Sub Child</label> -->
+                  <div class="custom-select">
+                    <div class="selected-item" (click)="isOpenCategorySubChild = !isOpenCategorySubChild">
+                <span *ngIf="selectedCategorySubChild">
+                  <img [src]="'http://localhost:8080/uploads/images/categories/'+selectedCategorySubChild.image"
+                       alt="{{ selectedCategorySubChild.name }}" width="30" />
+                  {{ selectedCategorySubChild.name }}
+                </span>
+                      <span *ngIf="!selectedCategorySubChild" style="width: 100%;">
+                  <img src="https://img.icons8.com/?size=100&id=qJfY9WJ3Qpuk&format=png&color=000000" width="25"
+                       alt=" " />
+                  Find Category Child
+                </span>
+                    </div>
+                    <div class="dropdown" *ngIf="isOpenCategorySubChild">
+                      <input type="text" [(ngModel)]="searchTextCategorySubChild" placeholder="Tìm kiếm category..." />
+                      <ul>
+                        <li *ngFor="let category of filteredCategoriesSubChild()" (click)="selectCategorySubChild(category)">
+                          <img [src]="'http://localhost:8080/uploads/images/categories/'+category.image"
+                               alt="{{ category.name }}" width="30" />
+                          {{ category.name }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="selectCategoryToSet !== null" class="col-md-3">
+                  <button class="btn btn-primary" (click)="addCategory(selectCategoryToSet)">Add category</button>
+                </div>
+              </div>
+
+            </div>
+            <!-- Các phần còn lại giữ nguyên -->
+          </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+          <div class="col-md-6 border-end" *ngIf="productDetail">
+            <h3>Product: {{ productDetail.name }}</h3>
+            <img [src]="'http://localhost:8080/uploads/images/products/' + productDetail.variantImage" alt="{{ productDetail.name }}" width="150" />
+
+            <p>Base Price: {{ productDetail.basePrice | currency:'VND':'symbol':'1.0-0' }}</p>
+            <p>Sale Price: {{ productDetail.salePrice | currency:'VND':'symbol':'1.0-0' }}</p>
+          </div>
+
+          <div class="col-md-6 ">
+            <div *ngIf="categoryList.length > 0" class="">
+              <h3>Product belong to categories:</h3>
+              <ul class="category-list">
+                <li *ngFor="let category of categoryList" class="category-item">
+                  <span>{{ category.name }}</span>
+<!--                  Nút xóa category-->
+                  <button class="delete-btn" (click)="removeCategory(category.id)">X</button>
+                </li>
+              </ul>
+            </div>
+            <p *ngIf="categoryList.length === 0" class="no-category">Không có danh mục nào.</p>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+

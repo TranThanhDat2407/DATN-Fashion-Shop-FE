@@ -16,7 +16,16 @@ import {ListCouponComponent} from './coupon/list-coupon/list-coupon.component';
 
 import { ListAttributeComponent } from "./attribute/list-attribute/list-attribute.component";
 import { ListProductComponent } from "./product/list-product/list-product.component";
+import {OrderDetailComponent} from './order/order-detail/order-detail.component';
 import { EditProductVariantComponent } from "./product/edit-product-variant/edit-product-variant.component";
+import { CreateProductComponent } from "./product/create-product/create-product.component";
+import {ShippingComponent} from '../client/checkout/shipping/shipping.component';
+import {
+  EditCategoryForProductComponent
+} from './product/edit-product/edit-category-for-product/edit-category-for-product.component';
+import {ListPromotionComponent} from './promotions/list-promotion/list-promotion.component';
+import {EditPromotionComponent} from './promotions/edit-promotion/edit-promotion.component';
+import {CreatePromotionComponent} from './promotions/create-promotion/create-promotion.component';
 
 export const adminRouter: Routes =[
   {
@@ -61,8 +70,8 @@ export const adminRouter: Routes =[
           component: ListOrderComponent
         },
         {
-          path:'edit_order',
-          component: EditOrderComponent
+          path:'order_detail/:orderId',
+          component: OrderDetailComponent
         },
         {
           path:'edit_attribute',
@@ -81,8 +90,19 @@ export const adminRouter: Routes =[
           component: ListAttributeComponent
         },
         {
+          path:'create_product',
+          component: CreateProductComponent
+        },
+        {
+          path:'create_product/:id',
+          component: CreateProductComponent
+        },
+        {
           path:'edit_product/:id',
-          component: EditProductComponent
+          component: EditProductComponent,
+          children: [
+            { path: 'edit-category-for-product', component: EditCategoryForProductComponent },
+          ],
         },
         {
           path:'edit_productVariant/:id/:productId',
@@ -104,7 +124,18 @@ export const adminRouter: Routes =[
           path:'edit_coupon/:id',
           component: EditCouponComponent
         },
-
+        {
+          path:'create_promotion',
+          component: CreatePromotionComponent
+        },
+        {
+          path:'list_promotions',
+          component: ListPromotionComponent
+        },
+        {
+          path:'edit_promotion/:id',
+          component: EditPromotionComponent
+        },
       ]
   }
 ]

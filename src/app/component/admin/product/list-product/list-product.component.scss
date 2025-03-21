@@ -11,6 +11,10 @@
     font-family: 'Source Sans Pro', sans-serif;
     color: #333;
   }
+  .product-details {
+    background-color: #fff;
+
+  }
   // @media (min-width: 600px) {
   //   body {
   //     padding: 60px 10px;
@@ -28,16 +32,15 @@
     font-size: 20px;
     line-height: 1.5;
   }
-  
+
   .container-list{
     margin: 10px 10px 0px 10px;
-  
   }
   .tabs {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-  
+
     min-width: 700px;
     background: #e5e5e5;
     //   box-shadow: 0 48px 80px -32px rgba(0,0,0,0.3);
@@ -56,7 +59,16 @@
     color: #7f7f7f;
     transition: background 0.1s, color 0.1s;
   }
-  
+  .product-name {
+    display: flex;
+    /* Sử dụng flexbox */
+    justify-content: space-between;
+    /* Căn đều hai đầu */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    height: 7rem;
+    font-size: 3rem;
+  }
   .label:hover {
     background: #d8d8d8;
   }
@@ -86,28 +98,43 @@
       order: 99;
     }
   }
+  @media (max-width: 768px) {
+    .product-details {
+      margin-top: 2rem;
+      /* Thêm khoảng cách trên */
+    }
+
+  }
+  @media (max-width: 1200px) {
+
+
+    .product-details {
+      padding: 1rem;
+    }
+  }
+
   .input:checked + .label + .panel {
     display: block;
   }
-  
-  
+
+
   .select-box {
     flex: 9;
     padding: 10px 10px 0px 10px;
   }
-  
-  
+
+
   .tools-title {
     transition: transform 0.3s ease-in-out;
   }
-  
+
   .tools-title:hover {
     transform: scale(0.9);
     cursor: pointer;
   }
-  
+
   .tools-title {
-  
+
     gap: 7px;
     display: flex;
     align-items: center;
@@ -120,7 +147,7 @@
     font-family: "Kanit", sans-serif;
     margin-top: -5px;
   }
-  
+
   .content-fiter-tools {
     padding-top: 10px;
     gap: 5px;
@@ -128,7 +155,7 @@
     height: auto;
     // background-color: rgb(34, 114, 126);
   }
-  
+
   .tool-elements {
     gap: 10px;
     // background-color: red;
@@ -141,22 +168,22 @@
     scrollbar-width: thin;
     -ms-overflow-style: scrollbar;
   }
-  
+
   .tool-elements::-webkit-scrollbar {
     width: 8px;
     height: 8px;
   }
-  
+
   .tool-elements::-webkit-scrollbar-thumb {
     // background-color: rgba(0, 0, 0, 0.5);
     border-radius: 3px;
-  
+
   }
-  
+
   .tool-elements::-webkit-scrollbar-track {
     background-color: transparent;
   }
-  
+
   .search-product {
     height: 60px;
     display: flex;
@@ -166,51 +193,50 @@
     align-items: center;
     /* Căn giữa theo chiều dọc */
   }
-  
+
   input {
     padding-left: 10px;
     font-family: "Kanit", sans-serif;
-  
+
   }
-  
+
   .search-product input {
     width: 100%;
     height: 70%;
-  
+
     flex: 9;
     border: 2px solid #dadada;
     border-radius: 3px;
-  
-  
+
+
   }
-  
-  
+
+
   select {
     border-radius: 0;
   }
-  
+
   input {
     border-radius: 1px;
     font-family: 600;
     font-family: "Kanit", sans-serif;
-  
+
   }
-  
+
   option {
     border-radius: 1px;
     font-family: 600;
     font-family: "Kanit", sans-serif;
-  
+
   }
-  
+
   .sortBox {
     text-align: end;
-  
+
     margin-left: -50px;
     flex: 1;
     display: flex;
     // flex-direction: column;
     justify-content: end;
-  
+
   }
-  

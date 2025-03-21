@@ -3,7 +3,7 @@
   <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
   <p>Mã đơn hàng: <strong id="orderId">{{ orderId }}</strong></p>
   <p>Chúng tôi sẽ sớm giao hàng đến bạn!</p>
-  <a href="/" class="btn">Tiếp tục mua sắm</a>
+  <a [routerLink]="['/client', currentCurrency, currentLang ]" class="btn">Tiếp tục mua sắm</a>
 </div>
 
 <script>

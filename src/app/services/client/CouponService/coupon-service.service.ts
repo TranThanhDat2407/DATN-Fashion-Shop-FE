@@ -50,11 +50,28 @@ export class CouponService {
     }
       return this.http.get<ApiResponse<any>>(`${this.apiUrl}/search`, { params });
   }
+  updateAutoCouponConfig(
+    type: string,
+    request: FormData
+  ): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(
+      `${this.apiUrl}/generate-coupon?type=${type}`,
+      request
+    );
+  }
 
 
+  createCoupon(type: string, couponData: any, file?: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('type', type);
+    formData.append('request', new Blob([JSON.stringify(couponData)], { type: 'application/json' }));
 
-  // applyCoupon(userId: number, requestBody: { code: string }): Observable<ApiResponse<boolean>> {
-  //   return this.http.post<ApiResponse<boolean>>(`${this.apiUrl}apply?userId=${userId}`, requestBody);
-  // }
+    if (file) {
+      formData.append('image', file);
+    }
+
+    return this.http.post( `${this.apiUrl}/generate-coupon?type=${type}`, formData);
+  }
+
 
 }
