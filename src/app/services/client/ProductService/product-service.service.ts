@@ -139,11 +139,11 @@ export class ProductServiceService {
     return this.http.get<ApiResponse<CategoryParentDTO[]>>(`${this.apiUrl}/${lang}/${productId}/categories/root`)
   }
 
-  getCategoryForProduct(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>>{
+  getCategoryForProduct(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>> {
     return this.http.get<ApiResponse<CategoryParentDTO[]>>(`${this.apiUrl}/${lang}/${productId}/categories`)
   }
 
-  getAllImageProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>>{
+  getAllImageProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>> {
     return this.http.get<ApiResponse<ImagesDetailProductDTO[]>>(`${this.apiUrl}/images/${productId}`)
   }
   getSalePrice(productId: number, colorId: number, sizeId: number): Observable<ApiResponse<VariantsDetailProductDTO>> {
@@ -228,6 +228,18 @@ export class ProductServiceService {
     return this.http.put(`${this.apiUrl}/${productId}`,formData)
   }
 
+
+  insertVariant(productId: number, colorValueId: number, sizeValueId: number, salePrice: number) {
+    const formData = new FormData();
+    formData.append('productId', productId.toString());  // Chuyển số thành chuỗi
+    formData.append('colorValueId', colorValueId.toString());
+    formData.append('sizeValueId', sizeValueId.toString());
+    formData.append('salePrice', salePrice.toString());
+
+
+    return this.http.post(`${this.apiUrl}/insert-variant/${productId}`, formData)
+
+  }
   removeCategoryFromProduct(productId: number, categoryId: number, lang: string = 'en'): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(
       `${this.apiUrl}/remove-category`,
