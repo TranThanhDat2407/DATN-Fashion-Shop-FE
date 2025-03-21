@@ -107,7 +107,7 @@
               </div>
             </ng-container>
 
-          <ng-container *ngIf="header === 'totalPrice' ">
+          <ng-container *ngIf="header === 'totalPrice'">
             {{ (item[header] | currency:'VND':'') }} VNĐ
           </ng-container>
 
@@ -135,14 +135,7 @@
               </div>
             </ng-container>
 
-<!--            <ng-container *ngIf="header === 'button-order'">-->
-<!--              <div class="button-container">-->
-<!--                <button type="button" [routerLink]="[routerLinkString, item.id]"-->
-<!--                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>-->
-<!--                  <button type="button" [routerLink]="[routerLinkStringView, item.id]"-->
-<!--                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">View</button>-->
-<!--              </div>-->
-<!--            </ng-container>-->
+
 
 
           <ng-container *ngIf="header === 'button-order'">

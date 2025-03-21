@@ -29,7 +29,7 @@
     background: linear-gradient(180deg, #393940, #37373d, #303035,#1d1d1d);
 
 }
- 
+
 .statis-item strong {
     font-size: 1.8rem;
     font-weight: 400;
@@ -40,7 +40,7 @@
 }
 .chart-content{
     padding: 7px;
-    
+
     width: 100%;
     height: auto;
     border-radius: 8px;
@@ -73,5 +73,18 @@
 }
 @media (max-width:500px) {
 
-    
+
+}
+
+.color-box {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.table img {
+  object-fit: cover;
 }

@@ -1,100 +1,65 @@
-<div class="container-fluid">
-  <h2 class="text-center my-3">Thống kê doanh thu</h2>
-
-
-  <!-- Hiển thị doanh thu -->
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h5 class="card-title">Doanh thu ngày</h5>
-          <p class="card-text text-success fs-4">{{ dailyRevenue | currency:'VND' }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h5 class="card-title">Doanh thu tháng</h5>
-          <p class="card-text text-primary fs-4">{{ monthlyRevenue | currency:'VND' }}</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card text-center shadow">
-        <div class="card-body">
-          <h5 class="card-title">Doanh thu năm</h5>
-          <p class="card-text text-warning fs-4">{{ yearlyRevenue | currency:'VND' }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="container">
+  <h2>Total likes and ratings statistics</h2>
 
   <!-- Bộ lọc -->
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <label for="date">Chọn ngày:</label>
-      <input id="date" type="date" class="form-control" [(ngModel)]="selectedDate" (change)="fetchRevenueData()">
-    </div>
-    <div class="col-md-4">
-      <label for="month">Chọn tháng:</label>
-      <input id="month" type="month" class="form-control" [(ngModel)]="selectedMonth" (change)="fetchRevenueData()">
-    </div>
-    <div class="col-md-4">
-      <label for="year">Chọn năm:</label>
-      <input id="year" type="number" class="form-control" [(ngModel)]="selectedYear" (change)="fetchRevenueData()">
+  <div class="filter-container">
+    <input type="text" [formControl]="searchForm.controls.searchText" placeholder="Search product..." />
+    <input type="number" [formControl]="searchForm.controls.minStars" placeholder="Minimum number of stars" />
+    <button (click)="resetFilter()">Reset</button>
+  </div>
+
+  <div *ngIf="products.length > 0; else noData">
+    <table class="product-table">
+      <thead>
+      <tr>
+        <th>STT</th>
+        <th (click)="sortData('productVariantId')">
+          ID <span *ngIf="sortColumn === 'productVariantId'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+        <th (click)="sortData('productName')">
+          Product Name <span *ngIf="sortColumn === 'productName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+        <th>Color</th>
+        <th>Image</th>
+        <th>Size</th>
+        <th (click)="sortData('totalPrice')">
+          Price<span *ngIf="sortColumn === 'totalPrice'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+        <th (click)="sortData('totalStart')">
+          Number of stars <span *ngIf="sortColumn === 'totalStart'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+        <th (click)="sortData('totalWishList')">
+          Wishlist number <span *ngIf="sortColumn === 'totalWishList'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let product of products; let i = index"  [routerLink]="['/admin/inventory-statistics']">
+        <td>{{ i + 1 + (currentPage * pageSize) }}</td>
+        <td>{{ product.productVariantId }}</td>
+        <td>{{ product.productName }}</td>
+        <td>{{ product.color }}</td>
+        <td><img [src]="getImageProduct(product.imageUrl)" alt="Product Image" class="product-image" /></td>
+        <td>{{ product.size }}</td>
+        <td>{{ product.totalPrice | currency }}</td>
+        <td>{{ product.totalStart }}</td>
+        <td>{{ product.totalWishList }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 0">Previous page</button>
+      <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next page</button>
     </div>
   </div>
 
-  <!-- Biểu đồ doanh thu -->
-<!--  <div class="card shadow mb-4">-->
-<!--    <div class="card-body">-->
-<!--      <h5 class="card-title text-center">Biểu đồ doanh thu</h5>-->
-<!--      <apx-chart-->
-<!--        *ngIf="revenueChart?.xaxis"-->
-<!--        [series]="revenueChart.series"-->
-<!--        [chart]="revenueChart.chart"-->
-<!--        [xaxis]="revenueChart.xaxis">-->
-<!--      </apx-chart>-->
+  <!-- Phân trang -->
 
-<!--    </div>-->
-<!--  </div>-->
 
-  <!-- Top 10 sản phẩm bán chạy -->
-  <h3 class="text-center my-4">Top 10 sản phẩm bán chạy</h3>
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
-    <tr>
-      <th>#</th>
-      <th>Hình ảnh</th>
-      <th>Tên sản phẩm</th>
-      <th>Màu sắc</th>
-      <th>Kích thước</th>
-      <th>Số lượng bán</th>
-      <th>Tổng doanh thu</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let product of topProducts | paginate: { itemsPerPage: 5, currentPage: currentPage }; let i = index">
-      <td>{{ (currentPage - 1) * 5 + i + 1 }}</td>
-      <td><img [src]="getImageProduct(product.imageUrl)" alt="Hình ảnh" class="img-thumbnail" width="50"></td>
-      <td>{{ product.productName }}</td>
-      <td>
-        <span class="color-box" [ngStyle]="{'background-color': product.color}"></span>
-        {{ product.color }}
-      </td>
-      <td>{{ product.size }}</td>
-      <td>{{ product.totalSold }}</td>
-      <td>{{ product.totalRevenue | currency:'VND' }}</td>
-    </tr>
-    <tr *ngIf="topProducts.length === 0">
-      <td colspan="7" class="text-center text-muted">Không có dữ liệu</td>
-    </tr>
-    </tbody>
-  </table>
-
-  <!-- Nút phân trang -->
-  <div class="d-flex justify-content-center my-3">
-    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
-  </div>
+  <ng-template #noData>
+    <p>No data!</p>
+  </ng-template>
 </div>
+

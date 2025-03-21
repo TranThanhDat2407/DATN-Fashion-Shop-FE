@@ -1,145 +1,105 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import { ChartComponent } from "ng-apexcharts";
-import {CurrencyPipe, NgForOf, NgIf, NgStyle} from '@angular/common';
-import {RevenueService} from '../../../services/admin/RevenueService/revenue.service';
-import {ApiResponse} from '../../../dto/Response/ApiResponse';
-import {PageResponse} from '../../../dto/Response/page-response';
-import { NgxPaginationModule } from 'ngx-pagination';
-
-
-interface TopProduct {
-  productVariantId: number;
-  productName: string;
-  color: string;
-  colorImage: string;
-  size: string;
-  imageUrl: string;
-  totalSold: number;
-  totalRevenue: number;
-}
+import { Component, OnInit } from '@angular/core';
+import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {
+  CountStartAndWishList,
+  InventoryStatistics,
+  RevenueService
+} from '../../../services/admin/RevenueService/revenue.service';
+import { debounceTime } from 'rxjs/operators';
+import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
+import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'app-statistical',
   templateUrl: './statistical.component.html',
-  styleUrls: ['./statistical.component.scss'],
+  standalone: true,
   imports: [
     CurrencyPipe,
-    NgStyle,
-    ChartComponent,
-    FormsModule,
+    ReactiveFormsModule,
     NgIf,
     NgForOf,
-    NgxPaginationModule
+    RouterLink,
+    RouterOutlet
   ],
-  standalone: true
+  styleUrls: ['./statistical.component.scss']
 })
 export class StatisticalComponent implements OnInit {
-  currentPage: number = 1;
-  dailyRevenue!: number;
-  monthlyRevenue!: number;
-  yearlyRevenue!: number;
-  topProducts: TopProduct[] = [];
-  orders: any[] = [];
+  products: CountStartAndWishList[] = [];
+  totalPages: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 10;
+  sortColumn: string = ''; // Cột sắp xếp
+  sortDirection: 'asc' | 'desc' = 'asc'; // Hướng sắp xếp
+  productId?: number;
+  searchForm = new FormGroup({
+    searchText: new FormControl(''),
+    minStars: new FormControl(null)
+  });
 
-  selectedDate = new Date().toISOString().split('T')[0];
-  selectedYear = new Date().getFullYear();
-  selectedMonth = new Date().toISOString().slice(0, 7); // Định dạng YYYY-MM
-
-
-  languageCode = 'vi';
-  page = 0;
-  size = 10;
-
-  revenueChart: any = {
-    series: [{
-      name: 'Doanh thu',
-      data: [0, 0, 0]  // Giá trị mặc định
-    }],
-    chart: {
-      type: 'bar',
-      height: 350
-    },
-    xaxis: {
-      categories: ['Ngày', 'Tháng', 'Năm']
-    }
-  };
-
-  constructor(private revenueService: RevenueService,private cdr: ChangeDetectorRef) {}
+  constructor(private revenueService: RevenueService,private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.fetchRevenueData();
-    this.loadTopProducts();
 
+      this.loadProductStats(0);
+
+
+    this.searchForm.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+      this.applyFilter();
+    });
   }
 
-  fetchRevenueData() {
-    const month = parseInt(this.selectedMonth.split('-')[1], 10);
+  loadProductStats(page: number) {
+    const { searchText, minStars } = this.searchForm.value;
+    const productName = searchText ? searchText.trim() : undefined;
+    const minStarsValue = minStars !== null ? minStars : undefined;
 
-
-    this.revenueService.getDailyRevenue(this.selectedDate).subscribe({
-      next: (response: number) => {
-        console.log("Doanh thu ngày nhận được:", response);
-        this.dailyRevenue = response; // Không còn response.data nữa
-      },
-      error: (err) => console.error('Lỗi khi lấy doanh thu ngày:', err)
-    });
-
-    this.revenueService.getMonthlyRevenue(this.selectedYear, month).subscribe({
-      next: (response: number) => {
-        console.log("Doanh thu tháng nhận được:", response);
-        this.monthlyRevenue = response;
-        this.updateChart();
-      },
-      error: (err) => console.error('Lỗi khi lấy doanh thu tháng:', err)
-    });
-
-    this.revenueService.getYearlyRevenue(this.selectedYear).subscribe({
-      next: (response: number) => {
-        console.log("Doanh thu năm nhận được:", response);
-        this.yearlyRevenue = response;
-      },
-      error: (err) => console.error('Lỗi khi lấy doanh thu năm:', err)
-    });
-
+    this.revenueService.getProductStats(
+      'vi', this.productId, productName, minStarsValue, this.sortColumn, this.sortDirection, page, this.pageSize
+    ).subscribe(response => {
+      this.products = response.data?.content || [];
+      this.totalPages = response.data?.totalPages || 0;
+      this.currentPage = page;
+    }, error => console.error('❌ Lỗi khi tải danh sách sản phẩm:', error));
   }
 
 
-  loadTopProducts() {
-    this.revenueService.getTopSellingProducts(this.languageCode, this.page, this.size).subscribe({
-      next: (response: ApiResponse<PageResponse<TopProduct>>) => {
-        if (response && response.data && response.data.content) {
-          this.topProducts = response.data.content;
-        } else {
-          console.warn('Không có dữ liệu sản phẩm bán chạy');
-          this.topProducts = []; // Gán danh sách rỗng để tránh lỗi
-        }
-      },
-      error: (err) => console.error('Lỗi lấy danh sách sản phẩm bán chạy:', err),
-    });
+
+  nextPage() {
+    if (this.currentPage < this.totalPages - 1) {
+      this.loadProductStats(this.currentPage + 1);
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 0) {
+      this.loadProductStats(this.currentPage - 1);
+    }
+  }
+
+  applyFilter() {
+    this.loadProductStats(0);
+  }
+
+  resetFilter() {
+    this.searchForm.reset();
+    this.sortColumn = '';
+    this.sortDirection = 'asc';
+    this.loadProductStats(0);
+  }
+
+  sortData(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.loadProductStats(0);
   }
 
   getImageProduct(imageUrl: string | null): string {
     return imageUrl ? `http://localhost:8080/uploads/images/products/${imageUrl}` : 'assets/images/default-product.png';
   }
-
-  updateChart() {
-    this.revenueChart = {
-      ...this.revenueChart,
-      series: [{
-        name: 'Doanh thu',
-        data: [
-          this.dailyRevenue || 0,
-          this.monthlyRevenue || 0,
-          this.yearlyRevenue || 0
-        ],
-      }],
-    };
-    this.cdr.detectChanges();
-  }
-
-
-
-
-
 }
+
+

@@ -1,0 +1,112 @@
+<div class="container-fluid mx-auto p-6 bg-white shadow-lg rounded-lg">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800 text-center">📊 Inventory statistics</h2>
+
+
+  <!-- Bộ lọc -->
+  <!-- Bộ lọc -->
+  <div class="row d-flex justify-content-around gap-3">
+    <div class="col-md-4 d-flex justify-content-start">
+      <input
+        type="text"
+        [(ngModel)]="productName"
+        placeholder="🔍 Product Name"
+        class=" form-control w-full max-w-[350px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+        (input)="applyFilter()"
+      />
+    </div>
+
+    <div class="col-md-4 d-flex justify-content-end">
+      <input
+        type="text"
+        [(ngModel)]="color"
+        placeholder="🎨 Color"
+        class=" form-control w-full max-w-[350px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+        (input)="applyFilter()"
+      />
+    </div>
+
+    <div class="col-md-4 d-flex justify-content-start">
+      <input
+        type="text"
+        [(ngModel)]="sizes"
+        placeholder="📏 Size"
+        class="form-control w-full max-w-[350px] p-3 border rounded-lg focus:ring-2 focus:ring-blue-400"
+        (input)="applyFilter()"
+      />
+    </div>
+
+    <div class="col-md-4 d-flex justify-content-end">
+      <button
+        (click)="resetFilter()"
+        class="btn btn-primary w-full max-w-[200px] p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-center">
+        ❌ Reset the filter
+      </button>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Bảng dữ liệu -->
+  <div *ngIf="products.length > 0; else noData" class="overflow-x-auto rounded-lg shadow-md mt-5">
+    <table class="w-full border-collapse border border-gray-300">
+      <thead class="bg-blue-500 text-white">
+      <tr>
+        <th class="border p-3">#</th>
+        <th class="border p-3">ID</th>
+        <th class="border p-3">Product Name</th>
+        <th class="border p-3">Color</th>
+        <th class="border p-3">Image</th>
+        <th class="border p-3">Size</th>
+        <th class="border p-3">Quantity</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let product of products; let i = index" class="hover:bg-gray-100 transition">
+        <td class="border p-3 text-center">{{ i + 1 + (currentPage * pageSize) }}</td>
+        <td class="border p-3 text-center">{{ product.productVariantId }}</td>
+        <td class="border p-3">{{ product.productName }}</td>
+        <td class="border p-3 text-center">{{ product.color }}</td>
+        <td class="border p-3 text-center">
+          <img
+            [src]="getImageProduct(product.imageUrl)"
+            alt="Product Image"
+            class="w-16 h-16 object-cover rounded-lg border"
+          />
+        </td>
+        <td class="border p-3 text-center">{{ product.size }}</td>
+        <td class="border p-3 text-center">{{ product.totalQuantity }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phân trang -->
+<!--  <div class="flex justify-center items-center gap-4 mt-6">-->
+<!--    <button-->
+<!--      (click)="prevPage()"-->
+<!--      [disabled]="currentPage === 0"-->
+<!--      class="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 hover:bg-blue-600 transition">-->
+<!--      ⬅️ Trang trước-->
+<!--    </button>-->
+
+<!--    <span class="text-lg font-semibold">Trang {{ currentPage + 1 }} / {{ totalPages }}</span>-->
+
+<!--    <button-->
+<!--      (click)="nextPage()"-->
+<!--      [disabled]="currentPage >= totalPages - 1"-->
+<!--      class="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 hover:bg-blue-600 transition">-->
+<!--      Trang sau ➡️-->
+<!--    </button>-->
+<!--  </div>-->
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 0">Previous page</button>
+    <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1">Next page</button>
+  </div>
+
+  <ng-template #noData>
+    <p class="text-red-500 text-center mt-6 text-lg">🚫 No data!</p>
+  </ng-template>
+</div>

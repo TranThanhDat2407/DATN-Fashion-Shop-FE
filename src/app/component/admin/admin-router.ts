@@ -24,6 +24,10 @@ import {ShippingComponent} from '../client/checkout/shipping/shipping.component'
 import {
   EditCategoryForProductComponent
 } from './product/edit-product/edit-category-for-product/edit-category-for-product.component';
+import {PaymentComponent} from '../client/checkout/payment/payment.component';
+import {ReviewOrderComponent} from '../client/checkout/review-order/review-order.component';
+import {AuthGuardFn} from '../../guards/auth.guard';
+import {InventoryStatisticsComponent} from './inventory-statistics/inventory-statistics.component';
 
 export const adminRouter: Routes =[
   {
@@ -69,8 +73,10 @@ export const adminRouter: Routes =[
         },
         {
           path:'statistical',
-          component: StatisticalComponent
+          component: StatisticalComponent,
         },
+        { path: 'inventory-statistics',
+          component: InventoryStatisticsComponent },
         {
           path:'order_detail/:orderId',
           component: OrderDetailComponent
