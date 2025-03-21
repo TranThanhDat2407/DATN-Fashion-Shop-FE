@@ -23,6 +23,9 @@ import {ShippingComponent} from '../client/checkout/shipping/shipping.component'
 import {
   EditCategoryForProductComponent
 } from './product/edit-product/edit-category-for-product/edit-category-for-product.component';
+import {ListPromotionComponent} from './promotions/list-promotion/list-promotion.component';
+import {EditPromotionComponent} from './promotions/edit-promotion/edit-promotion.component';
+import {CreatePromotionComponent} from './promotions/create-promotion/create-promotion.component';
 
 export const adminRouter: Routes =[
   {
@@ -121,7 +124,18 @@ export const adminRouter: Routes =[
           path:'edit_coupon/:id',
           component: EditCouponComponent
         },
-
+        {
+          path:'create_promotion',
+          component: CreatePromotionComponent
+        },
+        {
+          path:'list_promotions',
+          component: ListPromotionComponent
+        },
+        {
+          path:'edit_promotion/:id',
+          component: EditPromotionComponent
+        },
       ]
   }
 ]

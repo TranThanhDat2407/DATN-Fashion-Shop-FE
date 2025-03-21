@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import {catchError, forkJoin, map, Observable, of, tap} from 'rxjs';
 import { Product } from '../../../models/Product/product';
 import { ApiResponse } from '../../../dto/Response/ApiResponse';
 import { PageResponse } from '../../../dto/Response/page-response';
@@ -17,6 +17,8 @@ import { WishlistCheckResponse } from '../../../dto/WishlistCheckResponse';
 import { ProductSuggestDTO } from '../../../dto/ProductSuggestDTO';
 import { ProductVariantDTO } from '../../../dto/ProductVariantDTO';
 import { EditProduct } from '../../../component/admin/product/edit-product/edit-product.component';
+import {ProductDetailDTO} from '../../../dto/ProductDetailDTO';
+import {ProductWithImage} from '../../../dto/ProductWithImage';
 
 
 
@@ -218,6 +220,10 @@ export class ProductServiceService {
     return this.http.get<ApiResponse<EditProduct>>(`${this.apiUrl}/edit/${productId}`)
   }
 
+  getProductDetail(productId: number, langCode: string):Observable<ApiResponse<ProductDetailDTO>>{
+    return this.http.get<ApiResponse<ProductDetailDTO>>(`${this.apiUrl}/detail/${langCode}/${productId}`);
+  }
+
   updateProduct(productId : number, formData : FormData ) : Observable<any>{
     return this.http.put(`${this.apiUrl}/${productId}`,formData)
   }
@@ -249,6 +255,31 @@ export class ProductServiceService {
       {
         headers: { 'Accept-Language': lang }
       }
+    );
+  }
+
+  // Hàm lấy danh sách sản phẩm với ảnh
+  getProductsWithImages(productIds: number[]): Observable<ProductWithImage[]> {
+    const requests: Observable<any>[] = productIds.map(productId =>
+      forkJoin({
+        productDetail: this.getProductDetail(productId, 'en'),
+        imageDetails: this.getAllImageProduct(productId)
+      })
+    );
+
+    return forkJoin(requests).pipe(
+      map(responses => {
+        return responses.map(response => {
+          const productDetail = response.productDetail.data;
+          const imageUrl = response.imageDetails.data?.[0]?.mediaUrl || '';
+
+          return {
+            id: productDetail.id,
+            name: productDetail.name,
+            image: imageUrl
+          };
+        });
+      })
     );
   }
 }

@@ -23,6 +23,7 @@
         <hr style="border: 0.2px solid black; margin: 0;">
 
     </div>
+
     <div class="row">
         <div class="col-10">
             <div class="tool-searchs row">
@@ -73,9 +74,6 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
 
 
@@ -86,6 +84,5 @@
         [tableData]="dataFullElementProduct?.content?.flat() || []" [dataPage]="dataFullElementProduct"
         [typeImage]="'products'" [tableHeaders]="header" [routerLinkString]="'/admin/edit_product'"
         [toggleCheckbox]="toggleCheckbox" (pageChanged)="onPageChange($event)">
-
     </app-table>
 </div>
