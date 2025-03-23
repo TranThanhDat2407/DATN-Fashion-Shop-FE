@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { CouponLocalizedDTO } from '../../../dto/coupon/CouponClientDTO';
 import { ApiResponse } from '../../../dto/Response/ApiResponse';
+import {CouponConfigDTO} from '../../../dto/coupon/CouponConfigDTO';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CouponService {
   private couponDTO: CouponLocalizedDTO | null = null;
-
+  private CouponConfigDTO: CouponConfigDTO | null = null;
   private apiUrl = `${environment.apiBaseUrl}/coupons`; // 🔥 Cập nhật đường dẫn API đúng
 
   constructor(private http: HttpClient) { }
@@ -60,18 +61,38 @@ export class CouponService {
     );
   }
 
-
   createCoupon(type: string, couponData: any, file?: File): Observable<any> {
     const formData = new FormData();
-    formData.append('type', type);
+    formData.append('type', type); // Chỉ giữ type ở đây
     formData.append('request', new Blob([JSON.stringify(couponData)], { type: 'application/json' }));
 
     if (file) {
       formData.append('image', file);
     }
 
-    return this.http.post( `${this.apiUrl}/generate-coupon?type=${type}`, formData);
+
+    if (file) {
+      console.log('🔹 File đính kèm:', file.name);
+    }
+
+    return this.http.post(`${this.apiUrl}/generate-coupon`, formData); // Bỏ `?type=${type}`
   }
 
 
+
+  // getCouponConfigs(): Observable<{ [key: string]: CouponConfigDTO }> {
+  //   return this.http.get<{ [key: string]: CouponConfigDTO }>(`${this.apiUrl}/coupon-configs`);
+  // }
+
+
+  resetCoupon(couponKey: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/coupon-configs/${couponKey}`, {}, { responseType: 'text' });
+  }
+
+  getValidCouponConfigs(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/coupon-configs/valid`);  // Đảm bảo API này trỏ đúng đến controller backend
+  }
+
 }
+
+
