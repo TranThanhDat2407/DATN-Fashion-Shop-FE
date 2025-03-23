@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { catchError, map, Observable, of, tap } from 'rxjs';
+import {catchError, forkJoin, map, Observable, of, tap} from 'rxjs';
 import { Product } from '../../../models/Product/product';
 import { ApiResponse } from '../../../dto/Response/ApiResponse';
 import { PageResponse } from '../../../dto/Response/page-response';
@@ -17,6 +17,8 @@ import { WishlistCheckResponse } from '../../../dto/WishlistCheckResponse';
 import { ProductSuggestDTO } from '../../../dto/ProductSuggestDTO';
 import { ProductVariantDTO } from '../../../dto/ProductVariantDTO';
 import { EditProduct } from '../../../component/admin/product/edit-product/edit-product.component';
+import {ProductDetailDTO} from '../../../dto/ProductDetailDTO';
+import {ProductWithImage} from '../../../dto/ProductWithImage';
 
 
 
@@ -37,7 +39,7 @@ export class ProductServiceService {
   getProducts(
     languageCode: string,
     categoryId?: number,
-    isActive: boolean = true,
+    isActive?: boolean,
     name?: string,
     minPrice?: number,
     maxPrice?: number,
@@ -50,13 +52,14 @@ export class ProductServiceService {
     let params = new HttpParams();
 
     // Các tham số bắt buộc
-    params = params.set('isActive', isActive.toString())
+    params = params
       .set('page', page.toString())
       .set('size', size.toString())
       .set('sortBy', sortBy)
       .set('sortDir', sortDir);
 
     // Các tham số tùy chọn (chỉ thêm nếu có giá trị)
+    if (isActive) params = params.set('isActive', isActive.toString());
     if (categoryId !== undefined) params = params.set('categoryId', categoryId.toString());
     if (minPrice !== undefined) params = params.set('minPrice', minPrice.toString());
     if (maxPrice !== undefined) params = params.set('maxPrice', maxPrice.toString());
@@ -66,7 +69,6 @@ export class ProductServiceService {
     return this.http.get<ApiResponse<PageResponse<ProductListDTO[]>>>(`${this.apiUrl}/${languageCode}`, { params });
   }
 
-  
   getProductsAdmin(
     languageCode: string,
     name?: string,
@@ -136,6 +138,11 @@ export class ProductServiceService {
   getCategoryParent(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>> {
     return this.http.get<ApiResponse<CategoryParentDTO[]>>(`${this.apiUrl}/${lang}/${productId}/categories/root`)
   }
+
+  getCategoryForProduct(lang: string, productId: number): Observable<ApiResponse<CategoryParentDTO[]>> {
+    return this.http.get<ApiResponse<CategoryParentDTO[]>>(`${this.apiUrl}/${lang}/${productId}/categories`)
+  }
+
   getAllImageProduct(productId: number): Observable<ApiResponse<ImagesDetailProductDTO[]>> {
     return this.http.get<ApiResponse<ImagesDetailProductDTO[]>>(`${this.apiUrl}/images/${productId}`)
   }
@@ -174,7 +181,7 @@ export class ProductServiceService {
           timestamp: new Date().toISOString(),
           status: 500,
           message: 'Lỗi kết nối đến server',
-          data: { isInWishList: false },
+          data: { isInWishList: false }, // ✅ Nếu lỗi, trả về giá trị mặc định hợp lệ
           errors: null
         });
       })
@@ -213,7 +220,78 @@ export class ProductServiceService {
     return this.http.get<ApiResponse<EditProduct>>(`${this.apiUrl}/edit/${productId}`)
   }
 
+  getProductDetail(productId: number, langCode: string):Observable<ApiResponse<ProductDetailDTO>>{
+    return this.http.get<ApiResponse<ProductDetailDTO>>(`${this.apiUrl}/detail/${langCode}/${productId}`);
+  }
+
   updateProduct(productId : number, formData : FormData ) : Observable<any>{
     return this.http.put(`${this.apiUrl}/${productId}`,formData)
+  }
+
+
+  insertVariant(productId: number, colorValueId: number, sizeValueId: number, salePrice: number) {
+    const formData = new FormData();
+    formData.append('productId', productId.toString());  // Chuyển số thành chuỗi
+    formData.append('colorValueId', colorValueId.toString());
+    formData.append('sizeValueId', sizeValueId.toString());
+    formData.append('salePrice', salePrice.toString());
+
+
+    return this.http.post(`${this.apiUrl}/insert-variant/${productId}`, formData)
+
+  }
+  removeCategoryFromProduct(productId: number, categoryId: number, lang: string = 'en'): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(
+      `${this.apiUrl}/remove-category`,
+      {
+        params: {
+          productId: productId.toString(),
+          categoryId: categoryId.toString(),
+        },
+        headers: {
+          'Accept-Language': lang
+        }
+      }
+    );
+  }
+
+  setCategoryForProduct(productId: number, categoryId: number, lang: string = 'en'): Observable<ApiResponse<any>> {
+    const requestBody = {
+      id: productId,
+      categoryId: categoryId
+    };
+
+    return this.http.post<ApiResponse<any>>(
+      `${this.apiUrl}/set-categories`,
+      requestBody,
+      {
+        headers: { 'Accept-Language': lang }
+      }
+    );
+  }
+
+  // Hàm lấy danh sách sản phẩm với ảnh
+  getProductsWithImages(productIds: number[]): Observable<ProductWithImage[]> {
+    const requests: Observable<any>[] = productIds.map(productId =>
+      forkJoin({
+        productDetail: this.getProductDetail(productId, 'en'),
+        imageDetails: this.getAllImageProduct(productId)
+      })
+    );
+
+    return forkJoin(requests).pipe(
+      map(responses => {
+        return responses.map(response => {
+          const productDetail = response.productDetail.data;
+          const imageUrl = response.imageDetails.data?.[0]?.mediaUrl || '';
+
+          return {
+            id: productDetail.id,
+            name: productDetail.name,
+            image: imageUrl
+          };
+        });
+      })
+    );
   }
 }

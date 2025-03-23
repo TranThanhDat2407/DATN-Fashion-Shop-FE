@@ -22,7 +22,6 @@ export class TableComponent implements OnInit {
   constructor(
     private productService: ProductServiceService,
     private detailProductService: DetailProductService,
-    private navigationService: NavigationService
   ) {
   }
 
@@ -31,7 +30,8 @@ export class TableComponent implements OnInit {
   @Input() eventClickDelete: (item: any) => void = () => {
   };
   @Input() routerLinkString: string = '';
-
+  @Input() eventClickAdd: (item: any) => void = () => {
+  };
 
   @Input() activeRouterLinkString: string = '';
   @Input() changePage: boolean = true;

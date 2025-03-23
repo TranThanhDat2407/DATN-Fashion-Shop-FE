@@ -135,6 +135,20 @@
               </div>
             </ng-container>
 
+            <ng-container *ngIf="header === 'add'">
+              <div class="button-container">
+                <button type="button" (click)="eventClickAdd(item.id)" class="button-89"
+                        role="button">Add</button>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="header === 'delete'">
+              <div class="button-container">
+                <button type="button" (click)="eventClickDelete(item.id)" class="button-89"
+                        role="button">Remove</button>
+              </div>
+            </ng-container>
+
             <ng-container *ngIf="header === 'button-order'">
               <div class="button-container">
                 <button type="button" [routerLink]="[routerLinkString, item.id]"
