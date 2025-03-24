@@ -9,11 +9,7 @@ import { ColorDTO } from "../../../../models/colorDTO";
 import { Currency } from "../../../../models/Currency";
 import { SizeDTO } from "../../../../models/sizeDTO";
 import { NavigationService } from "../../../../services/Navigation/navigation.service";
-<<<<<<< HEAD
-import {ActivatedRoute, Router, RouterLink, RouterOutlet} from "@angular/router";
-=======
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
->>>>>>> 709e5027046f5304fcf48c3eac8963edf27f81ab
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { ProductServiceService } from "../../../../services/client/ProductService/product-service.service";
 import { DetailProductService } from "../../../../services/client/DetailProductService/detail-product-service.service";
 import { ReviewServiceService } from "../../../../services/client/ReviewService/review-service.service";
@@ -25,7 +21,7 @@ import { CartService } from "../../../../services/client/CartService/cart.servic
 import { CookieService } from "ngx-cookie-service";
 import { MatDialog } from "@angular/material/dialog";
 import { SessionService } from "../../../../services/session/session.service";
-import { catchError, firstValueFrom, forkJoin, lastValueFrom, map, Observable, of, take, timeout } from "rxjs";
+import { catchError, firstValueFrom, forkJoin, map, Observable, of, take } from "rxjs";
 import { CommonModule, Location, NgClass } from "@angular/common";
 import { TranslateModule } from "@ngx-translate/core";
 import { NavBottomComponent } from "../../../client/nav-bottom/nav-bottom.component";
@@ -46,12 +42,9 @@ import { LanguageDTO } from "../../../../dto/LanguageDTO";
 import { TranslationDTO } from "../../../../dto/CategoryAdminDTO";
 import { LanguagesService } from "../../../../services/LanguagesService/languages.service";
 import { CreateProduct, TranslationCreate } from "../create-product/create-product.component";
-<<<<<<< HEAD
-=======
 import { Color } from "../../../../models/AttributeValue/Color";
 import { AttributeService } from "../../../../services/admin/AttributeService/attribute.service";
 import { Size } from "../../../../models/AttributeValue/Size";
->>>>>>> 709e5027046f5304fcf48c3eac8963edf27f81ab
 import {EditCategoryForProductComponent} from './edit-category-for-product/edit-category-for-product.component';
 
 
@@ -103,12 +96,6 @@ export class EditProductComponent implements OnInit {
   dataCategoryParent: CategoryParentDTO[] = [];
   dataDetailsProduct: DetailProductDTO | null = null;
   dataQuantityInStock: InventoryDTO[] = []
-  dataPageColor: PageResponse<Color[]> | null = null
-  dataColorPoup: Color[] = []
-
-  dataPageSize: PageResponse<Size[]> | null = null
-  dataSizePoup: Size[] = []
-
   reviewAverage: number = 0
   reviewTotal: number = 0
   salePrice: number = 0;
@@ -128,10 +115,9 @@ export class EditProductComponent implements OnInit {
   dataEditProduct: EditProduct | null = null
   dataEditProductDetail: Translation[] = []
   basePrice: number = 0
-  isActive: boolean = false
+isActive : boolean =false
   isWishlist: boolean = false;
   sessionId?: string;
-
 
   dataLanguage: LanguageDTO[] = []
   translationsName: TranslationDTO[] = this.dataLanguage.map(lang => ({

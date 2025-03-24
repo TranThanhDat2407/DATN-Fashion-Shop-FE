@@ -18,7 +18,7 @@
     <tbody>
     <tr *ngFor="let order of orders" class="table-light" (click)="viewDetail(order.orderId)">
       <td>{{ order.orderId }}</td>
-      <td>{{ order.user?.email || 'Guess'  }}</td>
+      <td>{{ order.user?.email || 'Guest'  }}</td>
       <td>
         <img [src]="'http://localhost:8080/uploads/images/products/' + order.productImage"
              alt="{{ order.productName }}" class="rounded shadow-sm"

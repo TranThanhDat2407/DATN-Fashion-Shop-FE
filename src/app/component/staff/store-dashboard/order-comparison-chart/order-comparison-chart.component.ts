@@ -80,7 +80,7 @@ export class OrderComparisonChartComponent implements OnChanges {
 
     // Cập nhật dữ liệu biểu đồ
     this.barChartData = structuredClone({
-      labels: ['customer Order', 'Guess Order'],
+      labels: ['Customer Orders', 'Guest Orders'],
       datasets: [
         {
           ...this.barChartData.datasets[0],
