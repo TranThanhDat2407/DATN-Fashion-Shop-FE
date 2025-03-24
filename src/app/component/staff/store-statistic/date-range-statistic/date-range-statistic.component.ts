@@ -120,7 +120,7 @@ export class DateRangeStatisticComponent implements OnInit {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = `revenue_${startDateStr}_to_${endDateStr}.xls`;
+        a.download = `revenue_data.xlsx`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

@@ -58,7 +58,7 @@ export class DailyChartComponent implements OnInit {
     label: `${i + 1}`
   }));
 
-  years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+  years = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i);
 
 
 
@@ -107,7 +107,7 @@ export class DailyChartComponent implements OnInit {
 
         const a = document.createElement('a');
         a.href = url;
-        a.download = `revenue_${this.month}/${this.year}.xls`;
+        a.download = `revenue_data.xlsx`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);

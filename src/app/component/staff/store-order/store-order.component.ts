@@ -9,6 +9,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {ZXingScannerModule} from '@zxing/ngx-scanner';
 import {BarcodeFormat} from '@zxing/browser';
+import {StoreService} from '../../../services/client/store/store.service';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class StoreOrderComponent implements OnInit {
 
 
   constructor(private orderService: OrderService,
+              private storeService: StoreService,
               private route: ActivatedRoute,
               private router: Router,
               private http: HttpClient,
@@ -157,6 +159,39 @@ export class StoreOrderComponent implements OnInit {
       this.qrErrorMessage = '❌ Mã QR không hợp lệ. Vui lòng thử lại!';
       console.error('Lỗi: Không tìm thấy orderId trong mã QR');
     }
+  }
+
+  exportToExcel(): void {
+    const filters = this.filterForm.value;
+    let startDate = this.filterForm.value.startDate ?
+      `${this.filterForm.value.startDate}T00:00:00` : undefined;
+    let endDate = this.filterForm.value.endDate ?
+      `${this.filterForm.value.endDate}T23:59:59` : undefined;
+
+    // Gọi API xuất Excel với các tham số lọc
+    this.storeService.exportStoreOrdersToExcel(
+      this.storeId,
+      filters.orderStatusId,
+      filters.paymentMethodId,
+      filters.shippingMethodId,
+      filters.customerId,
+      filters.staffId,
+      startDate,
+      endDate,
+      'vi' // Ngôn ngữ mặc định
+    ).subscribe(
+      (blob: Blob) => {
+        // Tạo link tải file
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'store_orders.xlsx'; // Tên file tải về
+        link.click();
+      },
+      (error) => {
+        console.error('Lỗi khi xuất Excel:', error);
+        alert('Lỗi khi xuất Excel. Vui lòng thử lại sau.');
+      }
+    );
   }
 
   protected readonly BarcodeFormat = BarcodeFormat;

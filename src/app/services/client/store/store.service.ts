@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {environment} from '../../../../environments/environment';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ApiResponse} from '../../../dto/Response/ApiResponse';
 import {WishlistDTO} from '../../../dto/wishlistDTO';
@@ -15,6 +15,7 @@ import {StoreOrderComparisonResponse} from '../../../dto/store/StoreOrderCompari
 import {StorePaymentComparisonResponse} from '../../../dto/store/StorePaymentComparisonResponse';
 import {StoreRevenueByDateRangeResponse} from '../../../dto/store/StoreRevenueByDateRangeResponse';
 import {StoreDailyRevenueResponse} from '../../../dto/store/StoreDailyRevenueResponse';
+import {StoreOrderResponse} from '../../../dto/store/StoreOrderResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -255,4 +256,36 @@ export class StoreService {
       responseType: 'blob',
     });
   }
+
+  exportStoreOrdersToExcel(
+    storeId: number,
+    orderStatusId?: number,
+    paymentMethodId?: number,
+    shippingMethodId?: number,
+    customerId?: number,
+    staffId?: number,
+    startDate?: string,
+    endDate?: string,
+    languageCode: string = 'vi'
+  ): Observable<Blob> {
+    // Tạo các tham số query
+    let params = new HttpParams()
+      .set('storeId', storeId.toString())
+      .set('languageCode', languageCode);
+
+    if (orderStatusId) params = params.set('orderStatusId', orderStatusId.toString());
+    if (paymentMethodId) params = params.set('paymentMethodId', paymentMethodId.toString());
+    if (shippingMethodId) params = params.set('shippingMethodId', shippingMethodId.toString());
+    if (customerId) params = params.set('customerId', customerId.toString());
+    if (staffId) params = params.set('staffId', staffId.toString());
+    if (startDate) params = params.set('startDate', startDate);
+    if (endDate) params = params.set('endDate', endDate);
+
+    // Gọi API và trả về file Excel dưới dạng Blob
+    return this.http.get(`${this.apiUrl}/export-store-orders`, {
+      params: params,
+      responseType: 'blob'
+    });
+  }
+
 }

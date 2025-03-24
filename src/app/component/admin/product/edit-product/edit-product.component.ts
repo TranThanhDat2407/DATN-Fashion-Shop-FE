@@ -9,7 +9,7 @@ import { ColorDTO } from "../../../../models/colorDTO";
 import { Currency } from "../../../../models/Currency";
 import { SizeDTO } from "../../../../models/sizeDTO";
 import { NavigationService } from "../../../../services/Navigation/navigation.service";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import {ActivatedRoute, Router, RouterLink, RouterOutlet} from "@angular/router";
 import { ProductServiceService } from "../../../../services/client/ProductService/product-service.service";
 import { DetailProductService } from "../../../../services/client/DetailProductService/detail-product-service.service";
 import { ReviewServiceService } from "../../../../services/client/ReviewService/review-service.service";
@@ -42,7 +42,7 @@ import { LanguageDTO } from "../../../../dto/LanguageDTO";
 import { TranslationDTO } from "../../../../dto/CategoryAdminDTO";
 import { LanguagesService } from "../../../../services/LanguagesService/languages.service";
 import { CreateProduct, TranslationCreate } from "../create-product/create-product.component";
-import { Translation } from "../create-product/create-product.component";
+// import { Translation } from "../create-product/create-product.component";
 import {EditCategoryForProductComponent} from './edit-category-for-product/edit-category-for-product.component';
 
 
