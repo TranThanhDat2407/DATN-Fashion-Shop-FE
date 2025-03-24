@@ -1,0 +1,102 @@
+<app-header-admin [title_header]="'Create Product'" [routerLinkString]="'/admin/list_promotions'" />
+
+
+<div class="row">
+  <div class="col-md-3 border-end">
+    <h3>Insert Promotion</h3>
+    <form (ngSubmit)="createPromotion()" #promotionForm="ngForm">
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <input type="text" id="description" name="description" class="form-control" [(ngModel)]="promotion.description" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="discountRate" class="form-label">Discount Rate (%)</label>
+        <input type="number" id="discountRate" name="discountRate" class="form-control" [(ngModel)]="promotion.discountRate" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input type="datetime-local" id="startDate" name="startDate" class="form-control" [(ngModel)]="promotion.startDate" required />
+      </div>
+
+      <div class="mb-3">
+        <label for="endDate" class="form-label">End Date</label>
+        <input type="datetime-local" id="endDate" name="endDate" class="form-control" [(ngModel)]="promotion.endDate" required />
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-4 border-end">
+    <h3>Add Product to promotion</h3>
+      <div class="table-wrapper">
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>IMAGE</th>
+            <th>NAME</th>
+            <th>REMOVE</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- Loop through your productList array -->
+          <tr *ngFor="let product of productList">
+            <td>{{ product.id }}</td>
+            <td><img [src]="'http://localhost:8080/uploads/images/products/'+product.image" alt="Product Image" class="img-fluid"></td>
+            <td>{{ product.name }}</td>
+            <td><button class="remove-btn" (click)="removeProduct(product.id)">Remove</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <div class="col-md-5">
+    <div class="d-flex flex-column">
+      <div class="row">
+        <div class="col-10">
+          <div class="tool-searchs row">
+            <div class="col-9" style="margin-left: 4px;">
+              <div class="search-product">
+                <input type="text" placeholder=" Search Product Name" [(ngModel)]="nameSearch"
+                       name="nameSearch" (ngModelChange)="onNameChange($event)">
+                <!--   -->
+              </div>
+            </div>
+            <div class="col-1">
+              <div class="search-product">
+                <!-- <input type="text" style="font-size: 10px;" [(ngModel)]="parentId" name="parentId" disabled
+placeholder="Parent Id"> -->
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="container-list">
+      <app-table *ngIf="dataFullElementProduct" [currentPage]="page"
+                 [tableData]="dataFullElementProduct?.content?.flat() || []" [dataPage]="dataFullElementProduct"
+                 [typeImage]="'products'" [tableHeaders]="header"
+                 [eventClickAdd]="addProduct"
+                 (pageChanged)="onPageChange($event)">
+
+      </app-table>
+    </div>
+  </div>
+</div>
+
+<div class="container border-top">
+  <div class="row">
+    <div class="col-md-9"></div>
+    <div class="col-md-3">
+      <button class="btn btn-outline-primary mt-2" (click)="createPromotion()" [disabled]="promotionForm.invalid">SAVE PROMOTION</button>
+    </div>
+  </div>
+</div>
