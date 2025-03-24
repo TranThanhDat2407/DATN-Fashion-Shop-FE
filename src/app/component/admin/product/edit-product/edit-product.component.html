@@ -105,7 +105,6 @@
           <!--        product-color-->
           <div class="color-picker" style="background-color: #f5f5f5;">
             <dl class="color-picker-list">
-
               <div (click)="openPopupColor()" class="color-item-add">
                 <img src="https://img.icons8.com/?size=100&id=24717&format=png&color=000000" width="35" alt="Add Icon">
               </div>
@@ -150,14 +149,7 @@
                         </div>
                       </label>
                     </div>
-
- 
-
-                    
                   </div>
-
-
-
                   <div class="pagination">
                     <button (click)="prevPageColor()" [disabled]="pageNoCorlor === 0">Prev</button>
                     <span> {{ pageNoCorlor + 1 }} / {{ totalPagesColor }}</span>
@@ -197,14 +189,30 @@
                 </dt>
               </div>
 
-              
+
             </dl>
 
 
-            <p class="color-selected">Color {{selectedColorName}} </p>
+            <p class="color-selected" *ngIf="salePrice !== 0">
+              <span>
+                Sale Price for {{ selectedColorName }}
+                <input style="border-radius: 30px;" type="text" [(ngModel)]="salePrice"
+                >
+              </span>
+
+              <span class="coupon-pesent" *ngFor="let discount of discounts; let i = index"
+                (click)="toggleDiscount(discount, i)" [class.disabled]="selectedDiscountIndex === i">
+                {{ discount }}%
+              </span>
+              <span class="mt-4">
+                <button   (click)="updateSalePrice(productId ?? 0, selectedColorId, salePrice)" class="btn-save w-25">Save Sale Price</button>
+              </span>
+            </p>
+
+
           </div>
           <!--            product-size-->
-          <div class="size-picker" style="background-color: #f5f5f5;">
+          <div class="size-picker mt-2" style="background-color: #f5f5f5;">
             <dl class="size-picker-list">
               <!-- Popup chọn kích thước -->
               <div class="popup-size" *ngIf="isOpenSize">
@@ -236,7 +244,7 @@
 
 
 
-                   
+
                       <!-- Nhãn hoạt động như một div -->
                       <label class="d-flex w-100 align-items-center" [for]="'size-' + i"
                         style="cursor: pointer; padding: 5px;">
@@ -307,7 +315,7 @@
                       [disabled]="isSizeOutOfStock(size)">
 
                     <!-- Nhãn hiển thị kích thước -->
-                   <label class="btn btn-outline-dark size-label" [for]="'product-size-picker' + size.valueName"
+                    <label class="btn btn-outline-dark size-label" [for]="'product-size-picker' + size.valueName"
                       [ngClass]="{'ignore': isSizeOutOfStock(size)}">
                       {{ size.valueName }}
                     </label>
@@ -320,9 +328,11 @@
             </dl>
             <!-- <p class="size-selected">Size {{selectedSizeName}}</p> -->
           </div>
-          <div class="size-picker" style="background-color: #f5f5f5;" 
-          *ngIf="selectedColors.length !==0 "
-          >
+          <div class="size-picker" style="background-color: #f5f5f5;" *ngIf="selectedColors.length !==0 && selectedSizes.length !==0
+                  || selectedColors.length ===0 && selectedSizes.length !==0
+                   || selectedColors.length !==0 && selectedSizes.length ===0
+          
+          ">
             <button class="btn-save" (click)="insertVariantsColor()">SAVE COLOR & SIZE</button>
           </div>
 

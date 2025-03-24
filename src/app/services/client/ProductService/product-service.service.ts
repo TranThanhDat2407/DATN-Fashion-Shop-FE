@@ -294,4 +294,8 @@ export class ProductServiceService {
       })
     );
   }
+  updateSalePrice(productId : number, colorId: number , salePrice :number): Observable<any>{
+    return this.http.put(`${this.apiUrl}/product-variant/${productId}/${colorId}?salePrice=${salePrice}`,{})
+  } 
+
 }

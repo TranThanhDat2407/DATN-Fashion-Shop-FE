@@ -524,10 +524,28 @@ button {
   border-color: #ddd;
   font-weight: normal;
 }
+.coupon-pesent.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
 
 
-
-
+.coupon-pesent {
+  margin-left: 4px;
+  border: 1px solid black;
+  padding: 3px;
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), 
+              -4px -4px 10px rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out;
+}
+.coupon-pesent:hover{
+  cursor: pointer;
+  border: 1px solid rgb(8, 185, 16);
+  box-shadow: 4px 4px 10px rgba(8, 185, 16), 
+              -4px -4px 10px rgba(255, 255, 255, 0.8);
+}
 
 /* Tùy chỉnh viền */
 .accordion-item {
