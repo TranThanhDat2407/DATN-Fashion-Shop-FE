@@ -27,6 +27,7 @@ import {
 import {ListPromotionComponent} from './promotions/list-promotion/list-promotion.component';
 import {EditPromotionComponent} from './promotions/edit-promotion/edit-promotion.component';
 import {CreatePromotionComponent} from './promotions/create-promotion/create-promotion.component';
+import { InventoryComponent } from "./inventory/inventory/inventory.component";
 import {InventoryStatisticsComponent} from './inventory-statistics/inventory-statistics.component';
 
 
@@ -36,6 +37,11 @@ export const adminRouter: Routes =[
     component: AdminComponent,
     children:
       [
+
+        {
+          path:'inventory',
+          component: InventoryComponent
+        },
         {
           path:'list_user',
           component: ListUserComponent

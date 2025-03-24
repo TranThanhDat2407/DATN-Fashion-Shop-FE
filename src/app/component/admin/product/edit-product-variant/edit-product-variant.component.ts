@@ -192,6 +192,10 @@ export class EditProductVariantComponent implements OnInit {
       this.toastService.error('Model Height  is emty', "Error", { timeOut: 3000 });
       return;
     }
+    if (sampleProductVariant.modelHeight > 200) {
+      this.toastService.error('Model Height  <=  200 ', "Error", { timeOut: 3000 });
+      return;
+    }
     if (!this.selectedColorId || this.selectedColorId < 1) {
       this.toastService.error('Please choose color!', "Error", { timeOut: 3000 });
       return;

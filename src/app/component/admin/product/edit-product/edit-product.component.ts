@@ -10,6 +10,7 @@ import { Currency } from "../../../../models/Currency";
 import { SizeDTO } from "../../../../models/sizeDTO";
 import { NavigationService } from "../../../../services/Navigation/navigation.service";
 import {ActivatedRoute, Router, RouterLink, RouterOutlet} from "@angular/router";
+
 import { ProductServiceService } from "../../../../services/client/ProductService/product-service.service";
 import { DetailProductService } from "../../../../services/client/DetailProductService/detail-product-service.service";
 import { ReviewServiceService } from "../../../../services/client/ReviewService/review-service.service";
@@ -21,7 +22,7 @@ import { CartService } from "../../../../services/client/CartService/cart.servic
 import { CookieService } from "ngx-cookie-service";
 import { MatDialog } from "@angular/material/dialog";
 import { SessionService } from "../../../../services/session/session.service";
-import {catchError, firstValueFrom, forkJoin, lastValueFrom, map, Observable, of, take} from "rxjs";
+import { catchError, firstValueFrom, forkJoin, lastValueFrom, map, Observable, of, take, timeout } from "rxjs";
 import { CommonModule, Location, NgClass } from "@angular/common";
 import { TranslateModule } from "@ngx-translate/core";
 import { NavBottomComponent } from "../../../client/nav-bottom/nav-bottom.component";
@@ -45,7 +46,7 @@ import { CreateProduct, TranslationCreate } from "../create-product/create-produ
 import { Color } from "../../../../models/AttributeValue/Color";
 import { AttributeService } from "../../../../services/admin/AttributeService/attribute.service";
 import { Size } from "../../../../models/AttributeValue/Size";
-import {EditCategoryForProductComponent} from './edit-category-for-product/edit-category-for-product.component';
+import { EditCategoryForProductComponent } from './edit-category-for-product/edit-category-for-product.component';
 
 
 interface Translation {
@@ -96,6 +97,12 @@ export class EditProductComponent implements OnInit {
   dataCategoryParent: CategoryParentDTO[] = [];
   dataDetailsProduct: DetailProductDTO | null = null;
   dataQuantityInStock: InventoryDTO[] = []
+  dataPageColor: PageResponse<Color[]> | null = null
+  dataColorPoup: Color[] = []
+
+  dataPageSize: PageResponse<Size[]> | null = null
+  dataSizePoup: Size[] = []
+
   reviewAverage: number = 0
   reviewTotal: number = 0
   salePrice: number = 0;
@@ -115,9 +122,10 @@ export class EditProductComponent implements OnInit {
   dataEditProduct: EditProduct | null = null
   dataEditProductDetail: Translation[] = []
   basePrice: number = 0
-isActive : boolean =false
+  isActive: boolean = false
   isWishlist: boolean = false;
   sessionId?: string;
+
 
   dataLanguage: LanguageDTO[] = []
   translationsName: TranslationDTO[] = this.dataLanguage.map(lang => ({
@@ -196,6 +204,7 @@ isActive : boolean =false
   }
 
   async ngOnInit(): Promise<void> {
+
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
     this.getIdsFromProductRouter();
@@ -272,13 +281,14 @@ isActive : boolean =false
       try {
         for (const color of this.selectedColors) {
           for (const size of this.selectedSizes) {
-            if(!this.validationInsertVariantColor()) return
-            if(!this.validationInsertVariantSize()) return
+            if (!this.validationInsertVariantColor()) return
+            if (!this.validationInsertVariantSize()) return
             await lastValueFrom(this.productService.insertVariant(this.productId ?? 0, color.id, size.id, this.basePrice));
           }
         }
         this.toastService.success('Add Varaint Product Successfully', 'Succsess', { timeOut: 3000 })
         this.resetFormColor();
+        this.resetFormSize();
       } catch (error) {
         this.toastService.error('Add Variant Product Error', 'Error', { timeOut: 3000 });
         console.error('Lỗi khi thêm biến thể', error);
@@ -288,7 +298,7 @@ isActive : boolean =false
         if (this.dataColors.length !== 0) {
           for (const color of this.dataColors) {
             for (const size of this.selectedSizes) {
-            if(!this.validationInsertVariantSize()) return
+              if (!this.validationInsertVariantSize()) return
               await lastValueFrom(this.productService.insertVariant(this.productId ?? 0, color.id, size.id, this.basePrice));
             }
           }
@@ -307,7 +317,7 @@ isActive : boolean =false
         if (this.dataSizes.length !== 0) {
           for (const size of this.dataSizes) {
             for (const color of this.selectedColors) {
-            if(!this.validationInsertVariantColor()) return
+              if (!this.validationInsertVariantColor()) return
               await lastValueFrom(this.productService.insertVariant(this.productId ?? 0, color.id, size.id, this.basePrice));
             }
           }
@@ -325,6 +335,43 @@ isActive : boolean =false
       this.toastService.error('Please select size and color', 'Error', { timeOut: 3000 });
     }
 
+  }
+  discounts: number[] = [10, 20, 30, 40, 50];
+  selectedDiscountIndex: number | null = null;
+  originalPrice: number = 0;
+
+  toggleDiscount(discount: number, index: number) {
+    if (this.originalPrice === 0) {
+      this.originalPrice = this.salePrice;
+    }
+
+    if (this.selectedDiscountIndex === index) {
+      this.salePrice = this.originalPrice;
+      this.selectedDiscountIndex = null;
+    } else {
+      // Nếu chọn nút khác, cập nhật giá và disable nút đó
+      this.salePrice = this.originalPrice - (this.originalPrice * (discount / 100));
+      this.selectedDiscountIndex = index;
+    }
+  }
+
+  updateSalePrice(productId: number, colorId: number, salePrice: number) {
+    if(salePrice > this.basePrice){
+      this.toastService.error('Error', 'Sale Price must be less than Base Price', { timeOut: 3000 });
+      return ;
+    }
+    this.productService.updateSalePrice(productId, colorId, salePrice).subscribe({
+      next: response => {
+        this.toastService.success('Success', 'Updated sale price successfully!', { timeOut: 3000 });
+        this.selectedDiscountIndex = null;
+
+        console.log("run updateSalePrice ")
+      },
+      error: error => {
+        this.toastService.error('Error', 'Failed to update sale price!', { timeOut: 3000 });
+        console.error('Update Sale Price Error:', error);
+      }
+    });
   }
 
 
@@ -383,6 +430,7 @@ isActive : boolean =false
     const response = await firstValueFrom(
       forkJoin({
         allImagesProduct: this.getAllImagesProduct(productId).pipe(catchError(() => of([]))),
+        salePrice: this.getSalePrice(this.productId ?? 0, this.colorId ?? 0, this.selectedSizeId).pipe(catchError(() => of(0))),
         dataSizes: this.getSizeProduct(productId).pipe(catchError(() => of([]))),
         dataColors: this.getColorNameProduct(productId).pipe(catchError(() => of([]))),
         dataDetailsProduct: this.getDetailsProduct('en', productId).pipe(catchError(() => of(null))),
@@ -399,6 +447,7 @@ isActive : boolean =false
 
     this.dataImagesProduct = response.allImagesProduct;
     this.dataSizes = response.dataSizes;
+    this.salePrice = response.salePrice;
     this.dataColors = response.dataColors;
     this.reviewTotal = response.reviewTotal;
     this.dataDetailsProduct = response.dataDetailsProduct

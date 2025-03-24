@@ -16,6 +16,7 @@ import {StorePaymentComparisonResponse} from '../../../dto/store/StorePaymentCom
 import {StoreRevenueByDateRangeResponse} from '../../../dto/store/StoreRevenueByDateRangeResponse';
 import {StoreDailyRevenueResponse} from '../../../dto/store/StoreDailyRevenueResponse';
 import {StoreOrderResponse} from '../../../dto/store/StoreOrderResponse';
+import { Store } from '../../../models/Store/Store';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +71,29 @@ export class StoreService {
     return this.http.get<ApiResponse<StoreDetailDTO>>(`${this.apiUrl}/${storeId}`);
   }
 
+  getStore(
+    name?: string, 
+    city?: string, 
+    page: number = 0, 
+    size: number = 10, 
+    userLat?: number, 
+    userLon?: number
+  ): Observable<ApiResponse<PageResponse<Store[]>>> {
+    let params = `?page=${page}&size=${size}`;
+  
+    if (name) {
+      params += `&name=${encodeURIComponent(name)}`;
+    }
+    if (city) {
+      params += `&city=${encodeURIComponent(city)}`;
+    }
+    if (userLat !== undefined && userLon !== undefined) {
+      params += `&userLat=${userLat}&userLon=${userLon}`;
+    }
+  
+    return this.http.get<ApiResponse<PageResponse<Store[]>>>(`${this.apiUrl}/search${params}`);
+  }
+  
 
   getStoresStock(
     pageNo: number,
