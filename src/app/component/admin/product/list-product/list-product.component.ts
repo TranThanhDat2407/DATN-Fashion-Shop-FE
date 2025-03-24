@@ -41,7 +41,6 @@ export class ListProductComponent implements OnInit {
   nameSearch: string = ''
   debounceTimerName: any;
 
-
   async ngOnInit(): Promise<void> {
     await this.fetchProductList()
   }

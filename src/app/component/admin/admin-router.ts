@@ -23,6 +23,7 @@ import {ShippingComponent} from '../client/checkout/shipping/shipping.component'
 import {
   EditCategoryForProductComponent
 } from './product/edit-product/edit-category-for-product/edit-category-for-product.component';
+import { InventoryComponent } from "./inventory/inventory/inventory.component";
 
 export const adminRouter: Routes =[
   {
@@ -30,6 +31,11 @@ export const adminRouter: Routes =[
     component: AdminComponent,
     children:
       [
+        
+        {
+          path:'inventory',
+          component: InventoryComponent
+        },
         {
           path:'list_user',
           component: ListUserComponent
