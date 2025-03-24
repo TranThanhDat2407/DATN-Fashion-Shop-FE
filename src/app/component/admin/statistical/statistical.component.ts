@@ -6,7 +6,7 @@ import {
   RevenueService
 } from '../../../services/admin/RevenueService/revenue.service';
 import { debounceTime } from 'rxjs/operators';
-import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
+import {CurrencyPipe, DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
 
 @Component({
@@ -19,7 +19,8 @@ import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
     NgIf,
     NgForOf,
     RouterLink,
-    RouterOutlet
+    RouterOutlet,
+    DecimalPipe
   ],
   styleUrls: ['./statistical.component.scss']
 })

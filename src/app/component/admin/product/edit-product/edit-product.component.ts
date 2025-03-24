@@ -9,7 +9,11 @@ import { ColorDTO } from "../../../../models/colorDTO";
 import { Currency } from "../../../../models/Currency";
 import { SizeDTO } from "../../../../models/sizeDTO";
 import { NavigationService } from "../../../../services/Navigation/navigation.service";
+<<<<<<< HEAD
 import {ActivatedRoute, Router, RouterLink, RouterOutlet} from "@angular/router";
+=======
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from "@angular/router";
+>>>>>>> 709e5027046f5304fcf48c3eac8963edf27f81ab
 import { ProductServiceService } from "../../../../services/client/ProductService/product-service.service";
 import { DetailProductService } from "../../../../services/client/DetailProductService/detail-product-service.service";
 import { ReviewServiceService } from "../../../../services/client/ReviewService/review-service.service";
@@ -21,7 +25,7 @@ import { CartService } from "../../../../services/client/CartService/cart.servic
 import { CookieService } from "ngx-cookie-service";
 import { MatDialog } from "@angular/material/dialog";
 import { SessionService } from "../../../../services/session/session.service";
-import { catchError, firstValueFrom, forkJoin, map, Observable, of, take } from "rxjs";
+import { catchError, firstValueFrom, forkJoin, lastValueFrom, map, Observable, of, take, timeout } from "rxjs";
 import { CommonModule, Location, NgClass } from "@angular/common";
 import { TranslateModule } from "@ngx-translate/core";
 import { NavBottomComponent } from "../../../client/nav-bottom/nav-bottom.component";
@@ -42,6 +46,12 @@ import { LanguageDTO } from "../../../../dto/LanguageDTO";
 import { TranslationDTO } from "../../../../dto/CategoryAdminDTO";
 import { LanguagesService } from "../../../../services/LanguagesService/languages.service";
 import { CreateProduct, TranslationCreate } from "../create-product/create-product.component";
+<<<<<<< HEAD
+=======
+import { Color } from "../../../../models/AttributeValue/Color";
+import { AttributeService } from "../../../../services/admin/AttributeService/attribute.service";
+import { Size } from "../../../../models/AttributeValue/Size";
+>>>>>>> 709e5027046f5304fcf48c3eac8963edf27f81ab
 import {EditCategoryForProductComponent} from './edit-category-for-product/edit-category-for-product.component';
 
 
@@ -93,6 +103,12 @@ export class EditProductComponent implements OnInit {
   dataCategoryParent: CategoryParentDTO[] = [];
   dataDetailsProduct: DetailProductDTO | null = null;
   dataQuantityInStock: InventoryDTO[] = []
+  dataPageColor: PageResponse<Color[]> | null = null
+  dataColorPoup: Color[] = []
+
+  dataPageSize: PageResponse<Size[]> | null = null
+  dataSizePoup: Size[] = []
+
   reviewAverage: number = 0
   reviewTotal: number = 0
   salePrice: number = 0;
@@ -112,9 +128,10 @@ export class EditProductComponent implements OnInit {
   dataEditProduct: EditProduct | null = null
   dataEditProductDetail: Translation[] = []
   basePrice: number = 0
-isActive : boolean =false
+  isActive: boolean = false
   isWishlist: boolean = false;
   sessionId?: string;
+
 
   dataLanguage: LanguageDTO[] = []
   translationsName: TranslationDTO[] = this.dataLanguage.map(lang => ({
@@ -124,7 +141,7 @@ isActive : boolean =false
 
   translationsDescription: TranslationDTO[] = this.dataLanguage.map(lang => ({
     languageCode: lang.code,
-    name: 'sstrrtg'
+    name: ''
   }));
   translationsMaterial: TranslationDTO[] = this.dataLanguage.map(lang => ({
     languageCode: lang.code,
@@ -136,6 +153,38 @@ isActive : boolean =false
   }));
 
   cart: CreateCartDTO = { productVariantId: 0, quantity: 0 };
+
+  pageColor: number = 0
+  sizeColor: number = 10
+  sortByColor: string = 'id'
+  sortDirColor: string = 'desc'
+  nameColor: string = ''
+  pageNoCorlor: number = 0;
+  totalPagesColor: number = 0;
+  searchColor: string = ''
+  selectedColors: Color[] = [];
+
+  pageSize: number = 0
+  sizeSize: number = 10
+  sortBySize: string = 'id'
+  sortDirSize: string = 'desc'
+  nameSize: string = ''
+  pageNoSize: number = 0
+  totalPagesSize: number = 0;
+  searchSize: string = ''
+  selectedSizes: Size[] = [];
+
+
+
+
+
+
+
+
+
+
+
+
 
   constructor(
     private router: Router,
@@ -152,7 +201,8 @@ isActive : boolean =false
     private sessionService: SessionService,
     private diaLog: MatDialog,
     private toastService: ToastrService,
-    private languagesService: LanguagesService
+    private languagesService: LanguagesService,
+    private attributeService: AttributeService
 
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
@@ -203,8 +253,134 @@ isActive : boolean =false
     });
   }
 
+  validationInsertVariantColor(): boolean {
+    if (this.dataColors.length !== 0) {
+      for (const colorSelect of this.selectedColors) {
+        for (const color of this.dataColors) {
+          if (colorSelect.valueName === color.valueName) {
+            this.toastService.error(`Already have name color ${color.valueName} !`, 'Error', { timeOut: 3000 });
+            return false;
+          }
+        }
+      }
+    }
+    return true
+  }
+  validationInsertVariantSize(): boolean {
+    if (this.dataSizes.length !== 0) {
+      for (const sizeSelect of this.selectedSizes) {
+        for (const size of this.dataSizes) {
+          if (sizeSelect.valueName === size.valueName) {
+            this.toastService.error(`Already have name size ${size.valueName} !`, 'Error', { timeOut: 3000 });
+            return false;
+          }
+        }
+      }
+    }
+    return true
+  }
 
 
+  async insertVariantsColor() {
+    if (this.selectedColors.length !== 0 && this.selectedSizes.length !== 0) {
+      try {
+        for (const color of this.selectedColors) {
+          for (const size of this.selectedSizes) {
+            if(!this.validationInsertVariantColor()) return
+            if(!this.validationInsertVariantSize()) return
+            await lastValueFrom(this.productService.insertVariant(this.productId ?? 0, color.id, size.id, this.basePrice));
+          }
+        }
+        this.toastService.success('Add Varaint Product Successfully', 'Succsess', { timeOut: 3000 })
+        this.resetFormColor();
+      } catch (error) {
+        this.toastService.error('Add Variant Product Error', 'Error', { timeOut: 3000 });
+        console.error('Lỗi khi thêm biến thể', error);
+      }
+    } else if (this.selectedColors.length === 0 && this.selectedSizes.length !== 0) { // trường hợp thêm size , ko thêm color
+      try {
+        if (this.dataColors.length !== 0) {
+          for (const color of this.dataColors) {
+            for (const size of this.selectedSizes) {
+            if(!this.validationInsertVariantSize()) return
+              await lastValueFrom(this.productService.insertVariant(this.productId ?? 0, color.id, size.id, this.basePrice));
+            }
+          }
+          this.toastService.success('Add Size Product Successfully', 'Succsess', { timeOut: 3000 })
+          this.resetFormSize();
+        } else {
+          this.toastService.error('No color yet so cannot add size!', 'Error', { timeOut: 3000 });
+          return;
+        }
+      } catch (error) {
+        this.toastService.error('Add Variant Product Error', 'Error', { timeOut: 3000 });
+        console.error('Lỗi khi thêm biến thể', error);
+      }
+    } else if (this.selectedColors.length !== 0 && this.selectedSizes.length === 0) { // trường hợp thêm color , ko thêm size
+      try {
+        if (this.dataSizes.length !== 0) {
+          for (const size of this.dataSizes) {
+            for (const color of this.selectedColors) {
+            if(!this.validationInsertVariantColor()) return
+              await lastValueFrom(this.productService.insertVariant(this.productId ?? 0, color.id, size.id, this.basePrice));
+            }
+          }
+          this.toastService.success('Add Varaint Color Successfully', 'Succsess', { timeOut: 3000 })
+          this.resetFormColor();
+        } else {
+          this.toastService.error('No size yet so cannot add color!', 'Error', { timeOut: 3000 });
+          return;
+        }
+      } catch (error) {
+        this.toastService.error('Add Variant Product Error', 'Error', { timeOut: 3000 });
+        console.error('Lỗi khi thêm biến thể', error);
+      }
+    } else {
+      this.toastService.error('Please select size and color', 'Error', { timeOut: 3000 });
+    }
+
+  }
+
+
+  resetFormColor() {
+    this.selectedColors = []
+    this.productService.getColorNameProduct(this.productId ?? 0).subscribe((response) => {
+      this.dataColors = response.data
+    });
+  }
+  resetFormSize() {
+    this.selectedSizes = []
+    this.productService.getSizeProduct(this.productId ?? 0).subscribe((response) => {
+      this.dataSizes = response.data
+    });
+  }
+  get isColorSelected() {
+    return (color: Color) => this.selectedColors?.some(c => c.id === color.id) ?? false;
+  }
+  get isSizeSelected() {
+    return (size: Size) => this.selectedSizes?.some(s => s.id === size.id) ?? false;
+  }
+
+
+  isOpenColor = false;
+  openPopupColor() {
+
+    this.isOpenColor = true;
+  }
+
+  closePopupColor() {
+    this.isOpenColor = false;
+  }
+
+
+  isOpenSize = false;
+  openPopupSize() {
+    this.isOpenSize = true;
+  }
+
+  closePopupSize() {
+    this.isOpenSize = false;
+  }
   loadProductId() {
     this.routerActi.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
@@ -228,8 +404,9 @@ isActive : boolean =false
         dataVideoProduct: this.getVideosProduct(productId).pipe(catchError(() => of([]))),
         dataReviewDetailProduct: this.getReviewDetailProduct(productId, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of([]))),
         dataLanguage: this.getLanguages().pipe(catchError(() => of([]))),
-        dataEditProduct: this.editProduct(productId).pipe(catchError(() => of(null)))
-
+        dataEditProduct: this.editProduct(productId).pipe(catchError(() => of(null))),
+        dataAllColor: this.getColors(this.pageColor, this.sizeColor, this.sortByColor, this.sortDirColor, this.nameColor).pipe(catchError(() => of(null))),
+        dataAllSize: this.getSizes(this.pageSize, this.sizeSize, this.sortBySize, this.sortDirSize, this.nameSize).pipe(catchError(() => of(null))),
 
       })
     );
@@ -245,6 +422,15 @@ isActive : boolean =false
     this.dataEditProduct = response.dataEditProduct
     this.dataEditProductDetail = response.dataEditProduct?.translations.flat() ?? []
     this.convertDataEdit()
+    this.dataPageColor = response.dataAllColor
+    this.dataPageSize = response.dataAllSize
+
+
+    this.dataColorPoup = response.dataAllColor?.content.flat() ?? []
+    this.totalPagesColor = response.dataAllColor?.totalPages ?? 0;
+
+    this.dataSizePoup = response.dataAllSize?.content.flat() ?? []
+    this.totalPagesSize = response.dataAllSize?.totalPages ?? 0;
 
     if (this.dataImagesProduct?.length) {
       this.colorImage = this.dataImagesProduct.find(img => img.colorId);
@@ -266,9 +452,113 @@ isActive : boolean =false
       this.sizeId = this.dataSizes[0].id;
     }
 
+  }
 
 
 
+  toggleColorSelection(color: Color, event: any) {
+    if (event.target.checked) {
+      if (!this.selectedColors.some(c => c.id === color.id)) {
+        this.selectedColors.push(color);
+      }
+    } else {
+      this.selectedColors = this.selectedColors.filter(c => c.id !== color.id);
+    }
+
+    // console.log("Danh sách màu đã chọn:", this.selectedColors);
+  }
+
+
+  toggleSizeSelection(size: Size, event: any) {
+    if (event.target.checked) {
+      if (!this.selectedSizes.some(s => s.id === size.id)) {
+        this.selectedSizes.push(size);
+      }
+    } else {
+      this.selectedSizes = this.selectedSizes.filter(s => s.id !== size.id);
+    }
+
+    // console.log("Danh sách màu đã chọn:", this.selectedSizes);
+  }
+  removeColor(colorId: number) {
+    this.selectedColors = this.selectedColors.filter(color => color.id !== colorId);
+  }
+
+  loadColors() {
+    this.attributeService.getColors(this.pageNoCorlor, this.sizeColor, this.sortByColor, this.sortDirColor, this.searchColor).subscribe((response) => {
+      this.dataColorPoup = response.data.content.flat();
+      this.totalPagesColor = response.data.totalPages;
+    });
+  }
+  loadSizes() {
+    this.attributeService.getSizes(this.pageNoSize, this.sizeSize, this.sortBySize, this.sortDirSize, this.searchSize).subscribe((response) => {
+      this.dataSizePoup = response.data.content.flat();
+      this.totalPagesSize = response.data.totalPages;
+    });
+  }
+
+
+  filterColors() {
+    this.loadColors();
+  }
+  filterSizes() {
+    this.loadSizes()
+  }
+
+
+  prevPageColor() {
+    if (this.pageNoCorlor > 0) {
+      this.pageNoCorlor--;
+      this.loadColors()
+    }
+  }
+  nextPageColor() {
+    if (this.pageNoCorlor < this.totalPagesColor - 1) {
+      this.pageNoCorlor++;
+      this.loadColors()
+
+
+    }
+  }
+
+  prevPageSize() {
+    if (this.pageNoSize > 0) {
+      this.pageNoSize--;
+      this.loadSizes()
+
+    }
+  }
+  nextPageSize() {
+    if (this.pageNoSize < this.totalPagesSize - 1) {
+      this.pageNoSize++;
+      this.loadSizes();
+    }
+  }
+
+
+  getSizes(
+    page: number,
+    size: number,
+    sortBy: string,
+    sortDir: string,
+    name: string
+  ): Observable<PageResponse<Size[]> | null> {
+    return this.attributeService.getSizes(page, size, sortBy, sortDir, name).pipe(
+      map((response: ApiResponse<PageResponse<Size[]>>) => response.data),
+      catchError(() => of(null))
+    )
+  }
+  getColors(
+    page: number,
+    size: number,
+    sortBy: string,
+    sortDir: string,
+    name: string
+  ): Observable<PageResponse<Color[]> | null> {
+    return this.attributeService.getColors(page, size, sortBy, sortDir, name).pipe(
+      map((response: ApiResponse<PageResponse<Color[]>>) => response.data),
+      catchError(() => of(null))
+    )
   }
 
   editProduct(productId: number): Observable<EditProduct | null> {
@@ -316,7 +606,7 @@ isActive : boolean =false
 
     console.log("Product Data: ", product);
 
-    this.productService.updateProduct(this.productId ?? 0,formData).subscribe(
+    this.productService.updateProduct(this.productId ?? 0, formData).subscribe(
       {
         next: response => {
           this.toastService.success('Success', 'Product updated successfully!', { timeOut: 3000 });

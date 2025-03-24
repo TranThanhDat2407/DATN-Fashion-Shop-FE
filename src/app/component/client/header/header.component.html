@@ -20,8 +20,9 @@
     </ul>
     <!-- Icons -->
     <div class="d-flex align-items-center">
+
       <div class="dropdown">
-        <button class="btn notif-btn position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn notif-btn position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="true">
           <i [ngClass]="{
           'text-black': !isHome || isSearchActive
           }" class="bi bi-bell"
@@ -50,8 +51,8 @@
       </div>
       <!-- Dropdown Menu -->
       <div class="dropdown">
-        <button class="head-icon head-icon-global btn mx-2 dropdown-toggle no-focus no-caret" type="button"
-          data-bs-toggle="dropdown" aria-expanded="false">
+        <button style="z-index: 100" class="head-icon head-icon-global btn mx-2 dropdown-toggle no-focus no-caret" type="button"
+          data-bs-toggle="dropdown" aria-expanded="true">
           <i [ngClass]="{
           'text-black': !isHome || isSearchActive
           }" class="bi bi-globe"></i>

@@ -67,14 +67,30 @@ export class ListOrderComponent implements OnInit {
   }
 
   async fetchOrdersList(): Promise<void> {
-    const response = await firstValueFrom(
-      this.getFilteredOrders().pipe(catchError(() => of(null)))
+    try {
+      const response = await firstValueFrom(
+        this.getFilteredOrders().pipe(
+          catchError((error) => {
+            console.error('Lỗi khi gọi API:', error);
+            return of(null);
+          })
+        )
+      );
 
-    );
-    this.dataOrders = response;
-    console.log('Dữ liệu trả về sau khi lọc:', response);
-    this.cdr.detectChanges();
+      if (response && response.data) {
+        this.dataOrders = response.data;
+      } else {
+        this.dataOrders = null;
+      }
+
+      console.log('📌 Dữ liệu trả về sau khi lọc:', this.dataOrders);
+      this.cdr.detectChanges();
+    } catch (error) {
+      console.error('Lỗi khi tải danh sách đơn hàng:', error);
+    }
   }
+
+
 
   private formatDate(date: string | undefined, isStartDate: boolean): string | undefined {
     return date ? `${date}T${isStartDate ? '00:00:00' : '23:59:59'}` : undefined;
@@ -99,10 +115,13 @@ export class ListOrderComponent implements OnInit {
         this.sortDirection
       )
       .pipe(
-        map((response) => response.data),
-        catchError(() => of(null))
+        catchError((error) => {
+          console.error("Lỗi khi lấy dữ liệu đơn hàng:", error);
+          return of(null);
+        })
       );
   }
+
 
   toggleCheckboxOrder(item: any): void {
     item.checked = !item.checked;

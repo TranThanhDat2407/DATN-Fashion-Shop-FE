@@ -124,11 +124,13 @@
         <h4>Update Status Orders</h4>
         <p class="underline">Update order status, if order has been paid successfully.</p>
         <select class="action-buttons" id="orderStatus" [(ngModel)]="orderDetails.orderStatus"
-                (change)="updateOrderStatus(orderDetails.orderStatus)">
+                (change)="updateOrderStatus(orderDetails.orderStatus)"
+                [disabled]="isOrderDone()">
           <option *ngFor="let status of getFilteredOrderStatuses()" [value]="status">
             {{ status }}
           </option>
         </select>
+
       </div>
     </div>
 

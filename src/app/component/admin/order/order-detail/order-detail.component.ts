@@ -110,6 +110,9 @@ export class OrderDetailComponent implements OnInit, OnChanges, AfterViewInit {
     );
   }
 
+  isOrderDone(): boolean {
+    return this.orderDetails?.orderStatus === 'DONE';
+  }
 
   getFilteredOrderStatuses(): string[] {
     if (this.orderDetails?.paymentStatus === 'UNPAID') {

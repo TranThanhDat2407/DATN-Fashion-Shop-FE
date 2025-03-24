@@ -1,6 +1,27 @@
 <div class="container">
-  <h2>Total likes and ratings statistics</h2>
+  <!--      <div class="col-12 col-md-12 col-lg-12 ">-->
+  <!--        <div class="chart-container mt-3">-->
+  <!--&lt;!&ndash;          <span class="fw-bold mb-2 ">Bộ lọc</span>&ndash;&gt;-->
+  <!--          <div class="d-flex justify-content-between w-100">-->
+  <!--            <div class="w-25">-->
+  <!--              <label for="date" class="fw-bold">Select date:</label>-->
+  <!--              <input id="date" type="date" class="form-control" [(ngModel)]="selectedDate" (change)="fetchDailyRevenue()">-->
+  <!--            </div>-->
+  <!--            <div class="w-25">-->
+  <!--              <label for="month" class="fw-bold">Select month:</label>-->
+  <!--              <input id="month" type="month" class="form-control" [(ngModel)]="selectedMonth" (change)="fetchMonthlyRevenue()">-->
+  <!--            </div>-->
+  <!--            <div class="w-25">-->
+  <!--              <label for="year" class="fw-bold">Select year</label>-->
+  <!--              <input id="year" type="number" min="2000" max="2100" class="form-control" [(ngModel)]="selectedYear" (change)="fetchYearlyRevenue()">-->
+  <!--            </div>-->
+  <!--          </div>-->
+  <!--        </div>-->
+  <!--      </div>-->
 
+
+
+  <h2>Total likes and ratings statistics</h2>
   <!-- Bộ lọc -->
   <div class="filter-container">
     <input type="text" [formControl]="searchForm.controls.searchText" placeholder="Search product..." />
@@ -21,7 +42,7 @@
         </th>
         <th>Color</th>
         <th>Image</th>
-        <th>Size</th>
+
         <th (click)="sortData('totalPrice')">
           Price<span *ngIf="sortColumn === 'totalPrice'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
         </th>
@@ -34,14 +55,14 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let product of products; let i = index"  [routerLink]="['/admin/inventory-statistics']">
+<!--      [routerLink]="['/admin/inventory-statistics']"-->
+      <tr *ngFor="let product of products; let i = index" >
         <td>{{ i + 1 + (currentPage * pageSize) }}</td>
         <td>{{ product.productVariantId }}</td>
         <td>{{ product.productName }}</td>
         <td>{{ product.color }}</td>
         <td><img [src]="getImageProduct(product.imageUrl)" alt="Product Image" class="product-image" /></td>
-        <td>{{ product.size }}</td>
-        <td>{{ product.totalPrice | currency }}</td>
+        <td>{{ product.totalPrice | number}} VNĐ</td>
         <td>{{ product.totalStart }}</td>
         <td>{{ product.totalWishList }}</td>
       </tr>

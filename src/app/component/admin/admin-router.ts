@@ -24,10 +24,16 @@ import {ShippingComponent} from '../client/checkout/shipping/shipping.component'
 import {
   EditCategoryForProductComponent
 } from './product/edit-product/edit-category-for-product/edit-category-for-product.component';
+<<<<<<< HEAD
 import {PaymentComponent} from '../client/checkout/payment/payment.component';
 import {ReviewOrderComponent} from '../client/checkout/review-order/review-order.component';
 import {AuthGuardFn} from '../../guards/auth.guard';
 import {InventoryStatisticsComponent} from './inventory-statistics/inventory-statistics.component';
+=======
+import {ListPromotionComponent} from './promotions/list-promotion/list-promotion.component';
+import {EditPromotionComponent} from './promotions/edit-promotion/edit-promotion.component';
+import {CreatePromotionComponent} from './promotions/create-promotion/create-promotion.component';
+>>>>>>> 709e5027046f5304fcf48c3eac8963edf27f81ab
 
 export const adminRouter: Routes =[
   {
@@ -132,7 +138,18 @@ export const adminRouter: Routes =[
           path:'edit_coupon/:id',
           component: EditCouponComponent
         },
-
+        {
+          path:'create_promotion',
+          component: CreatePromotionComponent
+        },
+        {
+          path:'list_promotions',
+          component: ListPromotionComponent
+        },
+        {
+          path:'edit_promotion/:id',
+          component: EditPromotionComponent
+        },
       ]
   }
 ]
