@@ -70,11 +70,11 @@
 
         </div>
         <div class="footer-menu">
-            <button class="menu-item" [class.activeRespone]="isActive">
+            <button class="menu-item" [class.activeRespone]="isActive" (click)="logout()">
                 <img src="../../../../assets/images/turn-off.png" width="18" alt="">
-                <span class="menu-mini">Sign Up
-                Log Out
-            </span>
+                <span class="menu-mini">
+                  Log Out
+                </span>
             </button>
 
         </div>

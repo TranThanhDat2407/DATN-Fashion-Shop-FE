@@ -89,14 +89,9 @@ export class LoginAdminComponent implements OnInit{
 
     // Điều hướng đến trang trước đó
     this.userId = this.tokenService.getUserId();
-    this.sessionId = this.sessionService.getSession()
-    this.cartService.mergeCart(this.userId ?? 0, this.sessionId ?? '').subscribe(response => {
-      console.log(`response : `, response)
-    })
 
-    const sessionId = this.sessionService.getSession();
-    this.cartService.getQtyCart(this.userId ?? 0 , sessionId ?? '');
     const returnUrl = this.authService.getReturnUrl();
+    console.log(returnUrl);
     this.router.navigateByUrl(returnUrl);
   }
 
@@ -109,35 +104,40 @@ export class LoginAdminComponent implements OnInit{
     };
 
     this.userService.login(loginDTO).subscribe({
-      next: (data) => {
-        console.log('Login Response:', data);
-        // this.cartService.mergeCart(data.)
-        this.onLoginSuccess()
-        const token = data.data.token;
-        const roles = data.data.roles;
+      next: (response:any) => {
+        console.log('Login Response:', response);
+
+        const token = response.token;
+        const roles: string[] = response.roles ?? [];
 
         if (!token) {
-          this.errorMessage = 'Không nhận được token từ server.';
+          this.errorMessage = 'You need administrator rights to access';
+          this.toastr.error(this.errorMessage, 'ERROR', { timeOut: 2000 });
           return;
         }
 
-        // Lưu token vào service quản lý token
-        this.tokenService.setToken(token);
+        const isAdmin = roles.includes('ROLE_ADMIN');
 
-        // Điều hướng dựa vào vai trò người dùng
-        // if (roles.includes('ROLE_ADMIN')) {
-        //   this.router.navigate(['/admin']);
-        // } else {
-        //   this.router.navigate(['/']);
-        // }
+        if (isAdmin) {
+          // ✅ Lưu token trước khi xử lý
+          this.tokenService.setToken(token);
+
+          // ✅ Gọi các thao tác sau khi login thành công
+          this.onLoginSuccess();
+        } else {
+          // ❌ Không phải admin → không đăng nhập
+          this.tokenService.removeToken();
+          this.toastr.error('You need administrator rights to access', 'Access Denied', { timeOut: 2000 });
+        }
       },
       error: (error: any) => {
         console.error('Login error:', error);
-        this.errorMessage = error.message || 'Email hoặc mật khẩu không đúng';
-        this.toastr.error('Email hoặc mật khẩu không đúng', 'ERROR', { timeOut: 2000 })
+        this.toastr.error('Incorrect email or password', 'ERROR', { timeOut: 2000 });
       }
     });
   }
+
+
 
   togglePassword() {
     this.showPassword = !this.showPassword;
