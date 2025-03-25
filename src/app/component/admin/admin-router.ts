@@ -29,6 +29,7 @@ import {EditPromotionComponent} from './promotions/edit-promotion/edit-promotion
 import {CreatePromotionComponent} from './promotions/create-promotion/create-promotion.component';
 import { InventoryComponent } from "./inventory/inventory/inventory.component";
 import {InventoryStatisticsComponent} from './inventory-statistics/inventory-statistics.component';
+import {AdminGuard, AdminGuardFn} from '../../guards/admin.guard';
 
 
 export const adminRouter: Routes =[
@@ -40,11 +41,13 @@ export const adminRouter: Routes =[
 
         {
           path:'inventory',
-          component: InventoryComponent
+          component: InventoryComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'list_user',
-          component: ListUserComponent
+          component: ListUserComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'login_admin',
@@ -52,65 +55,82 @@ export const adminRouter: Routes =[
         },
         {
           path:'edit_user',
-          component: EditUserComponent
+          component: EditUserComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_user/:id',
-          component: EditUserComponent
+          component: EditUserComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'list_category',
-          component: ListCategoryComponent
+          component: ListCategoryComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_category/:id',
-          component: EditCategoryComponent
+          component: EditCategoryComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_category',
-          component: EditCategoryComponent
+          component: EditCategoryComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'dashboard',
-          component: DashboardComponent
+          component: DashboardComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'list_order',
-          component: ListOrderComponent
+          component: ListOrderComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'statistical',
           component: StatisticalComponent,
+          canActivate: [AdminGuardFn]
         },
         { path: 'inventory-statistics',
-          component: InventoryStatisticsComponent },
+          component: InventoryStatisticsComponent,
+          canActivate: [AdminGuardFn]
+        },
         {
           path:'order_detail/:orderId',
-          component: OrderDetailComponent
+          component: OrderDetailComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_attribute',
-          component: EditAttributeComponent
+          component: EditAttributeComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_attribute/size/:id',
-          component: EditAttributeComponent
+          component: EditAttributeComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_attribute/color/:id',
-          component: EditAttributeComponent
+          component: EditAttributeComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'list_attribute',
-          component: ListAttributeComponent
+          component: ListAttributeComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'create_product',
-          component: CreateProductComponent
+          component: CreateProductComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'create_product/:id',
-          component: CreateProductComponent
+          component: CreateProductComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_product/:id',
@@ -118,38 +138,47 @@ export const adminRouter: Routes =[
           children: [
             { path: 'edit-category-for-product', component: EditCategoryForProductComponent },
           ],
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_productVariant/:id/:productId',
-          component: EditProductVariantComponent
+          component: EditProductVariantComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'list_product',
-          component: ListProductComponent
+          component: ListProductComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_coupon',
-          component: EditCouponComponent
+          component: EditCouponComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'list_coupon',
-          component: ListCouponComponent
+          component: ListCouponComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_coupon/:id',
-          component: EditCouponComponent
+          component: EditCouponComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'create_promotion',
-          component: CreatePromotionComponent
+          component: CreatePromotionComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'list_promotions',
-          component: ListPromotionComponent
+          component: ListPromotionComponent,
+          canActivate: [AdminGuardFn]
         },
         {
           path:'edit_promotion/:id',
-          component: EditPromotionComponent
+          component: EditPromotionComponent,
+          canActivate: [AdminGuardFn]
         },
       ]
   }
