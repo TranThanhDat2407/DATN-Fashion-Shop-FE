@@ -3,7 +3,17 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule, NgClass } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { NavigationService } from '../../../services/Navigation/navigation.service';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+
+interface OrderResponse {
+  orderId: number;
+  userId: number;
+  couponId?: number | null;
+  shippingMethodName: string;
+  shippingAddress: string;
+  paymentMethodName: string;
+  orderStatusName: string;
+}
 
 @Component({
   selector: 'app-payment-success',
@@ -19,6 +29,8 @@ export class PaymentSuccessComponent implements OnInit {
   currentCurrency: string = '';
   userId: any = null;
 
+
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -30,16 +42,10 @@ export class PaymentSuccessComponent implements OnInit {
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
 
+
     this.route.queryParams.subscribe(params => {
       this.paymentData = params;
-      const responseCode = params['vnp_ResponseCode']?.toString();
-      const transactionStatus = params['vnp_TransactionStatus']?.toString();
-
-      this.isSuccess = responseCode === '00' && transactionStatus === '00';
-
-      if (this.isSuccess) {
-        this.verifyPayment(params);
-      }
+      this.verifyPayment(params);
     });
   }
 
@@ -54,10 +60,23 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
 
-  formatCurrency(amount: string): string {
+  formatCurrency(amount: any): string {
     if (!amount) return '0 VND';
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(parseInt(amount) / 100);
+
+    let amountNumber = Number(amount); // Chuyển đổi về số
+
+    if (isNaN(amountNumber)) {
+      console.error("⚠ Lỗi: Giá trị amount không hợp lệ:", amount);
+      return '0 VND';
+    }
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amountNumber / 100);
   }
+
+
 
   getStatusText(status: string): string {
     return status === '00' ? 'Giao dịch thành công' : 'Giao dịch thất bại';
@@ -66,7 +85,6 @@ export class PaymentSuccessComponent implements OnInit {
   clearCart(userId: number | null, sessionId: string | null): void {
     console.log("🛒 Đang gọi API xóa giỏ hàng...");
     console.log("🔍 UserId:", userId);
-    console.log("🔍 SessionId:", sessionId);
 
     if (!userId && !sessionId) {
       console.error("⚠ Không có userId hoặc sessionId, không thể xóa giỏ hàng!");
@@ -90,18 +108,30 @@ export class PaymentSuccessComponent implements OnInit {
     console.log("📤 Dữ liệu gửi lên backend:", vnpParams);
 
 
-    this.http.post('http://localhost:8080/api/v1/orders/return', vnpParams)
+    this.http.post<OrderResponse>('http://localhost:8080/api/v1/orders/return', vnpParams,{
+    headers: new HttpHeaders({'Content-Type': 'application/json'})
+  })
       .subscribe({
       next: (res) => {
         console.log("✅ Giao dịch hợp lệ:", res);
-        this.userId = this.getUserInfo();
-        const sessionId = localStorage.getItem('sessionId') || null;
-        if (this.userId) {
-          this.clearCart(this.userId, sessionId);
+        if (res.orderStatusName === "PROCESSING") {
+          // vnpParams.vnp_ResponseCode === "00" && vnpParams.vnp_TransactionStatus === "00"
+
+          this.isSuccess = true; // giao dịch thành công
+          this.userId = this.getUserInfo();
+          const sessionId = localStorage.getItem('sessionId') || null;
+
+          if (this.userId) {
+            this.clearCart(this.userId, sessionId);
+          }
+        } else {
+          this.isSuccess = false; // giao dịch thất bại
+          console.warn("⚠ Giao dịch không thành công, không xóa giỏ hàng.");
         }
       },
       error: (err: HttpErrorResponse) => {
         if (err.error && err.error.message) {
+          this.isSuccess = false;
           console.error("⚠ Giao dịch không hợp lệ:", err.error.message);
 
         } else {

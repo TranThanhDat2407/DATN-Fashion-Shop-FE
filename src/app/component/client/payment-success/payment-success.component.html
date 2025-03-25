@@ -9,13 +9,11 @@
 
     <div class="payment-info">
       <p><strong>Mã giao dịch:</strong> {{ paymentData.vnp_TransactionNo || 'N/A' }}</p>
-      <p><strong>Số tiền:</strong> {{ formatCurrency(paymentData.vnp_Amount) }}</p>
+      <p><strong>Số tiền:</strong> {{ formatCurrency(paymentData.vnp_Amount)}}</p>
       <p><strong>Ngân hàng:</strong> {{ paymentData.vnp_BankCode || 'Không xác định' }}</p>
       <p><strong>Trạng thái:</strong> {{ getStatusText(paymentData.vnp_TransactionStatus) }}</p>
     </div>
 
-    <button class="btn-home" [routerLink]="['/client', currentCurrency, currentLang,'product'  ]">Tiếp tục mua sắm</button>
-
+    <button class="btn-home" [routerLink]="['/client', currentCurrency, currentLang, 'product']">Tiếp tục mua sắm</button>
   </div>
 </div>
-

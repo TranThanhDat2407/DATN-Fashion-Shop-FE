@@ -354,8 +354,6 @@ export class EditAddressComponent implements OnInit{
     this.locationService.getProvinces().subscribe(
       (response) => {
         this.provinces = response.data;
-
-
       },
       (error) => {
         console.error("Lỗi khi lấy danh sách tỉnh:", error);
