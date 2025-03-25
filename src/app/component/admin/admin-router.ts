@@ -45,6 +45,10 @@ export const adminRouter: Routes =[
           canActivate: [AdminGuardFn]
         },
         {
+          path:'inventory/edit_qty/:idInventory',
+          component: InventoryComponent
+        },
+        {
           path:'list_user',
           component: ListUserComponent,
           canActivate: [AdminGuardFn]
