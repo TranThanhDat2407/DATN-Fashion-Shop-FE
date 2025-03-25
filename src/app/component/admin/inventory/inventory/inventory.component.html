@@ -5,9 +5,9 @@
 <div class="container-list">
   <div class="tabs">
     <input class="input" name="tabs" type="radio" id="tab-1" checked="checked" />
-    <label class="label" for="tab-1">
+    <label class="label" for="tab-1" (click)="resetRouterLink('tab-1')">
       <i class="fa-solid fa-boxes-packing"></i>
-      List Inventory For Warehouse </label>
+      List Inventory For Store </label>
     <div class="panel">
       <!-- Bộ lọc -->
 
@@ -25,8 +25,8 @@
           </div>
           <div class="col-md-3 mt-1">
             <select class="form-select" [(ngModel)]="storeId" (ngModelChange)="fetchStockData()">
-              <option *ngFor="let store of dataStore" [value]="store.id" > {{store.name}} </option>
-             
+              <option *ngFor="let store of dataStore" [value]="store.id"> {{store.name}} </option>
+
             </select>
           </div>
 
@@ -148,7 +148,7 @@
       </div>
       <div class="table-responsive">
         <table class="table table-striped table-bordered align-middle">
-          <thead class="table-dark text-center">
+          <thead class="text-center">
             <tr>
               <th>No.</th>
               <th>Image</th>
@@ -261,22 +261,384 @@
       </nav>
     </div>
     <input class="input" name="tabs" type="radio" id="tab-2" />
-    <label class="label" for="tab-2"><i class="fa-solid fa-plus"></i> Add Inventory To Warehouse</label>
+    <label class="label" (click)="resetRouterLink('tab-2')" for="tab-2"><i class="fa-solid fa-list"></i> List Inventory
+      for Warehouse </label>
     <div class="panel">
-      <!-- <h1>Color List</h1> -->
+      <div class="container mb-4">
+
+        <div class="row g-3 align-items-center">
+          <label class="form-label mb-1 col-md-7">Filter</label>
+          <label class="form-label mb-1 col-md-3">Sort</label>
+          <!-- Tìm kiếm theo tên -->
+          <div class="col-md-7 mt-1">
+            <input type="text" class="form-control" placeholder="Enter product name..."
+              [(ngModel)]="nameSearchWarehouse" (ngModelChange)="fetchInventoryForWarehouseOnly()">
+          </div>
+
+          <div class="col-md-3 mt-1">
+            <select class="form-select" [(ngModel)]="sortByWarehouse"
+              (ngModelChange)="fetchInventoryForWarehouseOnly()">
+              <option value="id">Product</option>
+              <option value="basePrice">Base Price</option>
+              <option value="salePrice">Sale Price</option>
+              <option value="quantityInStock">Stock Quantity</option>
+              <option value="updatedAt">Product Update Date</option>
+              <option value="updatedAt">Inventory Update Date</option>
+            </select>
+          </div>
+
+          <!-- Thứ tự sắp xếp -->
+          <div class="col-md-1 mt-1">
+            <select class="form-select" [(ngModel)]="sortDirWarehouse"
+              (ngModelChange)="fetchInventoryForWarehouseOnly()">
+              <option value="asc">&uarr;</option>
+              <option value="desc">&darr;</option>
+            </select>
+          </div>
+
+          <!-- Nút Reset -->
+          <div class="col-md-1 mt-1">
+            <button class="btn btn-danger w-100" (click)="resetFiltersWarehouse()">Reset</button>
+          </div>
+        </div>
+
+        <!-- Chọn danh mục -->
+        <div class="item-category-select row mt-2">
+          <!-- Chọn Category Parent -->
+          <div class="col-md-4">
+            <label class="form-label">Category Parent</label>
+            <div class="custom-select">
+              <div class="selected-item" (click)="isOpenCategoryParent = !isOpenCategoryParent">
+                <span *ngIf="selectedCategoryParent">
+                  <img [src]="selectedCategoryParent.image" alt="{{ selectedCategoryParent.name }}" width="30" />
+                  {{ selectedCategoryParent.name }}
+                </span>
+                <span *ngIf="!selectedCategoryParent">
+                  <img src="https://img.icons8.com/?size=100&id=qJfY9WJ3Qpuk&format=png&color=000000" width="25 "
+                    alt="Default" />
+                  Select Category
+                </span>
+              </div>
+              <div class="dropdown" *ngIf="isOpenCategoryParent">
+                <input type="text" [(ngModel)]="searchTextCategoryParent" placeholder="Tìm kiếm category..." />
+                <ul>
+                  <li *ngFor="let category of filteredCategoriesParent()" (click)="selectCategoryParent(category)">
+                    <img [src]="'http://localhost:8080/uploads/images/categories/' + category.image"
+                      alt="{{ category.name }}" width="30" />
+                    {{ category.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chọn Category Child -->
+          <div class="col-md-4" *ngIf="categoryChildren && categoryChildren.length > 0">
+            <label class="form-label">Category Child</label>
+            <div class="custom-select">
+              <div class="selected-item" (click)="isOpenCategoryChild = !isOpenCategoryChild">
+                <span *ngIf="selectedCategoryChild">
+                  <img [src]="'http://localhost:8080/uploads/images/categories/'+selectedCategoryChild.image"
+                    alt="{{ selectedCategoryChild.name }}" width="30" />
+                  {{ selectedCategoryChild.name }}
+                </span>
+                <span *ngIf="!selectedCategoryChild">
+                  <img src="https://img.icons8.com/?size=100&id=qJfY9WJ3Qpuk&format=png&color=000000" width="25"
+                    alt=" " />
+                  Select Category
+                </span>
+              </div>
+              <div class="dropdown" *ngIf="isOpenCategoryChild">
+                <input type="text" [(ngModel)]="searchTextCategoryChild" placeholder="Tìm kiếm category..." />
+                <ul>
+                  <li *ngFor="let category of filteredCategoriesChild()" (click)="selectCategoryChild(category)">
+                    <img [src]="'http://localhost:8080/uploads/images/categories/'+ category.image"
+                      alt="{{ category.name }}" width="30" />
+                    {{ category.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="col-md-4" *ngIf="categorySubChildren && categorySubChildren.length > 0">
+            <label class="form-label">Category Sub Child</label>
+            <div class="custom-select">
+              <div class="selected-item" (click)="isOpenCategorySubChild = !isOpenCategorySubChild">
+                <span *ngIf="selectedCategorySubChild">
+                  <img [src]="'http://localhost:8080/uploads/images/categories/'+selectedCategorySubChild.image"
+                    alt="{{ selectedCategorySubChild.name }}" width="30" />
+                  {{ selectedCategorySubChild.name }}
+                </span>
+                <span *ngIf="!selectedCategorySubChild">
+                  <img src="https://img.icons8.com/?size=100&id=qJfY9WJ3Qpuk&format=png&color=000000" width="25"
+                    alt=" " />
+                  Select Category
+                </span>
+              </div>
+              <div class="dropdown" *ngIf="isOpenCategorySubChild">
+                <input type="text" [(ngModel)]="searchTextCategorySubChild" placeholder="Tìm kiếm category..." />
+                <ul>
+                  <li *ngFor="let category of filteredCategoriesSubChild()" (click)="selectCategorySubChild(category)">
+                    <img [src]="'http://localhost:8080/uploads/images/categories/'+category.image"
+                      alt="{{ category.name }}" width="30" />
+                    {{ category.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+          <thead class="text-center">
+            <tr>
+              <th>No.</th>
+              <th>Image</th>
+              <th>Product</th>
+              <th>Color</th>
+              <th>Size</th>
+              <th>Base Price</th>
+              <th>Sale Price</th>
+              <th>Promotion</th>
+              <th>Stock Quantity</th>
+              <th>Product Variant Update</th>
+              <th>Inventory Update</th>
+              <th>Tag</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let stock of dataInventoryForWarehouse; let i = index" class="text-center">
+              <!-- Ảnh sản phẩm -->
+              <td>{{i +1}}</td>
+              <td>
+                <img [src]="'http://localhost:8080/uploads/images/products/' + stock.productImage" alt="Ảnh sản phẩm"
+                  class="img-thumbnail" width="60" height="60">
+              </td>
+
+              <!-- Tên sản phẩm -->
+              <td class="fw-bold">{{ stock.productName }}</td>
+
+              <!-- Màu sắc -->
+              <td>
+                <img [src]="'http://localhost:8080/uploads/images/products/colors/' + stock.colorImage" alt="Màu sắc"
+                  class="rounded-circle border border-secondary" width="35" height="35">
+                <br>
+                <span class="">{{ stock.colorName }}</span>
+              </td>
+
+              <!-- Kích thước -->
+              <td class="fw-semibold">{{ stock.sizeName }}</td>
+
+              <!-- Giá gốc -->
+              <td>
+                <span class="text-black fw-bold">{{ stock.basePrice | currency:'VND' }}</span>
+              </td>
+
+              <!-- Giá khuyến mãi -->
+              <td>
+                <span class="text-danger fw-bold">{{ stock.salePrice | currency:'VND' }}</span>
+              </td>
+
+              <!-- Khuyến mãi -->
+              <td class="p-0 m-0">
+                <span *ngIf="stock.promotion" class="badge bg-success">
+                  Start Date: {{ stock.promotion.startDate | date:'dd/MM/yyyy' }}
+                </span><br>
+                <span *ngIf="stock.promotion" class="badge bg-danger">
+                  End Date: {{ stock.promotion.endDate | date:'dd/MM/yyyy' }}
+                </span>
+                <span *ngIf="stock.promotion" class="badge" style="background-color: orange;">
+                  {{ stock.promotion.description }}
+                </span>
+                <span *ngIf="!stock.promotion" class="badge bg-secondary">None</span>
+              </td>
+
+              <!-- Số lượng tồn kho -->
+              <td>
+                <span
+                  [ngClass]="{'text-danger fw-bold': stock.quantityInStock <= 5, 'fw-semibold': stock.quantityInStock > 5}">
+                  {{ stock.quantityInStock }}
+                </span>
+              </td>
+
+
+              <td>
+                <span class="text-muted">{{ stock.variantUpdateDate | date:'dd/MM/yyyy HH:mm' }}</span>
+              </td>
+
+              <td>
+                <span class="text-muted">{{ stock.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+              </td>
+
+              <td>
+                <button class="btn btn-primary btn-sm" (click)="goToEditInventory(stock.inventoryId ?? 0)">
+                  Edit
+                </button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-success " (click)="printAllTagsInPage()">Print All Tags In Page</button>
+      </div>
+      <!--  <button class="btn btn-success" (click)="printAllTags()">Print All</button>-->
+      <nav class="mt-4">
+        <ul class="pagination justify-content-end">
+          <li class="page-item" [class.disabled]="pageNoWarehouse === 0">
+            <button class="page-link" (click)="changePage(pageNoWarehouse - 1)">Previous</button>
+          </li>
+
+          <li class="page-item" *ngFor="let page of [].constructor(totalPagesWarehouse); let i = index"
+            [class.active]="i === pageNoWarehouse">
+            <button class="page-link" (click)="changePageWarehouse(i)">{{ i + 1 }}</button>
+          </li>
+
+          <li class="page-item" [class.disabled]="pageNoWarehouse === totalPagesWarehouse - 1">
+            <button class="page-link" (click)="changePageWarehouse(pageNoWarehouse + 1)">Next</button>
+          </li>
+        </ul>
+      </nav>
 
     </div>
-    <input class="input" name="tabs" type="radio" id="tab-3" />
-    <label class="label" for="tab-3"><i class="fa-solid fa-list"></i> List Inventory for Store </label>
-    <div class="panel">
-      <h1>Tekno Match</h1>
-      <p>Tekno Match (Citrus ×clementina) is a hybrid between a mandarin orange and a sweet orange, so named in
-        1902. The exterior is a deep orange colour with a smooth, glossy appearance. Clementines can be
 
-        separated into 7 to 14 segments. Similarly to tangerines, they tend to be easy to peel.</p>
+    <!-- <input class="input" name="tabs" type="radio" id="tab-5" />
+    <label class="label" for="tab-5"><i class="fa-solid fa-shop"></i> List Inventory For Warehouse</label>
+    <div class="panel">
+
+    </div> -->
+
+
+
+
+
+    <input class="input" name="tabs" type="radio" id="tab-3" />
+    <label class="label" for="tab-3" (click)="resetRouterLink('tab-3')"><i class="fa-solid fa-plus"></i> Add Inventory
+      To Warehouse</label>
+    <div class="panel">
+      <div class="container">
+        <div class="container">
+          <h1 class="">EDIT INVENTORY </h1>
+          {{selectedInventory?.productImage}}
+          <hr>
+          <div class="mt-3 row">
+            <div class="col-md-4" *ngIf="selectedInventory !== null">
+              <img [src]="'http://localhost:8080/uploads/images/products/'+ selectedInventory?.productImage" width="85%"
+                [alt]="'selectedInventory?.productImage'">
+              <br>
+              <span class="text-uppercase fw-bolder mt-1">{{selectedInventory?.productName}}</span> <br>
+              <span class=" fw-bolder">Color {{selectedInventory?.colorName}} : <img width="40" height="40"
+                  [src]="'http://localhost:8080/uploads/images/products/colors/' + selectedInventory?.colorImage"
+                  [alt]="selectedInventory?.colorImage"> </span>
+
+              <br> <span class="  fw-bolder">Size : {{selectedInventory?.sizeName}}</span>
+
+              <div class="mt-5">
+                <app-button [nameButton]="'APPLY'" [eventClickBtnAdd]="eventClickApply" />
+                <!--  -->
+              </div>
+            </div>
+            <div class="col-md-4" *ngIf="selectedInventory === null">
+            
+                <app-button [nameButton]="'APPLY'" [eventClickBtnAdd]="eventClickApply" />
+                <!--  -->
+            </div>
+            <div class="col-md-8">
+              <div style="margin-left: 40px;">
+                <span> <span class="title-color ">Selected Prodduct Variant : </span><span class="pr_varaint_select"
+                    *ngFor="let item of selectedProductVariants">{{item}}</span></span>
+                <p></p>
+                <span class="title-color search-variant">Quantity In Stock <input class="input-height"
+                    [(ngModel)]="qtyInStock" name="modelHeight" type="number"></span>
+              </div>
+
+              <ul id="dic-none">
+
+                <hr>
+                <div class="search-variant">
+                  <span (click)="resetForm()"><i class="fa-solid fa-rotate-right"></i></span>
+                  <input class="input-variant" type="text" [(ngModel)]="nameSearchProductVar"
+                    (change)="searchProductItem()" (keyup.enter)="searchProductItem()">
+
+                </div>
+                <div class="row variant-all " style="padding: 10px 0 0 0;">
+                  <label class="col-md-6"
+                    style="margin: 0 0 10px 10px;border-radius: 20px; border: 1px solid rgb(83, 82, 82); width: 47%; height: 33%;min-height: 130px;"
+                    *ngFor="let item of dataProductVariant" [for]="item.productVariantId"
+                    (click)="toggleCheckbox(item.productVariantId)">
+                    <div class="row">
+                      <div class="col-1 d-flex" style="padding: 30px 0 30px 0;">
+                        <div class="d-flex " style="  border-right: 1px solid black; padding: 0 10px 0 10px;">
+                          <input type="checkbox" [id]="item.productVariantId"
+                            [checked]="selectedProductVariants.includes(item.productVariantId)"
+                            (click)="$event.stopPropagation()">
+                        </div>
+                      </div>
+                      <div class="col-10" style="margin-top: 0px; width:91%; padding-top: 15px;">
+                        <div class="container d-flex ">
+                          <div class="product-card">
+                            <div class="product-image">
+                              <img [src]="'http://localhost:8080/uploads/images/products/' + item.productImage"
+                                alt="Product Image">
+                            </div>
+                          </div>
+                          <div class="card-body product-details">
+                            <span class="text-uppercase fw-bolder" style="font-size: 0.8rem;">{{ item.productName }}
+                            </span>
+                            <strong>Color :
+                              <img [src]="'http://localhost:8080/uploads/images/products/colors/' + item.colorImage"
+                                width="33" alt="">
+                            </strong>
+                            <strong>Size : {{ item.sizeName }}</strong>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+                  <button (click)="changePageProductVart(currentPageProductVar - 1)"
+                    [disabled]="currentPageProductVar === 0">« Prev</button>
+
+                  <input type="number" [(ngModel)]="inputPage" (keydown.enter)="goToPage(inputPage)"
+                    (change)="goToPage(inputPage)" min="1" [max]="totalPageProductVar" style="width: 50px; text-align: center; height: 30px; 
+                                   
+                                       ">
+                  <span>/ {{ totalPageProductVar }}</span>
+
+                  <button (click)="changePageProductVart(currentPageProductVar + 1)"
+                    [disabled]="currentPageProductVar >= totalPageProductVar - 1">Next »</button>
+                </div>
+
+
+
+
+
+              </ul>
+              <hr>
+              <div class="d-flex ms-3 mb-3">
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
     <input class="input" name="tabs" type="radio" id="tab-4" />
-    <label class="label" for="tab-4"><i class="fa-solid fa-code-compare"></i> Transfer Inventory</label>
+    <label class="label" for="tab-4"><i class="fa-solid fa-code-compare" (click)="resetRouterLink('tab-4')"></i>
+      Transfer Inventory</label>
     <div class="panel">
       <h1>Tekno Match</h1>
       <p>Tekno Match (Citrus ×clementina) is a hybrid between a mandarin orange and a sweet orange, so named in

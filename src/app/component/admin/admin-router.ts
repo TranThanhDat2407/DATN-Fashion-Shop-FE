@@ -40,6 +40,10 @@ export const adminRouter: Routes =[
           component: InventoryComponent
         },
         {
+          path:'inventory/edit_qty/:idInventory',
+          component: InventoryComponent
+        },
+        {
           path:'list_user',
           component: ListUserComponent
         },

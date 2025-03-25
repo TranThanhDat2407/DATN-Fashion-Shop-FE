@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import {environment} from '../../../../environments/environment';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {ApiResponse} from '../../../dto/Response/ApiResponse';
-import {WishlistDTO} from '../../../dto/wishlistDTO';
-import {ListStoreDTO} from '../../../dto/ListStoreDTO';
-import {PageResponse} from '../../../dto/Response/page-response';
-import {StoreInventoryDTO} from '../../../dto/StoreInventoryDTO';
-import {StoreDetailDTO} from '../../../dto/StoreDetailDTO';
-import {ListStoreStockDTO} from '../../../dto/ListStoreStockDTO';
-import {InventoryAudResponse} from '../../../dto/Response/inventory/InventoryAudResponse';
-import {TopProduct} from '../../../component/staff/store-dashboard/top-products-table/top-products-table.component';
-import {StoreOrderComparisonResponse} from '../../../dto/store/StoreOrderComparisonResponse';
-import {StorePaymentComparisonResponse} from '../../../dto/store/StorePaymentComparisonResponse';
-import {StoreRevenueByDateRangeResponse} from '../../../dto/store/StoreRevenueByDateRangeResponse';
-import {StoreDailyRevenueResponse} from '../../../dto/store/StoreDailyRevenueResponse';
-import {StoreOrderResponse} from '../../../dto/store/StoreOrderResponse';
+import { environment } from '../../../../environments/environment';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { ApiResponse } from '../../../dto/Response/ApiResponse';
+import { WishlistDTO } from '../../../dto/wishlistDTO';
+import { ListStoreDTO } from '../../../dto/ListStoreDTO';
+import { PageResponse } from '../../../dto/Response/page-response';
+import { StoreInventoryDTO } from '../../../dto/StoreInventoryDTO';
+import { StoreDetailDTO } from '../../../dto/StoreDetailDTO';
+import { ListStoreStockDTO } from '../../../dto/ListStoreStockDTO';
+import { InventoryAudResponse } from '../../../dto/Response/inventory/InventoryAudResponse';
+import { TopProduct } from '../../../component/staff/store-dashboard/top-products-table/top-products-table.component';
+import { StoreOrderComparisonResponse } from '../../../dto/store/StoreOrderComparisonResponse';
+import { StorePaymentComparisonResponse } from '../../../dto/store/StorePaymentComparisonResponse';
+import { StoreRevenueByDateRangeResponse } from '../../../dto/store/StoreRevenueByDateRangeResponse';
+import { StoreDailyRevenueResponse } from '../../../dto/store/StoreDailyRevenueResponse';
+import { StoreOrderResponse } from '../../../dto/store/StoreOrderResponse';
 import { Store } from '../../../models/Store/Store';
 
 @Injectable({
@@ -27,10 +27,10 @@ export class StoreService {
   constructor(private http: HttpClient) { }
 
   getStores(pageNo: number,
-            pageSize: number,
-            city: string,
-            userLat: number,
-            userLon: number): Observable<ApiResponse<PageResponse<ListStoreDTO>>> {
+    pageSize: number,
+    city: string,
+    userLat: number,
+    userLon: number): Observable<ApiResponse<PageResponse<ListStoreDTO>>> {
     let params = `?page=${pageNo}&size=${pageSize}`;
 
     if (city) {
@@ -45,8 +45,8 @@ export class StoreService {
   }
 
   getStoresForLogin(pageNo: number,
-            pageSize: number,
-            name: string
+    pageSize: number,
+    name: string
   ): Observable<ApiResponse<PageResponse<ListStoreDTO>>> {
     let params = `?page=${pageNo}&size=${pageSize}`;
 
@@ -72,15 +72,15 @@ export class StoreService {
   }
 
   getStore(
-    name?: string, 
-    city?: string, 
-    page: number = 0, 
-    size: number = 10, 
-    userLat?: number, 
+    name?: string,
+    city?: string,
+    page: number = 0,
+    size: number = 10,
+    userLat?: number,
     userLon?: number
   ): Observable<ApiResponse<PageResponse<Store[]>>> {
     let params = `?page=${page}&size=${size}`;
-  
+
     if (name) {
       params += `&name=${encodeURIComponent(name)}`;
     }
@@ -90,10 +90,10 @@ export class StoreService {
     if (userLat !== undefined && userLon !== undefined) {
       params += `&userLat=${userLat}&userLon=${userLon}`;
     }
-  
+
     return this.http.get<ApiResponse<PageResponse<Store[]>>>(`${this.apiUrl}/search${params}`);
   }
-  
+
 
   getStoresStock(
     pageNo: number,
@@ -311,5 +311,7 @@ export class StoreService {
       responseType: 'blob'
     });
   }
+
+
 
 }
