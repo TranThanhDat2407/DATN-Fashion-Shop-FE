@@ -113,8 +113,6 @@ export class ShippingComponent implements OnInit{
       document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
     });
 
-
-
     this.fetchStores();
   }
 
@@ -125,7 +123,7 @@ export class ShippingComponent implements OnInit{
     this.locationService.getProvinces().subscribe(
       (response) => {
         this.provinces = response.data;
-        console.log(this.provinces)
+
 
       },
       (error) => {
@@ -159,14 +157,16 @@ export class ShippingComponent implements OnInit{
       console.error('Không tìm thấy userId trong localStorage');
     }
   }
+
+
   onProvinceChange(event: any) {
     const provinceCode = Number(event.target.value);
     if (!provinceCode || provinceCode === this.selectedProvince) return;
     this.selectedProvince = provinceCode; // Chỉ lưu mã tỉnh (số)
 
     // Cập nhật NewAddress.province
-    const selectedProvinceObj = this.provinces.find(p =>  p.code ===  this.selectedProvince);
-    this.NewAddress.province = selectedProvinceObj ? selectedProvinceObj.name : '';
+    const selectedProvinceObj = this.provinces.find(p =>  p.ProvinceID ===  this.selectedProvince);
+    this.NewAddress.province = selectedProvinceObj ? selectedProvinceObj.ProvinceName : '';
     // Reset quận/huyện và phường/xã
     this.selectedDistrict = null;
     this.selectedWard = null;
@@ -174,6 +174,8 @@ export class ShippingComponent implements OnInit{
     this.districts = [];
     // Gọi API lấy danh sách quận/huyện
     if (this.selectedProvince) {
+      console.log("📍 Tỉnh đã chọn:", this.selectedProvince);
+
       this.locationService.getDistricts(this.selectedProvince).subscribe(
         (response) => {
           if (response && response.data) {
@@ -233,7 +235,6 @@ export class ShippingComponent implements OnInit{
     console.log(this.NewAddress)
   }
 
-
   updateAddress() {
     if (!this.userId || !this.NewAddress.id) {
       console.error('Không tìm thấy userId hoặc addressId!');
@@ -288,6 +289,7 @@ export class ShippingComponent implements OnInit{
       console.error('Không tìm thấy userId!');
       return;
     }
+
     this.addressService.addAddress(this.userId, this.NewAddress).subscribe({
       next: (response: ApiResponse<AddressDTO>) => {
         if (response && response.data) {
