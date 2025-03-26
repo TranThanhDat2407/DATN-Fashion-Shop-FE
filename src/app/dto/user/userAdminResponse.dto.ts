@@ -1,4 +1,6 @@
-export interface UserAdminResponse {
+import {BaseResponse} from '../Response/base-response';
+
+export interface UserAdminResponse extends BaseResponse{
   id: number;
   firstName: string;
   lastName: string;

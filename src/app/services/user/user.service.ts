@@ -13,6 +13,7 @@ import {UserDetailDTO} from '../../dto/UserDetailDTO';
 import {TokenService} from '../token/token.service';
 import {PageResponse} from '../../dto/Response/page-response';
 import {UserAdminResponse} from '../../dto/user/userAdminResponse.dto';
+import {GetUsersParams} from '../../dto/user/GetUsersParams';
 @Injectable({
   providedIn: 'root'
 })
@@ -246,5 +247,19 @@ export class UserService {
 
     return this.http.post(`${this.userUrl}/change-password`, body, { headers, params });
   }
+
+  getAllUser(params: GetUsersParams): Observable<ApiResponse<PageResponse<UserAdminResponse[]>>> {
+    let httpParams = new HttpParams();
+
+    // Chỉ append nếu có giá trị
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        httpParams = httpParams.set(key, String(value));
+      }
+    });
+
+    return this.http.get<ApiResponse<PageResponse<UserAdminResponse[]>>>(`${this.userUrl}/all`, { params: httpParams });
+  }
+
 
 }

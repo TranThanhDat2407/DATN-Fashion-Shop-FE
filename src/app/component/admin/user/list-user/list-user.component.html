@@ -1,5 +1,8 @@
 <app-header-admin [title_header]="'User'" [routerLinkString]="'/admin/edit_user'"/>
 
-<app-table [tableHeaders]="headerTableList" [tableData]="userData" 
-[routerLinkString]="'/admin/edit_user'"
-[toggleCheckbox]="toggleCheckbox"></app-table>
+<app-table *ngIf="userData" [currentPage]="pageIndex"
+  [tableHeaders]="headerTableList" [tableData]="userData?.content.flat() || []" [dataPage]="userData"
+  [routerLinkString]="'/admin/edit_user'"
+  [toggleCheckbox]="toggleCheckbox" (pageChanged)="onPageChange($event)">
+
+</app-table>
