@@ -1,4 +1,4 @@
-<app-header-admin [title_header]="'Inventory'" />
+<app-header-admin [title_header]="'Inventory'" [btnActive]="false" />
 
 
 
@@ -398,6 +398,7 @@
           <thead class="text-center">
             <tr>
               <th>No.</th>
+              <th>Id</th>
               <th>Image</th>
               <th>Product</th>
               <th>Color</th>
@@ -415,6 +416,7 @@
             <tr *ngFor="let stock of dataInventoryForWarehouse; let i = index" class="text-center">
               <!-- Ảnh sản phẩm -->
               <td>{{i +1}}</td>
+              <td>{{stock.productVariantId}}</td>
               <td>
                 <img [src]="'http://localhost:8080/uploads/images/products/' + stock.productImage" alt="Ảnh sản phẩm"
                   class="img-thumbnail" width="60" height="60">
@@ -492,7 +494,7 @@
       <nav class="mt-4">
         <ul class="pagination justify-content-end">
           <li class="page-item" [class.disabled]="pageNoWarehouse === 0">
-            <button class="page-link" (click)="changePage(pageNoWarehouse - 1)">Previous</button>
+            <button class="page-link" (click)="changePageWarehouse(pageNoWarehouse - 1)">Previous</button>
           </li>
 
           <li class="page-item" *ngFor="let page of [].constructor(totalPagesWarehouse); let i = index"
@@ -545,9 +547,9 @@
               </div>
             </div>
             <div class="col-md-4" *ngIf="selectedInventory === null">
-            
-                <app-button [nameButton]="'APPLY'" [eventClickBtnAdd]="eventClickApply" />
-                <!--  -->
+
+              <app-button [nameButton]="'APPLY'" [eventClickBtnAdd]="eventClickApply" />
+              <!--  -->
             </div>
             <div class="col-md-8">
               <div style="margin-left: 40px;">
@@ -605,7 +607,7 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="pagination" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+                <div class="paginationMini" style="font-family: Georgia, 'Times New Roman', Times, serif;">
                   <button (click)="changePageProductVart(currentPageProductVar - 1)"
                     [disabled]="currentPageProductVar === 0">« Prev</button>
 
@@ -640,11 +642,162 @@
     <label class="label" for="tab-4"><i class="fa-solid fa-code-compare" (click)="resetRouterLink('tab-4')"></i>
       Transfer Inventory</label>
     <div class="panel">
-      <h1>Tekno Match</h1>
-      <p>Tekno Match (Citrus ×clementina) is a hybrid between a mandarin orange and a sweet orange, so named in
-        1902. The exterior is a deep orange colour with a smooth, glossy appearance. Clementines can be
+      <div class="container">
+        <div class="d-flex " style="justify-content: space-between;">
+          <h1 class="">Transfer Inventory</h1>
+          {{selectedInventory?.productImage}}
+          <button class="btn-historyTranfer" routerLink="/admin/history_transfer"><i class="fa-solid fa-list-ul"></i> History Transfer List</button>
+        </div>
+        <hr>
+        <div class="mt-3 row">
+          <div class="col-md-4">
+            <div class=" row">
+              <div class="col-12 warehouse-select" *ngFor="let itemTransferSelect of selectedWarehouseTransfer">
+                <div class="row">
+                  <div class="col-9 d-flex">
+                    <div class="flex-grow-0" style="max-width: 80px;">
+                      <img [src]="'http://localhost:8080/uploads/images/products/'+ itemTransferSelect?.productImage"
+                        style="width: 100%; max-width: 60px; height: auto; border-radius: 20px;"
+                        [alt]="itemTransferSelect?.productImage">
+                    </div>
 
-        separated into 7 to 14 segments. Similarly to tangerines, they tend to be easy to peel.</p>
+                    <div class="flex-grow-4 ms-2">
+                      <span class="fw-bolder" style="font-size: 0.8rem;">
+                        Color {{itemTransferSelect?.colorName}} :
+                        <img width="25" height="25"
+                          [src]="'http://localhost:8080/uploads/images/products/colors/' + itemTransferSelect?.colorImage"
+                          [alt]="itemTransferSelect?.colorImage">
+                      </span>
+                      <br>
+                      <span class="fw-bolder" style="font-size: 0.8rem;">Size: {{itemTransferSelect?.sizeName}}</span>
+                      <br>
+                      <span class=" fw-bolder mt-1"
+                        style="font-size: 0.8rem;">{{itemTransferSelect?.productName}}</span>
+                    </div>
+                  </div>
+
+                  <div class="col-3 d-flex justify-content-center align-items-center">
+                    <input class="w-75" type="number" [(ngModel)]="itemTransferSelect.quantityInStock" min="1"
+                      (change)="validateQuantity(itemTransferSelect)">
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="mt-5">
+              <app-button [nameButton]="'transfer'" [eventClickBtnAdd]="insertTransfer" />
+              <!--  -->
+            </div>
+
+          </div>
+
+          <div class="col-md-8">
+            <div class="d-flex justify-content-between" style="margin-left: 40px;">
+              <div class="mb-4" style="width: 48%;">
+                <label class="form-label mb-1 col-md-3">Store</label>
+                <select class="form-select" [(ngModel)]="storeIdForWarehouse" (ngModelChange)="chooseStoreWarehouse()">
+                  <option *ngFor="let store of dataStore" [value]="store.id"> {{store.name}} </option>
+                </select>
+              </div>
+
+              <div class="mb-4" style="width: 48%;">
+                <label class="form-label mb-1 col-md-3">Message</label>
+                <textarea [(ngModel)]="dataMessage" class="form-control"></textarea>
+              </div>
+            </div>
+
+            <div class="d-flex gap-5 align-items-center justify-content-start" style="margin-left: 40px; width: 100%;">
+              <!-- <span> <span class="title-color ">Selected Prodduct Variant : </span><span class="pr_varaint_select"
+                  *ngFor="let item of selectedProductVariants">{{item}}</span></span>
+              <p></p> -->
+              <div> <span class="form-label">Quantity In Stock : </span> </div>
+              <div> <input class="input-height-warehouse" [(ngModel)]="qtyTransfer" name="modelHeight" type="number">
+              </div>
+              <div> <button class="btn-applyAll" (click)="applyAllQtyWarehouse()">APPLY ALL QUANTITY</button></div>
+
+            </div>
+
+            <ul>
+
+              <hr>
+              <div class="search-variant">
+                <span (click)="resetForm()"><i class="fa-solid fa-rotate-right"></i></span>
+                <input class="input-variant" type="text" [(ngModel)]="nameSearchWarehouseTransfer"
+                  (change)="searchWarehouseTranfer()" (keyup.enter)="searchWarehouseTranfer()">
+
+              </div>
+              <div class="row variant-all " style="padding: 10px 0 0 0;">
+                <label class="col-md-6"
+                  style="margin: 0 0 10px 10px;border-radius: 20px; border: 1px solid rgb(83, 82, 82); width: 47%; height: 33%;min-height: 130px;"
+                  *ngFor="let item of dataInventoryForWarehouseTransfer" [for]="item.productVariantId"
+                  (click)="toggleSelectedWarehouseTransfer(item)">
+                  <div class="row">
+                    <div class="col-1 d-flex" style="padding: 30px 0 30px 0;">
+                      <div class="d-flex " style="  border-right: 1px solid black; padding: 0 10px 0 10px;">
+                        <input type="checkbox" [id]="item.productVariantId"
+                          [checked]="selectedProductVariants.includes(item.productVariantId)"
+                          (click)="$event.stopPropagation()">
+                      </div>
+                    </div>
+                    <div class="col-10" style="margin-top: 0px; width:91%; padding-top: 15px;">
+                      <div class="container d-flex ">
+                        <div class="product-card">
+                          <div class="product-image">
+                            <img [src]="'http://localhost:8080/uploads/images/products/' + item.productImage"
+                              alt="Product Image">
+                          </div>
+                        </div>
+                        <div class="card-body product-details">
+                          <span class="text-uppercase fw-bolder" style="font-size: 0.8rem;">{{ item.productName }}
+                          </span>
+                          <strong>Color :
+                            <img [src]="'http://localhost:8080/uploads/images/products/colors/' + item.colorImage"
+                              width="33" alt="">
+                          </strong>
+                          <strong>Size : {{ item.sizeName }}</strong>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Pagination -->
+              <div class="paginationMini" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+                <button (click)="changePageWarehouseTransfer(currentPageWarehouseTransfer - 1)"
+                  [disabled]="currentPageWarehouseTransfer === 0">« Prev</button>
+ 
+
+                <input type="number" [(ngModel)]="inputPageWarehouseTransfer"
+                  (keydown.enter)="goToPageWarehouseTransfer(inputPageWarehouseTransfer)"
+                  (change)="goToPageWarehouseTransfer(inputPageWarehouseTransfer)" min="1"
+                  [max]="totalPageWarehouseTransfer" style="width: 50px; text-align: center; height: 30px;">
+
+                <span>/ {{ totalPageWarehouseTransfer }}</span>
+
+                <button (click)="changePageWarehouseTransfer(currentPageWarehouseTransfer + 1)"
+                  [disabled]="currentPageWarehouseTransfer >= totalPageWarehouseTransfer - 1">Next »</button>
+              </div>
+
+
+
+
+
+
+            </ul>
+            <hr>
+            <div class="d-flex ms-3 mb-3">
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
     </div>
 
 

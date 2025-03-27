@@ -11,6 +11,7 @@ import { ListStoreStockDTO } from '../../../dto/ListStoreStockDTO';
 })
 export class InventoryService {
   private apiUrl = `${environment.apiBaseUrl}/inventory`;
+ 
 
   constructor(private http: HttpClient) { }
 
@@ -50,4 +51,10 @@ export class InventoryService {
   updateInventory(inventoryId : number , newQuantity : number) : Observable<any>{
     return this.http.put(`${this.apiUrl}/warehouse-inventory/${inventoryId}?newQuantity=${newQuantity}`,{})
   } 
+
+  insertInventoryTransfer(data : any) : Observable<any>{
+    return this.http.post(`${environment.apiBaseUrl}/inventory-transfers/create`, data)
+  }
+
+  
 }

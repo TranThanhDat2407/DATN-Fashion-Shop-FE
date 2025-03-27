@@ -20,7 +20,7 @@
             <h5>{{title_header}} </h5>
 <!--            <span>Check and edit category. Check and edit category</span>-->
           </div>
-          <div class="btn-header">
+          <div class="btn-header" *ngIf="btnActive">
             <button type="button" class="button" >
               <span class="button__text">{{title_btn}}</span>
               <span class="button__icon" [routerLink]="[routerLinkString]"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor"
