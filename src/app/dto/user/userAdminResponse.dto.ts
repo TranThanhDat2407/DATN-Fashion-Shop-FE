@@ -9,7 +9,7 @@ export interface UserAdminResponse extends BaseResponse{
   gender: string;
   dateOfBirth: string; // Định dạng ISO "yyyy-MM-dd'T'HH:mm:ss"
   role: Role;
-  is_active: boolean;
+  isActive: boolean;
 }
 
 export interface Role {

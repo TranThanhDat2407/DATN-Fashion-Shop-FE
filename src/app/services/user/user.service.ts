@@ -261,5 +261,8 @@ export class UserService {
     return this.http.get<ApiResponse<PageResponse<UserAdminResponse[]>>>(`${this.userUrl}/all`, { params: httpParams });
   }
 
+  blockOrEnableUser(userId: number): Observable<any> {
+    return this.http.patch(`${this.userUrl}/${userId}/block-enable`, null);
+  }
 
 }

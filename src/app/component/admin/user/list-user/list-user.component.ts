@@ -1,60 +1,13 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { HeaderAdminComponent } from '../../header-admin/header-admin.component';
 import { TableComponent } from '../../table/table.component';
 import {UserService} from '../../../../services/user/user.service';
 import {PageResponse} from '../../../../dto/Response/page-response';
-import {ProductListDTO} from '../../../../dto/ProductListDTO';
 import {UserAdminResponse} from '../../../../dto/user/userAdminResponse.dto';
 import {GetUsersParams} from '../../../../dto/user/GetUsersParams';
 import {NgIf} from '@angular/common';
-
-export const MOCK_USERS: User[] = [
-  {
-    id: 1,
-    email: 'john.doe@example.com',
-    password: 'password123',
-    firstName: 'John',
-    lastName: 'Doe',
-    phone: '1234567890',
-    dateOfBirth: '1985-08-20T12:00:00Z', // Định dạng thành chuỗi
-    gender: 'Male',
-    isActive: true,
-    createdAt: '2024-01-01T12:00:00Z',
-    updatedAt: '2024-01-10T12:00:00Z',
-    createdBy: 101,
-    updatedBy: 102
-  },
-  {
-    id: 2,
-    email: 'jane.smith@example.com',
-    password: 'password456',
-    firstName: 'Jane',
-    lastName: 'Smith',
-    phone: '0987654321',
-    dateOfBirth: '1992-05-15T12:00:00Z', // Định dạng thành chuỗi
-    gender: 'Female',
-    isActive: false,
-    createdAt: '2024-01-02T12:00:00Z',
-    updatedAt: '2024-01-11T12:00:00Z',
-    createdBy: 103,
-    updatedBy: 104
-  },
-  {
-    id: 100,
-    email: 'alice.brown@example.com',
-    password: 'password789',
-    firstName: 'Alice',
-    lastName: 'Brown',
-    phone: '1122334455',
-    dateOfBirth: '1985-08-20T12:00:00Z', // Định dạng thành chuỗi
-    gender: 'Female',
-    isActive: true,
-    createdAt: '2024-01-03T12:00:00Z',
-    updatedAt: '2024-01-12T12:00:00Z',
-    createdBy: 105,
-    updatedBy: 106
-  }
-];
+import {ToastrService} from 'ngx-toastr';
+import {FormsModule} from '@angular/forms';
 
 export interface User {
   id: number;
@@ -76,11 +29,13 @@ export interface User {
 @Component({
   selector: 'app-list-user',
   standalone: true,
-  imports: [HeaderAdminComponent, TableComponent, NgIf],
+  imports: [HeaderAdminComponent, TableComponent, NgIf, FormsModule],
   templateUrl: './list-user.component.html',
   styleUrl: './list-user.component.scss'
 })
 export class ListUserComponent implements OnInit {
+  debounceTimerName: any;
+  emailSearch?: string
   // Phân trang
   pageIndex: number = 0;
   pageSize: number = 10;
@@ -91,7 +46,7 @@ export class ListUserComponent implements OnInit {
   filterLastName: string = '';
   filterPhone: string = '';
   filterGender: string = ''; // ví dụ: 'MALE', 'FEMALE'
-  filterActiveStatus: boolean | null = null;
+  filterActiveStatus: any = null;
 
 // Filter theo ngày tạo
   filterStartDate: string | null = null; // ISO: '2024-01-01T00:00:00'
@@ -104,12 +59,38 @@ export class ListUserComponent implements OnInit {
   sortBy: string = 'id';
   sortDir: 'asc' | 'desc' = 'desc';
 
+  headerTableList: string[] = [
+    'id',
+    'email',
+    'firstName',
+    'lastName',
+    'phone',
+    'dateOfBirth',
+    'gender',
+    'isActive',
+    'createdAt',
+    'updatedAt',
+  ]
+
+  userData: PageResponse<UserAdminResponse[]> | null = null
+
   constructor(
     private userService: UserService,
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef
   ) {
   }
 
-  filterUser() {
+
+
+
+
+  async ngOnInit(): Promise<void> {
+    await this.filterUser();
+  }
+
+
+  async filterUser(): Promise<void> {
     const filterParams: GetUsersParams = {
       page: this.pageIndex,
       size: this.pageSize,
@@ -118,7 +99,7 @@ export class ListUserComponent implements OnInit {
       lastName: this.filterLastName,
       phone: this.filterPhone,
       gender: this.filterGender,
-      isActive: this.filterActiveStatus ?? undefined,
+      isActive: this.filterActiveStatus,
       startDate: this.filterStartDate ?? undefined,
       endDate: this.filterEndDate ?? undefined,
       roleId: this.filterRoleId ?? undefined,
@@ -138,65 +119,54 @@ export class ListUserComponent implements OnInit {
   }
 
 
-  checkedItems: any[] = [];
-  headerTableList: string[] = [
-    'id',
-    'email',
-    'firstName',
-    'lastName',
-    'phone',
-    'dateOfBirth',
-    'gender',
-    'isActive',
-    'createdAt',
-    'updatedAt',
-    'createdBy',
-    'updatedBy',
-    'button'
-  ]
-
-  userData: PageResponse<UserAdminResponse[]> | null = null
-
-
-
-  ngOnInit(): void {
-    this.filterUser();
-  }
-
-
-
-
-  clickNe(id :number ) {
-    console.log('Selected ID:', id);
-  }
-
-
-
-  toggleCheckbox(item: any) {
-    if (!Array.isArray(this.checkedItems)) {
-      this.checkedItems = [];  // Khởi tạo checkedItems nếu chưa phải là mảng
-    }
-
-    item.checked = !item.checked;
-
-    if (item.checked) {
-      this.checkedItems.push(item);
-    } else {
-      const index = this.checkedItems.findIndex(i => i.id === item.id);
-      if (index !== -1) {
-        this.checkedItems.splice(index, 1);
-      }
-    }
-
-    console.log(item.checked);
-    console.log(item.id);
-    console.log(this.checkedItems);
-  }
-
   onPageChange(newPage: number): void {
     this.pageIndex = newPage;
     this.filterUser();
   }
 
+  toggleIsActive = (item: any): void => {
+    this.userService.blockOrEnableUser(item.id).subscribe({
+      next: () => {
+        this.toastr.success('Cập nhật trạng thái người dùng thành công');
+        this.filterUser(); // Gọi lại danh sách nếu bạn muốn refresh
+      },
+      error: (err) => {
+        this.toastr.error('Có lỗi xảy ra khi cập nhật trạng thái');
+        console.error(err);
+      }
+    });
 
+  }
+
+  onCreateAtChange(){
+    this.sortBy = this.sortBy;
+    this.filterUser();
+  }
+  onSortDirChange(){
+    this.sortDir = this.sortDir
+    this.filterUser()
+  }
+  onNameChange(value: string){
+    // Xóa timer cũ nếu có
+    if (this.debounceTimerName) {
+      clearTimeout(this.debounceTimerName);
+    }
+    // Đặt timer mới chờ 1s
+    this.debounceTimerName = setTimeout(() => {
+      this.searchName(value);
+    }, 1000);
+  }
+  onIsActiveChange(){
+    this.filterActiveStatus = this.filterActiveStatus;
+    this.filterUser();
+  }
+  searchName(value: string): void {
+    this.filterEmail = value;
+
+    setTimeout(() => {
+      this.onPageChange(0)
+    }, 500);
+
+    this.cdr.detectChanges(); // Cập nhật lại giao diện ngay lập tức
+  }
 }
