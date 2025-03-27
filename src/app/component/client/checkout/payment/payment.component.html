@@ -1,6 +1,6 @@
 
 <div class="row">
-  <app-shipping></app-shipping>
+<!--  <app-shipping></app-shipping>-->
 
 </div>
 <div class="row">
@@ -29,46 +29,62 @@
             Vui lòng chọn tùy chọn thanh toán
           </div>
 
-          <div id="payment" class="accordion-collapse collapse show">
+          <div id="payment" class="accordion-collapse collapse show" >
             <div class="accordion-body">
               <div class="d-flex justify-content-around"
                    style="border-top: 1px solid rgb(224, 224, 224); padding: 28px 20px;">
 
-                <div class="mb-m pr-s">
-                  <span class="fr-radio fr-radio-primary bold-with-subtext">
-                    <input type="radio" id="payinstore" name="paymentMethod" value="3"
-                           (change)="onSelectionChange(5)" [checked]="selectedMethod === 5" />
-                    <label for="payinstore" class="content-wrapper">
-                      <span class="content-text">
-                        <span class="title">Thanh Toán Tại Cửa Hàng</span>
-                      </span>
-                    </label>
-                  </span>
+                <div *ngFor="let method of availablePaymentMethods">
+                  <div class="mb-m pr-s">
+    <span class="fr-radio fr-radio-primary bold-with-subtext">
+      <input type="radio" [id]="'pay-' + method.id" name="paymentMethod" [value]="method.id"
+             (change)="onSelectionChange(method.id)" [checked]="selectedMethod === method.id" />
+      <label [for]="'pay-' + method.id" class="content-wrapper">
+        <span class="content-text">
+          <span class="title">{{ method.label }}</span>
+        </span>
+      </label>
+    </span>
+                  </div>
                 </div>
 
-                <div class="mb-m pr-s">
-                    <span class="fr-radio fr-radio-primary bold-with-subtext">
-                      <input type="radio" id="cod" name="paymentMethod" value="1"
-                             (change)="onSelectionChange(1)" [checked]="selectedMethod === 1"/>
-                      <label for="cod" class="content-wrapper">
-                        <span class="content-text">
-                          <span class="title">Thanh toán khi nhận hàng</span>
-                        </span>
-                      </label>
-                    </span>
-                </div>
 
-                <div class="mb-m pr-s">
-                   <span class="fr-radio fr-radio-primary bold-with-subtext">
-                    <input type="radio" id="vnpay" name="paymentMethod" value="2"
-                           (change)="onSelectionChange(2)" [checked]="selectedMethod === 2" />
-                    <label for="vnpay" class="content-wrapper">
-                      <span class="content-text">
-                        <span class="title">Thanh toán bằng VNPAY</span>
-                      </span>
-                    </label>
-                  </span>
-                </div>
+
+<!--                <div class="mb-m pr-s">-->
+<!--                  <span class="fr-radio fr-radio-primary bold-with-subtext">-->
+<!--                    <input type="radio" id="payinstore" name="paymentMethod" value="3"-->
+<!--                           (change)="onSelectionChange(5)" [checked]="selectedMethod === 5" />-->
+<!--                    <label for="payinstore" class="content-wrapper">-->
+<!--                      <span class="content-text">-->
+<!--                        <span class="title">Thanh Toán Tại Cửa Hàng</span>-->
+<!--                      </span>-->
+<!--                    </label>-->
+<!--                  </span>-->
+<!--                </div>-->
+
+<!--                <div class="mb-m pr-s">-->
+<!--                    <span class="fr-radio fr-radio-primary bold-with-subtext">-->
+<!--                      <input type="radio" id="cod" name="paymentMethod" value="1"-->
+<!--                             (change)="onSelectionChange(1)" [checked]="selectedMethod === 1"/>-->
+<!--                      <label for="cod" class="content-wrapper">-->
+<!--                        <span class="content-text">-->
+<!--                          <span class="title">Thanh toán khi nhận hàng</span>-->
+<!--                        </span>-->
+<!--                      </label>-->
+<!--                    </span>-->
+<!--                </div>-->
+
+<!--                <div class="mb-m pr-s">-->
+<!--                   <span class="fr-radio fr-radio-primary bold-with-subtext">-->
+<!--                    <input type="radio" id="vnpay" name="paymentMethod" value="2"-->
+<!--                           (change)="onSelectionChange(2)" [checked]="selectedMethod === 2" />-->
+<!--                    <label for="vnpay" class="content-wrapper">-->
+<!--                      <span class="content-text">-->
+<!--                        <span class="title">Thanh toán bằng VNPAY</span>-->
+<!--                      </span>-->
+<!--                    </label>-->
+<!--                  </span>-->
+<!--                </div>-->
 
 
 
@@ -76,12 +92,7 @@
               <hr>
               <!-- Nội dung tương ứng -->
 
-
-
-
-
-
-              <div *ngIf="selectedMethod === + '1'">
+              <div *ngIf="selectedMethod === 1">
                 <div class="fr-contents-card">
                   <div>
                     <div>
@@ -91,7 +102,7 @@
                         </div>
                       </div>
                       <div class="fr-wrapper mb-m mt-m" style="width: auto;">
-                        <button [routerLink]="['../review']" style="max-width: 288px" class="fr-btn fr-btn w4-f wundefined-f" type="button" data-test="tiếp-tục-button"
+                        <button  [routerLink]="['../review']" style="max-width: 288px" class="fr-btn fr-btn w4-f wundefined-f" type="button" data-test="tiếp-tục-button"
                         >Tiếp tục
                         </button>
                       </div>
@@ -101,7 +112,7 @@
               </div>
 
 
-              <div *ngIf="selectedMethod === + '2'">
+              <div *ngIf="selectedMethod === 2">
                 <div class="fr-contents-card">
                   <div>
                     <div>

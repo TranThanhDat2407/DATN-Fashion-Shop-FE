@@ -1,0 +1,215 @@
+// @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400i,700,700i');
+// @import url('https://fonts.googleapis.com/css?family=Bree+Serif');
+* {
+  box-sizing: border-box;
+}
+body {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background: #efefef;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: #333;
+}
+// @media (min-width: 600px) {
+//   body {
+//     padding: 60px 10px;
+//   }
+// }
+h1 {
+  margin: 0;
+  font-family: 'Bree Serif', serif;
+  font-size: 36px;
+}
+p {
+  margin-top: 20px;
+  margin-bottom: 0;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.container-list{
+  margin: 10px 10px 0px 10px;
+
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  min-width: 700px;
+  background: #e5e5e5;
+  //   box-shadow: 0 48px 80px -32px rgba(0,0,0,0.3);
+}
+.input {
+  position: absolute;
+  opacity: 0;
+}
+.label {
+  width: 100%;
+  padding: 10px 20px;
+  background: #e5e5e5;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  color: #7f7f7f;
+  transition: background 0.1s, color 0.1s;
+}
+
+.label:hover {
+  background: #d8d8d8;
+}
+.label:active {
+  background: #ccc;
+}
+.input:focus + .label {
+  z-index: 1;
+}
+.input:checked + .label {
+  background: #fff;
+  color: #000;
+}
+@media (min-width: 600px) {
+  .label {
+    width: auto;
+  }
+}
+.panel {
+  display: none;
+  padding: 20px 30px 30px;
+  background: #fff;
+  width: 100%;
+}
+@media (min-width: 600px) {
+  .panel {
+    order: 99;
+  }
+}
+.input:checked + .label + .panel {
+  display: block;
+}
+
+
+.select-box {
+  flex: 9;
+  padding: 10px 10px 0px 10px;
+}
+
+
+.tools-title {
+  transition: transform 0.3s ease-in-out;
+}
+
+.tools-title:hover {
+  transform: scale(0.9);
+  cursor: pointer;
+}
+
+.tools-title {
+
+  gap: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 60px;
+  border-right: 3px solid #e7e7e7;
+  width: 110px;
+  // background-color: rgb(97, 16, 16);
+  font-size: 15px;
+  font-family: "Kanit", sans-serif;
+  margin-top: -5px;
+}
+
+.content-fiter-tools {
+  padding-top: 10px;
+  gap: 5px;
+  display: flex;
+  height: auto;
+  // background-color: rgb(34, 114, 126);
+}
+
+.tool-elements {
+  gap: 10px;
+  // background-color: red;
+  width: 10%;
+  display: flex;
+  overflow-x: auto;
+  justify-content: start;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  -ms-overflow-style: scrollbar;
+}
+
+.tool-elements::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.tool-elements::-webkit-scrollbar-thumb {
+  // background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+
+}
+
+.tool-elements::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.search-product {
+  height: 60px;
+  display: flex;
+  /* Đảm bảo input nằm giữa */
+  justify-content: center;
+  /* Căn giữa theo chiều ngang */
+  align-items: center;
+  /* Căn giữa theo chiều dọc */
+}
+
+input {
+  padding-left: 10px;
+  font-family: "Kanit", sans-serif;
+
+}
+
+.search-product input {
+  width: 100%;
+  height: 70%;
+
+  flex: 9;
+  border: 2px solid #dadada;
+  border-radius: 3px;
+
+
+}
+
+
+select {
+  border-radius: 0;
+}
+
+input {
+  border-radius: 1px;
+  font-family: 600;
+  font-family: "Kanit", sans-serif;
+
+}
+
+option {
+  border-radius: 1px;
+  font-family: 600;
+  font-family: "Kanit", sans-serif;
+
+}
+
+.sortBox {
+  text-align: end;
+
+  margin-left: -50px;
+  flex: 1;
+  display: flex;
+  // flex-direction: column;
+  justify-content: end;
+
+}

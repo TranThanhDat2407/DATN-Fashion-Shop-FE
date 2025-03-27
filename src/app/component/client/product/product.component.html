@@ -21,10 +21,8 @@
           <div class="count-product">
             <span>{{products.length}} Sản Phẩm</span>
           </div>
-          <input type="text" class="form-control rounded-pill"
-                 [(ngModel)]="searchQuery"
-                 (input)="onSearchInput($event)"
-                 placeholder="Tìm kiếm theo từ khóa">
+          <input type="text" class="form-control rounded-pill" [(ngModel)]="searchQuery" (input)="onSearchInput($event)"
+            placeholder="Tìm kiếm theo từ khóa">
         </div>
         <div class="content-filter-tools mb-3 p-3 border rounded">
           <div class="d-flex align-items-center mb-2">
@@ -37,8 +35,21 @@
               <label for="priceRange" class="form-label">Khoảng giá</label>
               <select class="form-select" id="priceRange" (change)="onPriceRangeChange($event)">
                 <option value="">Chọn khoảng giá</option>
-                <option value="600000-700000">{{ getCurrencyPrice(600000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
-                <option value="700000-800000">{{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(800000, currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="600000-700000">{{ getCurrencyPrice(600000, currentCurrencyDetail?.rateToBase ??
+                  1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(700000,
+                  currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="700000-800000">{{ getCurrencyPrice(700000, currentCurrencyDetail?.rateToBase ??
+                  1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(800000,
+                  currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="800000-900000">{{ getCurrencyPrice(800000, currentCurrencyDetail?.rateToBase ??
+                  1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(900000,
+                  currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="900000-1000000">{{ getCurrencyPrice(900000, currentCurrencyDetail?.rateToBase ??
+                  1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(1000000,
+                  currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
+                <option value="1000000-1200000">{{ getCurrencyPrice(1000000, currentCurrencyDetail?.rateToBase ??
+                  1,currentCurrencyDetail?.code ?? '' ) }} - {{ getCurrencyPrice(1200000,
+                  currentCurrencyDetail?.rateToBase ?? 1,currentCurrencyDetail?.code ?? '' ) }}</option>
               </select>
             </div>
 
@@ -46,26 +57,28 @@
             <div>
               <label class="form-label">Chương trình khuyến mãi</label>
               <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="promoDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-outline-secondary dropdown-toggle w-100" type="button" id="promoDropdown"
+                  data-bs-toggle="dropdown" aria-expanded="false">
                   Chọn khuyến mãi
                 </button>
                 <ul class="dropdown-menu p-2" aria-labelledby="promoDropdown">
                   <li class="dropdown-item">
-                    <input class="form-check-input me-2" type="checkbox" id="onlyPromotion" (change)="onPromotionFilterChange($event)">
+                    <input class="form-check-input me-2" type="checkbox" id="onlyPromotion"
+                      (change)="onPromotionFilterChange($event)">
                     <label class="form-check-label" for="onlyPromotion">Chỉ hiển thị sản phẩm có khuyến mãi</label>
                   </li>
-<!--                  <li class="dropdown-item">-->
-<!--                    <input class="form-check-input me-2" type="checkbox" value="new" id="new">-->
-<!--                    <label class="form-check-label" for="new">New</label>-->
-<!--                  </li>-->
-<!--                  <li class="dropdown-item">-->
-<!--                    <input class="form-check-input me-2" type="checkbox" value="coming_soon" id="coming_soon">-->
-<!--                    <label class="form-check-label" for="coming_soon">Coming Soon</label>-->
-<!--                  </li>-->
-<!--                  <li class="dropdown-item">-->
-<!--                    <input class="form-check-input me-2" type="checkbox" value="recycled" id="recycled">-->
-<!--                    <label class="form-check-label" for="recycled">Sản phẩm từ chất liệu tái chế</label>-->
-<!--                  </li>-->
+                  <!--                  <li class="dropdown-item">-->
+                  <!--                    <input class="form-check-input me-2" type="checkbox" value="new" id="new">-->
+                  <!--                    <label class="form-check-label" for="new">New</label>-->
+                  <!--                  </li>-->
+                  <!--                  <li class="dropdown-item">-->
+                  <!--                    <input class="form-check-input me-2" type="checkbox" value="coming_soon" id="coming_soon">-->
+                  <!--                    <label class="form-check-label" for="coming_soon">Coming Soon</label>-->
+                  <!--                  </li>-->
+                  <!--                  <li class="dropdown-item">-->
+                  <!--                    <input class="form-check-input me-2" type="checkbox" value="recycled" id="recycled">-->
+                  <!--                    <label class="form-check-label" for="recycled">Sản phẩm từ chất liệu tái chế</label>-->
+                  <!--                  </li>-->
                 </ul>
               </div>
             </div>
@@ -86,21 +99,28 @@
 
         <div class="products-box">
 
-          <div class="product-item" *ngFor="let product of getFilteredProducts()"
-           [routerLink]="['/client', currentCurrency, currentLang,'detail_product', product.id,
+          <div class="product-item" *ngFor="let product of getFilteredProducts()" [routerLink]="['/client', currentCurrency, currentLang,'detail_product', product.id,
                                                                                     product.colors?.[0]?.id,
-                                                                                    product.sizes?.[0]?.id]"  >
+                                                                                    product.sizes?.[0]?.id]">
 
             <div class="product-item-image">
               <img src="{{getImageProduct(product.detail?.variantImage)}}" alt="aaa">
             </div>
             <div class="product-item-ColorAndbtnWishList">
               <div class="product-item-color">
-                <label *ngFor="let color of product.colors" class="fr-chip-label"
+                <label *ngFor="let color of product.colors?.slice(0, 5)" class="fr-chip-label"
                   [style.background-image]="'url(' + getColorImage(color.valueImg) + ')'"
                   [style.background-size]="'50px'" [style.background-position]="'center center'" [style.width]="'21px'"
                   [style.height]="'21px'">
                 </label>
+
+                <span *ngIf="product.colors?.length ">...</span>
+
+
+
+
+
+
               </div>
               <div class="product-item-btnWishList">
                 <button (click)="$event.stopPropagation(); toggleWishlist(product.id, product.detail?.colorId ?? 0)">
@@ -164,7 +184,8 @@
             </div>
             <ng-container *ngIf="product.promotion?.isActive != null && product.promotion?.isActive">
               <div class="product-item-coupon">
-                <span>{{ "Giảm giá hết thời hạn" | translate }}  {{ product.promotion?.endDate | date:'dd/MM/yyyy, hh:mm a' }}</span>
+                <span>{{ "Giảm giá hết thời hạn" | translate }} {{ product.promotion?.endDate | date:'dd/MM/yyyy, hh:mm
+                  a' }}</span>
 
 
               </div>
@@ -196,7 +217,8 @@
     <ul class="pagination justify-content-center">
       <!-- Nút "Trước" -->
       <li class="page-item" [class.disabled]="first">
-        <a class="page-link" (click)="changePage(currentPage - 1)" [attr.aria-disabled]="first ? 'true' : null">Trước</a>
+        <a class="page-link" (click)="changePage(currentPage - 1)"
+          [attr.aria-disabled]="first ? 'true' : null">Trước</a>
       </li>
 
       <!-- Số trang -->
@@ -213,5 +235,3 @@
 
 
 </div>
-
-

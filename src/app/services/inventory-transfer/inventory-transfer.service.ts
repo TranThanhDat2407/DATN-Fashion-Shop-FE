@@ -35,11 +35,12 @@ export class InventoryTransferService {
     if (isReturn !== undefined) {
       params = params.set('isReturn', isReturn.toString());
     }
-
+    console.log('API URL:',   `${this.api_url}/store/${storeId}?languageCode=en`, { params });
     return this.http.get<ApiResponse<PageResponse<InventoryTransferResponse>>>(
-      `${this.api_url}/store/${storeId}`, { params }
+      `${this.api_url}/store/${storeId}?languageCode=en`, { params }
     );
   }
+  
 
   getTransferById(id: number): Observable<InventoryTransferResponse> {
     return this.http.get<InventoryTransferResponse>(`${this.api_url}/${id}`);
@@ -52,5 +53,7 @@ export class InventoryTransferService {
   cancelTransfer(id: number, langCode: string = 'vi'): Observable<InventoryTransferResponse> {
     return this.http.put<InventoryTransferResponse>(`${this.api_url}/cancel/${id}?langCode=${langCode}`, {});
   }
+
+
 
 }

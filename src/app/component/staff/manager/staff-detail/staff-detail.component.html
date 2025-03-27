@@ -1,0 +1,28 @@
+<app-store-header title_header="Staff Detail"></app-store-header>
+
+<div class="container mt-4">
+  <div class="card shadow-lg p-4">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item"><strong>Full Name:</strong> {{ staff?.firstName }} {{ staff?.lastName }}</li>
+      <li class="list-group-item"><strong>Role:</strong> {{ staff?.role?.name }}</li>
+      <li class="list-group-item"><strong>Email:</strong> {{ staff?.email }}</li>
+      <li class="list-group-item"><strong>Phone:</strong> {{ staff?.phone }}</li>
+      <li class="list-group-item"><strong>Store:</strong> {{ staff?.store?.name }}</li>
+      <li class="list-group-item"><strong>Gender: </strong>
+        <span *ngIf="staff?.gender === 'M'">Male</span>
+        <span *ngIf="staff?.gender === 'F'">Female</span>
+        <span *ngIf="staff?.gender === 'U'">Unselected</span>
+      </li>
+      <li class="list-group-item"><strong>Status: </strong>
+        <span class="badge bg-success" *ngIf="staff?.isActive">Active</span>
+        <span class="badge bg-danger" *ngIf="!staff?.isActive">Inactive</span>
+      </li>
+    </ul>
+
+    <div class="text-center mt-3">
+      <button class="btn btn-warning" (click)="toggleStatus()" [disabled]="loading">
+        {{ staff?.isActive ? 'Deactivate' : 'Activate' }}
+      </button>
+    </div>
+  </div>
+</div>

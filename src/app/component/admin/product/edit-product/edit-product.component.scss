@@ -1,6 +1,7 @@
 .product-details {
-  background-color: #fff;
-
+  background-color: #f5f5f5;
+  width: 100%;
+  margin-top: 20px;
 }
 
 h3 {
@@ -42,16 +43,73 @@ button {
 }
 
 
+.details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+
+.input-name {
+  margin-bottom: 20px;
+}
+
+.input-name label {
+  margin-left: 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: "Kanit", sans-serif;
+}
+
+.input-name input {
+  padding-left: 20px;
+
+  border-radius: 20px;
+  width: 100%;
+  height: 40px;
+}
+
+.product-name-item {
+  font-weight: 700;
+}
+
+.product-name h5 {
+  cursor: pointer;
+  /* Biến con trỏ thành hình bàn tay */
+  transition: color 0.3s ease-in-out;
+  /* Hiệu ứng đổi màu */
+}
+
+.product-name h5:hover {
+  color: #007bff;
+  /* Đổi màu chữ khi hover */
+}
+
+.product-name.active .details {
+  max-height: 500px;
+  /* Đủ lớn để hiển thị nội dung */
+}
+
+/* Bố cục của product-name */
+.product-names {
+  background-color: #f5f5f5;
+  padding: 15px 15px 15px 0;
+  font-family: "Kanit", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
 /* Bố cục của product-name */
 .product-name {
-  display: flex;
-  /* Sử dụng flexbox */
-  justify-content: space-between;
-  /* Căn đều hai đầu */
-  align-items: center;
-  /* Căn giữa theo chiều dọc */
-  height: 7rem;
-  font-size: 3rem;
+  background-color: white;
+  padding: 15px;
+  border: 1px solid #c4c4c4;
+  border-radius: 24px;
+  font-family: "Kanit", sans-serif;
+  margin-bottom: 10px
+}
+
+.colorTitle {
+  color: #3251ad;
 }
 
 /* Tên sản phẩm */
@@ -421,6 +479,21 @@ button {
   font-size: 0.9rem;
 }
 
+.btn-save {
+  width: 100%;
+  border-radius: 25px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 700;
+  height: 33px;
+  background-color: white;
+}
+
+.btn-save:hover {
+  background-color: #3251ad;
+  color: white;
+  border: none;
+}
+
 /*------------------------------ Decripsion */
 /* Tăng khoảng cách dòng và căn chỉnh */
 .details-content {
@@ -450,6 +523,28 @@ button {
   /* Màu chữ xám nhạt */
   border-color: #ddd;
   font-weight: normal;
+}
+.coupon-pesent.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+
+.coupon-pesent {
+  margin-left: 4px;
+  border: 1px solid black;
+  padding: 3px;
+  background: linear-gradient(145deg, #ffffff, #e6e6e6);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), 
+              -4px -4px 10px rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  transition: transform 0.2s ease-in-out;
+}
+.coupon-pesent:hover{
+  cursor: pointer;
+  border: 1px solid rgb(8, 185, 16);
+  box-shadow: 4px 4px 10px rgba(8, 185, 16), 
+              -4px -4px 10px rgba(255, 255, 255, 0.8);
 }
 
 /* Tùy chỉnh viền */
@@ -484,9 +579,201 @@ button {
   border: none;
 }
 
-/* Responsive CSS */
+/* Hiệu ứng icon */
+.color-item-add {
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
 
-/* Mobile devices (max-width: 768px) */
+.color-item-add:hover {
+  transform: scale(0.9);
+}
+ 
+.popup-color{
+  font-family: "Kanit", sans-serif;
+
+  position: fixed;
+  top: -10%;
+  left: -28%;
+  width: 100%;
+  height: 100vh;
+  // background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-size{
+  font-family: "Kanit", sans-serif;
+
+  position: fixed;
+  top: -10%;
+  left: -28%;
+  width: 100%;
+  height: 100vh;
+  // background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.selected-color {
+  background-color: rgb(255, 255, 255);
+  height: auto;
+}
+
+.check-color {
+  margin-right: 4px;
+}
+
+.btn-confirm-search {
+  height: 46px;
+  margin-left: 4px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.input-search-color {
+  width: 100%;
+  height: 40px;
+  border-radius: 6px;
+  padding-left: 5px;
+}
+.name-size{
+  height: auto;
+  border-radius: 5px;
+  padding: 5px;
+  border: 1px solid black;
+  font-size: 0.8rem;
+}
+.box-color {
+  background-color: white;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin-top: 6px;
+  height: auto;
+}
+
+.img-color {
+  width: 15%;
+}
+
+.item-color {
+  padding: 2px 1px 2px 2px;
+  height: auto;
+  width: 49%;
+  border: 1px solid black;
+  border-radius: 7px;
+  background-color: white;
+  max-height: 47px;
+}
+
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // background-color: red;
+}
+
+.pagination button {
+  margin-left: 4px;
+  border-radius: 10px;
+}
+
+.pagination span {
+  margin-left: 4px;
+}
+
+.item-color-select {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2px 1px 2px 2px;
+  border-radius: 7px;
+  background-color: #ffffff;
+  max-width: 270px;
+}
+
+.item-size-select {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 2px 1px 2px 2px;
+  border-radius: 7px;
+  background-color: #ffffff;
+  max-width: 270px;
+}
+.size-box{
+  margin-bottom: 10px;
+  margin-left: 5px;
+}
+.tect-color-name {
+  font-size: 0.8rem;
+
+}
+ 
+.popup-content-color {
+  font-family: "Kanit", sans-serif;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+
+  /* Viền nhẹ */
+  border: 2px solid #d1d9e6;
+
+  /* Hiệu ứng nổi (box shadow) */
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15),
+    -6px -6px 12px rgba(255, 255, 255, 0.8);
+
+  /* Hiệu ứng chuyển động mượt */
+  transition: all 0.3s ease-in-out;
+}
+.popup-content-size {
+  font-family: "Kanit", sans-serif;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+
+  /* Viền nhẹ */
+  border: 2px solid #d1d9e6;
+
+  /* Hiệu ứng nổi (box shadow) */
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15),
+    -6px -6px 12px rgba(255, 255, 255, 0.8);
+
+  /* Hiệu ứng chuyển động mượt */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Khi hover vào sẽ nổi bật hơn */
+.popup-content-color:hover {
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2),
+    -10px -10px 20px rgba(255, 255, 255, 0.9);
+}
+.popup-content-size:hover {
+  box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2),
+    -10px -10px 20px rgba(255, 255, 255, 0.9);
+}
+
+/* Nút đóng */
+.close-btn {
+  font-size: 24px;
+  cursor: pointer;
+  float: right;
+}
+
+.text-color-name {
+  font-size: 0.7rem;
+}
+
 @media (max-width: 768px) {
 
   /* Container adjustments */

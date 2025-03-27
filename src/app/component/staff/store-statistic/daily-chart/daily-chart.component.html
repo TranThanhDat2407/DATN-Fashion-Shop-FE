@@ -1,0 +1,64 @@
+<div class="d-flex align-items-center justify-content-end gap-2 mb-2 mt-3">
+  <!-- Chọn tháng -->
+  <div class="d-flex align-items-center">
+    <label for="month" class="me-2 fw-bold">Month:</label>
+    <select id="month" class="form-select w-auto" [(ngModel)]="month" (change)="fetchRevenueData()">
+      <option *ngFor="let m of months" [value]="m.value">{{ m.label }}</option>
+    </select>
+  </div>
+
+  <!-- Chọn năm -->
+  <div class="d-flex align-items-center">
+    <label for="year" class="me-2 fw-bold">Year:</label>
+    <select id="year" class="form-select w-auto" [(ngModel)]="year" (change)="fetchRevenueData()">
+      <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+    </select>
+  </div>
+</div>
+
+
+<div *ngIf="chartData.length > 0">
+  <canvas
+    baseChart
+    [datasets]="chartData"
+    [labels]="chartLabels"
+    [options]="chartOptions"
+    [legend]="chartLegend"
+    [plugins]="chartPlugins"
+    [type]="chartType"
+  >
+  </canvas>
+</div>
+
+<div *ngIf="chartData.length === 0">
+  <p>No data available to display.</p>
+</div>
+
+<h3 class="mt-4">Revenue List</h3>
+<button class="btn btn-success me-2"
+        (click)="exportRevenue()"
+>Export Excel</button>
+<table class="table table-bordered mt-2">
+  <thead>
+  <tr>
+    <th>Date</th>
+    <th>Revenue</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let item of revenueList">
+    <td>{{ item.day }}/{{ item.month }}/{{ item.year }}</td>
+    <td>{{ item.totalRevenue | currency:'VND':'' }} VND</td>
+    <td>
+    <button class="btn btn-primary me-2"
+            (click)="goToOrders(item.day,item.month, item.year)"
+    >View Orders</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<h4 class="mt-3 fw-bold d-flex justify-content-start">
+  Total Revenue: {{ totalRevenueSum | currency:'VND':'' }} VND
+</h4>
