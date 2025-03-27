@@ -1,13 +1,13 @@
 <div class="container-menu">
     <div class="header-menu" [class.activeRespone]="isActive">
         <img src="../../../../assets/images/admin.png" alt="" width="32">
-        <h6 class="menu-item" [class.activeRespone]="isActive"><span
-            class="menu-mini">Admin</span></h6>
+        <h6 class="menu-item" [class.activeRespone]="isActive"><span class="menu-mini">Admin</span></h6>
     </div>
     <div class="menu-aside">
         <div class="content-menu">
             <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/dashboard"
-                routerLinkActive="active-routerLink" data-bs-toggle="tooltip" data-bs-placement="top" title="This is a tooltip">
+                routerLinkActive="active-routerLink" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="This is a tooltip">
                 <img src="../../../../assets/images/dashboard.png" width="18" alt=""><span
                     class="menu-mini">Dashboard</span>
             </div>
@@ -17,15 +17,14 @@
                     class="menu-mini">Category</span>
             </div>
             <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/list_attribute"
-            routerLinkActive="active-routerLink">
-            <img src="../../../../assets/images/value.png" width="18" alt=""><span
-                class="menu-mini">Attribute</span>
-        </div>
-          <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/list_coupon"
-               routerLinkActive="active-routerLink">
-            <img src="../../../../assets/images/value.png" width="18" alt=""><span
-            class="menu-mini">Coupon</span>
-          </div>
+                routerLinkActive="active-routerLink">
+                <img src="../../../../assets/images/value.png" width="18" alt=""><span
+                    class="menu-mini">Attribute</span>
+            </div>
+            <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/list_coupon"
+                routerLinkActive="active-routerLink">
+                <img src="../../../../assets/images/value.png" width="18" alt=""><span class="menu-mini">Coupon</span>
+            </div>
             <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/list_order"
                 routerLinkActive="active-routerLink">
                 <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
@@ -37,35 +36,44 @@
                 <img src="https://img.icons8.com/?size=100&id=2531&format=png&color=000000" width="18" alt=""> <span
                     class="menu-mini">Inventory</span>
             </div>
+            <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/list_store"
+                routerLinkActive="active-routerLink">
+                <img src="https://img.icons8.com/?size=100&id=18878&format=png&color=000000" width="18" alt=""> <span
+                    class="menu-mini">Store</span>
+            </div>
             <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/list_product"
-            routerLinkActive="active-routerLink">
+                routerLinkActive="active-routerLink">
                 <img src="../../../../assets/images/shirt.png" width="18" alt=""><span class="menu-mini">Product</span>
             </div>
-            <div class="menu-item " [class.activeRespone]="isActive" routerLink="/admin/list_promotions" routerLinkActive="active-routerLink">
-              <img src="../../../../assets/images/promotion.png" width="18" alt=""> <span class="menu-mini">Promotions</span>
+            <div class="menu-item " [class.activeRespone]="isActive" routerLink="/admin/list_promotions"
+                routerLinkActive="active-routerLink">
+                <img src="https://img.icons8.com/?size=100&id=12089&format=png&color=000000" width="18" alt=""> <span
+                    class="menu-mini">Promotions</span>
             </div>
-            <div class="menu-item " [class.activeRespone]="isActive" routerLink="/admin/list_user" routerLinkActive="active-routerLink">
+            <div class="menu-item " [class.activeRespone]="isActive" routerLink="/admin/list_user"
+                routerLinkActive="active-routerLink">
                 <img src="../../../../assets/images/group.png" width="18" alt=""> <span class="menu-mini">User</span>
             </div>
-           <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"
-               routerLinkActive="active-routerLink">
-            <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
-            class="menu-mini">Statistical</span>
+            <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"
+                routerLinkActive="active-routerLink">
+                <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
+                    class="menu-mini">Statistical</span>
             </div>
             <div class="menu-item" [class.activeRespone]="isActive">
-                <span class="menu-mini" >
+                <span class="menu-mini">
                     ACCOUNT ADMIN
                 </span>
             </div>
-            <div class="menu-item" [class.activeRespone]="isActive">
+            <!-- <div class="menu-item" [class.activeRespone]="isActive">
                 <img src="../../../../assets/images/user.png" width="18" alt="">  <span class="menu-mini">Profile</span>
-            </div>
+            </div> -->
             <div class="menu-item" [class.activeRespone]="isActive">
-                <img src="../../../../assets/images/log-in.png" width="18" alt="">  <span class="menu-mini">Sign In</span>
+                <img src="../../../../assets/images/log-in.png" width="18" alt=""> <span class="menu-mini">Sign
+                    In</span>
             </div>
-            <div class="menu-item" [class.activeRespone]="isActive">
+            <!-- <div class="menu-item" [class.activeRespone]="isActive">
                 <img src="../../../../assets/images/group.png" width="18" alt="">  <span class="menu-mini">Sign Up</span>
-            </div>
+            </div> -->
 
 
         </div>
@@ -73,7 +81,7 @@
             <button class="menu-item" [class.activeRespone]="isActive" (click)="logout()">
                 <img src="../../../../assets/images/turn-off.png" width="18" alt="">
                 <span class="menu-mini">
-                  Log Out
+                    Log Out
                 </span>
             </button>
 
