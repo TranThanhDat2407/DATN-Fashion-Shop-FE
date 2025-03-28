@@ -628,7 +628,13 @@ export class InventoryComponent implements OnInit {
 
 
 
+  reloadTransfer() {
+    this.nameSearchWarehouseTransfer = ''
+    this.selectedWarehouseTransfer  = []
+    this.fetchWarehouseTransferOnly()
 
+    // this.modelHeight = 0
+  }
 
   resetForm() {
     this.nameSearchProductVar = ''
