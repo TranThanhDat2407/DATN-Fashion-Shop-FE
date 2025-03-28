@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {NavigationService} from '../../../../services/Navigation/navigation.service';
 import {AddressDTO} from '../../../../dto/address/AddressDTO';
@@ -10,6 +10,7 @@ import {CommonModule, JsonPipe, NgClass, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {LocationServiceService} from '../../../../services/client/LocationService/location-service.service';
 import {forkJoin, Observable, of} from 'rxjs';
+import bootstrap from '../../../../../main.server';
 
 
 @Component({
@@ -96,6 +97,7 @@ export class EditAddressComponent implements OnInit{
           this.selectedWard = null;
           this.districts = [];
           this.wards  = [];
+
         } else {
           console.error('Thêm địa chỉ thất bại!');
           console.log(response.data)

@@ -89,9 +89,6 @@
 
 
 <div class="container">
-
-
-
   <div class="modal" id="dang-ky-dia-chi-profile" tabindex="-1" aria-labelledby="modal-new-address"  aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -102,8 +99,6 @@
         <div class="modal-body">
           <div class="wrapper">
             <form #addressForm="ngForm" novalidate class="form-new-address">
-
-              <!-- Tên -->
               <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Tên&nbsp;</label>
                 <div class="col-sm-9">
@@ -230,8 +225,12 @@
                 <div class="col">
                   <button class="btn btn-address" [disabled]="addressForm.invalid"
                           style="padding: 10px 100px; background-color: #1b1b1b; color: #ffffff"
-                          type="button" (click)="isUpdate ? updateAddress() : addNewAddress()">
+                          type="button"
+                          (click)="isUpdate ? updateAddress() : addNewAddress()"
+                          data-bs-dismiss="modal"
+                       >
                     {{ isUpdate ? 'Cập nhật' : 'Xác nhận' }}
+
                   </button>
                 </div>
                 <div class="col">
@@ -241,13 +240,9 @@
               </div>
 
             </form>
-
           </div>
         </div>
-
       </div>
-
     </div>
-
   </div>
 </div>
