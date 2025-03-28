@@ -43,6 +43,11 @@ export const adminRouter: Routes = [
     children:
       [
         {
+          path: "edit_store/:id",
+          component: EditStoreComponent,
+          canActivate: [AdminGuardFn],
+        },
+        {
           path: "transfer_detail/:id",
           component: TransferDetailComponent,
           canActivate: [AdminGuardFn],

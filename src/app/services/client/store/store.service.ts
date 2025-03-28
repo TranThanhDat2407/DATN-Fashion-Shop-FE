@@ -26,6 +26,22 @@ export class StoreService {
 
   constructor(private http: HttpClient) { }
 
+
+  deleteStore(storeId : number) : Observable<any>{
+    return this.http.delete(`${this.apiUrl}/${storeId}`)
+  }
+
+  createStore(data: any) : Observable<any>{
+    return this.http.post(`${this.apiUrl}`,data)
+  }
+  editStore( storeId : number): Observable<ApiResponse<ListStoreDTO>>{
+    return this.http.get<ApiResponse<ListStoreDTO>>(`${this.apiUrl}/${storeId}`)
+  }
+
+  updateStore( storeId : number,data: any): Observable<any>{
+    return this.http.put<ApiResponse<ListStoreDTO>>(`${this.apiUrl}/${storeId}`,data)
+  }
+
   getStores(pageNo: number,
     pageSize: number,
     city: string,
