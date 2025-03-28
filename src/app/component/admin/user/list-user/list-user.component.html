@@ -1,0 +1,83 @@
+<app-header-admin [title_header]="'User'" [routerLinkString]="'/admin/edit_user'"/>
+<div class="d-flex flex-column">
+  <div class="select-box">
+    <div class="content-fiter-tools">
+      <div class="tools-title">
+        <!-- (click)="resetFiter()" -->
+        <i class="fa-solid fa-sort"></i>
+        <span>Filter</span>
+      </div>
+      <div class="tool-elements  ">
+        <select class="form-select" [(ngModel)]="filterActiveStatus" (change)="onIsActiveChange()">
+          <option [ngValue]="null" selected>--</option>
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Non Active</option>
+        </select>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div style="padding: 0 10px 0 10px;margin-top: 10px;margin-bottom: 10px;">
+    <hr style="border: 0.2px solid black; margin: 0;">
+
+  </div>
+
+  <div class="row">
+    <div class="col-10">
+      <div class="tool-searchs row">
+        <div class="col-1 mt-2 ps-4 " style="cursor: pointer;">
+          <!-- (click)="deleteItemsCheck()" -->
+          <img src="https://img.icons8.com/?size=100&id=gq8yzmdS4C7D&format=png&color=000000" width="50"
+               alt="">
+        </div>
+        <div class="col-9" style="margin-left: 4px;">
+          <div class="search-product">
+            <input type="text" placeholder=" Search Category Name" [(ngModel)]="emailSearch"
+                   name="nameSearch" (ngModelChange)="onNameChange($event)">
+            <!--   -->
+          </div>
+        </div>
+        <div class="col-1">
+          <div class="search-product">
+            <!-- <input type="text" style="font-size: 10px;" [(ngModel)]="parentId" name="parentId" disabled
+placeholder="Parent Id"> -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-2" style="text-align: end;padding-right: 20px;">
+      <strong>
+        SORT </strong>
+
+      <div class="sortBox">
+        <!-- <div class="search-product">
+<input type="text" [(ngModel)]="parentIdSearch" name="parentIdSearch"
+(ngModelChange)="searchParentIdCategory($event)" placeholder=" Search Parent Id">
+</div> -->
+        <div class="element-select ms-1 ">
+          <select style="height: 30px;" [(ngModel)]="sortBy" (change)="onCreateAtChange()">
+            <option [value]="'id'" selected>Id</option>
+            <option [value]="'createdAt'">Created At</option>
+          </select>
+        </div>
+
+        <div class="element-select d-flex justify-content-end   ">
+          <select class=" " [(ngModel)]="sortDir" (change)="onSortDirChange()">
+            <option [value]="'asc'" selected>&uarr;</option>
+            <option [value]="'desc'" selected>&darr;</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-table *ngIf="userData" [currentPage]="pageIndex"
+  [tableHeaders]="headerTableList" [tableData]="userData?.content || []" [dataPage]="userData"
+  [routerLinkString]="'/admin/edit_user'"
+  (pageChanged)="onPageChange($event)" [changeActive]="toggleIsActive">
+
+</app-table>

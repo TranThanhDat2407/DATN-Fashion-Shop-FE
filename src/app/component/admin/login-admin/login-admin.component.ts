@@ -121,7 +121,6 @@ export class LoginAdminComponent implements OnInit{
         if (isAdmin) {
           // ✅ Lưu token trước khi xử lý
           this.tokenService.setToken(token);
-
           // ✅ Gọi các thao tác sau khi login thành công
           this.onLoginSuccess();
         } else {

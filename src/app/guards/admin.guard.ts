@@ -37,7 +37,6 @@ export class AdminGuard {
 
     // ❌ Không đủ quyền - chặn và thông báo
     this.authService.setReturnUrl(this.router.url);
-    this.toast.error("You need administrator rights to access");
 
     // ✅ Chuyển hướng về trang login
     this.router.navigate(['admin/login_admin']);
