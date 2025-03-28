@@ -2,6 +2,7 @@ import {Promotion} from '../models/Product/Promotion';
 import {BaseResponse} from './Response/base-response';
 
 export interface ListStoreStockDTO extends BaseResponse{
+  inventoryId? :number
   productId: number;
   productVariantId: number;
   productImage: string;

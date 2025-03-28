@@ -30,26 +30,25 @@ export class AdminGuard {
     const userRole = this.user_info?.roles;
     const isAdmin = userRole?.includes('ROLE_ADMIN') ?? false;
 
-    console.log('Guard role:', this.userService.getUserInfo());
-
+    // ✅ Trường hợp được phép truy cập
     if (!isTokenExpired && isUserIdValid && isAdmin) {
       return true;
-    } else {
-      // Nếu không authenticated, bạn có thể redirect hoặc trả về một UrlTree khác.
-      // Ví dụ trả về trang login:
-      this.authService.setReturnUrl(this.router.url);
-      this.toast.error("You need administrator rights to access");
-      this.router.navigate(['admin/login_admin']);
-
-      return true;
     }
+
+    // ❌ Không đủ quyền - chặn và thông báo
+    this.authService.setReturnUrl(this.router.url);
+
+    // ✅ Chuyển hướng về trang login
+    this.router.navigate(['admin/login_admin']);
+
+    return false; // ❗ Quan trọng: chặn truy cập
   }
+
 }
 
 export const AdminGuardFn: CanActivateFn = (
   next: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
 ): boolean => {
-
   return inject(AdminGuard).canActivate(next, state);
 }

@@ -7,7 +7,6 @@ import { ProductServiceService } from '../../../../services/client/ProductServic
 import { catchError, firstValueFrom, forkJoin, map, Observable, of } from 'rxjs';
 import { PageResponse } from '../../../../dto/Response/page-response';
 import { ProductListDTO } from '../../../../dto/ProductListDTO';
-import { response } from 'express';
 import { ApiResponse } from '../../../../dto/Response/ApiResponse';
 import { ProductVariantDetailDTO } from '../../../../models/ProductVariant/product-variant-detailDTO';
 
@@ -106,7 +105,7 @@ export class ListProductComponent implements OnInit {
     setTimeout(() => {
       this.onPageChange(0)
     }, 500);
-   
+
     this.cdr.detectChanges(); // Cập nhật lại giao diện ngay lập tức
   }
 
@@ -129,16 +128,12 @@ export class ListProductComponent implements OnInit {
   }
 
   onCreateAtChange() {
- 
       this.sortBy = this.sortBy
       this.fetchProductList()
-    
   }
   onSortDirChange() {
       this.sortDir = this.sortDir
       this.fetchProductList()
-
-    
   }
 
   toggleCheckbox = (item: any): void => {

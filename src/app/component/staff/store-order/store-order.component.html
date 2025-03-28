@@ -141,7 +141,7 @@
         <td>{{ order.shippingMethod?.methodName || 'Pay In Store' }}</td>
         <td>{{ order.paymentMethod?.methodName || '' }}</td>
 
-        <td>{{ order.user?.firstName || '' }} {{ order.user?.lastName || 'Guest' }}</td>
+        <td>{{ order.user?.firstName || '' }} {{ order.user?.lastName || '' }}</td>
 
         <!-- Nếu createdBy null, hiển thị 'System' -->
         <td>{{ order.createdBy ? order.createdBy : 'System' }}</td>
@@ -157,7 +157,6 @@
       </tr>
       </tbody>
     </table>
-
   </div>
   <div class="d-flex justify-content-end">
   <button (click)="exportToExcel()" class="btn btn-success">Export Excel</button>
@@ -179,5 +178,4 @@
       </li>
     </ul>
   </nav>
-
 </div>

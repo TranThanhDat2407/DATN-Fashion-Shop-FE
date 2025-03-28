@@ -23,8 +23,22 @@ import { error } from 'console';
 import { StoreService } from '../../../../services/client/store/store.service';
 import { CategoryAdminService } from '../../../../services/admin/CategoryService/category.service';
 import { LanguagesService } from '../../../../services/LanguagesService/languages.service';
+import { InventoryService } from '../../../../services/admin/InventoryService/inventory.service';
+import { DetailMediaDTO } from '../../../../dto/DetailMediaDTO';
+import { MediaInfoDTO } from '../../../../dto/MediaInfoDTO';
+import { ColorDTO } from '../../../../models/colorDTO';
+import { ProductVariantDTO } from '../../../../dto/ProductVariantDTO';
+import { ImageDetailService } from '../../../../services/client/ImageDetailService/image-detail.service';
+import { ProductServiceService } from '../../../../services/client/ProductService/product-service.service';
+import { ToastrService } from 'ngx-toastr';
+import { ButtonComponent } from "../../button/button.component";
 
-
+interface ProductVariantModel {
+  sortOrder: number;
+  modelHeight: number;
+  colorValueId: number;
+  productVariantIds: number[];
+}
 interface Category {
   id: number;
   name: string;
@@ -35,17 +49,18 @@ interface Category {
 @Component({
   selector: 'app-inventory',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxBarcode6Module, HeaderAdminComponent, NgOptimizedImage, RouterLink],
+  imports: [CommonModule, FormsModule, NgxBarcode6Module, HeaderAdminComponent, NgOptimizedImage, RouterLink, ButtonComponent],
   templateUrl: './inventory.component.html',
   styleUrl: './inventory.component.scss'
 })
 export class InventoryComponent implements OnInit {
-
-
+  inventoryId: number = 0
+  dataMessage: string = ''
 
   selectedStore: number = 0;
 
   storeId: number = 2;
+  storeIdForWarehouse: number = 0;
 
   name?: string
   city?: string
@@ -112,6 +127,73 @@ export class InventoryComponent implements OnInit {
   searchTextCategorySubChild: string = '';
   selectedCategorySubChild: Category | null = null;
 
+  dataPageInventoryForWarehouse: PageResponse<ListStoreStockDTO[]> | null = null
+  dataInventoryForWarehouse: ListStoreStockDTO[] = []
+
+  dataPageInventoryForWarehouseTransfer: PageResponse<ListStoreStockDTO[]> | null = null
+  dataInventoryForWarehouseTransfer: ListStoreStockDTO[] = []
+  dataAllInventoryForWarehouseTransfer: ListStoreStockDTO[] = []
+
+  warehouseId: number = 1
+  nameSearchWarehouse: string = ''
+  categoryIdWarehouse?: number
+  pageWarehouse?: number
+  sizeWarehouse?: number
+  sortByWarehouse: string = 'id'
+  sortDirWarehouse?: string
+
+
+  mediaId!: number;
+  productId!: number;
+  checkedItem: number[] = [];
+
+  dataDetailMedia: DetailMediaDTO[] = [];
+  dataMediaInfo: MediaInfoDTO | null = null;
+  dataColors: ColorDTO[] = [];
+  selectedColorId!: number;
+  colorId?: number;
+  dataProductVariantPage: PageResponse<ProductVariantDTO[]> | null = null
+  dataProductVariant: ProductVariantDTO[] = []
+  qtyInStock: number = 0
+
+  currentPageProductVar: number = 0;
+  pageSizeProductVar: number = 15;
+  totalPageProductVar: number = 0;
+  nameSearchProductVar: string = ''
+
+
+  warehouseIdTranfer: number = 1
+  categoryIdWarehouseTranfer?: number
+  pageWarehouseTranfer?: number
+  sizeWarehouseTranfer?: number
+  sortByWarehouseTranfer: string = 'id'
+  sortDirWarehouseTranfer?: string
+
+
+  currentPageWarehouseTransfer: number = 0;
+  pageSizeWarehouseTransfer: number = 15;
+  totalPageWarehouseTransfer: number = 0;
+  nameSearchWarehouseTransfer: string = ''
+  pageNoWarehouseTransfer = 0;
+
+
+  nameSearch: string = ''
+  selectedProductVariants: number[] = [];
+  newProductVariant: ProductVariantModel = {
+    sortOrder: 0,
+    modelHeight: 0,
+    colorValueId: 0,
+    productVariantIds: []
+  }
+
+
+  pageNoWarehouse = 0;
+  pageSizeWarehouse = 10;
+  totalPagesWarehouse = 0;
+
+  qtyTransfer: number = 1
+
+  selectedWarehouseTransfer: ListStoreStockDTO[] = []; 
 
 
   constructor(
@@ -122,28 +204,492 @@ export class InventoryComponent implements OnInit {
     private http: HttpClient,
     private categoryAdminService: CategoryAdminService,
     private languagesSrevice: LanguagesService,
+    private inventoryService: InventoryService,
+    private imageDetailService: ImageDetailService,
+    private productService: ProductServiceService,
+    private toastService: ToastrService
 
 
   ) { }
 
   async ngOnInit() {
+    this.editInventory('tab-4')
+    console.log('selectedWarehouseTransfer selectedWarehouseTransfer : ' + this.selectedWarehouseTransfer.length)
     await this.fetchCategory();
     this.listCategory = await firstValueFrom(this.buildCategoryTree());
+    this.fetchStockData()
     this.fetchInventoryStore()
+
+
+
+  }
+
+  validateTransfer(): boolean {
+    for (const item of this.selectedWarehouseTransfer) {
+      if (!item.quantityInStock || item.quantityInStock <= 0) {
+        this.toastService.warning(`Invalid quantity for product ID: ${item.productVariantId}`, "Warning", { timeOut: 3000 });
+        return false;
+      }
+    }
+
+
+    if (this.selectedWarehouseTransfer.length === 0) {
+      this.toastService.warning("Please select at least one product!", "Warning", { timeOut: 3000 });
+      return false;
+    }
+
+    if (!this.storeIdForWarehouse) {
+      this.toastService.warning("Please select a store!", "Warning", { timeOut: 3000 });
+      return false;
+    }
+
+
+
+    return true;
+  }
+
+  resetFormTransfer() {
+    this.selectedWarehouseTransfer = []
+    this.fetchWarehouseTransferOnly()
+    this.dataMessage = ''
+    this.storeIdForWarehouse = 0
+    this.qtyTransfer = 1
+  }
+  insertTransfer = async (): Promise<void> => {
+    if (!this.validateTransfer()) return;
+    try {
+
+
+      let isValid = true;
+
+      for (const transfer of this.selectedWarehouseTransfer) {
+        const stock = this.dataAllInventoryForWarehouseTransfer.find(s => s.productVariantId === transfer.productVariantId);
+
+        if (!stock) {
+          this.toastService.warning(`No stock found for product ID: ${transfer.productVariantId}`, "Warning", { timeOut: 5000 });
+          isValid = false;
+          break;
+        }
+
+        if (transfer.quantityInStock > stock.quantityInStock) {
+          this.toastService.warning(
+            `Quantity for ${stock.colorName} - ${stock.sizeName} in Warehouse not enough || Qty in Warehouse: ${stock.quantityInStock}`,
+            "Warning",
+            { timeOut: 5000 }
+          );
+          isValid = false;
+          break;
+        }
+      }
+      if (!isValid) return; 
+      let allSuccess = true; 
+      for (const transfer of this.selectedWarehouseTransfer) {
+        const exemplarTransfer = {
+          warehouseId: 1,
+          storeId: this.storeIdForWarehouse,
+          message: this.dataMessage,
+          transferItems: [
+            {
+              productVariantId: transfer.productVariantId,
+              quantity: transfer.quantityInStock
+            }
+          ]
+        };
+        try {
+          const response = await this.inventoryService.insertInventoryTransfer(exemplarTransfer).toPromise();
+          if (!response) {
+            allSuccess = false;
+          }
+        } catch (error) {
+          console.error("Lỗi khi gọi API:", error);
+          allSuccess = false;
+        }
+      }
+      if (allSuccess) {
+        this.resetFormTransfer();
+        this.toastService.success("Transfer Store Successfully!", "Success", { timeOut: 3000 });
+      } else {
+        this.toastService.error("Some transfers failed!", "Error", { timeOut: 3000 });
+      }
+    } catch (error) {
+      console.error("Lỗi khi chuyển kho:", error);
+      this.toastService.error("Transfer Store error!", "Error", { timeOut: 3000 });
+    }
+  };
+
+
+  updateQuantity(event: Event, itemTransferSelect: any) {
+    const inputElement = event.target as HTMLInputElement;
+    itemTransferSelect.quantityInStock = Number(inputElement.value);
   }
 
 
   async fetchInventoryStore(): Promise<void> {
     const callApis = {
       dataStore: this.getStore(this.name, this.city, this.page, this.size, this.userLat, this.userLon).pipe(catchError(() => of(null))),
+      dataInventoryForWarehouse: this.getInventoryForWarehouse(1, this.nameSearchWarehouse, this.categoryIdWarehouse, this.pageWarehouse, this.sizeWarehouse, this.sortByWarehouse, this.sortDirWarehouse).pipe(catchError(() => of(null))),
+      dataInventoryForWarehouseTransfer: this.getInventoryForWarehouse(1, this.nameSearchWarehouseTransfer, this.categoryIdWarehouseTranfer, this.pageWarehouseTranfer, this.sizeWarehouseTranfer, this.sortByWarehouseTranfer, this.sortDirWarehouseTranfer).pipe(catchError(() => of(null))),
+      dataProductVariant: this.getProductVariant(this.nameSearchProductVar, this.currentPageProductVar, this.pageSizeProductVar).pipe(catchError(() => of(null)))
+
     }
     const response = await firstValueFrom(forkJoin(callApis))
     this.dataPageStore = response.dataStore
     this.dataStore = response.dataStore?.content.flat() ?? []
-    console.log('object ', this.dataStore = response.dataStore?.content.flat() ?? []
-    )
+
+    this.dataPageInventoryForWarehouse = response.dataInventoryForWarehouse
+    this.dataInventoryForWarehouse = response.dataInventoryForWarehouse?.content.flat() ?? []
+    this.totalPagesWarehouse = response.dataInventoryForWarehouse?.totalPages ?? 0
+
+
+    this.dataPageInventoryForWarehouseTransfer = response.dataInventoryForWarehouse
+    this.dataInventoryForWarehouseTransfer = response.dataInventoryForWarehouse?.content.flat() ?? []
+
+    this.totalPageWarehouseTransfer = response.dataInventoryForWarehouse?.totalPages ?? 0
+
+
+
+    this.dataProductVariant = response.dataProductVariant?.content.flat() ?? []
+    this.totalPageProductVar = response.dataProductVariant?.totalPages ?? 0;
+
+
+
+    this.dataAllInventoryForWarehouseTransfer = await this.fetchAllInventoryForWarehouse();
+
+
 
   }
+
+
+  async fetchAllInventoryForWarehouse(): Promise<any[]> {
+    let allData: any[] = [];
+    let currentPage = 0;
+    let totalPages = 1; // Giả sử số trang ban đầu là 1
+
+    while (currentPage < totalPages) {
+      const response = await firstValueFrom(this.getInventoryForWarehouse(
+        1,
+        this.nameSearchWarehouse,
+        this.categoryIdWarehouse,
+        currentPage,
+        this.sizeWarehouse,
+        this.sortByWarehouse,
+        this.sortDirWarehouse
+      ).pipe(catchError(() => of(null))));
+
+      if (response && response.content) {
+        allData = [...allData, ...response.content]; // Gộp dữ liệu từ từng trang
+        totalPages = response.totalPages; // Cập nhật tổng số trang từ API
+      } else {
+        break; // Nếu không có dữ liệu, thoát vòng lặp
+      }
+
+      currentPage++;
+    }
+
+    return allData;
+  }
+  async fetchProductVariantOnly(): Promise<void> {
+    const response = await firstValueFrom(
+      this.getProductVariant(
+        this.nameSearchProductVar,
+        this.currentPageProductVar,
+        this.pageSizeProductVar
+      ).pipe(catchError(() => of(null)))
+    );
+
+    this.dataProductVariantPage = response;
+    this.dataProductVariant = response?.content?.flat() ?? [];
+    this.totalPageProductVar = response?.totalPages ?? 0;
+
+    console.log("dataProductVariant", response);
+  }
+
+
+  async fetchWarehouseTransferOnly(): Promise<void> {
+    const response = await firstValueFrom(
+      this.getInventoryForWarehouse(
+        1, // warehouseId
+        this.nameSearchWarehouseTransfer,
+        this.categoryIdWarehouseTranfer,
+        this.currentPageWarehouseTransfer, // Cập nhật đúng currentPage
+        this.sizeWarehouseTranfer,
+        this.sortByWarehouseTranfer,
+        this.sortDirWarehouseTranfer
+      ).pipe(catchError(() => of(null)))
+    );
+
+    this.dataPageInventoryForWarehouseTransfer = response;
+    this.dataInventoryForWarehouseTransfer = response?.content?.flat() ?? [];
+    this.totalPageWarehouseTransfer = response?.totalPages ?? 0;
+
+    console.log("fetchWarehouseTransferOnly", response);
+  }
+  validateQuantity(item: ListStoreStockDTO): void {
+    if (!item.quantityInStock || item.quantityInStock <= 0) {
+      item.quantityInStock = 1; // Nếu nhỏ hơn hoặc bằng 0 hoặc không phải số, đặt về 1
+    }
+  }
+
+  chooseStoreWarehouse() {
+
+    console.log('storeIdForWarehouse : ' + this.storeIdForWarehouse)
+  }
+  fillQtyInStock(): void {
+    this.dataInventoryForWarehouse.forEach(item => {
+      console.log(`Item ID: ${item.inventoryId}, Current ID: ${this.inventoryId}`);
+
+      if (item.inventoryId === this.inventoryId) {
+        this.qtyInStock = item.quantityInStock
+        console.log("Trùng khớp inventoryId", item.quantityInStock);
+      } else {
+        console.log("Không trùng khớp inventoryId");
+      }
+    });
+  }
+
+
+
+  validationInsert(): boolean {
+    if (this.selectedProductVariants.length === 0) {
+      this.toastService.error('Product Variant is emty', "Error", { timeOut: 3000 });
+      return false;
+    }
+
+    if (this.qtyInStock === 0) {
+      this.toastService.error('Qty in stock is emty', "Error", { timeOut: 3000 });
+      return false;
+    }
+    return true;
+
+  }
+  insertProductVariantFromWarehouse = async (): Promise<void> => {
+    if (!this.validationInsert()) return;
+
+    const insertPromises = this.selectedProductVariants.map(async item => {
+      const dataInsertWarehouse = {
+        warehouseId: 1,
+        productVariantId: Number(item),
+        quantityInStock: this.qtyInStock
+      };
+
+      try {
+        await firstValueFrom(this.inventoryService.insertInventory(dataInsertWarehouse));
+      } catch (error) {
+        console.error(`❌ Lỗi khi thêm productVariantId ${item}:`, error);
+        throw error; // Ném lỗi ra ngoài để kiểm tra sau
+      }
+    });
+
+    try {
+      await Promise.all(insertPromises); // Chờ tất cả API chạy xong
+      this.toastService.success('Add Qty Product Variant In Warehouse Successfully', "Success", { timeOut: 3000 });
+      this.fetchInventoryForWarehouseOnly()
+      this.resetForm(); // ✅ Reset form sau khi tất cả insert thành công
+    } catch (error) {
+      this.toastService.error('Add Qty Product Variant In Warehouse Error', "Error", { timeOut: 3000 });
+    }
+  };
+
+
+
+  resetRouterLink(tab: string): void {
+    this.router.navigate([`/admin/inventory`]);
+    this.editInventory(tab)
+    this.selectedInventory = null
+    this.inventoryId = 0
+
+  }
+  goToEditInventory(idInventory: number): void {
+    this.inventoryId = idInventory;
+    this.fillQtyInStock()
+    this.fillDataEdit();
+    this.editInventory('tab-3');
+  }
+
+  selectedInventory: ListStoreStockDTO | null = null
+
+  fillDataEdit(): void {
+    const inventory = this.dataInventoryForWarehouse.find(item => item.inventoryId === this.inventoryId);
+
+    if (inventory) {
+      this.selectedInventory = inventory; // Gán dữ liệu để hiển thị
+      console.log(this.selectedInventory)
+    } else {
+      console.warn('Không tìm thấy inventory với ID:', this.inventoryId);
+    }
+  }
+
+
+
+
+  inputPage: number = 1;
+  changePageProductVart(page: number) {
+    if (page >= 0 && page < this.totalPageProductVar) {
+      this.currentPageProductVar = page;
+      this.inputPage = page + 1; // Cập nhật giá trị input
+      this.fetchProductVariantOnly()
+
+    }
+  }
+
+  goToPage(page: number) {
+    const pageIndex = page - 1; // Chuyển đổi thành chỉ mục 0-based
+    if (pageIndex >= 0 && pageIndex < this.totalPageProductVar) {
+      this.changePageProductVart(pageIndex);
+    } else {
+      this.inputPage = this.currentPageProductVar + 1; // Reset nếu nhập sai
+    }
+  }
+
+
+  inputPageWarehouseTransfer: number = 1;
+  changePageWarehouseTransfer(page: number) {
+    if (page >= 0 && page < this.totalPageWarehouseTransfer) {
+      this.currentPageWarehouseTransfer = page;
+      this.inputPageWarehouseTransfer = page + 1; // Cập nhật giá trị input
+      this.fetchWarehouseTransferOnly();
+    }
+  }
+
+  goToPageWarehouseTransfer(page: number) {
+    const pageIndex = page - 1; // Chuyển thành chỉ mục 0-based
+    if (pageIndex >= 0 && pageIndex < this.totalPageWarehouseTransfer) {
+      this.changePageWarehouseTransfer(pageIndex);
+    } else {
+      this.inputPageWarehouseTransfer = this.currentPageWarehouseTransfer + 1; // Reset nếu nhập sai
+    }
+  }
+
+
+  searchWarehouseTranfer(): void {
+    console.log(this.nameSearchProductVar)
+    this.goToPageWarehouseTransfer(1)
+    this.fetchWarehouseTransferOnly()
+  }
+
+  searchProductItem(): void {
+    this.goToPage(1)
+    this.fetchProductVariantOnly()
+  }
+
+  getProductVariant(name: string, page: number, size: number): Observable<PageResponse<ProductVariantDTO[]> | null> {
+    return this.productService.getProductVariants(name, page, size).pipe(
+      map((response: ApiResponse<PageResponse<ProductVariantDTO[]>>) => response.data || null),
+      catchError(() => of(null))
+    )
+  }
+
+
+
+
+  toggleCheckbox(productVariantId: number): void {
+    const index = this.selectedProductVariants.indexOf(productVariantId);
+
+    if (index === -1) {
+      this.selectedProductVariants.push(productVariantId);
+    } else {
+      this.selectedProductVariants.splice(index, 1);
+    }
+
+    console.log("Danh sách đã chọn:", this.selectedProductVariants);
+  }
+
+
+  toggleSelectedWarehouseTransfer(warehouseTransfer: ListStoreStockDTO): void {
+    const index = this.selectedWarehouseTransfer.findIndex(item => item.productVariantId === warehouseTransfer.productVariantId);
+
+    if (index !== -1) {
+      this.selectedWarehouseTransfer.splice(index, 1);
+    } else {
+      this.selectedWarehouseTransfer.push({
+        ...warehouseTransfer,
+        quantityInStock: 1 // Đặt qty về 1 khi chọn
+      });
+    }
+
+    // Log danh sách đã chọn
+    console.log("Danh sách Warehouse Transfer đã chọn:", this.selectedWarehouseTransfer);
+  }
+
+  applyAllQtyWarehouse(): void {
+    if (!this.selectedWarehouseTransfer.length) {
+      this.toastService.warning("Please choose Product Variant!", "Warning", { timeOut: 3000 });
+      return; // Đảm bảo có return nếu danh sách trống
+    }
+
+    if (!this.qtyTransfer || this.qtyTransfer == 0) {
+      this.toastService.warning("Quantity must be greater than 0!", "Warning", { timeOut: 3000 });
+      return; // Đảm bảo có return nếu số lượng không hợp lệ
+    }
+
+    this.selectedWarehouseTransfer.forEach(item => item.quantityInStock = this.qtyTransfer);
+    return; // Đảm bảo có return ở cuối cùng
+  }
+
+
+
+
+
+  resetForm() {
+    this.nameSearchProductVar = ''
+    this.qtyInStock = 0
+    // this.nameSearch = ''
+    this.selectedProductVariants = []
+    // this.modelHeight = 0
+  }
+  getColorNameProduct(productId: number): Observable<ColorDTO[]> {
+    return this.productService.getColorNameProduct(productId).pipe(
+      map(
+        (response: ApiResponse<ColorDTO[]>) => response.data || []
+      ), // Chỉ lấy data
+      catchError(() => of([])) // Trả về mảng rỗng nếu lỗi
+    );
+  }
+  get selectedColorName(): string {
+    return this.dataColors.find(color => color.id === this.selectedColorId)?.valueName || 'Không xác định';
+  }
+  getImageColor(fileName: string | undefined): string {
+    return this.productService.getColorImage(fileName);
+  }
+
+  getMediaInfo(mediaId: number): Observable<MediaInfoDTO | null> {
+    return this.imageDetailService.getMediaInfo(mediaId).pipe(
+      map((response: ApiResponse<MediaInfoDTO>) => response?.data || null),
+      catchError((error) => {
+        console.error('Lỗi khi gọi API getMediaInfo : ', error);
+        return of(null);
+      })
+    );
+  }
+  getDetailMedia(mediaId: number): Observable<DetailMediaDTO[] | null> {
+    return this.imageDetailService.getDetailMedia(mediaId).pipe(
+      map((response: ApiResponse<DetailMediaDTO[]>) => response.data),
+      catchError((error) => {
+        console.error('Lỗi khi gọi API getDetailMedia : ', error);
+        return of(null);
+      })
+    )
+  }
+
+
+  getInventoryForWarehouse(
+    warehouseId: number,
+    productName?: string,
+    categoryId?: number,
+    page?: number,
+    size?: number,
+    sortBy?: string,
+    sortDir?: string
+  ): Observable<PageResponse<ListStoreStockDTO[]>> {
+
+    return this.inventoryService.getInventoryForWarehouse(warehouseId, 'en', productName, categoryId, page, size, sortBy, sortDir).pipe(
+      map((response: ApiResponse<PageResponse<ListStoreStockDTO[]>>) => response.data)
+    );
+
+  }
+
+
+
 
   getStore(
     name?: string,
@@ -158,6 +704,8 @@ export class InventoryComponent implements OnInit {
   }
 
   fetchStockData() {
+
+    console.log(this.storeIdForWarehouse)
     const selectedCategoryId = this.selectedCategorySubChild?.id || this.selectedCategoryChild?.id || this.selectedCategoryParent?.id || null;
     this.storeService.getStoresStock(
       this.pageNo,
@@ -174,6 +722,7 @@ export class InventoryComponent implements OnInit {
           this.stockList = response.data.content;
           this.totalPages = response.data.totalPages;
           console.log(this.storeId)
+
         }
       },
       error: (err) => console.error('Lỗi tải dữ liệu kho:', err)
@@ -186,6 +735,76 @@ export class InventoryComponent implements OnInit {
       this.fetchStockData();
     }
   }
+  changePageWarehouse(page: number) {
+    if (page >= 0 && page < this.totalPagesWarehouse) {
+      this.pageNoWarehouse = page;
+      this.fetchInventoryForWarehouseOnly();
+    }
+  }
+
+  async fetchInventoryForWarehouseOnly(): Promise<void> {
+    const response = await firstValueFrom(
+      this.getInventoryForWarehouse(
+        1,
+        this.nameSearchWarehouse,
+        this.categoryIdWarehouse,
+        this.pageNoWarehouse,
+        this.sizeWarehouse,
+        this.sortByWarehouse,
+        this.sortDirWarehouse
+      ).pipe(catchError(() => of(null)))
+    );
+
+    this.dataPageInventoryForWarehouse = response;
+    this.dataInventoryForWarehouse = response?.content?.flat() ?? [];
+    this.totalPagesWarehouse = response?.totalPages ?? 0;
+
+  }
+
+  editInventory(tab: string) {
+    const tab3 = document.getElementById(tab) as HTMLInputElement;
+    if (tab3) {
+      tab3.checked = true; // Chọn tab
+
+      const myDiv = document.getElementById('dic-none');
+      if (myDiv) {
+        if (this.inventoryId !== 0) {
+          myDiv.style.display = 'none'; // Ẩn nếu có inventoryId
+        } else {
+          myDiv.style.display = 'block'; // Hiện nếu inventoryId = 0
+        }
+      }
+    }
+  }
+
+  eventClickApply = (): void => {
+    if (this.inventoryId !== 0) {
+      this.updateInventory()
+    } else if (this.inventoryId === 0) {
+      this.insertProductVariantFromWarehouse()
+    }
+  }
+
+  updateInventory = async (): Promise<void> => {
+    if (!this.inventoryId) {
+      this.toastService.warning("Invalid Inventory ID!", "Warning", { timeOut: 3000 });
+      return;
+    }
+
+    try {
+      await firstValueFrom(this.inventoryService.updateInventory(this.inventoryId, this.qtyInStock));
+
+      this.toastService.success("Inventory updated successfully!", "Success", { timeOut: 3000 });
+      this.fetchInventoryForWarehouseOnly()
+      this.qtyInStock = 0
+      // Refresh inventory list
+    } catch (error) {
+      this.toastService.error("Failed to update inventory!", "Error", { timeOut: 3000 });
+      console.error("❌ Error updating inventory:", error);
+    }
+  };
+
+
 
   buildCategoryTree(): Observable<Category[]> {
     // Giả sử this.dataParentCategories đã được load từ API (kiểu CategoryDTO[])
@@ -306,6 +925,10 @@ export class InventoryComponent implements OnInit {
 
     this.getListCategoryChild(category.id);
     this.fetchStockData();
+    this.categoryIdWarehouse = category.id
+    if (this.categoryIdWarehouse !== undefined || this.categoryIdWarehouse !== null) {
+      this.fetchInventoryForWarehouseOnly()
+    }
   }
 
   selectCategoryChild(category: Category): void {
@@ -320,7 +943,10 @@ export class InventoryComponent implements OnInit {
 
     this.getListCategorySubChild(category.id);
     this.fetchStockData();
-
+    this.categoryIdWarehouse = category.id
+    if (this.categoryIdWarehouse !== undefined || this.categoryIdWarehouse !== null) {
+      this.fetchInventoryForWarehouseOnly()
+    }
   }
 
   selectCategorySubChild(category: Category): void {
@@ -329,6 +955,10 @@ export class InventoryComponent implements OnInit {
     this.searchTextCategorySubChild = '';
     this.getListCategorySubSubChild(category.id);
     this.fetchStockData();
+    this.categoryIdWarehouse = category.id
+    if (this.categoryIdWarehouse !== undefined || this.categoryIdWarehouse !== null) {
+      this.fetchInventoryForWarehouseOnly()
+    }
   }
 
   getListCategoryChild(categoriesIdChild: number | undefined): Category[] {
@@ -410,11 +1040,30 @@ export class InventoryComponent implements OnInit {
     this.selectedCategoryChild = null;
     this.selectedCategorySubChild = null;
     this.categoryId = undefined; // Xóa bộ lọc theo category
+    this.categoryChildren = [];
+    this.categorySubChildren = [];
+    this.categorySubSubChildren = [];
     this.sortBy = 'productVariant.product.id'; // Giá trị mặc định
     this.sortDir = 'asc'; // Giá trị mặc định
     this.pageNo = 0; // Quay về trang đầu tiên
 
     this.fetchStockData(); // Gọi API để tải lại dữ liệu
+  }
+
+  resetFiltersWarehouse() {
+    this.nameSearchWarehouse = '';  // Xóa tìm kiếm tên sản phẩm
+    this.selectedCategoryParent = null;
+    this.selectedCategoryChild = null;
+    this.selectedCategorySubChild = null;
+    this.categoryChildren = [];
+    this.categorySubChildren = [];
+    this.categorySubSubChildren = [];
+    this.categoryIdWarehouse = undefined; // Xóa bộ lọc theo category
+    this.sortByWarehouse = 'id'; // Giá trị mặc định
+    this.sortDirWarehouse = 'asc'; // Giá trị mặc định
+    this.pageNoWarehouse = 0; // Quay về trang đầu tiên
+
+    this.fetchInventoryForWarehouseOnly(); // Gọi API để tải lại dữ liệu
   }
 
 
