@@ -29,18 +29,21 @@ export class InventoryTransferService {
       .set('sortBy', sortBy)
       .set('sortDir', sortDir);
 
+    if (storeId) {
+      params = params.set('storeId', storeId);
+    }
     if (status) {
       params = params.set('status', status);
     }
     if (isReturn !== undefined) {
       params = params.set('isReturn', isReturn.toString());
     }
-    console.log('API URL:',   `${this.api_url}/store/${storeId}?languageCode=en`, { params });
+    console.log('API URL:',   `${this.api_url}/store`, { params });
     return this.http.get<ApiResponse<PageResponse<InventoryTransferResponse>>>(
-      `${this.api_url}/store/${storeId}?languageCode=en`, { params }
+      `${this.api_url}/store`, { params }
     );
   }
-  
+
 
   getTransferById(id: number): Observable<InventoryTransferResponse> {
     return this.http.get<InventoryTransferResponse>(`${this.api_url}/${id}`);
