@@ -114,9 +114,9 @@ export class DashboardComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.fetchRevenueData();
     this.loadTopProducts();
-    this.fetchDailyRevenue();
-    this.fetchMonthlyRevenue();
-    this.fetchYearlyRevenue();
+    // this.fetchDailyRevenue();
+    // this.fetchMonthlyRevenue();
+    // this.fetchYearlyRevenue();
 
     this.fetchDashboard();
     this.getRevenueYesterday().subscribe(response => {

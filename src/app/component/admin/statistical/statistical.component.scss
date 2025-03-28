@@ -78,12 +78,15 @@
   cursor: not-allowed;
 }
 
+thead th {
+  text-align: center;
+}
 
 th {
   cursor: pointer;
   user-select: none;
   padding: 10px;
-  background: #f4f4f4;
+  //background: #f4f4f4;
   text-align: left;
 }
 
@@ -96,7 +99,17 @@ span {
   margin-left: 5px;
 }
 
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  gap: 10px;
+}
 
+.page-info {
+  font-weight: bold;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
