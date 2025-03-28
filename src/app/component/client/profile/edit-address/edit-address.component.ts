@@ -11,12 +11,13 @@ import {FormsModule} from '@angular/forms';
 import {LocationServiceService} from '../../../../services/client/LocationService/location-service.service';
 import {forkJoin, Observable, of} from 'rxjs';
 import bootstrap from '../../../../../main.server';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-edit-address',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, NgForOf, FormsModule, NgClass, JsonPipe],
+  imports: [RouterLink, RouterLinkActive, NgForOf, FormsModule, NgClass, JsonPipe, TranslatePipe],
   templateUrl: './edit-address.component.html',
   styleUrl: './edit-address.component.scss'
 })
