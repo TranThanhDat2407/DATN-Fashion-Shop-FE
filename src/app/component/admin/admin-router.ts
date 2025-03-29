@@ -6,8 +6,6 @@ import { EditCategoryComponent } from "./categoty/edit-category/edit-category.co
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { ListOrderComponent } from "./order/list-order/list-order.component";
 import { EditOrderComponent } from "./order/edit-order/edit-order.component";
-import { ListUserComponent } from "./user/list-user/list-user.component";
-import { EditUserComponent } from "./user/edit-user/edit-user.component";
 import { EditAttributeComponent } from "./attribute/edit-attribute/edit-attribute.component";
 import { EditProductComponent } from "./product/edit-product/edit-product.component";
 import { LoginAdminComponent } from "./login-admin/login-admin.component";
@@ -43,6 +41,11 @@ export const adminRouter: Routes = [
     children:
       [
         {
+          path: "edit_store/:id",
+          component: EditStoreComponent,
+          canActivate: [AdminGuardFn],
+        },
+        {
           path: "transfer_detail/:id",
           component: TransferDetailComponent,
           canActivate: [AdminGuardFn],
@@ -71,27 +74,16 @@ export const adminRouter: Routes = [
           path: 'inventory/edit_qty/:idInventory',
           component: InventoryComponent
         },
-        {
-          path: 'list_user',
-          component: ListUserComponent,
-          canActivate: [AdminGuardFn]
-        },
+
+
         {
           path: 'login_admin',
           component: LoginAdminComponent
         },
+
         {
-          path: 'edit_user',
-          component: EditUserComponent,
-          canActivate: [AdminGuardFn]
-        },
-        {
-          path: 'edit_user/:id',
-          component: EditUserComponent,
-          canActivate: [AdminGuardFn]
-        },
-        {
-          path: 'list_category',
+
+          path:'list_category',
           component: ListCategoryComponent,
           canActivate: [AdminGuardFn]
         },

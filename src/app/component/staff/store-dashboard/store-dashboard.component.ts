@@ -20,6 +20,8 @@ import {WeeklyRevenueChartComponent} from './weekly-revenue-chart/weekly-revenue
 import {OrderComparisonChartComponent} from './order-comparison-chart/order-comparison-chart.component';
 import {CurrencyPipe} from '@angular/common';
 import {PaymentComparisonChartComponent} from './payment-comparison-chart/payment-comparison-chart.component';
+import {UnsoldTableComponent} from './unsold-table/unsold-table.component';
+import {InventoryService, InventoryStatusResponse} from '../../../services/admin/InventoryService/inventory.service';
 
 @Component({
   selector: 'app-store-dashboard',
@@ -32,7 +34,8 @@ import {PaymentComparisonChartComponent} from './payment-comparison-chart/paymen
     WeeklyRevenueChartComponent,
     OrderComparisonChartComponent,
     CurrencyPipe,
-    PaymentComparisonChartComponent
+    PaymentComparisonChartComponent,
+    UnsoldTableComponent
   ],
   templateUrl: './store-dashboard.component.html',
   styleUrl: './store-dashboard.component.scss'
@@ -55,6 +58,7 @@ export class StoreDashboardComponent implements OnInit{
     private route: ActivatedRoute,
     private tokenService: TokenService,
     private userService: UserService,
+    private inventoryService: InventoryService,
     private storeService: StoreService,
     private staffService: StaffService) {
   }
@@ -70,6 +74,7 @@ export class StoreDashboardComponent implements OnInit{
     this.loadOrderComparison();
     this.loadPaymentComparison();
     this.fetchDashboardData(this.storeId);
+    this.loadUnsoldProducts();
   }
 
   // fetchTopProducts(): void {
@@ -142,6 +147,37 @@ export class StoreDashboardComponent implements OnInit{
   onOrdersPageChange(newPage: number): void {
     this.ordersPage = newPage;
     this.fetchLatestOrders();
+  }
+
+  unsoldProducts: InventoryStatusResponse[] = [];
+  unsoldPage = 0;
+  unsoldTotalPages = 1;
+  unsoldLoading = false;
+  pageSize = 5;
+
+// Thêm phương thức loadUnsoldProducts
+  loadUnsoldProducts(): void {
+    this.unsoldLoading = true;
+    const langCode = 'en'; // Hoặc lấy từ ngôn ngữ người dùng
+
+    this.inventoryService.getUnsoldProducts(this.storeId, langCode, this.unsoldPage, this.pageSize)
+      .subscribe({
+        next: (response) => {
+          this.unsoldProducts = response.data.content;
+          this.unsoldTotalPages = response.data.totalPages;
+          this.unsoldLoading = false;
+        },
+        error: (err) => {
+          console.error('Error loading unsold products:', err);
+          this.unsoldLoading = false;
+        }
+      });
+  }
+
+// Thêm phương thức xử lý thay đổi trang
+  onUnsoldPageChange(newPage: number): void {
+    this.unsoldPage = newPage;
+    this.loadUnsoldProducts();
   }
 
 

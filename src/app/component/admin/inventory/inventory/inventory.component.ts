@@ -193,7 +193,7 @@ export class InventoryComponent implements OnInit {
 
   qtyTransfer: number = 1
 
-  selectedWarehouseTransfer: ListStoreStockDTO[] = []; 
+  selectedWarehouseTransfer: ListStoreStockDTO[] = [];
 
 
   constructor(
@@ -281,30 +281,32 @@ export class InventoryComponent implements OnInit {
           break;
         }
       }
-      if (!isValid) return; 
-      let allSuccess = true; 
-      for (const transfer of this.selectedWarehouseTransfer) {
-        const exemplarTransfer = {
-          warehouseId: 1,
-          storeId: this.storeIdForWarehouse,
-          message: this.dataMessage,
-          transferItems: [
-            {
-              productVariantId: transfer.productVariantId,
-              quantity: transfer.quantityInStock
-            }
-          ]
-        };
-        try {
-          const response = await this.inventoryService.insertInventoryTransfer(exemplarTransfer).toPromise();
-          if (!response) {
-            allSuccess = false;
-          }
-        } catch (error) {
-          console.error("Lỗi khi gọi API:", error);
+      if (!isValid) return;
+      let allSuccess = true;
+
+      
+      const transferItems = this.selectedWarehouseTransfer.map(transfer => ({
+        productVariantId: transfer.productVariantId,
+        quantity: transfer.quantityInStock
+      }));
+
+      const exemplarTransfer = {
+        warehouseId: 1,
+        storeId: this.storeIdForWarehouse,
+        message: this.dataMessage,
+        transferItems: transferItems
+      };
+
+      try {
+        const response = await this.inventoryService.insertInventoryTransfer(exemplarTransfer).toPromise();
+        if (!response) {
           allSuccess = false;
         }
+      } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+        allSuccess = false;
       }
+
       if (allSuccess) {
         this.resetFormTransfer();
         this.toastService.success("Transfer Store Successfully!", "Success", { timeOut: 3000 });
@@ -628,7 +630,13 @@ export class InventoryComponent implements OnInit {
 
 
 
+  reloadTransfer() {
+    this.nameSearchWarehouseTransfer = ''
+    this.selectedWarehouseTransfer = []
+    this.fetchWarehouseTransferOnly()
 
+    // this.modelHeight = 0
+  }
 
   resetForm() {
     this.nameSearchProductVar = ''

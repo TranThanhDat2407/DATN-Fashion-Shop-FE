@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditUserComponent } from './edit-user.component';
+import { UnsoldTableComponent } from './unsold-table.component';
 
-describe('EditUserComponent', () => {
-  let component: EditUserComponent;
-  let fixture: ComponentFixture<EditUserComponent>;
+describe('UnsoldTableComponent', () => {
+  let component: UnsoldTableComponent;
+  let fixture: ComponentFixture<UnsoldTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditUserComponent]
+      imports: [UnsoldTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(EditUserComponent);
+    fixture = TestBed.createComponent(UnsoldTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

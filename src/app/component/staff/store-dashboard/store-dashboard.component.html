@@ -118,6 +118,19 @@
       (pageChange)="onOrdersPageChange($event)">
     </app-lastest-order>
       </div>
+
+
+      <div class="col-12">
+        <div class="chart-content line-chart-box ">
+          <span>Inventory Status</span>
+
+          <app-unsold-table
+            [unsoldProducts]="unsoldProducts"
+            [page]="unsoldPage"
+            [totalPages]="unsoldTotalPages"
+            (pageChange)="onUnsoldPageChange($event)">>
+          </app-unsold-table>
+        </div>
   </div>
 
 
