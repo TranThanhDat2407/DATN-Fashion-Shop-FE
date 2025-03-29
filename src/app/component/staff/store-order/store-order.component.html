@@ -127,21 +127,32 @@
           class="text-center">
         <td>{{ i + 1 }}</td>
         <td class="fw-bold">{{ order.orderId }}</td>
-        <td class="fw-bold">{{ order.totalPrice | currency:'VND':'symbol-narrow' }}
+        <td class="fw-bold">{{ order.totalPrice | currency:'VND':'' }} VND
         </td>
         <td>{{ getTotalQuantity(order)}}</td>
         <!--        <td>{{ transfer.warehouseId }}</td>-->
         <!--        <td>{{ transfer.storeId }}</td>-->
         <td>
-            <span>
-              {{ order.orderStatus.statusName }}
-            </span>
+  <span class="fw-bold d-flex align-items-center">
+    <span
+      class="status-indicator"
+      [ngClass]="{
+        'bg-success': order.orderStatus.statusName === 'DONE',
+        'bg-warning': order.orderStatus.statusName === 'PENDING',
+        'bg-danger': order.orderStatus.statusName === 'CANCELLED'
+      }"
+    ></span>
+    {{ order.orderStatus.statusName }}
+  </span>
         </td>
 
         <td>{{ order.shippingMethod?.methodName || 'Pay In Store' }}</td>
         <td>{{ order.paymentMethod?.methodName || '' }}</td>
 
-        <td>{{ order.user?.firstName || '' }} {{ order.user?.lastName || '' }}</td>
+        <td>
+          {{ order.user ? (order.user.firstName || '') + ' ' + (order.user.lastName || '')
+          : 'Guest' }}
+        </td>
 
         <!-- Nếu createdBy null, hiển thị 'System' -->
         <td>{{ order.createdBy ? order.createdBy : 'System' }}</td>

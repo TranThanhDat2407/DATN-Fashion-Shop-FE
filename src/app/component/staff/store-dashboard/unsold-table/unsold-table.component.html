@@ -41,13 +41,14 @@
           </span>
       </td>
       <td>
-          <span class="fw-bold" [ngClass]="{
-            'text-danger': product.daysUnsold > 30,
-            'text-warning': product.daysUnsold > 15 && product.daysUnsold <= 30,
-            'text-success': product.daysUnsold <= 15
-          }">
-            {{ product.daysUnsold }}
-          </span>
+  <span class="fw-bold" [ngClass]="{
+    'text-danger': product.daysUnsold > 30,
+    'text-warning': product.daysUnsold > 15 && product.daysUnsold <= 30,
+    'text-success': product.daysUnsold <= 15 && product.daysUnsold >= 0,
+    'text-muted': product.daysUnsold === -1
+  }" [title]="product.daysUnsold === -1 ? 'This product has never been sold' : ''">
+    {{ product.daysUnsold === -1 ? 'Never sold' : product.daysUnsold }}
+  </span>
       </td>
     </tr>
     </tbody>
