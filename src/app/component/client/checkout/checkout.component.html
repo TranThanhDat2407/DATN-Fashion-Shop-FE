@@ -27,7 +27,7 @@
             <div class="sticky sticky--checkout">
               <div class="" data-test="order-summary">
                 <div class="">
-                  <div><span class="text-uppercase">Tổng đơn hàng</span><span
+                  <div><span class="text-uppercase">Tổng sản phẩm</span><span
                     class="">| {{ cartData?.cartItems?.length }}
                     Sản phẩm</span>
                   </div>
@@ -39,12 +39,15 @@
                   <table>
                     <tbody>
                     <tr class="">
-                      <td data-test="tổng-cộng-label">Tổng cộng</td>
+                      <td data-test="tổng-cộng-label">Tổng đơn hàng
                       <td data-test="tổng-cộng">
   <span class="fr-price-currency fr-price-currency-order-change">
     <abbr class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
     <span>
-      {{ getCurrencyPrice(cartData?.totalPrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+     {{
+        getCurrencyPrice(cartData?.totalPrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1,
+          currentCurrencyDetail?.code ?? 'VND')
+      }}
     </span>
   </span>
                       </td>
@@ -52,29 +55,28 @@
                     </tr>
                     <tr>
 
+                      <!-- Mã giảm giá (nếu có) -->
+                    <tr *ngIf="appliedCoupon">
                       <td colspan="2">
-                        <ng-container *ngIf="appliedCoupon">
-                          <span>{{ "MÃ GIẢM GIÁ" | translate }} ({{ appliedCoupon.code }})</span>
-                          <span>
-      <ng-container *ngIf="appliedCoupon.discountType === 'PERCENTAGE'">
-        -{{ appliedCoupon.discountValue }}%
-        ( {{
-          getCurrencyPrice(getDiscountAmount(),
-            currentCurrencyDetail?.rateToBase ?? 1,
-            currentCurrencyDetail?.code ?? 'VND')
-        }} )
-      </ng-container>
-      <ng-container *ngIf="appliedCoupon.discountType === 'FIXED'">
-        -{{
-          getCurrencyPrice(appliedCoupon.discountValue ?? 0,
-            currentCurrencyDetail?.rateToBase ?? 1,
-            currentCurrencyDetail?.code ?? 'VND')
-        }}
-      </ng-container>
-    </span>
-                        </ng-container>
+                        <span>{{ "MÃ GIẢM GIÁ" | translate }} ({{ appliedCoupon.code }})</span>
+                        <span>
+                    <ng-container *ngIf="appliedCoupon.discountType === 'PERCENTAGE'">
+                      -{{ appliedCoupon.discountValue }}%
+                      ( {{
+                        getCurrencyPrice(getDiscountAmount(),
+                          currentCurrencyDetail?.rateToBase ?? 1,
+                          currentCurrencyDetail?.code ?? 'VND')
+                      }} )
+                    </ng-container>
+                    <ng-container *ngIf="appliedCoupon.discountType === 'FIXED'">
+                      -{{
+                        getCurrencyPrice(appliedCoupon.discountValue ?? 0,
+                          currentCurrencyDetail?.rateToBase ?? 1,
+                          currentCurrencyDetail?.code ?? 'VND')
+                      }}
+                    </ng-container>
+                  </span>
                       </td>
-
                     </tr>
 
                     <tr class="" *ngIf="shippingInfo">
@@ -84,11 +86,12 @@
                         class="fr-no-uppercase fr-price-currency-margin"
                         title="Vietnamese dong">VND</abbr><span>
                   </span>
-                        {{ getCurrencyPrice(shippingInfo.shippingFee ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                        {{ getCurrencyPrice(shippingInfo.shippingFee ?? 0,
+                          currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
                   </span></td>
                     </tr>
                     <tr class="header-row">
-                      <th class="text-uppercase" data-test="tổng-label">Tổng</th>
+                      <th class="text-uppercase" data-test="tổng-label">Tổng sau giảm giá</th>
                       <th data-test="tổng">
                     <span class="fr-price-currency fr-price-currency-order-change">
                       <abbr
@@ -96,17 +99,19 @@
                         title="Vietnamese dong">VND</abbr>
                       <span>
                   </span>
-                      {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                      {{ getCurrencyPrice(getTotalAfterDiscount(),
+                      currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
                     </span>
                       </th>
                     </tr>
                     <tr class="">
-                      <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">Đã bao gồm thuế giá trị gia tăng</td>
+                      <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">Đã bao gồm thuế VAT (8%)</td>
                       <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang"><span
                         class="fr-price-currency fr-price-currency-order-change"><abbr
                         class="fr-no-uppercase fr-price-currency-margin"
                         title="Vietnamese dong">VND</abbr><span></span>
-                        {{ getCurrencyPrice(getVATAmount(), currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                        {{ getCurrencyPrice(getVATAmount(), currentCurrencyDetail?.rateToBase ?? 1,
+                          currentCurrencyDetail?.code ?? 'VND') }}
                       </span></td>
                     </tr>
                     </tbody>
@@ -116,7 +121,11 @@
                       <th data-test="tổng-dơn-dặt-hang"><span
                         class="fr-price-currency fr-price-currency-order-change"><abbr
                         class="fr-no-uppercase fr-price-currency-margin" style="color: red"
-                        title="Vietnamese dong">VND</abbr><span style="color: red;"> {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}</span></span>
+                        title="Vietnamese dong">VND</abbr><span
+                        style="color: red;">
+                        {{ getCurrencyPrice(getGrandTotal(),
+                        currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                      </span></span>
                       </th>
                     </tr>
                     </tfoot>

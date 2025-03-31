@@ -58,10 +58,7 @@ export class ShippingComponent implements OnInit{
     isDefault: false
   };
 
-  shippingMethods = [
-    { id: 1, name: 'Giao hàng nhanh' },
-    { id: 2, name: 'Nhận tại cửa hàng' },
-  ];
+
 
 
   showMoreButton = false;
@@ -441,7 +438,8 @@ export class ShippingComponent implements OnInit{
         receiverName: `${selectedAddress?.firstName} ${selectedAddress?.lastName}`,
         receiverPhone: selectedAddress?.phoneNumber || '',
         shippingMethodId: this.selectedShippingMethod,
-        shippingFee: this.shippingFee ?? 0
+        // shippingFee: this.shippingFee ?? 0
+        shippingFee: 0
       };
       console.log('🚚 Giao đến địa chỉ:', shippingData);
       this.checkoutService.setShippingFee(shippingData);
