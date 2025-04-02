@@ -24,7 +24,6 @@ export interface CountStartAndWishList {
   size: string;
   imageUrl: string;
   totalPrice: number;
-  totalStart: number;
   totalWishList: number;
 }
 
@@ -72,9 +71,6 @@ export class RevenueService {
     languageCode: string,
     productId?: number,
     productName?: string,
-    minStars?: number,
-    sortColumn?: string,
-    sortDirection?: 'asc' | 'desc',
     page: number = 0,
     size: number = 10
   ): Observable<ApiResponse<PageResponse<CountStartAndWishList>>> {
@@ -85,14 +81,12 @@ export class RevenueService {
 
     if (productId) params = params.set('productId', productId.toString());
     if (productName?.trim()) params = params.set('productName', productName);
-    if (minStars) params = params.set('minStars', minStars.toString());
-    if (sortColumn) params = params.set('sortColumn', sortColumn);
-    if (sortDirection) params = params.set('sortDirection', sortDirection);
 
     return this.http.get<ApiResponse<PageResponse<CountStartAndWishList>>>(
-      `${this.apiUrl}/count/start-wishlist`, { params }
+      `${this.apiUrl}/count/wishlist`, { params }
     );
   }
+
 
 
 

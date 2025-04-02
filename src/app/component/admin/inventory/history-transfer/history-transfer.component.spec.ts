@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListUserComponent } from './list-user.component';
+import { HistoryTransferComponent } from './history-transfer.component';
 
-describe('ListUserComponent', () => {
-  let component: ListUserComponent;
-  let fixture: ComponentFixture<ListUserComponent>;
+describe('HistoryTransferComponent', () => {
+  let component: HistoryTransferComponent;
+  let fixture: ComponentFixture<HistoryTransferComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ListUserComponent]
+      imports: [HistoryTransferComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ListUserComponent);
+    fixture = TestBed.createComponent(HistoryTransferComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

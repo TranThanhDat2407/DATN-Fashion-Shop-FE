@@ -1,16 +1,29 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiResponse } from '../../../dto/Response/ApiResponse';
 import { PageResponse } from '../../../dto/Response/page-response';
 import { ListStoreStockDTO } from '../../../dto/ListStoreStockDTO';
+
+export interface InventoryStatusResponse {
+  productVariantId: number;
+  productName: string;
+  productImage: string;
+  colorValue: string;
+  colorImage: string;
+  sizeValue: string;
+  quantityInStock: number;
+  storeName: string;
+  daysUnsold: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class InventoryService {
   private apiUrl = `${environment.apiBaseUrl}/inventory`;
+
 
   constructor(private http: HttpClient) { }
 
@@ -49,5 +62,28 @@ export class InventoryService {
 
   updateInventory(inventoryId : number , newQuantity : number) : Observable<any>{
     return this.http.put(`${this.apiUrl}/warehouse-inventory/${inventoryId}?newQuantity=${newQuantity}`,{})
-  } 
+  }
+
+  insertInventoryTransfer(data : any) : Observable<any>{
+    return this.http.post(`${environment.apiBaseUrl}/inventory-transfers/create`, data)
+  }
+
+  getUnsoldProducts(
+    storeId: number,
+    langCode: string,
+    page: number = 0,
+    size: number = 10
+  ): Observable<ApiResponse<PageResponse<InventoryStatusResponse>>> {
+    // Tạo query parameters
+    const params = new HttpParams()
+      .set('storeId', storeId.toString())
+      .set('langCode', langCode)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<ApiResponse<PageResponse<InventoryStatusResponse>>>(
+      `${this.apiUrl}/unsold`,
+      { params }
+    );
+  }
 }

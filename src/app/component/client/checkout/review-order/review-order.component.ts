@@ -146,6 +146,11 @@ export class ReviewOrderComponent implements OnInit {
     // return Math.max((this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(), 0);
   }
 
+  getVATAmount(): number {
+    const subtotal = this.getTotalAfterDiscount(); // Tổng sau giảm giá + phí ship
+    const taxRate = 0.1; // 10% VAT
+    return subtotal * taxRate;
+  }
 
 
   /** 🔹 Xác nhận đặt hàng */
