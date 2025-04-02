@@ -164,7 +164,7 @@ export const clientRouter: Routes =[
 
 
 
-    { path: '', redirectTo: 'vnd/vi', pathMatch: 'full' } // Mặc định là 'vi'
+    { path: '', redirectTo: 'VND/vi', pathMatch: 'full' } // Mặc định là 'vi'
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

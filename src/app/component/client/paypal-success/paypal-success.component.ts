@@ -32,6 +32,7 @@ export class PaypalSuccessComponent implements OnInit {
     if (token && payerId) {
       this.paypal.captureOrder(token).subscribe({
         next: (res) => {
+
           this.message = '🎉 Thanh toán thành công!';
           console.log('🎯 Kết quả từ BE:', res);
           this.isLoading = false;

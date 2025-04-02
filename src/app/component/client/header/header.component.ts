@@ -28,8 +28,6 @@ import {NotificationDTO} from '../../../models/NotificationDTO';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  languageList: LanguageDTO[] = [];
-  currencyList: CurrencyDTO[] = [];
   categoriesParent: CategoryDTO[] = [];
   apiError: any;
   isHome: boolean = false;
@@ -103,34 +101,10 @@ export class HeaderComponent implements OnInit {
       this.getNotification(this.userId);
     }
     console.log("totalNotify: "+this.totalNotify$);
-
   }
 
 
-  changeLanguageAndCurrency(lang: string) {
-    // Cập nhật giá trị ngôn ngữ và tiền tệ trong NavigationService
-    let currency: string = "";
-    if (lang === "vi") {
-      currency = "vnd";
-    } else if (lang === "en") {
-      currency = "usd";
-    } else if (lang === "jp") {
-      currency = "jpy";
-    }
-    this.navigationService.updateLang(lang);
-    this.navigationService.updateCurrency(currency);
-    this.getCategoriesParent(this.currentLang);
-    // Tạo URL mới với ngôn ngữ và tiền tệ đã thay đổi
-    const updatedUrl = this.router.url.replace(
-      /\/client\/[^\/]+\/[^\/]+/,
-      `/client/${currency}/${lang}`
-    );
 
-    // Điều hướng đến URL mới
-    this.router.navigateByUrl(updatedUrl);
-
-    window.location.href = updatedUrl;
-  }
 
   getLanguage(): void {
     this.navigationService.getLanguage().subscribe({
@@ -180,6 +154,64 @@ export class HeaderComponent implements OnInit {
     this.notificationService.getUserNotifications(this.userId, 'vi', 0, 5, 'id', 'desc').subscribe(response => {
       this.notifications = response.data.content;
     });
+  }
+
+  languageList: LanguageDTO[] = [];
+  currencyList: CurrencyDTO[] = [];
+
+  languageDropdownVisible: boolean = false;
+  currencyDropdownVisible: boolean = false;
+
+  toggleDropdown() {
+    this.languageDropdownVisible = !this.languageDropdownVisible;
+    this.currencyDropdownVisible = !this.currencyDropdownVisible;
+  }
+
+  setHoverState(state: boolean) {
+    // Điều chỉnh trạng thái hover để hiển thị danh sách
+    if (state) {
+      this.languageDropdownVisible = true;
+      this.currencyDropdownVisible = true;
+    } else {
+      this.languageDropdownVisible = false;
+      this.currencyDropdownVisible = false;
+    }
+  }
+
+  toggleLanguageDropdown() {
+    this.languageDropdownVisible = !this.languageDropdownVisible;
+  }
+
+  toggleCurrencyDropdown() {
+    this.currencyDropdownVisible = !this.currencyDropdownVisible;
+  }
+
+  changeLanguage(lang: string) {
+
+    this.navigationService.updateLang(lang);
+    this.getCategoriesParent(this.currentLang);
+
+    const updatedUrl = this.router.url.replace(
+      /\/client\/[^\/]+\/[^\/]+/,
+      `/client/${this.currentCurrency}/${lang}`
+    );
+
+    this.router.navigateByUrl(updatedUrl);
+    window.location.href = updatedUrl;
+  }
+
+  changeCurrency(currency: string) {
+    // Cập nhật giá trị tiền tệ trong NavigationService
+    this.navigationService.updateCurrency(currency);
+    this.getCategoriesParent(this.currentLang);
+
+    const updatedUrl = this.router.url.replace(
+      /\/client\/[^\/]+\/[^\/]+/,
+      `/client/${currency}/${this.currentLang}`
+    );
+
+    this.router.navigateByUrl(updatedUrl);
+    window.location.href = updatedUrl;
   }
 
 
