@@ -1,1 +1,118 @@
-<p>edit-coupon works!</p>
+<app-header-admin title_header="Coupon" title_btn="Add Item"
+                  routerLinkString="/admin/edit_coupon"></app-header-admin>
+
+
+
+
+
+<form #couponForm="ngForm" novalidate enctype="multipart/form-data">
+  <!-- Dropdown chọn ngày lễ -->
+  <div class="form-group">
+    <label>Chọn ngày lễ</label>
+    <select class="form-select" required name="holidayId" [(ngModel)]="selectedHolidayId" #holiday="ngModel"
+            (change)="onHolidayChange($event)"
+            [ngClass]="{'is-invalid': holiday.invalid && holiday.touched}">
+
+      <option *ngFor="let holiday of holidays" [value]="holiday.id">
+        {{ holiday.holidayName }}
+      </option>
+    </select>
+    <div *ngIf="holiday.invalid && holiday.touched" class="invalid-feedback">
+      <small>Vui lòng chọn ngày lễ.</small>
+    </div>
+  </div>
+  <!-- Loại giảm giá -->
+  <div class="form-group">
+    <label>Loại giảm giá</label>
+    <select [(ngModel)]="couponData.discountType" name="discountType" #discountType="ngModel"
+            class="form-control" required (change)="onDiscountTypeChange()"
+            [ngClass]="{'is-invalid': discountType.invalid && discountType.touched}">
+      <option value="PERCENTAGE">Phần trăm</option>
+      <option value="FIXED">Số tiền cố định</option>
+    </select>
+    <div *ngIf="discountType.invalid && discountType.touched" class="invalid-feedback">
+      <small>Vui lòng chọn loại giảm giá.</small>
+    </div>
+  </div>
+
+  <!-- Giá trị giảm -->
+  <div class="form-group">
+    <label>Giá trị giảm {{ couponData.discountType === 'PERCENTAGE' ? '(%)' : '(VNĐ)' }}</label>
+    <input type="number" [(ngModel)]="couponData.discountValue" name="discountValue" #discountValue="ngModel"
+           class="form-control" required
+           [attr.min]="minDiscountValue"
+           [attr.max]="maxDiscountValue"
+           [ngClass]="{'is-invalid': discountValue.invalid && discountValue.touched}" />
+    <div *ngIf="discountValue.invalid && discountValue.touched" class="invalid-feedback">
+      <small>Giá trị giảm phải từ {{ minDiscountValue }} đến {{ maxDiscountValue }}.</small>
+    </div>
+  </div>
+
+  <!-- Giá trị đơn hàng tối thiểu -->
+  <div class="form-group">
+    <label>Giá trị đơn hàng tối thiểu (VNĐ)</label>
+    <input type="number" [(ngModel)]="couponData.minOrderValue" name="minOrderValue" #minOrderValue="ngModel"
+           class="form-control" required min="100000"
+           [ngClass]="{'is-invalid': minOrderValue.invalid && minOrderValue.touched}" />
+    <div *ngIf="minOrderValue.invalid && minOrderValue.touched" class="invalid-feedback">
+      <small>Giá trị đơn hàng tối thiểu phải từ 100000 VNĐ trở lên.</small>
+    </div>
+  </div>
+
+  <!-- Số ngày hết hạn -->
+  <div class="form-group">
+    <label>Số ngày hết hạn</label>
+    <input type="number" [(ngModel)]="couponData.expirationDays" name="expirationDays" #expirationDays="ngModel"
+           class="form-control" required min="3" max="30"
+           [ngClass]="{'is-invalid': expirationDays.invalid && expirationDays.touched}" />
+    <div *ngIf="expirationDays.invalid && expirationDays.touched" class="invalid-feedback">
+      <small>Số ngày hết hạn phải từ 3 đến 30 ngày.</small>
+    </div>
+  </div>
+
+  <!-- Ảnh -->
+  <div class="form-group">
+    <label>Chọn ảnh</label>
+    <input type="file" (change)="onFileSelected($event)" class="form-control" />
+  </div>
+
+  <!-- Nút gửi -->
+  <button type="button" class="btn btn-primary"
+          [disabled]="couponForm.invalid"
+          (click)="createCoupon()">
+    {{ 'Tạo mã giảm giá' }}
+  </button>
+
+</form>
+
+<table class="coupon-table" *ngIf="couponConfigs && Object.keys(couponConfigs).length > 0">
+  <thead>
+  <tr>
+    <th>Code</th>
+    <th>Loại</th>
+    <th>Giá trị</th>
+    <th>Đơn hàng tối thiểu</th>
+    <th>Ngày hết hạn</th>
+    <th>Hình ảnh</th>
+    <th>Hành động</th> <!-- Cột mới -->
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let key of Object.keys(couponConfigs)">
+    <td>{{ key }}</td>
+    <td>{{ couponConfigs[key]?.discountType || '-' }}</td>
+    <td>{{ couponConfigs[key]?.discountValue || '-' }}</td>
+    <td>{{ couponConfigs[key]?.minOrderValue || '-' }}</td>
+    <td>{{ couponConfigs[key]?.expirationDays || '-' }}</td>
+    <td>
+      <img *ngIf="couponConfigs[key]?.imageUrl" [src]="'http://localhost:8080/uploads/coupons/' + couponConfigs[key]?.imageUrl" alt="Coupon Image" width="50">
+    </td>
+    <td>
+      <button class="edit-btn" (click)="editCoupon(key)">✏️ Sửa</button>
+      <button class="delete-btn" (click)="resetCoupon(key)">🗑️ Xóa</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+

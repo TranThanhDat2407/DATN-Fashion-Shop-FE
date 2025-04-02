@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {NavigationService} from '../../../../services/Navigation/navigation.service';
 import {AddressDTO} from '../../../../dto/address/AddressDTO';
@@ -10,12 +10,14 @@ import {CommonModule, JsonPipe, NgClass, NgForOf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {LocationServiceService} from '../../../../services/client/LocationService/location-service.service';
 import {forkJoin, Observable, of} from 'rxjs';
+import bootstrap from '../../../../../main.server';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-edit-address',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, NgForOf, FormsModule, NgClass, JsonPipe],
+  imports: [RouterLink, RouterLinkActive, NgForOf, FormsModule, NgClass, JsonPipe, TranslatePipe],
   templateUrl: './edit-address.component.html',
   styleUrl: './edit-address.component.scss'
 })
@@ -71,6 +73,7 @@ export class EditAddressComponent implements OnInit{
       console.error('Không tìm thấy userId!');
       return;
     }
+
     this.addressService.addAddress(this.userId, this.NewAddress).subscribe({
       next: (response: ApiResponse<AddressDTO>) => {
         if (response && response.data) {
@@ -95,6 +98,7 @@ export class EditAddressComponent implements OnInit{
           this.selectedWard = null;
           this.districts = [];
           this.wards  = [];
+
         } else {
           console.error('Thêm địa chỉ thất bại!');
           console.log(response.data)
@@ -231,8 +235,8 @@ export class EditAddressComponent implements OnInit{
     this.selectedProvince = provinceCode; // Chỉ lưu mã tỉnh (số)
 
     // Cập nhật NewAddress.province
-    const selectedProvinceObj = this.provinces.find(p =>  p.code ===  this.selectedProvince);
-    this.NewAddress.province = selectedProvinceObj ? selectedProvinceObj.name : '';
+    const selectedProvinceObj = this.provinces.find(p =>  p.ProvinceID ===  this.selectedProvince);
+    this.NewAddress.province = selectedProvinceObj ? selectedProvinceObj.ProvinceName : '';
     // Reset quận/huyện và phường/xã
     this.selectedDistrict = null;
     this.selectedWard = null;
@@ -240,12 +244,21 @@ export class EditAddressComponent implements OnInit{
     this.districts = [];
     // Gọi API lấy danh sách quận/huyện
     if (this.selectedProvince) {
+      console.log("📍 Tỉnh đã chọn:", this.selectedProvince);
+
       this.locationService.getDistricts(this.selectedProvince).subscribe(
-        data => {
-          this.districts = data.districts || [];
+        (response) => {
+          if (response && response.data) {
+            this.districts = response.data; // API trả về object chứa `data`
+          } else {
+            this.districts = response.districts || []; // Kiểm tra fallback
+          }
+
+          console.log("🏠 Danh sách quận/huyện:", this.districts);
         },
-        error => {
-          console.error("Lỗi khi lấy danh sách quận/huyện:", error);
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách quận/huyện:", error);
+          this.districts = []; // Reset danh sách khi lỗi
         }
       );
     }
@@ -258,35 +271,39 @@ export class EditAddressComponent implements OnInit{
     this.wards = [];
 
     // Gán tên quận vào NewAddress.district
-    const selectedDistrictObj = this.districts.find(d => d.code == districtCode);
-    this.NewAddress.district = selectedDistrictObj ? selectedDistrictObj.name : '';
+    const selectedDistrictObj = this.districts.find(d => d.DistrictID == districtCode);
+    this.NewAddress.district = selectedDistrictObj ? selectedDistrictObj.DistrictName : '';
     // Gọi API lấy danh sách phường/xã
     if (this.selectedDistrict) {
-      this.locationService.getWards(this.selectedDistrict).subscribe(data => {
-        this.wards = data.wards || [];
-      });
+      console.log("🏙 Quận/Huyện đã chọn:", this.selectedDistrict);
+
+      this.locationService.getWards(this.selectedDistrict).subscribe(
+        (response) => {
+          if (response && response.data) {
+            this.wards = response.data; // API trả về object chứa `data`
+          } else {
+            this.wards = response.wards || []; // Kiểm tra fallback
+          }
+
+          console.log("📍 Danh sách phường/xã:", this.wards);
+        },
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách phường/xã:", error);
+          this.wards = []; // Reset danh sách khi lỗi
+        }
+      );
     }
   }
   onWardChange(event: any) {
     const wardCode = (event.target.value)
     if (!wardCode || this.selectedWard === wardCode) return;
     this.selectedWard = wardCode;
+    console.log(this.selectedWard)
     // Gán tên phường vào NewAddress.ward
-    const selectedWardObj = this.wards.find(w => w.code == wardCode);
-    this.NewAddress.ward = selectedWardObj ? selectedWardObj.name : '';
+    const selectedWardObj = this.wards.find(w => w.WardCode == wardCode);
+    this.NewAddress.ward = selectedWardObj ? selectedWardObj.WardName : '';
     console.log(this.NewAddress)
   }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -339,8 +356,7 @@ export class EditAddressComponent implements OnInit{
   getProvinces() {
     this.locationService.getProvinces().subscribe(
       (response) => {
-        this.provinces = response;
-
+        this.provinces = response.data;
       },
       (error) => {
         console.error("Lỗi khi lấy danh sách tỉnh:", error);

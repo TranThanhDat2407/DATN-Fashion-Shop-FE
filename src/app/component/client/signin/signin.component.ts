@@ -10,7 +10,6 @@ import {RegisterDTO} from '../../../dto/user/register.dto';
 import {UserService} from '../../../services/user/user.service';
 import {debounceTime, distinctUntilChanged, Subject, switchMap} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
-import {ModelNotifySuccsessComponent} from '../Modal-notify/model-notify-succsess/model-notify-succsess.component';
 import {ModalRegisterSuccessComponent} from '../Modal-notify/modal-register-success/modal-register-success.component';
 import {ModalRegisterFailComponent} from '../Modal-notify/modal-register-fail/modal-register-fail.component';
 
@@ -93,7 +92,6 @@ export class SigninComponent implements OnInit{
   }
 
   onSubmit(form: NgForm) {
-    console.log("ok nho")
     if (form.invalid || this.passwordMismatch || this.emailExists || this.phoneExists) {
 
       return;
@@ -124,7 +122,7 @@ export class SigninComponent implements OnInit{
         this.notifySuccsess = false;
         setTimeout(() => {
           this.notifySuccsess = true;
-        }, 10);
+        }, 100);
 
         form.resetForm();
       },

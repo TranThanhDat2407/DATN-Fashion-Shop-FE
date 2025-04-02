@@ -44,6 +44,9 @@
     padding: 0px;
     display: flex;
     flex-direction: column;
+    justify-content: end;
+    height: 100px;
+    // background-color: #84adea;
 }
 
 .footer-menu button {
@@ -66,8 +69,14 @@ span{
     flex-direction: column;
     padding-top: 10px;
     margin-right: 5px;
+    max-height: 400px; /* Điều chỉnh chiều cao tối đa tùy ý */
+    overflow-y: auto;
+    scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+    -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
 }
-
+.content-menu::-webkit-scrollbar {
+    display: none;
+}
 .menu-item {
     width: 100%;
     display: flex;

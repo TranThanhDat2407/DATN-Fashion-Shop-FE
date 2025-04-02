@@ -26,7 +26,7 @@
                                      class="text-danger">{{"Vui lòng nhập email." | translate}}</div>
                                 <div *ngIf="emailCtrl.errors?.['pattern']"
                                      class="text-danger">{{"Vui lòng nhập email đúng định dạng." | translate}}</div>
-                              </div>
+                             </div>
                             <label class="form-label fw-bold">{{ "MẬT KHẨU" | translate }}</label>
                             <input class="form-control" name="password" [type]="showPassword ? 'text' : 'password'"
                                 [(ngModel)]="password" required minlength="6" #passwordCtrl="ngModel" />
@@ -38,7 +38,7 @@
                                      class="text-danger">
                                   {{"Mật khẩu phải có 6 kí tự bao gồm kí tự hoa và số." | translate}}
                                 </div>
-                              </div>
+                             </div>
 
                             <div class="form-check">
                                 <div>

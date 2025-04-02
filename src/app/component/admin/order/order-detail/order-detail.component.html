@@ -1,0 +1,148 @@
+<div class="order-detail-container" *ngIf="orderDetails && Object.keys(orderDetails).length > 0">
+  <h2>Order Details #{{ orderDetails.orderId }}</h2>
+  <!-- Thanh tiến trình đơn hàng -->
+  <div class="order-progress">
+    <div class="step" [ngClass]="{ 'active': orderDetails.orderStatus === 'PENDING' }">
+      <div class="circle pending"></div>
+      <span>PENDING</span>
+    </div>
+    <div class="line" [ngClass]="{ 'completed': isCompleted('PROCESSING') }"></div>
+
+    <div class="step" [ngClass]="{ 'active': orderDetails.orderStatus === 'PROCESSING' }">
+      <div class="circle processing"></div>
+      <span>PROCESSING</span>
+    </div>
+    <div class="line" [ngClass]="{ 'completed': isCompleted('SHIPPED') }"></div>
+
+    <div class="step" [ngClass]="{ 'active': orderDetails.orderStatus === 'SHIPPED' }">
+      <div class="circle shipped"></div>
+      <span>SHIPPED</span>
+    </div>
+    <div class="line" [ngClass]="{ 'completed': isCompleted('DELIVERED') }"></div>
+
+    <div class="step" [ngClass]="{ 'active': orderDetails.orderStatus === 'DELIVERED' }">
+      <div class="circle delivered"></div>
+      <span>DELIVERED</span>
+    </div>
+    <div class="line" [ngClass]="{ 'completed': isCompleted('CANCELLED') }"></div>
+
+    <div class="step" [ngClass]="{ 'active': orderDetails.orderStatus === 'CANCELLED' }">
+      <div class="circle cancelled"></div>
+      <span>CANCELLED</span>
+    </div>
+    <div class="line" [ngClass]="{ 'completed': isCompleted('DONE') }"></div>
+
+    <div class="step" [ngClass]="{ 'active': orderDetails.orderStatus === 'DONE' }">
+      <div class="circle done"></div>
+      <span>DONE</span>
+    </div>
+  </div>
+
+
+  <div class="col">
+    <!-- Thông tin đơn hàng -->
+    <div class="order-info d-flex justify-content-between">
+      <h4>Order Information</h4>
+      <p><strong>Order ID:</strong> {{ orderDetails.orderId }}</p>
+      <p><strong>Create At:</strong> {{ orderDetails.createTime | date:'dd/MM/yyyy HH:mm' }}</p>
+      <p><strong>Shop:</strong> {{ orderDetails.storeName }}</p>
+      <p><strong>Order Status:</strong> {{ orderDetails?.orderStatus }}</p>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 col-sm-6">
+      <div class="product-list">
+        <h4>Products</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <th>Color</th>
+            <th>Size</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let detail of orderDetailsAdmin">
+            <td><img [src]="getImageProduct(detail.imageUrl)" class="product-image" /></td>
+            <td>{{ detail.productVariant?.productName || 'N/A' }}</td>
+            <td>{{ detail.productVariant?.colorName || 'N/A' }}</td>
+            <td>{{ detail.productVariant?.size || 'N/A' }}</td>
+            <td>{{ detail.quantity }}</td>
+            <td>{{ (detail.unitPrice | currency:'VND':'')}} VNĐ</td>
+            <td>{{ (detail.totalPrice | currency:'VND':'')}} VNĐ</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <!-- Thông tin khách hàng -->
+      <div class="customer-info">
+        <h4>Customer Information</h4>
+        <p class="underline"><strong>Name:</strong> {{ orderDetails.customerName }}</p>
+        <p class="underline"><strong>Phone:</strong> {{ orderDetails.customerPhone }}</p>
+        <p class="underline"><strong>Address:</strong> {{ orderDetails.shippingAddress }}</p>
+      </div>
+
+      <!-- Phương thức thanh toán -->
+      <div class="payment-info">
+        <h4>Payment</h4>
+        <p class="underline"><strong>Method:</strong> {{ orderDetails.paymentMethod }}</p>
+        <p class="underline"><strong>Status: </strong> <span [ngClass]="orderDetails.paymentStatus?.toLowerCase()">{{ orderDetails.paymentStatus }}</span></p>
+      </div>
+    </div>
+
+</div>
+
+
+
+
+
+  <div class="row">
+    <div class="col-md-8">
+      <!-- Chi phí đơn hàng -->
+      <div class="order-cost">
+        <h4>Order Costs</h4>
+        <p class="underline"><strong>Total number of products</strong> <span style="float: right;">{{ getTotalQuantity() }}</span></p>
+        <p class="underline"><strong>Tax</strong> <span style="float: right;"> {{ (orderDetails.tax  | currency:'VND' : '')}} VNĐ</span></p>
+        <p class="underline"><strong>Shipping Fee</strong><span style="float: right;">{{ (orderDetails.shippingFee  | currency:'VND': '') }} VNĐ</span> </p>
+        <p class="underline"><strong>Coupon</strong><span style="float: right;"> {{ (orderDetails.couponPrice  | currency:'VND' : '') }} VNĐ</span> </p>
+        <p class="underline"><strong>Total order value</strong> <span style="float: right;"> {{ getTotalOrderValue() }}</span> </p>
+        <p class="total-amount underline"><strong>Total Payment</strong> <span style="float: right;">  {{ (orderDetails.totalAmount  | currency:'VND' : '') }} VNĐ</span></p>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="update-status">
+        <h4>Update Status Orders</h4>
+        <p class="underline">Update order status, if order has been paid successfully.</p>
+        <select class="action-buttons" id="orderStatus" [(ngModel)]="orderDetails.orderStatus"
+                (change)="updateOrderStatus(orderDetails.orderStatus)"
+                [disabled]="isOrderDone()">
+          <option *ngFor="let status of getFilteredOrderStatuses()" [value]="status">
+            {{ status }}
+          </option>
+        </select>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+<!-- Chỉ hiển thị biểu đồ khi có dữ liệu -->
+<canvas id="orderChart" *ngIf="orderDetails"></canvas>
+
+
+<p *ngIf="!orderDetails">No data orders. Debug: {{ orderDetails | json }}</p>

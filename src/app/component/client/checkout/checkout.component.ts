@@ -57,10 +57,10 @@ export class CheckoutComponent implements OnInit {
       this.currentStep = lastSegment || 'shipping';
     });
 
-    this.checkoutService.shippingInfo$.subscribe(info => {
-      if(info){
-        this.shippingInfo = info;
-        console.log('CheckoutComponent -  Nhận shippingInfo:', info );
+    this.checkoutService.shippingInfo$.subscribe(shippingInfo => {
+      if(shippingInfo){
+        this.shippingInfo = shippingInfo;
+        console.log('CheckoutComponent -  Nhận shippingInfo:', shippingInfo );
       }
 
     });
@@ -118,6 +118,13 @@ export class CheckoutComponent implements OnInit {
     const total = (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount();
     return Math.max(0, total + (this.shippingInfo?.shippingFee ?? 0));
     // return Math.max((this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(), 0); // Đảm bảo không bị âm
+  }
+
+
+  getVATAmount(): number {
+    const subtotal = this.getTotalAfterDiscount(); // Tổng sau giảm giá + phí ship
+    const taxRate = 0.1; // 10% VAT
+    return subtotal * taxRate;
   }
 
 }

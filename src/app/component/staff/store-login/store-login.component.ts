@@ -8,6 +8,7 @@ import {Role} from '../../../models/role';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TokenService} from '../../../services/token/token.service';
 import {CommonModule} from '@angular/common';
+import {UserService} from '../../../services/user/user.service';
 
 @Component({
   selector: 'app-store-login',
@@ -36,7 +37,8 @@ export class StoreLoginComponent implements OnInit {
     private staffService: StaffService,
     private router: Router,
     private route: ActivatedRoute,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -79,22 +81,38 @@ export class StoreLoginComponent implements OnInit {
 
     this.staffService.login(staffLoginDTO).subscribe({
       next: (response: any) => {
-        this.errorMessage = response.message
-        if (response) {
+        if (response && response.data?.token) {
           const token = response.data.token;
           const storeId = this.loginForm.value.storeId;
-
           this.tokenService.setToken(token);
-          this.router.navigate([`/staff/${storeId}/dashboard`]);
-          this.errorMessage = response.message
 
+          // Lấy thông tin user detail để kiểm tra role
+          this.userService.getUserDetail(token).subscribe({
+            next: (userDetail) => {
+              const roleName = userDetail.role?.name;
+              const storeId = this.loginForm.value.storeId;
+
+              if (roleName === 'STAFF') {
+                this.router.navigate([`/staff/${storeId}/checkout`]);
+              } else if (roleName === 'STORE_MANAGER') {
+                this.router.navigate([`/staff/${storeId}/dashboard`]);
+              } else {
+                // Mặc định nếu không nhận dạng được role
+                this.router.navigate([`/staff/${storeId}/dashboard`]);
+              }
+            },
+            error: (error) => {
+              console.error('Lỗi khi lấy thông tin user:', error);
+              this.errorMessage = 'Không thể lấy thông tin người dùng';
+            }
+          });
         } else {
-          this.errorMessage = response.message
+          this.errorMessage = response?.message || 'Đăng nhập thất bại';
         }
       },
       error: (error: any) => {
-        console.error('Login error:', error);
-        this.errorMessage = error.message ;
+        console.error('Lỗi đăng nhập:', error);
+        this.errorMessage = error.error?.message || error.message || 'Đăng nhập thất bại';
       }
     });
   }

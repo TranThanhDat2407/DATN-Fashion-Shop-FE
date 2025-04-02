@@ -125,7 +125,7 @@
   "TỔNG HÓA ĐƠN": "TOTAL BILL",
   "MÃ GIẢM": "DISCOUNT CODE",
   "MUA NGAY": "BUY NOW",
-  "TIẾP TỤC MUA SẮM": "CONTINUE SHOPPING",  
+  "TIẾP TỤC MUA SẮM": "CONTINUE SHOPPING",
   "Xóa giỏ hàng" : "Clear cart",
 
 
@@ -161,5 +161,7 @@
 
   "_commentStore-modal-delete": "----------------------Phần commentStore-modal-delete ----------------------------",
   "Bạn có muốn xóa không": "Do you want to delete",
-  "Hủy": "Close"
+  "Hủy": "Close",
+
+  "All_Address": "All Addresses"
 }

@@ -112,10 +112,12 @@
   "_commentStore-modal-error": "----------------------Phần commentStore-modal-error ----------------------------",
     "Lỗi": "エラー",
   "Thêm Thất Bại": "追加に失敗しました",
-  
+
 
   "_commentStore-modal-delete": "----------------------Phần commentStore-modal-delete ----------------------------",
   "Bạn có muốn xóa không": "削除しますか",
-  "Hủy": "キャンセル"
+  "Hủy": "キャンセル",
+
+  "All_Address": "すべての住所"
 
 }

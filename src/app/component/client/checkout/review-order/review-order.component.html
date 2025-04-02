@@ -72,7 +72,9 @@
                             <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">Đã bao gồm thuế giá trị gia tăng</td>
                             <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang"><span
                               class="fr-price-currency fr-price-currency-order-change"><abbr
-                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr><span></span></span>
+                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr><span>
+                               {{ getCurrencyPrice(getVATAmount(), currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                            </span></span>
                             </td>
                           </tr>
                           </tbody>

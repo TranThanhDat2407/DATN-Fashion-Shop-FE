@@ -27,7 +27,7 @@
         <input type="text"
                [(ngModel)]="searchUserKeyword"
                (input)="filterUsers()"
-               placeholder="Tìm kiếm khách hàng..."
+               placeholder="Search By User..."
                class="form-control"/>
         <ul>
           <button *ngIf="selectedUser" (click)="clearUserSelection()" class="clear-selection-btn">
@@ -52,7 +52,7 @@
     />
 
     <button (click)="toggleSortExpirationDate()" class="btn-sort">
-      Sắp xếp theo ngày hết hạn
+      Sort By ExpirationDate
       <span *ngIf="sortBy === 'expirationDate'">
     ({{ sortDirection === 'asc' ? '⬆️' : '⬇️' }})
   </span>
@@ -73,7 +73,7 @@
              [currentPage]="currentPage"
              [tableData]="coupons?.content?.flat() || []"
              [dataPage]="coupons"
-             [tableHeaders]="['code', 'name','imageUrl','discountType','discountValue','minOrderValue', 'expirationDate','userIds','description','button' ]"
+             [tableHeaders]="['code', 'name','imageUrl','discountType','discountValue','minOrderValue', 'expirationDate','description','button' ]"
              [routerLinkString]="'/admin/edit_coupon'"
              (pageChanged)="onPageChange($event)"
              [typeImage] = "'coupons'"

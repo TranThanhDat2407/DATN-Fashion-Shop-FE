@@ -1,0 +1,139 @@
+<app-header-admin [title_header]="'Edit Store'" [routerLinkString]="'/admin/list_store'" />
+
+<div class="container">
+    <form [formGroup]="storeForm" (ngSubmit)="eventApply()">
+        <div class="parent">
+            <!-- NAME -->
+            <div class="div1">
+                <label class="form-label">NAME</label>
+                <input type="text" formControlName="name" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['name'].invalid && storeForm.controls['name'].touched">
+                    <span *ngIf="storeForm.controls['name'].errors?.['required']">Name is required.</span>
+                    <span *ngIf="storeForm.controls['name'].errors?.['pattern']">Only letters are allowed.</span>
+                </div>
+            </div>
+
+            <!-- PHONE NUMBER -->
+            <div class="div2">
+                <label class="form-label">PHONE NUMBER</label>
+                <input type="text" formControlName="phoneNumber" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['phoneNumber'].invalid && storeForm.controls['phoneNumber'].touched">
+                    <span *ngIf="storeForm.controls['phoneNumber'].errors?.['required']">Phone number is
+                        required.</span>
+                    <span *ngIf="storeForm.controls['phoneNumber'].errors?.['pattern']">Must be 10-11 digits.</span>
+                </div>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="div3">
+                <label class="form-label">EMAIL</label>
+                <input type="text" formControlName="email" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['email'].invalid && storeForm.controls['email'].touched">
+                    <span *ngIf="storeForm.controls['email'].errors?.['required']">Email is required.</span>
+                    <span *ngIf="storeForm.controls['email'].errors?.['email']">Invalid email format.</span>
+                </div>
+            </div>
+
+            <!-- OPEN HOUR -->
+            <div class="div5">
+                <label class="form-label">OPEN HOUR</label>
+                <input *ngIf="storeId === 0" type="datetime-local" formControlName="openHour" class="form-control">
+                <input *ngIf="storeId !== 0" type="time" formControlName="openHour" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['openHour'].invalid && storeForm.controls['openHour'].touched">
+                    Open hour is required.
+                </div>
+            </div>
+
+            <!-- CLOSE HOUR -->
+            <div class="div4">
+                <label class="form-label">CLOSE HOUR</label>
+                <input *ngIf="storeId === 0" type="datetime-local" formControlName="closeHour" class="form-control">
+                <input *ngIf="storeId !== 0" type="time" formControlName="closeHour" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['closeHour'].invalid && storeForm.controls['closeHour'].touched">
+                    <span *ngIf="storeForm.controls['closeHour'].errors?.['required']">
+                        Close hour is required.
+                    </span>
+                    <span *ngIf="storeForm.controls['closeHour'].errors?.['invalidDate']">
+                        Open and close hours must be on the same day.
+                    </span>
+                    <span *ngIf="storeForm.controls['closeHour'].errors?.['invalidTime']">
+                        Close hour must be later than Open hour.
+                    </span>
+                </div>
+            </div>
+
+
+            <!-- STREET -->
+            <div class="div6">
+                <label class="form-label">STREET</label>
+                <input type="text" formControlName="street" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['street'].invalid && storeForm.controls['street'].touched">
+                    <span *ngIf="storeForm.controls['street'].errors?.['required']">Street is required.</span>
+                    <span *ngIf="storeForm.controls['street'].errors?.['pattern']">Invalid characters.</span>
+                </div>
+            </div>
+            <!-- WARD -->
+            <div class="div7">
+                <label class="form-label">WARD</label>
+                <input type="text" formControlName="ward" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['ward'].invalid && storeForm.controls['ward'].touched">
+                    <span *ngIf="storeForm.controls['ward'].errors?.['required']">Ward is required.</span>
+                    <span *ngIf="storeForm.controls['ward'].errors?.['pattern']">Invalid characters.</span>
+                </div>
+            </div>
+
+            <!-- DISTRICT -->
+            <div class="div8">
+                <label class="form-label">DISTRICT</label>
+                <input type="text" formControlName="district" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['district'].invalid && storeForm.controls['district'].touched">
+                    <span *ngIf="storeForm.controls['district'].errors?.['required']">District is required.</span>
+                    <span *ngIf="storeForm.controls['district'].errors?.['pattern']">Invalid characters.</span>
+                </div>
+            </div>
+
+            <!-- CITY -->
+            <div class="div12">
+                <label class="form-label">CITY</label>
+                <input type="text" formControlName="city" class="form-control">
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['city'].invalid && storeForm.controls['city'].touched">
+                    <span *ngIf="storeForm.controls['city'].errors?.['required']">City is required.</span>
+                    <span *ngIf="storeForm.controls['city'].errors?.['pattern']">Only letters are allowed.</span>
+                </div>
+            </div>
+
+            <!-- FULL ADDRESS -->
+            <div class="div9">
+                <label class="form-label">FULL ADDRESS</label>
+                <input *ngIf="storeId === 0" type="text" formControlName="fullAddress" class="form-control" readonly>
+                <input *ngIf="storeId !== 0" type="text" formControlName="fullAddress" class="form-control" >
+            </div>
+
+            <!-- IS ACTIVE -->
+            <div class="div11">
+                <label class="form-label">IS ACTIVE</label>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" formControlName="isActive">
+                </div>
+            </div>
+
+            <!-- BUTTON -->
+            <div class="item-store mt-4">
+                <button type="submit" class="pushable" >
+                    <span class="shadow"></span>
+                    <span class="edge"></span>
+                    <span class="front"> APPLY</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

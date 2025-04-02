@@ -47,8 +47,9 @@
                     [routerLink]="['/client', currentCurrency, currentLang, 'profile', 'order_history', 'order_detail', order.orderId]">
               Xem chi tiết đơn hàng
             </button>
-
-
+            <button class="btn btn-outline-danger mt-2 ms-2" (click)="changePendingOrder(order.orderId)" *ngIf="order.orderStatus === 'PENDING'" >
+              Hủy
+            </button>
           </div>
         </div>
       </td>

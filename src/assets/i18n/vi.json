@@ -163,10 +163,12 @@
   "Hoàn Thành" : "Hoàn Thành",
   "Thành Công" : "Thành Công",
 
-  
+
   "_commentStore-modal-delete": "----------------------Phần commentStore-modal-delete ----------------------------",
   "Bạn có muốn xóa không" : "Bạn có muốn xóa không",
-  "Hủy" : "Hủy"
+  "Hủy" : "Hủy",
+  "All_Address": "Tất cả địa chỉ"
 
- 
+
+
 }

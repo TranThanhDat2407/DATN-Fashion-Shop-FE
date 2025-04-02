@@ -7,8 +7,10 @@ export interface InventoryTransferResponse extends BaseResponse {
   status: string;
   message: string;
   isReturn: boolean;
+  storeName : string;
+  warning : boolean
 
-  items: InventoryTransferItemResponse[]; // Danh sách các sản phẩm trong phiếu chuyển kho
+  items: InventoryTransferItemResponse[];
 }
 
 export interface InventoryTransferItemResponse {

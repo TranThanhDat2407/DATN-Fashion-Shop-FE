@@ -22,4 +22,6 @@ export interface StoreOrderResponse extends BaseResponse{
   coupon: StoreCouponResponse;
 
   orderDetails: StoreOrderDetailResponse[];
+
+
 }
