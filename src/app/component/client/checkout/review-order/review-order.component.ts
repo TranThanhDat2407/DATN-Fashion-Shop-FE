@@ -179,30 +179,20 @@ export class ReviewOrderComponent implements OnInit {
           console.log("🔗 Chuyển hướng tới MoMo:", response.payUrl);
           window.location.href = response.payUrl;
 
-        } else if (this.paymentInfo.paymentMethodId === 6) {
+        } else if (this.paymentInfo.paymentMethodId === 7) {
           const orderRequest = this.checkoutService.getCheckoutData();
           console.log("📤 Gửi đơn hàng thanh toán PayPal:", orderRequest);
+          const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
 
-          this.checkoutService.placeOrder(orderRequest).subscribe(
-            response => {
-              const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
-
-              this.paypal.createOrder(totalAmount).subscribe({
-                next: (approvalUrl) => window.location.href = approvalUrl,
-                error: (err) => {
-                  console.error('❌ Lỗi tạo order PayPal:', err);
-                  alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
-                }
-              });
-            },
-            error => {
-              console.error('❌ Lỗi khi lưu đơn hàng (PayPal):', error);
-              alert('Đặt hàng thất bại. Vui lòng thử lại.');
+          this.paypal.createOrder(totalAmount).subscribe({
+            next: (approvalUrl) => window.location.href = approvalUrl,
+            error: (err) => {
+              console.error('❌ Lỗi tạo order PayPal:', err);
+              alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
             }
-          );
-        }
-        else {
-          console.log("✅ Đơn hàng không dùng VNPay, chuyển đến trang xác nhận.");
+          });
+        } else {
+          console.log("✅ Đơn hàng không dùng ví điện tử, chuyển đến trang xác nhận.");
           this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
             queryParams: { orderId: response.orderId }
           });
