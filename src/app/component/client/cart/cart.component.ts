@@ -252,18 +252,13 @@ export class CartComponent implements OnInit {
     );
 
   }
+
   fetchCurrency() {
     this.getCurrency().subscribe(({ data }) => {
-      const index = { en: 0, vi: 1, jp: 2 }[this.currentLang] ?? 0;
-      let currency = data?.[index];
-
-      // Kiểm tra currency nếu undefined hoặc thiếu code
-      if (!currency || !currency.code) {
-        currency = { id: 1, code: 'USD', name: 'US Dollar', symbol: '$', rateToBase: 1, isBase: true };
-      }
-
-      this.currentCurrencyDetail = currency;
-      console.log('💰 Thông tin tiền tệ:', currency);
+      const index = { USD: 0, VND: 1, JPY: 2 }[this.currentCurrency] ?? 0;
+      const currency = data?.[index] || { code: '', name: '', symbol: '', exchangeRate: 0 };
+      this.currentCurrencyDetail = currency
+      console.log('Thông tin tiền tệ:', currency);
     });
   }
 

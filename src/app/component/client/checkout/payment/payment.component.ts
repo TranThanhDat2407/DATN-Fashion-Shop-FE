@@ -27,6 +27,7 @@ export class PaymentComponent implements OnInit {
     { id: 2, label: 'Thanh toán bằng VNPAY' },
     { id: 5, label: 'Thanh toán tại cửa hàng' },
     { id: 6, label: 'Thanh toán bằng Momo' },
+    { id: 7, label: 'Thanh toán bằng PayPal' },
   ];
 
 
@@ -62,9 +63,9 @@ export class PaymentComponent implements OnInit {
     const shippingMethodId = this.checkoutService.shippingInfo.value?.shippingMethodId;
 
     if (shippingMethodId === 1) {
-      this.availablePaymentMethods = this.paymentMethods.filter(m => m.id === 1 || m.id === 2 || m.id === 6);
+      this.availablePaymentMethods = this.paymentMethods.filter(m => m.id === 1 || m.id === 2 || m.id === 6 || m.id === 7);
     } else {
-      this.availablePaymentMethods = this.paymentMethods.filter(m => m.id === 2 || m.id === 5 || m.id === 6);
+      this.availablePaymentMethods = this.paymentMethods.filter(m => m.id === 2 || m.id === 5 || m.id === 6 || m.id === 7);
     }
 
     if (!this.availablePaymentMethods.some(m => m.id === this.selectedMethod)) {

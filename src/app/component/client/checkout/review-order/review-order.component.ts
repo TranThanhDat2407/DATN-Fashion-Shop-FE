@@ -15,6 +15,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { CouponService } from '../../../../services/client/CouponService/coupon-service.service';
 import {AddressDTO} from '../../../../dto/address/AddressDTO';
 import {ShippingService} from '../../../../services/client/ShippingService/shipping-service.service';
+import {PaypalService} from '../../../../services/paypal/paypal.service';
 
 @Component({
   selector: 'app-review-order',
@@ -24,6 +25,8 @@ import {ShippingService} from '../../../../services/client/ShippingService/shipp
   styleUrls: ['./review-order.component.scss']
 })
 export class ReviewOrderComponent implements OnInit {
+  usdRate: number = 0;
+
   shippingInfo: any = {};
   cartData: CartDTO | null = null;
   selectedShippingMethod: number = 2;
@@ -47,7 +50,8 @@ export class ReviewOrderComponent implements OnInit {
     private cookieService: CookieService,
     private couponService: CouponService,
     private navigationService: NavigationService,
-    private shippingService : ShippingService
+    private shippingService : ShippingService,
+    private paypal: PaypalService
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
   }
@@ -56,6 +60,21 @@ export class ReviewOrderComponent implements OnInit {
     this.userId = this.tokenService.getUserId() ?? 0;
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
+
+    this.navigationService.getCurrency().subscribe({
+      next: (currencies) => {
+        const usd = currencies.find(c => c.code === 'USD');
+        if (usd) {
+          this.usdRate = usd.rateToBase;
+          console.log(`✅ Tỷ giá USD đã được cache: ${this.usdRate}`);
+        } else {
+          console.error('❌ Không tìm thấy tỷ giá USD trong danh sách.');
+        }
+      },
+      error: (err) => {
+        console.error('❌ Lỗi khi gọi API lấy tỷ giá:', err);
+      }
+    });
 
     this.checkoutService.shippingInfo$.subscribe(shippingInfo => {
       if(shippingInfo){
@@ -160,7 +179,29 @@ export class ReviewOrderComponent implements OnInit {
           console.log("🔗 Chuyển hướng tới MoMo:", response.payUrl);
           window.location.href = response.payUrl;
 
-        } else {
+        } else if (this.paymentInfo.paymentMethodId === 6) {
+          const orderRequest = this.checkoutService.getCheckoutData();
+          console.log("📤 Gửi đơn hàng thanh toán PayPal:", orderRequest);
+
+          this.checkoutService.placeOrder(orderRequest).subscribe(
+            response => {
+              const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
+
+              this.paypal.createOrder(totalAmount).subscribe({
+                next: (approvalUrl) => window.location.href = approvalUrl,
+                error: (err) => {
+                  console.error('❌ Lỗi tạo order PayPal:', err);
+                  alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
+                }
+              });
+            },
+            error => {
+              console.error('❌ Lỗi khi lưu đơn hàng (PayPal):', error);
+              alert('Đặt hàng thất bại. Vui lòng thử lại.');
+            }
+          );
+        }
+        else {
           console.log("✅ Đơn hàng không dùng VNPay, chuyển đến trang xác nhận.");
           this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
             queryParams: { orderId: response.orderId }

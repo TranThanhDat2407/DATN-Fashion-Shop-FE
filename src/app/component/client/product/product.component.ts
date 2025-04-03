@@ -197,13 +197,11 @@ export class ProductComponent implements OnInit {
 
   fetchCurrency() {
     this.getCurrency().subscribe(({ data }) => {
-      const index = { en: 0, vi: 1, jp: 2 }[this.currentLang] ?? 0;
+      const index = { USD: 0, VND: 1, JPY: 2 }[this.currentCurrency] ?? 0;
       const currency = data?.[index] || { code: '', name: '', symbol: '', exchangeRate: 0 };
       this.currentCurrencyDetail = currency
       console.log('Thông tin tiền tệ:', currency);
     });
-
-
   }
   //lấy dữ liệu chi tiết của sản phẩm
   getProductDetail(productId: number): Observable<ProductVariantDetailDTO | null> {
