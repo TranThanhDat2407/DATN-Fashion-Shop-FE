@@ -56,10 +56,17 @@ export class OrderServiceAdmin {
 
 
 
-  updateOrderStatus(orderId: number, status: string): Observable<ApiResponse<OrderAdmin>>  {
-    console.log('Sending request:', { status });
-    return this.http.put<ApiResponse<OrderAdmin>>(`${this.apiUrl}/${orderId}/status`, { status });
+  updateOrderStatus(orderId: number, status: string): Observable<ApiResponse<OrderAdmin>> {
+    console.log('Sending request:', { orderId, status }); // Log yêu cầu gửi đi
+
+    return this.http.put<ApiResponse<OrderAdmin>>(`${this.apiUrl}/${orderId}/status`, { status }).pipe(
+      catchError(error => {
+        console.error('Lỗi trong service khi gọi API:', error); // Log lỗi từ API
+        return throwError(error);
+      })
+    );
   }
+
 
 
 

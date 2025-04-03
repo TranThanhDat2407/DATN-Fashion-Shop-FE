@@ -1,0 +1,29 @@
+<div class="payment-container">
+  <div class="payment-card">
+    <!-- Hiển thị khi đang loading -->
+    <div *ngIf="isLoading" class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Đang xác thực thanh toán...</p>
+    </div>
+
+    <!-- Hiển thị kết quả khi đã có trạng thái -->
+    <div *ngIf="isSuccess !== null && !isLoading">
+      <div *ngIf="isSuccess; else failure">
+        <h2>🎉 Thanh toán thành công!</h2>
+        <p>Đơn hàng của bạn đang được xử lý.</p>
+        <button class="btn-home" [routerLink]="['/client', currentCurrency, currentLang, 'product']">
+          Tiếp tục mua sắm
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Trạng thái thất bại -->
+<ng-template #failure>
+  <h2>❌ Thanh toán thất bại</h2>
+  <p>Vui lòng thử lại hoặc kiểm tra phương thức thanh toán.</p>
+  <a [routerLink]="['/client', currentCurrency, currentLang, 'cart']" class="btn btn-danger">
+    Quay lại giỏ hàng
+  </a>
+</ng-template>

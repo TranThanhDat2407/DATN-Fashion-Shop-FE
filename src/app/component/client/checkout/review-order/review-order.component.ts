@@ -67,7 +67,7 @@ export class ReviewOrderComponent implements OnInit {
     this.checkoutService.paymentInfo.subscribe(payment => {
       console.log("📢 Payment info nhận được trong ReviewOrder:", payment);
       if (payment) {
-          this.paymentInfo = payment;
+        this.paymentInfo = payment;
         console.log("🎯 Phương thức thanh toán trong ReviewOrder:", payment.paymentMethodId);
       } else {
         console.warn("⚠️ Không có phương thức thanh toán nào được chọn!");
@@ -147,59 +147,32 @@ export class ReviewOrderComponent implements OnInit {
     console.log("📌 selectedShippingMethod:", this.selectedShippingMethod);
     console.log("📌 paymentMethodId:", this.paymentInfo.paymentMethodId);
 
-    if (this.shippingInfo.shippingMethodId === 2) {
-      // Click & Collect: Gọi API khác
-      const clickAndCollectRequest = this.checkoutService.getClickAndCollectCheckoutData();
-      console.log("📤 Gửi đơn hàng Click & Collect:", clickAndCollectRequest);
+    const orderRequest = this.checkoutService.getCheckoutData();
 
-      if (!clickAndCollectRequest || !clickAndCollectRequest.storeId) {
-        console.error("❌ Lỗi: Dữ liệu Click & Collect không hợp lệ!", clickAndCollectRequest);
-        return;
+    this.checkoutService.placeOrder(orderRequest).subscribe(
+      response => {
+
+        if (response.paymentUrl) {
+          console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
+          window.location.href = response.paymentUrl;
+
+        } else if (typeof response?.payUrl === 'string' && response.payUrl.startsWith('http')) {
+          console.log("🔗 Chuyển hướng tới MoMo:", response.payUrl);
+          window.location.href = response.payUrl;
+
+        } else {
+          console.log("✅ Đơn hàng không dùng VNPay, chuyển đến trang xác nhận.");
+          this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
+            queryParams: { orderId: response.orderId }
+          });
+        }
+      },
+      error => {
+        console.error('❌ Lỗi khi đặt hàng:', error);
+        alert('Đặt hàng thất bại. Vui lòng thử lại.');
       }
-
-      this.checkoutService.placeClickAndCollectOrder().subscribe(
-        response => {
-          if (response.paymentUrl) {
-            console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
-            window.location.href = response.paymentUrl;
-          } else {
-            console.log("✅ Đơn hàng không dùng VNPay, chuyển đến trang xác nhận.");
-            this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
-              queryParams: { orderId: response.orderId }
-            });
-          }
-        },
-        error => {
-          console.error('❌ Lỗi khi đặt hàng Click & Collect:', error);
-          alert('Đặt hàng Click & Collect thất bại. Vui lòng thử lại.');
-        }
-      );
-
-    }
-
-    else {
-      // Giao đến địa chỉ
-      const orderRequest = this.checkoutService.getCheckoutData();
-      console.log("📤 Gửi đơn hàng:", orderRequest);
-
-      this.checkoutService.placeOrder(orderRequest).subscribe(
-        response => {
-          if (response.paymentUrl) {
-            console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
-            window.location.href = response.paymentUrl;
-          } else {
-            console.log("✅ Đơn hàng không dùng VNPay, chuyển đến trang xác nhận.");
-            this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
-              queryParams: { orderId: response.orderId }
-            });
-          }
-        },
-        error => {
-          console.error('❌ Lỗi khi đặt hàng:', error);
-          alert('Đặt hàng thất bại. Vui lòng thử lại.');
-        }
-      );
-    }
+    );
   }
+
 
 }

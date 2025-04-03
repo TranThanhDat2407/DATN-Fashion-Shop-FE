@@ -36,6 +36,7 @@ import {VerifyEmailComponent} from './verify-email/verify-email.component';
 import {CheckoutConfirmationComponent} from './checkout-comfirmation/checkout-confirmation.component';
 import {ChangePasswordComponent} from './profile/change-password/change-password.component';
 import {NotificationComponent} from './notification/notification.component';
+import {MomoSuccessComponent} from './momo-success/momo-success.component';
 
 
 export const clientRouter: Routes =[
@@ -138,6 +139,9 @@ export const clientRouter: Routes =[
 
           { path: 'payment_success',
             component: PaymentSuccessComponent },
+
+          { path: 'momo-success',
+            component: MomoSuccessComponent },
 
           { path: 'otp',
             component: OTPComponent },

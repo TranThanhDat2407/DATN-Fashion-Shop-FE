@@ -1,11 +1,12 @@
-<div class="container">
-  <h2>🎉 Đặt Hàng Thành Công!</h2>
-  <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
-  <p>Mã đơn hàng: <strong id="orderId">{{ orderId }}</strong></p>
-  <p>Chúng tôi sẽ sớm giao hàng đến bạn!</p>
-  <a [routerLink]="['/client', currentCurrency, currentLang,'product' ]" class="btn">Tiếp tục mua sắm</a>
+<div class="payment-container">
+  <div class="payment-card">
+    <h2>🎉 Đặt Hàng Thành Công!</h2>
+    <p>Cảm ơn bạn đã mua hàng tại cửa hàng của chúng tôi.</p>
+    <p>Mã đơn hàng: <strong id="orderId">{{ orderId }}</strong></p>
+    <p>Chúng tôi sẽ sớm giao hàng đến bạn!</p>
+    <a [routerLink]="['/client', currentCurrency, currentLang,'product' ]" class="btn">Tiếp tục mua sắm</a>
+  </div>
 </div>
-
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     const params = new URLSearchParams(window.location.search);
