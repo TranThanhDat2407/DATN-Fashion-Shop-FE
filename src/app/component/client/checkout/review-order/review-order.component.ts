@@ -179,19 +179,7 @@ export class ReviewOrderComponent implements OnInit {
           console.log("🔗 Chuyển hướng tới MoMo:", response.payUrl);
           window.location.href = response.payUrl;
 
-        } else if (this.paymentInfo.paymentMethodId === 7) {
-          const orderRequest = this.checkoutService.getCheckoutData();
-          console.log("📤 Gửi đơn hàng thanh toán PayPal:", orderRequest);
-          const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
-
-          this.paypal.createOrder(totalAmount).subscribe({
-            next: (approvalUrl) => window.location.href = approvalUrl,
-            error: (err) => {
-              console.error('❌ Lỗi tạo order PayPal:', err);
-              alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
-            }
-          });
-        } else {
+        } else{
           console.log("✅ Đơn hàng không dùng ví điện tử, chuyển đến trang xác nhận.");
           this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
             queryParams: { orderId: response.orderId }
@@ -203,6 +191,21 @@ export class ReviewOrderComponent implements OnInit {
         alert('Đặt hàng thất bại. Vui lòng thử lại.');
       }
     );
+
+    if (this.paymentInfo.paymentMethodId === 7) {
+      // const orderRequest = this.checkoutService.getCheckoutData();
+      console.log("📤 Gửi đơn hàng thanh toán PayPal:", orderRequest);
+      const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
+
+      this.paypal.createOrder(totalAmount).subscribe({
+        next: (approvalUrl) => window.location.href = approvalUrl,
+        error: (err) => {
+          console.error('❌ Lỗi tạo order PayPal:', err);
+          alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
+        }
+      });
+    }
+
   }
 
 

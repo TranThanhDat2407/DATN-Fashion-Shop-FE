@@ -101,6 +101,7 @@ export class CheckoutService {
             orderId: response.data.orderId,
             paymentUrl: response.data.paymentUrl || null,
             payUrl: response.data.payUrl || null
+
           };
         } else {
           throw new Error(response.message || 'Không thể tạo đơn hàng.');
