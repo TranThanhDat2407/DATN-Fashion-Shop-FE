@@ -3,13 +3,15 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {NavigationService} from '../../../services/Navigation/navigation.service';
 import {HttpClient} from '@angular/common/http';
 import {firstValueFrom} from 'rxjs';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-checkout-confirmation',
   standalone: true,
-  imports: [
-    RouterLink
-  ],
+    imports: [
+        RouterLink,
+        NgIf
+    ],
   templateUrl: './checkout-confirmation.component.html',
   styleUrl: './checkout-confirmation.component.scss'
 })

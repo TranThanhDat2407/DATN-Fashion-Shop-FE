@@ -88,3 +88,19 @@
 .table img {
   object-fit: cover;
 }
+.date-filter {
+  display: flex;
+  align-items: center;
+
+  mat-form-field {
+    width: 150px;
+
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+
+    .mat-form-field-outline {
+      background-color: white;
+    }
+  }
+}

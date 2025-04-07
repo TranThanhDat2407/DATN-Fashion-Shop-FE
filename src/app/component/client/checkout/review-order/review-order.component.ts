@@ -15,6 +15,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { CouponService } from '../../../../services/client/CouponService/coupon-service.service';
 import {AddressDTO} from '../../../../dto/address/AddressDTO';
 import {ShippingService} from '../../../../services/client/ShippingService/shipping-service.service';
+import {PaypalService} from '../../../../services/paypal/paypal.service';
 
 @Component({
   selector: 'app-review-order',
@@ -24,6 +25,8 @@ import {ShippingService} from '../../../../services/client/ShippingService/shipp
   styleUrls: ['./review-order.component.scss']
 })
 export class ReviewOrderComponent implements OnInit {
+  usdRate: number = 0;
+
   shippingInfo: any = {};
   cartData: CartDTO | null = null;
   selectedShippingMethod: number = 2;
@@ -47,7 +50,8 @@ export class ReviewOrderComponent implements OnInit {
     private cookieService: CookieService,
     private couponService: CouponService,
     private navigationService: NavigationService,
-    private shippingService : ShippingService
+    private shippingService : ShippingService,
+    private paypal: PaypalService
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
   }
@@ -56,6 +60,21 @@ export class ReviewOrderComponent implements OnInit {
     this.userId = this.tokenService.getUserId() ?? 0;
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
+
+    this.navigationService.getCurrency().subscribe({
+      next: (currencies) => {
+        const usd = currencies.find(c => c.code === 'USD');
+        if (usd) {
+          this.usdRate = usd.rateToBase;
+          console.log(`✅ Tỷ giá USD đã được cache: ${this.usdRate}`);
+        } else {
+          console.error('❌ Không tìm thấy tỷ giá USD trong danh sách.');
+        }
+      },
+      error: (err) => {
+        console.error('❌ Lỗi khi gọi API lấy tỷ giá:', err);
+      }
+    });
 
     this.checkoutService.shippingInfo$.subscribe(shippingInfo => {
       if(shippingInfo){
@@ -67,7 +86,7 @@ export class ReviewOrderComponent implements OnInit {
     this.checkoutService.paymentInfo.subscribe(payment => {
       console.log("📢 Payment info nhận được trong ReviewOrder:", payment);
       if (payment) {
-          this.paymentInfo = payment;
+        this.paymentInfo = payment;
         console.log("🎯 Phương thức thanh toán trong ReviewOrder:", payment.paymentMethodId);
       } else {
         console.warn("⚠️ Không có phương thức thanh toán nào được chọn!");
@@ -122,75 +141,69 @@ export class ReviewOrderComponent implements OnInit {
   }
 
   getTotalAfterDiscount(): number {
-    const total = (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount();
-    return Math.max(0, total + (this.shippingInfo?.shippingFee ?? 0));
-    // return Math.max((this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(), 0);
+    return Math.max(
+      (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(),
+      0
+    );
   }
 
   getVATAmount(): number {
-    const subtotal = this.getTotalAfterDiscount(); // Tổng sau giảm giá + phí ship
-    const taxRate = 0.1; // 10% VAT
-    return subtotal * taxRate;
+    const subtotal = (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount();
+    const taxRate = 0.08;
+    return Math.round(subtotal * taxRate * 100) / 100;
   }
+
+  getGrandTotal(): number {
+    const subtotal = this.getTotalAfterDiscount();
+    const vat = this.getVATAmount();
+    const shippingFee = this.shippingInfo?.shippingFee ?? 0;
+    return subtotal + vat + shippingFee;
+  }
+
 
   /** 🔹 Xác nhận đặt hàng */
   confirmOrder(): void {
     console.log("📌 selectedShippingMethod:", this.selectedShippingMethod);
     console.log("📌 paymentMethodId:", this.paymentInfo.paymentMethodId);
 
-    if (this.shippingInfo.shippingMethodId === 2) {
-      // Click & Collect: Gọi API khác
-      const clickAndCollectRequest = this.checkoutService.getClickAndCollectCheckoutData();
-      console.log("📤 Gửi đơn hàng Click & Collect:", clickAndCollectRequest);
+    const orderRequest = this.checkoutService.getCheckoutData();
 
-      if (!clickAndCollectRequest || !clickAndCollectRequest.storeId) {
-        console.error("❌ Lỗi: Dữ liệu Click & Collect không hợp lệ!", clickAndCollectRequest);
-        return;
+    this.checkoutService.placeOrder(orderRequest).subscribe(
+      response => {
+
+        if (response.paymentUrl) {
+          console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
+          window.location.href = response.paymentUrl;
+
+        } else if (typeof response?.payUrl === 'string' && response.payUrl.startsWith('http')) {
+          console.log("🔗 Chuyển hướng tới MoMo:", response.payUrl);
+          window.location.href = response.payUrl;
+
+        } else if (this.paymentInfo.paymentMethodId === 7) {
+          const orderRequest = this.checkoutService.getCheckoutData();
+          console.log("📤 Gửi đơn hàng thanh toán PayPal:", orderRequest);
+          const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
+
+          this.paypal.createOrder(totalAmount).subscribe({
+            next: (approvalUrl) => window.location.href = approvalUrl,
+            error: (err) => {
+              console.error('❌ Lỗi tạo order PayPal:', err);
+              alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
+            }
+          });
+        } else {
+          console.log("✅ Đơn hàng không dùng ví điện tử, chuyển đến trang xác nhận.");
+          this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
+            queryParams: { orderId: response.orderId }
+          });
+        }
+      },
+      error => {
+        console.error('❌ Lỗi khi đặt hàng:', error);
+        alert('Đặt hàng thất bại. Vui lòng thử lại.');
       }
-
-      this.checkoutService.placeClickAndCollectOrder().subscribe(
-        response => {
-          if (response.paymentUrl) {
-            console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
-            window.location.href = response.paymentUrl;
-          } else {
-            console.log("✅ Đơn hàng không dùng VNPay, chuyển đến trang xác nhận.");
-            this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
-              queryParams: { orderId: response.orderId }
-            });
-          }
-        },
-        error => {
-          console.error('❌ Lỗi khi đặt hàng Click & Collect:', error);
-          alert('Đặt hàng Click & Collect thất bại. Vui lòng thử lại.');
-        }
-      );
-
-    }
-
-    else {
-      // Giao đến địa chỉ
-      const orderRequest = this.checkoutService.getCheckoutData();
-      console.log("📤 Gửi đơn hàng:", orderRequest);
-
-      this.checkoutService.placeOrder(orderRequest).subscribe(
-        response => {
-          if (response.paymentUrl) {
-            console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
-            window.location.href = response.paymentUrl;
-          } else {
-            console.log("✅ Đơn hàng không dùng VNPay, chuyển đến trang xác nhận.");
-            this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
-              queryParams: { orderId: response.orderId }
-            });
-          }
-        },
-        error => {
-          console.error('❌ Lỗi khi đặt hàng:', error);
-          alert('Đặt hàng thất bại. Vui lòng thử lại.');
-        }
-      );
-    }
+    );
   }
+
 
 }

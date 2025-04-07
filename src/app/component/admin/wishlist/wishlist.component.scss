@@ -1,0 +1,128 @@
+mat-card {
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+.search-box {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  border-radius: 10px;
+}
+
+mat-paginator {
+  margin-top: 20px;
+}
+.review-card {
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.avatar {
+  background-color: #ccc;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+/* Container chính */
+.summary-container {
+  display: flex;
+  gap: 20px; /* Khoảng cách giữa 2 phần */
+  margin: 20px 0;
+}
+
+/* Mỗi section chiếm 50% width */
+.rating-section,
+.fit-section {
+  flex: 1; /* Chiếm không gian bằng nhau */
+  min-width: 0; /* Fix overflow */
+}
+
+/* Card styling cho cả 2 phần */
+.rating-section .review-summary,
+.fit-section .fit-progress-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  height: 100%;
+}
+
+/* Responsive - trên mobile sẽ stack dọc */
+@media (max-width: 768px) {
+  .summary-container {
+    flex-direction: column;
+  }
+}
+
+/* Các style hiện có giữ nguyên và thêm vào */
+.rating-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.stars {
+  color: #FFD700; /* Màu vàng cho sao */
+  display: flex;
+}
+
+.average-rating {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 8px;
+}
+
+.review-count {
+  color: #666;
+}
+
+.rating-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progress-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-label {
+  width: 30px;
+}
+
+.count-label {
+  width: 30px;
+  text-align: right;
+}
+
+/* Fit progress styles */
+.fit-progress-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.fit-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.current-fit-label {
+  font-weight: bold;
+  color: #3f51b5;
+  text-align: center;
+  flex-grow: 1;
+}

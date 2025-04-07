@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule, NgClass } from '@angular/common';
-import { firstValueFrom } from 'rxjs';
+import {firstValueFrom, take} from 'rxjs';
 import { NavigationService } from '../../../services/Navigation/navigation.service';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 
@@ -28,7 +28,7 @@ export class PaymentSuccessComponent implements OnInit {
   currentLang: string = '';
   currentCurrency: string = '';
   userId: any = null;
-
+  isLoading: boolean = true;
 
 
   constructor(
@@ -36,14 +36,16 @@ export class PaymentSuccessComponent implements OnInit {
     private router: Router,
     private navigationService: NavigationService,
     private http: HttpClient
-  ) {}
+  ) {
+  }
 
   async ngOnInit(): Promise<void> {
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
 
 
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(take(1)).subscribe(params => {
+
       this.paymentData = params;
       this.verifyPayment(params);
     });
@@ -77,7 +79,6 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
 
-
   getStatusText(status: string): string {
     return status === '00' ? 'Giao dịch thành công' : 'Giao dịch thất bại';
   }
@@ -95,7 +96,7 @@ export class PaymentSuccessComponent implements OnInit {
     if (userId) params.userId = userId;
     if (sessionId) params.sessionId = sessionId;
 
-    this.http.delete(`http://localhost:8080/api/v1/cart/clear`, { params }).subscribe({
+    this.http.delete(`http://localhost:8080/api/v1/cart/clear`, {params}).subscribe({
       next: () => console.log('✅ Giỏ hàng đã được xóa thành công!'),
       error: (err) => {
         console.error('⚠ Lỗi khi xóa giỏ hàng:', err);
@@ -105,19 +106,20 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
   verifyPayment(vnpParams: any) {
-    console.log("📤 Dữ liệu gửi lên backend:", vnpParams);
+    console.log("📤 [VNPay] Bắt đầu xác thực thanh toán:", vnpParams);
 
+    this.isLoading = true; // Hiển thị trạng thái loading trước khi gửi yêu cầu
 
-    this.http.post<OrderResponse>('http://localhost:8080/api/v1/orders/return', vnpParams,{
-    headers: new HttpHeaders({'Content-Type': 'application/json'})
-  })
-      .subscribe({
+    this.http.post<OrderResponse>('http://localhost:8080/api/v1/orders/return', vnpParams, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    }).subscribe({
       next: (res) => {
-        console.log("✅ Giao dịch hợp lệ:", res);
-        if (res.orderStatusName === "PROCESSING") {
-          // vnpParams.vnp_ResponseCode === "00" && vnpParams.vnp_TransactionStatus === "00"
+        console.log("✅ [VNPay] Giao dịch hợp lệ:", res);
+        // vnpParams.vnp_ResponseCode === "00" && vnpParams.vnp_TransactionStatus === "00"
+        this.isSuccess = res.orderStatusName === "PROCESSING";
+        this.isLoading = false;
 
-          this.isSuccess = true; // giao dịch thành công
+        if (this.isSuccess) {
           this.userId = this.getUserInfo();
           const sessionId = localStorage.getItem('sessionId') || null;
 
@@ -125,23 +127,14 @@ export class PaymentSuccessComponent implements OnInit {
             this.clearCart(this.userId, sessionId);
           }
         } else {
-          this.isSuccess = false; // giao dịch thất bại
           console.warn("⚠ Giao dịch không thành công, không xóa giỏ hàng.");
         }
       },
       error: (err: HttpErrorResponse) => {
-        if (err.error && err.error.message) {
-          this.isSuccess = false;
-          console.error("⚠ Giao dịch không hợp lệ:", err.error.message);
-
-        } else {
-          console.error("⚠ Giao dịch không hợp lệ, lỗi không xác định:", err);
-        }
+        console.error("⚠ Lỗi khi xác thực giao dịch:", err);
+        this.isSuccess = false;
+        this.isLoading = false; // Tắt trạng thái loading dù có lỗi
       }
     });
   }
-
-
-
-
 }
