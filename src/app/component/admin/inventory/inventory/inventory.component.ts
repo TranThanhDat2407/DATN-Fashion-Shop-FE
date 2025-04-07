@@ -32,6 +32,9 @@ import { ImageDetailService } from '../../../../services/client/ImageDetailServi
 import { ProductServiceService } from '../../../../services/client/ProductService/product-service.service';
 import { ToastrService } from 'ngx-toastr';
 import { ButtonComponent } from "../../button/button.component";
+import { DialogComponent } from '../../dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+
 
 interface ProductVariantModel {
   sortOrder: number;
@@ -207,7 +210,9 @@ export class InventoryComponent implements OnInit {
     private inventoryService: InventoryService,
     private imageDetailService: ImageDetailService,
     private productService: ProductServiceService,
-    private toastService: ToastrService
+    private toastService: ToastrService,
+    private diaLog: MatDialog,
+
   ) { }
 
   async ngOnInit() {
@@ -277,7 +282,7 @@ export class InventoryComponent implements OnInit {
       if (!isValid) return;
       let allSuccess = true;
 
-      
+
       const transferItems = this.selectedWarehouseTransfer.map(transfer => ({
         productVariantId: transfer.productVariantId,
         quantity: transfer.quantityInStock
@@ -442,6 +447,21 @@ export class InventoryComponent implements OnInit {
     });
   }
 
+  checkProductVarinatId(): void {
+    this.selectedProductVariants.forEach(item => {
+      const idHad = Number(item);
+
+      const exists = this.dataAllInventoryForWarehouseTransfer.some(
+        warehouse => warehouse.productVariantId === idHad
+      );
+      if (exists) {
+        this.toastService.success("Transfer Store Successfully!", "Success", { timeOut: 3000 });
+      } else {
+        console.log('Không có id:', idHad);
+      }
+    });
+
+  }
 
 
   validationInsert(): boolean {
@@ -450,40 +470,87 @@ export class InventoryComponent implements OnInit {
       return false;
     }
 
-    if (this.qtyInStock === 0) {
-      this.toastService.error('Qty in stock is emty', "Error", { timeOut: 3000 });
+
+
+    if (
+      this.qtyInStock === 0 ||
+      this.qtyInStock === null ||
+      this.qtyInStock === undefined ||
+      isNaN(this.qtyInStock)
+    ) {
+      this.toastService.error('Qty in stock is empty', 'Error', { timeOut: 3000 });
       return false;
     }
+
     return true;
 
   }
   insertProductVariantFromWarehouse = async (): Promise<void> => {
-    if (!this.validationInsert()) return;
+  if (!this.validationInsert()) return;
 
-    const insertPromises = this.selectedProductVariants.map(async item => {
-      const dataInsertWarehouse = {
-        warehouseId: 1,
-        productVariantId: Number(item),
-        quantityInStock: this.qtyInStock
-      };
+  const duplicatedItems = this.selectedProductVariants.filter(item =>
+    this.dataAllInventoryForWarehouseTransfer.some(
+      warehouse => warehouse.productVariantId === Number(item)
+    )
+  );
 
-      try {
-        await firstValueFrom(this.inventoryService.insertInventory(dataInsertWarehouse));
-      } catch (error) {
-        console.error(`❌ Lỗi khi thêm productVariantId ${item}:`, error);
-        throw error; // Ném lỗi ra ngoài để kiểm tra sau
+  if (duplicatedItems.length > 0) {
+    const messageLines = duplicatedItems.map(item => {
+      const warehouse = this.dataAllInventoryForWarehouseTransfer.find(
+        w => w.productVariantId === Number(item)
+      );
+
+      if (!warehouse) {
+        console.error(`Warehouse for productVariantId ${item} not found.`);
+        return `ID ${item}: Warehouse not found!`; // Nếu không tìm thấy warehouse, trả về thông báo lỗi.
+      }
+
+      const oldQty = warehouse.quantityInStock || 0; // Đảm bảo luôn có giá trị số
+      const newQty = oldQty + this.qtyInStock;
+      return `ID ${item}: ${oldQty} + ${this.qtyInStock} = ${newQty}`;
+    });
+
+    const dialogRef = this.diaLog.open(DialogComponent, {
+      data: {
+        message: `The following products are already in stock. Do you want to add more quantity? \n \n${messageLines.join('\n')}\n`,
+        confirm: 'YES'
       }
     });
 
-    try {
-      await Promise.all(insertPromises); // Chờ tất cả API chạy xong
-      this.toastService.success('Add Qty Product Variant In Warehouse Successfully', "Success", { timeOut: 3000 });
-      this.fetchInventoryForWarehouseOnly()
-      this.resetForm(); // ✅ Reset form sau khi tất cả insert thành công
-    } catch (error) {
-      this.toastService.error('Add Qty Product Variant In Warehouse Error', "Error", { timeOut: 3000 });
+    const result = await firstValueFrom(dialogRef.afterClosed());
+    if (!result) {
+      console.log("❌ Hủy thêm do người dùng từ chối.");
+      return;
     }
-  };
+  }
+
+  const insertPromises = this.selectedProductVariants.map(async item => {
+    const dataInsertWarehouse = {
+      warehouseId: 1,
+      productVariantId: Number(item),
+      quantityInStock: this.qtyInStock
+    };
+
+    try {
+      await firstValueFrom(this.inventoryService.insertInventory(dataInsertWarehouse));
+    } catch (error) {
+      console.error(`❌ Lỗi khi thêm productVariantId ${item}:`, error);
+      throw error;
+    }
+  });
+
+  try {
+    await Promise.all(insertPromises);
+    this.toastService.success('Add Product Variant Successfully! ', "Success", { timeOut: 3000 });
+    this.fetchInventoryForWarehouseOnly();
+    this.dataAllInventoryForWarehouseTransfer = await this.fetchAllInventoryForWarehouse();
+    this.resetForm();
+  } catch (error) {
+    this.toastService.error('Lỗi khi thêm vào kho', "Error", { timeOut: 3000 });
+  }
+};
+
+
 
 
 
@@ -1156,6 +1223,7 @@ export class InventoryComponent implements OnInit {
       printWindow.document.close();
     }, 1000);
   }
+
 
 
   printAllTagsInPage() {
