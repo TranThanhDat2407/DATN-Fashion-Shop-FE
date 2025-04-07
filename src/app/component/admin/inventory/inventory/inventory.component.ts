@@ -208,8 +208,6 @@ export class InventoryComponent implements OnInit {
     private imageDetailService: ImageDetailService,
     private productService: ProductServiceService,
     private toastService: ToastrService
-
-
   ) { }
 
   async ngOnInit() {
@@ -219,9 +217,6 @@ export class InventoryComponent implements OnInit {
     this.listCategory = await firstValueFrom(this.buildCategoryTree());
     this.fetchStockData()
     this.fetchInventoryStore()
-
-
-
   }
 
   validateTransfer(): boolean {
@@ -258,8 +253,6 @@ export class InventoryComponent implements OnInit {
   insertTransfer = async (): Promise<void> => {
     if (!this.validateTransfer()) return;
     try {
-
-
       let isValid = true;
 
       for (const transfer of this.selectedWarehouseTransfer) {
