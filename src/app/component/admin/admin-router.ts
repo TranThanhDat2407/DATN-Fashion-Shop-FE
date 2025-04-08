@@ -26,12 +26,12 @@ import { ListPromotionComponent } from './promotions/list-promotion/list-promoti
 import { EditPromotionComponent } from './promotions/edit-promotion/edit-promotion.component';
 import { CreatePromotionComponent } from './promotions/create-promotion/create-promotion.component';
 import { InventoryComponent } from "./inventory/inventory/inventory.component";
-import { InventoryStatisticsComponent } from './inventory-statistics/inventory-statistics.component';
 import { AdminGuard, AdminGuardFn } from '../../guards/admin.guard';
 import { EditStoreComponent } from "./store/edit-store/edit-store.component";
 import { ListStoreComponent } from "./store/list-store/list-store.component";
 import { HistoryTransferComponent } from "./inventory/history-transfer/history-transfer.component";
 import { TransferDetailComponent } from "./inventory/transfer-detail/transfer-detail.component";
+import {WishlistComponent} from './wishlist/wishlist.component';
 import {
   DateRangeStatisticComponent
 } from '../staff/store-statistic/date-range-statistic/date-range-statistic.component';
@@ -125,9 +125,10 @@ export const adminRouter: Routes = [
           component: StatisticalComponent,
           canActivate: [AdminGuardFn],
         },
+
         {
-          path: 'inventory-statistics',
-          component: InventoryStatisticsComponent,
+          path: 'wishlists',
+          component: WishlistComponent,
           canActivate: [AdminGuardFn]
         },
         {

@@ -3,7 +3,7 @@
 <div class="modal-container" *ngIf="isModalOpen">
     <div class="modal-content">
         <span>CONFIRM</span>
-        <p>{{data.message }}</p>
+        <pre style="max-width: 400px;">{{ data.message }}</pre>
         <div class="d-flex">
             <button mat-button mat-dialog-close="false" class="btn-content btn-login"
                 (click)="onConfirm()">{{ (data?.confirm || 'DELETE') }}

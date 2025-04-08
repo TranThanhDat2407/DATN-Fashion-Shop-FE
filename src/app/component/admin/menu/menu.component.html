@@ -59,6 +59,7 @@
             <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
             class="menu-mini">Wishlist</span>
           </div>
+          <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"
 
           <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/store-statistical/dashboard1"
                routerLinkActive="active-routerLink">
@@ -91,7 +92,7 @@
             </div> -->
 
 
-        </div>
+
         <div class="footer-menu">
             <button class="menu-item" [class.activeRespone]="isActive" (click)="logout()">
                 <img src="../../../../assets/images/turn-off.png" width="18" alt="">
@@ -105,4 +106,4 @@
 
 
 </div>
-
+</div>

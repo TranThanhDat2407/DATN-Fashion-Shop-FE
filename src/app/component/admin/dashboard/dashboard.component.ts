@@ -23,6 +23,16 @@ import {PageResponse} from '../../../dto/Response/page-response';
 import {RevenueService} from '../../../services/admin/RevenueService/revenue.service';
 import {NgChartsModule} from 'ng2-charts';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {
+  MatDatepicker,
+  MatDatepickerInput,
+  MatDatepickerModule,
+  MatDatepickerToggle
+} from '@angular/material/datepicker';
+import {MatButton} from '@angular/material/button';
+import {MatNativeDateModule} from '@angular/material/core';
 
 export interface TableDataModel {
   id: number;
@@ -44,7 +54,11 @@ export interface TableDataModel {
     NgStyle,
     NgIf,
     NgForOf,
-    DecimalPipe],
+    DecimalPipe,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -66,6 +80,10 @@ export class DashboardComponent implements OnInit {
   size = 10;
 
   chartType: ChartType = 'bar';
+
+
+
+
 
   revenueChartData: ChartConfiguration<'bar'>['data'] = {
     labels: [],
@@ -117,7 +135,6 @@ export class DashboardComponent implements OnInit {
     // this.fetchDailyRevenue();
     // this.fetchMonthlyRevenue();
     // this.fetchYearlyRevenue();
-
     this.fetchDashboard();
     this.getRevenueYesterday().subscribe(response => {
       console.log(response); // Kiểm tra dữ liệu trả về từ API
@@ -324,12 +341,6 @@ export class DashboardComponent implements OnInit {
   getImageProduct(imageUrl: string | null): string {
     return imageUrl ? `http://localhost:8080/uploads/images/products/${imageUrl}` : 'assets/images/default-product.png';
   }
-
-
-
-
-
-
 
 
 }

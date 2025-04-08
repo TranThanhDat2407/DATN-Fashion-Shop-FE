@@ -185,7 +185,7 @@ export class DetailProductComponent implements OnInit {
     this.dataReviewDetailProduct = response.dataReviewDetailProduct
     if (this.dataImagesProduct?.length) {
       this.colorImage = this.dataImagesProduct.find(img => img.colorId);
-    
+
       const groupedImages = this.dataImagesProduct.reduce((acc, img) => {
         if (!acc[img.colorId]) {
           acc[img.colorId] = [];
@@ -193,10 +193,10 @@ export class DetailProductComponent implements OnInit {
         acc[img.colorId].push(img);
         return acc;
       }, {} as Record<string, typeof this.dataImagesProduct>);
-    
+
       this.noColorImages = Object.values(groupedImages).flatMap(group => group.slice(1));
     }
-    
+
 
 
 
@@ -335,14 +335,11 @@ export class DetailProductComponent implements OnInit {
 
   fetchCurrency() {
     this.getCurrency().subscribe(({ data }) => {
-      const index = { en: 0, vi: 1, jp: 2 }[this.currentLang] ?? 0;
+      const index = { USD: 0, VND: 1, JPY: 2 }[this.currentCurrency] ?? 0;
       const currency = data?.[index] || { code: '', name: '', symbol: '', exchangeRate: 0 };
       this.currentCurrencyDetail = currency
-
       console.log('Thông tin tiền tệ:', currency);
     });
-
-
   }
 
   getCurrency(): Observable<ApiResponse<Currency[]>> {

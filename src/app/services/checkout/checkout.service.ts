@@ -12,9 +12,9 @@ import {ClickAndCollectOrderRequest} from '../../dto/ClickAndCollectOrderRequest
 export class CheckoutService {
   private apiUrl = 'http://localhost:8080/api/v1/orders';
 
-   shippingInfo = new BehaviorSubject<any>(null);
+  shippingInfo = new BehaviorSubject<any>(null);
 
- public paymentInfo = new BehaviorSubject<any>({ paymentMethodId: 1 });
+  public paymentInfo = new BehaviorSubject<any>({ paymentMethodId: 1 });
   private orderReview = new BehaviorSubject<any>(null);
   private cartData = new BehaviorSubject<any>(null);
 
@@ -53,11 +53,11 @@ export class CheckoutService {
     let allowedPaymentMethods = [];
 
     if (shippingMethodId === 1) {
-      // Giao tận nhà: chỉ COD + VNPAY
-      allowedPaymentMethods = [1, 2];
+      // Giao tận nhà: chỉ COD + VNPAY +Momo
+      allowedPaymentMethods = [1, 2, 6];
     } else {
-      // Nhận tại cửa hàng: chỉ VNPAY + Thanh toán tại cửa hàng
-      allowedPaymentMethods = [2, 5];
+      // Nhận tại cửa hàng: chỉ VNPAY + Thanh toán tại cửa hàng + Momo
+      allowedPaymentMethods = [2, 5, 6];
     }
 
     const currentPaymentMethod = this.paymentInfo.value?.paymentMethodId || null;
@@ -82,6 +82,7 @@ export class CheckoutService {
       paymentMethodId: this.paymentInfo.value?.paymentMethodId
         ? this.paymentInfo.value.paymentMethodId
         : null,
+      storeId:this.shippingInfo.value.storeId,
       receiverName: this.shippingInfo.value?.receiverName ?? '',
       receiverPhone: this.shippingInfo.value?.receiverPhone ?? '',
       shippingFee: this.shippingInfo.value?.shippingFee ?? 0
@@ -89,13 +90,18 @@ export class CheckoutService {
   }
 
   placeOrder(orderRequest: any): Observable<any> {
-    console.log("🚀 Đang gửi request đặt hàng placeOrder:", orderRequest);
+
     return this.http.post<ApiResponse<any>>('http://localhost:8080/api/v1/orders/create-order', orderRequest) .pipe(
       map((response: ApiResponse<any>) => {
+
+        console.log("📩 Phản hồi từ API:", response);
         if (response.status && response.data) {
+
           return {
             orderId: response.data.orderId,
-            paymentUrl: response.data.paymentUrl || null
+            paymentUrl: response.data.paymentUrl || null,
+            payUrl: response.data.payUrl || null
+
           };
         } else {
           throw new Error(response.message || 'Không thể tạo đơn hàng.');

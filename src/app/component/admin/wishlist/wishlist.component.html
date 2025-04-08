@@ -1,0 +1,151 @@
+<mat-card>
+  <h2>Evaluation statistics</h2>
+
+  <!-- Thanh tìm kiếm -->
+  <mat-form-field appearance="outline" class="search-box">
+    <mat-label>Search product</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Enter product name...">
+  </mat-form-field>
+
+  <!-- Bảng đánh giá -->
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+         *ngIf="dataSource && dataSource.data.length > 0">
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+        (click)="onRowClick(row.productId)" style="cursor: pointer;">
+    </tr>
+
+  <!-- Cột: Tên sản phẩm -->
+    <ng-container matColumnDef="productName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Product</th>
+      <td mat-cell *matCellDef="let review">{{ review.productName }}</td>
+    </ng-container>
+
+    <!-- Cột: Tổng đánh giá -->
+    <ng-container matColumnDef="totalReviews">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Review</th>
+      <td mat-cell *matCellDef="let review">{{ review.totalReviews }}</td>
+    </ng-container>
+
+    <!-- Cột: Đánh giá trung bình -->
+    <ng-container matColumnDef="avgRating">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Avg Review</th>
+      <td mat-cell *matCellDef="let review">{{ review.avgRating }}</td>
+    </ng-container>
+
+    <!-- Cột: Đánh giá sao -->
+    <ng-container matColumnDef="fiveStars">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>⭐⭐⭐⭐⭐</th>
+      <td mat-cell *matCellDef="let review">{{ review.fiveStars }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="fourStars">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>⭐⭐⭐⭐</th>
+      <td mat-cell *matCellDef="let review">{{ review.fourStars }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="threeStars">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>⭐⭐⭐</th>
+      <td mat-cell *matCellDef="let review">{{ review.threeStars }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="twoStars">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>⭐⭐</th>
+      <td mat-cell *matCellDef="let review">{{ review.twoStars }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="oneStar">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>⭐</th>
+      <td mat-cell *matCellDef="let review">{{ review.oneStar }}</td>
+    </ng-container>
+
+    <!-- Header & Rows -->
+<!--    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!--    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>-->
+  </table>
+
+  <!-- Phân trang -->
+  <mat-paginator [length]="totalElements" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+  </mat-paginator>
+</mat-card>
+
+<!-- Nếu không có dữ liệu -->
+<ng-template #noData>
+  <p>No data.</p>
+</ng-template>
+
+
+<mat-card *ngIf="selectedProductId">
+  <h3>Reviews for Product ID: {{ selectedProductId }}</h3>
+
+  <div *ngIf="isLoadingReviews">
+    <p>Loading reviews...</p>
+  </div>
+  <div class="summary-container">
+    <!-- Phần đánh giá sao (bên trái) -->
+    <div class="rating-section">
+      <div class="review-summary">
+        <div class="rating-header">
+        <span class="stars">
+          <mat-icon *ngFor="let star of getStarsArray()" class="star">star</mat-icon>
+          <mat-icon *ngIf="hasHalfStar()" class="star">star_half</mat-icon>
+        </span>
+          <span class="average-rating">{{ averageRating.toFixed(1) }}</span>
+          <span class="review-count">({{ totalReviews }})</span>
+        </div>
+
+        <div class="rating-progress">
+          <div *ngFor="let star of [5, 4, 3, 2, 1]" class="progress-item">
+            <span class="star-label">{{ star }} ★</span>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="getRatingPercentage(star)">
+            </mat-progress-bar>
+            <span class="count-label">{{ ratingCounts[star] || 0 }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phần đánh giá fit (bên phải) -->
+    <div class="fit-section">
+      <div class="fit-progress-container">
+        <div class="fit-labels">
+          <span>Chật</span>
+          <span class="current-fit-label">{{currentFitLabel}}</span>
+          <span>Rộng</span>
+        </div>
+
+        <mat-progress-bar
+          mode="determinate"
+          [value]="getFitPosition(fitData)"
+          [color]="getFitColor()">
+        </mat-progress-bar>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="reviews.length > 0; else noReviews">
+    <mat-card *ngFor="let review of reviews" class="review-card">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar"></div>
+        <mat-card-title>{{ review.nickname }} - {{ review.reviewRate }} ⭐</mat-card-title>
+        <mat-card-subtitle>{{ review.ageGroup }} | {{ review.gender }} | {{ review.location }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>{{ review.title }}</strong></p>
+        <p>{{ review.comment }}</p>
+        <p><strong>Purchased Size:</strong> {{ review.purchasedSize }} | <strong>Fit:</strong> {{ review.fit }}</p>
+        <p><strong>Height:</strong> {{ review.height }} | <strong>Weight:</strong> {{ review.weight }}</p>
+        <p *ngIf="review.shoeSize"><strong>Shoe Size:</strong> {{ review.shoeSize }}</p>
+      </mat-card-content>
+      <mat-card-footer>
+        <p>Reviewed on: {{ review.createdAt | date:'medium' }}</p>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+
+  <ng-template #noReviews>
+    <p>No reviews found.</p>
+  </ng-template>
+</mat-card>

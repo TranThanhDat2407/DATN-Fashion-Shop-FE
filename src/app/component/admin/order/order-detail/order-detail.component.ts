@@ -94,7 +94,10 @@ export class OrderDetailComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     this.orderServiceAdmin.updateOrderStatus(this.orderId, newStatus).subscribe(
+
       (response) => {
+        console.log('API Response:', response);
+
         if (response.status === 200) {
           this.toastService.success('Cập nhật trạng thái thành công!', 'Thành công');
 
@@ -102,9 +105,11 @@ export class OrderDetailComponent implements OnInit, OnChanges, AfterViewInit {
           this.fetchOrderDetailsAdmin();
         } else {
           this.toastService.error('Lỗi cập nhật trạng thái!', 'Lỗi');
+          console.error('Error response:', response);
         }
       },
       (error) => {
+        console.error('Lỗi khi gọi API cập nhật trạng thái:', error);
         this.toastService.error('Đã xảy ra lỗi, vui lòng thử lại!', 'Lỗi');
       }
     );

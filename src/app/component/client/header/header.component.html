@@ -49,33 +49,53 @@
           </li>
         </ul>
       </div>
-      <!-- Dropdown Menu -->
+      <!-- Dropdown Menu language and currency -->
       <div class="dropdown">
         <button style="z-index: 100" class="head-icon head-icon-global btn mx-2 dropdown-toggle no-focus no-caret" type="button"
-          data-bs-toggle="dropdown" aria-expanded="true">
+                (click)="toggleDropdown()" aria-expanded="false">
           <i [ngClass]="{
-          'text-black': !isHome || isSearchActive
-          }" class="bi bi-globe"></i>
+      'text-black': !isHome || isSearchActive
+    }" class="bi bi-globe"></i>
         </button>
-        <ul class="dropdown-menu dropdown-custom z-3">
-          <li *ngFor="let language of languageList">
-            <p class="dropdown-item" href="javascript:void(0)" [ngClass]="{ 'active': currentLang === language.code }"
-              (click)="changeLanguageAndCurrency(language.code)">
-              {{ language.name | translate}}
-              <i *ngIf="currentLang === language.code" class="bi bi-check2 ms-2"></i>
+        <ul class="dropdown-menu dropdown-custom z-3" [ngClass]="{ 'show': languageDropdownVisible || currencyDropdownVisible }"
+            (mouseover)="setHoverState(true)" (mouseleave)="setHoverState(false)">
+
+          <!-- Language dropdown -->
+          <li (mouseover)="setHoverState(true)" (mouseleave)="setHoverState(false)">
+            <p class="dropdown-item" (click)="toggleLanguageDropdown()">
+              Language
             </p>
+            <ul *ngIf="languageDropdownVisible">
+              <li *ngFor="let language of languageList">
+                <p class="dropdown-item" href="javascript:void(0)" [ngClass]="{ 'active': currentLang === language.code }"
+                   (click)="changeLanguage(language.code)">
+                  {{ language.name | translate }}
+                  <img src="http://localhost:8080/uploads/images/products/{{language.code}}.png" alt="" style="width: 30px; height: auto;"/>
+
+                </p>
+              </li>
+            </ul>
           </li>
-          <!--          <li *ngFor="let language of languageList">-->
-          <!--            <a-->
-          <!--              class="dropdown-item"-->
-          <!--              [class.active]="currentLang === language.code"-->
-          <!--              (click)="changeLanguageAndCurrency(language.code)">-->
-          <!--              {{ language.name | translate }}-->
-          <!--              <i class="bi bi-check2"></i>-->
-          <!--            </a>-->
-          <!--          </li>-->
+
+          <!-- Currency dropdown -->
+          <li (mouseover)="setHoverState(true)" (mouseleave)="setHoverState(false)">
+            <p class="dropdown-item" (click)="toggleCurrencyDropdown()">
+              Currency
+            </p>
+            <ul *ngIf="currencyDropdownVisible">
+              <li *ngFor="let currency of currencyList">
+                <p class="dropdown-item" href="javascript:void(0)" [ngClass]="{ 'active': currentCurrency === currency.code }"
+                   (click)="changeCurrency(currency.code)">
+                  {{ currency.name }} ({{ currency.symbol }})
+                  <i *ngIf="currentCurrency === currency.code" class="bi bi-check2 ms-2"></i>
+                </p>
+              </li>
+            </ul>
+          </li>
+
         </ul>
       </div>
+
       <!-- Other Icons -->
       <a [routerLink]="['/client', currentCurrency, currentLang, 'wishlist']" class="head-icon mx-2">
         <i [ngClass]="{
