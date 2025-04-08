@@ -1,0 +1,26 @@
+<div class="chart-container">
+  <canvas baseChart
+          [type]="'bar'"
+          [data]="barChartData"
+          [options]="barChartOptions">
+  </canvas>
+</div>
+
+<table class="table table-striped table-bordered mt-3">
+  <thead class="table-dark">
+  <tr>
+    <th>#</th>
+    <th>Store</th>
+    <th>City</th>
+    <th>Revenue (VND)</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let store of data; let i = index">
+    <td>{{ i + 1 }}</td>
+    <td>{{ store.storeName }}</td>
+    <td>{{ store.city }}</td>
+    <td>{{ store.totalRevenue | number:'1.0-0' }} VND</td>
+  </tr>
+  </tbody>
+</table>

@@ -1,0 +1,33 @@
+<div class="chart-container">
+  <div class="chart-header">
+    <h3>Comparison of Revenue and Store Count by City</h3>
+  </div>
+  <div class="chart-wrapper">
+    <canvas baseChart
+            [type]="'bar'"
+            [data]="barChartData"
+            [options]="barChartOptions"
+            [plugins]="barChartPlugins"
+            [legend]="barChartLegend">
+    </canvas>
+  </div>
+</div>
+
+<div class="table-container mt-3">
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+    <tr>
+      <th>City</th>
+      <th>Number of Stores</th>
+      <th>Revenue (VND)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of data">
+      <td>{{ item.city }}</td>
+      <td>{{ item.storeCount }}</td>
+      <td>{{ item.totalRevenue | number:'1.0-0' }} VND</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

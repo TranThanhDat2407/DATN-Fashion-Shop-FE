@@ -59,15 +59,21 @@
             <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
             class="menu-mini">Wishlist</span>
           </div>
+
+          <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/store-statistical/dashboard1"
+               routerLinkActive="active-routerLink">
+            <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
+            class="menu-mini">Store Statistical</span>
+          </div>
+
            <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"
                routerLinkActive="active-routerLink">
             <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
             class="menu-mini">Statistical</span>
-            <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"
-                routerLinkActive="active-routerLink">
-                <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
-                    class="menu-mini">Statistical</span>
-            </div>
+
+           </div>
+
+
             <div class="menu-item" [class.activeRespone]="isActive">
                 <span class="menu-mini">
                     ACCOUNT ADMIN
@@ -99,4 +105,4 @@
 
 
 </div>
-</div>
+
