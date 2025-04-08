@@ -192,20 +192,6 @@ export class ReviewOrderComponent implements OnInit {
       }
     );
 
-    if (this.paymentInfo.paymentMethodId === 7) {
-      // const orderRequest = this.checkoutService.getCheckoutData();
-      console.log("📤 Gửi đơn hàng thanh toán PayPal:", orderRequest);
-      const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
-
-      this.paypal.createOrder(totalAmount).subscribe({
-        next: (approvalUrl) => window.location.href = approvalUrl,
-        error: (err) => {
-          console.error('❌ Lỗi tạo order PayPal:', err);
-          alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
-        }
-      });
-    }
-
   }
 
 

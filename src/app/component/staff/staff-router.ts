@@ -20,6 +20,7 @@ import {StoreStatisticComponent} from './store-statistic/store-statistic.compone
 import {DateRangeStatisticComponent} from './store-statistic/date-range-statistic/date-range-statistic.component';
 import {DailyChartComponent} from './store-statistic/daily-chart/daily-chart.component';
 import {NotificationComponent} from './notification/notification.component';
+import {MomoStoreSuccessComponent} from './momo-store-success/momo-store-success.component';
 
 
 export const staffRouter: Routes = [
@@ -35,6 +36,11 @@ export const staffRouter: Routes = [
       {
         path: "checkout",
         component: StaffCheckoutComponent,
+        canActivate: [StoreGuardFn],
+      },
+      {
+        path: "momo-store-success",
+        component: MomoStoreSuccessComponent,
         canActivate: [StoreGuardFn],
       },
       {
