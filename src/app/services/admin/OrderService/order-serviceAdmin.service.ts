@@ -28,7 +28,8 @@ export class OrderServiceAdmin {
     page: number = 0,
     size: number = 10,
     sortBy: string = 'createdAt',
-    sortDirection: string = 'desc'
+    sortDirection: string = 'desc',
+    storeId?: number
   ): Observable<ApiResponse<PageResponse<OrderAdmin[]>>> {
     let params = new HttpParams();
 
@@ -43,6 +44,7 @@ export class OrderServiceAdmin {
 
     if (updateFromDate) params = params.set('updateFromDate', updateFromDate.toString());
     if (updateToDate) params = params.set('updateToDate', updateToDate.toString());
+    if (storeId) params = params.set('storeId', storeId.toString())
 
     params = params.set('page', page)
       .set('size', size)

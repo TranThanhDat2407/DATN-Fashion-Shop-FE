@@ -90,8 +90,9 @@
     <td>{{ item.year }}</td>
     <td>{{ item.totalRevenue | currency:'VND':'' }} VND</td>
     <td>
+<!--      (click)="goToOrders(item.month, item.year)-->
       <button class="btn btn-primary me-2"
-              (click)="goToOrders(item.month, item.year)"
+              (click)="goToOrders()"
       >View Orders</button>
       <button class="btn btn-secondary"
               (click)="goToDailyChart(item.month, item.year)"
