@@ -47,6 +47,13 @@
     padding-top: 20px;
     font: 400 0.8rem/1.2 'Kanit', sans-serif;
   }
+  .modal-content pre {
+    max-width: 200px;
+    padding-top: 20px;
+    font: 400 0.8rem/1.7 'Kanit', sans-serif;
+    white-space: pre-wrap; /* Cho phép xuống dòng tự động */
+    word-wrap: break-word; /* Ngắt từ nếu cần thiết */
+  }
   
   /* -----------------------
      Button Styles
