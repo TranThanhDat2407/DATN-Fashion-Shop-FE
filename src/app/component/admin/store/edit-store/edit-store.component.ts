@@ -31,7 +31,7 @@ export class EditStoreComponent implements OnInit {
     private toastService: ToastrService,
     private storeService: StoreService,
     private routerActivated: ActivatedRoute,
-        private diaLog: MatDialog,
+    private diaLog: MatDialog,
 
 
   ) { }
@@ -114,6 +114,10 @@ export class EditStoreComponent implements OnInit {
       latitude: 0,
       longitude: 0,
       isActive: this.storeForm.value.isActive,
+      street: this.storeForm.value.street,
+      ward: this.storeForm.value.ward,
+      district: this.storeForm.value.district,
+      city: this.storeForm.value.city,
       openHour: openHourFormatted,
       closeHour: closeHourFormatted,
       full_address: this.storeForm.getRawValue().fullAddress,
@@ -200,14 +204,18 @@ export class EditStoreComponent implements OnInit {
           openHour: this.formatTime(this.dataEdit.openHour),  // Format lại
           closeHour: this.formatTime(this.dataEdit.closeHour),  // Format lại
           isActive: this.dataEdit.isActive,
-          fullAddress: this.dataEdit.fullAddress
+          fullAddress: this.dataEdit.fullAddress,
+          street: this.dataEdit.street,
+          ward: this.dataEdit.ward,
+          district: this.dataEdit.district,
+          city: this.dataEdit.city,
         });
 
-        this.storeForm.get('fullAddress')?.enable();
-        this.storeForm.get('street')?.disable();
-        this.storeForm.get('ward')?.disable();
-        this.storeForm.get('district')?.disable();
-        this.storeForm.get('city')?.disable();
+        // this.storeForm.get('fullAddress')?.enable();
+        // this.storeForm.get('street')?.disable();
+        // this.storeForm.get('ward')?.disable();
+        // this.storeForm.get('district')?.disable();
+        // this.storeForm.get('city')?.disable();
 
         const fullAddress = this.dataEdit.fullAddress;
         this.storeForm.patchValue({ fullAddress }, { emitEvent: true });
