@@ -49,53 +49,73 @@ export class MomoSuccessComponent implements OnInit {
 
 
     this.route.queryParams.pipe(take(1)).subscribe(params => {
-
+      console.log("📥 [MoMo] Redirect với params:", params);
       this.paymentData = params;
-      this.verifyMoMo(params);
+
+
+      const resultCode = params['resultCode'];
+      this.isSuccess = resultCode === '0';
+
+      if (this.isSuccess) {
+        this.userId = this.getUserInfo();
+        const sessionId = localStorage.getItem('sessionId') || null;
+        if (this.userId || sessionId) {
+          this.clearCart(this.userId, sessionId);
+        }
+      }
     });
+
   }
   getUserInfo(): number | null {
     const userData = localStorage.getItem('user_info');
     return userData ? JSON.parse(userData).id ?? null : null;
   }
 
-  verifyMoMo(params: any) {
-    console.log("📤 [MoMo] Bắt đầu xác thực thanh toán:", params);
 
-    this.isLoading = true;
 
-    this.http.post<OrderResponse>('http://localhost:8080/api/v1/momo/callback', params, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    }).subscribe({
-      next: (res) => {
-        console.log("✅ [MoMo] Thanh toán thành công:", res);
-        this.isLoading = false;
-        this.handlePaymentResponse(res);
-      },
-      error: (err: HttpErrorResponse) => {
-        console.error("❌ Lỗi xác thực MoMo:", err);
-        this.isLoading = false;
-        this.isSuccess = false;
-      }
-    });
-  }
 
-  private handlePaymentResponse(res: OrderResponse) {
-    this.userId = this.getUserInfo();
-    const sessionId = localStorage.getItem('sessionId') || null;
+  // verifyMoMo(params: any) {
+  //   console.log("📤 [MoMo] Bắt đầu xác thực thanh toán:", params);
+  //
+  //   this.isLoading = true;
+  //
+  //   this.http.post<OrderResponse>('http://localhost:8080/api/v1/momo/callback', params, {
+  //     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  //   }).subscribe({
+  //     next: (res) => {
+  //       console.log("✅ [MoMo] Thanh toán thành công:", res);
+  //       this.isLoading = false;
+  //       this.handlePaymentResponse(res);
+  //     },
+  //     error: (err: HttpErrorResponse) => {
+  //       console.error("❌ Lỗi xác thực MoMo:", err);
+  //       this.isLoading = false;
+  //       this.isSuccess = false;
+  //     }
+  //   });
+  // }
 
-    if (res.orderStatusName === "PROCESSING") {
-      console.log("✅ Đơn hàng đang xử lý!");
-      this.isSuccess = true;
-
-      if (this.userId) {
-        this.clearCart(this.userId, sessionId);
-      }
-    } else {
-      console.warn("⚠ Giao dịch thất bại hoặc bị hủy!");
-      this.isSuccess = false;
-    }
-  }
+  // private handlePaymentResponse(res: OrderResponse) {
+  //   this.userId = this.getUserInfo();
+  //   const sessionId = localStorage.getItem('sessionId') || null;
+  //
+  //   if (res.orderStatusName === "PROCESSING") {
+  //     console.log("✅ Đơn hàng đang xử lý!");
+  //     this.isSuccess = true;
+  //
+  //     if (this.userId) {
+  //       this.clearCart(this.userId, sessionId);
+  //     }
+  //   } else {
+  //     console.warn("⚠ Giao dịch thất bại hoặc bị hủy!");
+  //     this.isSuccess = false;
+  //   }
+  // }
+  // clearCart(userId: number | null, sessionId: string | null): void {
+  //   if (!userId && !sessionId) {
+  //     console.error("⚠ Không có userId hoặc sessionId, không thể xóa giỏ hàng!");
+  //     return;
+  //   }
 
   clearCart(userId: number | null, sessionId: string | null): void {
     if (!userId && !sessionId) {

@@ -100,8 +100,8 @@ export class CheckoutService {
           return {
             orderId: response.data.orderId,
             paymentUrl: response.data.paymentUrl || null,
-            payUrl: response.data.payUrl || null,
-            approvalUrl: response.data.approvalUrl || null,
+            payUrl: response.data.payUrl || null
+
           };
         } else {
           throw new Error(response.message || 'Không thể tạo đơn hàng.');

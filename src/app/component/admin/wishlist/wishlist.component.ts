@@ -245,7 +245,7 @@ export class WishlistComponent implements OnInit{
 
   getStarsArray() {
     const rating = this.averageRating || 0;
-    return Array(Math.floor(rating)).fill(0);;
+    return Array(Math.floor(rating)).fill(0);
   }
 
   hasHalfStar() {

@@ -15,15 +15,17 @@
           Tiếp tục mua sắm
         </button>
       </div>
+
+      <!-- Trạng thái thất bại -->
+      <ng-template #failure>
+        <h2>❌ Thanh toán thất bại</h2>
+        <p>Vui lòng thử lại hoặc kiểm tra phương thức thanh toán.</p>
+        <a [routerLink]="['/client', currentCurrency, currentLang, 'cart']" class="btn btn-danger">
+          Quay lại giỏ hàng
+        </a>
+      </ng-template>
     </div>
   </div>
 </div>
 
-<!-- Trạng thái thất bại -->
-<ng-template #failure>
-  <h2>❌ Thanh toán thất bại</h2>
-  <p>Vui lòng thử lại hoặc kiểm tra phương thức thanh toán.</p>
-  <a [routerLink]="['/client', currentCurrency, currentLang, 'cart']" class="btn btn-danger">
-    Quay lại giỏ hàng
-  </a>
-</ng-template>
+

@@ -158,7 +158,7 @@ export class StoreDashboardComponent implements OnInit{
 // Thêm phương thức loadUnsoldProducts
   loadUnsoldProducts(): void {
     this.unsoldLoading = true;
-    const langCode = 'en'; // Hoặc lấy từ ngôn ngữ người dùng
+    const langCode = 'vi';
 
     this.inventoryService.getUnsoldProducts(this.storeId, langCode, this.unsoldPage, this.pageSize)
       .subscribe({

@@ -260,6 +260,8 @@
         </ul>
       </nav>
     </div>
+
+    
     <input class="input" name="tabs" type="radio" id="tab-2" />
     <label class="label" (click)="resetRouterLink('tab-2')" for="tab-2"><i class="fa-solid fa-list"></i> List Inventory
       for Warehouse </label>
@@ -491,6 +493,7 @@
         <button class="btn btn-success " (click)="printAllTagsInPage()">Print All Tags In Page</button>
       </div>
       <!--  <button class="btn btn-success" (click)="printAllTags()">Print All</button>-->
+        <input type="text">
       <nav class="mt-4">
         <ul class="pagination justify-content-end">
           <li class="page-item" [class.disabled]="pageNoWarehouse === 0">
