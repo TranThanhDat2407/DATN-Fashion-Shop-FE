@@ -11,6 +11,7 @@ import {OrderAdmin} from '../../../../models/OrderAdmin/OrderAdmin';
 import {HttpClient} from '@angular/common/http';
 import {ToastrService} from 'ngx-toastr';
 import {catchError, firstValueFrom, map, of} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-list-order',
@@ -39,6 +40,7 @@ export class ListOrderComponent implements OnInit {
   sortBy: string = 'id';
   sortDirection: string = 'desc';
   checkedItemOrder: number[] = [];
+  storeId?: number;
 
   // UI Controls
   isFilterVisible = false;
@@ -58,12 +60,32 @@ export class ListOrderComponent implements OnInit {
     private orderService: OrderServiceAdmin,
     private http: HttpClient,
     private toastService: ToastrService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute
+
   ) { }
 
   ngOnInit(): void {
-    this.fetchOrdersList();
     this.fetchCities();
+
+    this.route.queryParams.subscribe(params => {
+      if (params['storeId']) {
+        this.storeId = +params['storeId'];
+      }
+      if (params['fromDate']) {
+        this.fromDate = params['fromDate'].split('T')[0]; // Lấy phần ngày thôi
+      }
+      if (params['toDate']) {
+        this.toDate = params['toDate'].split('T')[0]; // Lấy phần ngày thôi
+      }
+
+      // Nếu có params thì tự động load data
+      if (this.storeId || this.fromDate || this.toDate) {
+        this.fetchOrdersList();
+      }
+    });
+
+
   }
 
   async fetchOrdersList(): Promise<void> {
@@ -97,7 +119,6 @@ export class ListOrderComponent implements OnInit {
   }
 
   getFilteredOrders() {
-    console.log("📌 Trước khi gọi API, shippingAddress:", this.shippingAddress);
     return this.orderService
       .getFilteredOrders(
         this.orderId,
@@ -112,7 +133,8 @@ export class ListOrderComponent implements OnInit {
         this.page,
         this.size,
         this.sortBy,
-        this.sortDirection
+        this.sortDirection,
+        this.storeId
       )
       .pipe(
         catchError((error) => {

@@ -167,31 +167,49 @@ export class ReviewOrderComponent implements OnInit {
     console.log("📌 paymentMethodId:", this.paymentInfo.paymentMethodId);
 
     const orderRequest = this.checkoutService.getCheckoutData();
+    if (this.paymentInfo.paymentMethodId === 6) {
+      this.checkoutService.placeOrder(orderRequest).subscribe(
+        response => {
+          const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
 
-    this.checkoutService.placeOrder(orderRequest).subscribe(
-      response => {
-
-        if (response.paymentUrl) {
-          console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
-          window.location.href = response.paymentUrl;
-
-        } else if (typeof response?.payUrl === 'string' && response.payUrl.startsWith('http')) {
-          console.log("🔗 Chuyển hướng tới MoMo:", response.payUrl);
-          window.location.href = response.payUrl;
-
-        } else{
-          console.log("✅ Đơn hàng không dùng ví điện tử, chuyển đến trang xác nhận.");
-          this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
-            queryParams: { orderId: response.orderId }
+          this.paypal.createOrder(totalAmount).subscribe({
+            next: (approvalUrl) => window.location.href = approvalUrl,
+            error: (err) => {
+              console.error('❌ Lỗi tạo order PayPal:', err);
+              alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
+            }
           });
+        },
+        error => {
+          console.error('❌ Lỗi khi lưu đơn hàng (PayPal):', error);
+          alert('Đặt hàng thất bại. Vui lòng thử lại.');
         }
-      },
-      error => {
-        console.error('❌ Lỗi khi đặt hàng:', error);
-        alert('Đặt hàng thất bại. Vui lòng thử lại.');
-      }
-    );
+      );
+    } else {
+      this.checkoutService.placeOrder(orderRequest).subscribe(
+        response => {
 
+          if (response.paymentUrl) {
+            console.log("🔗 Chuyển hướng tới VNPay:", response.paymentUrl);
+            window.location.href = response.paymentUrl;
+
+          } else if (typeof response?.payUrl === 'string' && response.payUrl.startsWith('http')) {
+            console.log("🔗 Chuyển hướng tới MoMo:", response.payUrl);
+            window.location.href = response.payUrl;
+
+          } else {
+            console.log("✅ Đơn hàng không dùng ví điện tử, chuyển đến trang xác nhận.");
+            this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
+              queryParams: {orderId: response.orderId}
+            });
+          }
+        },
+        error => {
+          console.error('❌ Lỗi khi đặt hàng:', error);
+          alert('Đặt hàng thất bại. Vui lòng thử lại.');
+        }
+      );
+    }
   }
 
 

@@ -10,15 +10,19 @@ export class PaypalService {
 
   createOrder(amount: number) {
     const params = new HttpParams().set('amount', amount.toString());
+
     return this.http.post(this.API_BASE + '/create-order', null, {
       params,
       responseType: 'text'
     });
   }
 
+
   captureOrder(token: string) {
-    return this.http.post('http://localhost:8080/api/v1/paypal/capture-order', null, {
-      params: { token },
+    const params = new HttpParams().set('token', token);
+
+    return this.http.post(this.API_BASE + '/capture-order', null, {
+      params,
       responseType: 'text'
     });
   }

@@ -23,11 +23,11 @@ export class PaymentComponent implements OnInit {
   availablePaymentMethods: { id: number; label: string }[] = [];
 
   paymentMethods = [
-    { id: 1, label: 'Khi nhận hàng' },
-    { id: 2, label: ' VNPAY' },
-    { id: 5, label: 'Tại cửa hàng' },
-    { id: 6, label: 'Momo' },
-    { id: 7, label: ' PayPal' },
+    { id: 1, label: 'Thanh toán khi nhận hàng' },
+    { id: 2, label: 'Thanh toán bằng VNPAY' },
+    { id: 5, label: 'Thanh toán tại cửa hàng' },
+    { id: 7, label: 'Thanh toán bằng Momo' },
+    { id: 6, label: 'Thanh toán bằng PayPal' },
   ];
 
 

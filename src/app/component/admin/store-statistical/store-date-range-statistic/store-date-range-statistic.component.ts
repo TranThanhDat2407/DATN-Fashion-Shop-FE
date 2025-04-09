@@ -130,17 +130,37 @@ export class StoreDateRangeStatisticComponent implements OnInit {
     });
   }
 
-  goToOrders(month: number, year: number): void {
-    const storeId = this.route.parent?.parent?.snapshot.paramMap.get('storeId');
-    if (storeId) {
-      const startDate = `${year}-${month.toString().padStart(2, '0')}-01T00:00:00`;
-      const endDate = new Date(year, month, 0); // Lấy ngày cuối cùng của tháng
-      const endDateStr = `${year}-${month.toString().padStart(2, '0')}-${endDate.getDate()}T23:59:59`;
+  goToOrders(): void {
 
-      this.router.navigate([`/staff/${storeId}/store-order`], {
-        queryParams: { startDate, endDate: endDateStr }
-      });
+    // const storeId = this.route.parent?.parent?.snapshot.paramMap.get('storeId');
+    //
+    // if (storeId) {
+    //   const startDate = `${year}-${month.toString().padStart(2, '0')}-01T00:00:00`;
+    //   const endDate = new Date(year, month, 0); // Lấy ngày cuối cùng của tháng
+    //   const endDateStr = `${year}-${month.toString().padStart(2, '0')}-${endDate.getDate()}T23:59:59`;
+    //
+    //   this.router.navigate([`/staff/${storeId}/store-order`], {
+    //     queryParams: { startDate, endDate: endDateStr }
+    //   });
+    // }
+    if (!this.storeId || !this.startDate.value || !this.endDate.value) {
+      console.error('Vui lòng chọn cửa hàng và khoảng thời gian');
+      return;
     }
+
+    const startDateStr = this.formatApiDate(this.startDate.value);
+    const endDateStr = this.formatApiDate(this.endDate.value);
+
+    this.router.navigate(['/admin/list_order'], {
+      queryParams: {
+        storeId: this.storeId,
+        fromDate: startDateStr,
+        toDate: endDateStr
+      }
+    });
+
+
+
   }
 
   exportRevenueByDateRange(): void {
