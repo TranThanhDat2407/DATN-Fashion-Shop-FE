@@ -328,6 +328,12 @@ export class StoreService {
     });
   }
 
+  getRevenueByCity(year: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/revenue-by-city?year=${year}`);
+  }
 
+  getTopStoresByRevenue(year: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/top-revenue?year=${year}`);
+  }
 
 }

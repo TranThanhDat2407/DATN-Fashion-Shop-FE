@@ -50,21 +50,29 @@
                 <img src="https://img.icons8.com/?size=100&id=12089&format=png&color=000000" width="18" alt=""> <span
                     class="menu-mini">Promotions</span>
             </div>
+            <div class="menu-item " [class.activeRespone]="isActive" routerLink="/admin/list_user"
+                routerLinkActive="active-routerLink">
+                <img src="../../../../assets/images/group.png" width="18" alt=""> <span class="menu-mini">User</span>
+            </div>
           <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/wishlists"
                routerLinkActive="active-routerLink">
             <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
             class="menu-mini">Wishlist</span>
           </div>
-          <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"
+<!--          <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"></div>-->
+
+          <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/store-statistical/dashboard1"
+               routerLinkActive="active-routerLink">
+            <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
+            class="menu-mini">Store Statistical</span>
+          </div>
+
+           <div class="menu-item" [class.activeRespone]="isActive" routerLink="/admin/statistical"
                routerLinkActive="active-routerLink">
             <img src="../../../../assets/images/checkout.png" width="18" alt=""> <span
             class="menu-mini">Statistical</span>
-          </div>
 
-            <div class="menu-item " [class.activeRespone]="isActive" routerLink="/admin/list_user"
-                routerLinkActive="active-routerLink">
-                <img src="../../../../assets/images/group.png" width="18" alt=""> <span class="menu-mini">User</span>
-            </div>
+           </div>
 
 
             <div class="menu-item" [class.activeRespone]="isActive">
@@ -98,4 +106,5 @@
 
 
 </div>
+
 </div>

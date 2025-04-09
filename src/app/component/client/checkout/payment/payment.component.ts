@@ -26,8 +26,8 @@ export class PaymentComponent implements OnInit {
     { id: 1, label: 'Thanh toán khi nhận hàng' },
     { id: 2, label: 'Thanh toán bằng VNPAY' },
     { id: 5, label: 'Thanh toán tại cửa hàng' },
-    { id: 6, label: 'Thanh toán bằng Momo' },
-    { id: 7, label: 'Thanh toán bằng PayPal' },
+    { id: 7, label: 'Thanh toán bằng Momo' },
+    { id: 6, label: 'Thanh toán bằng PayPal' },
   ];
 
 

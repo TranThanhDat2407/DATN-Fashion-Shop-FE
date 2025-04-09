@@ -8,21 +8,23 @@ import {
 import { debounceTime } from 'rxjs/operators';
 import {CurrencyPipe, DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {ActivatedRoute, RouterLink, RouterOutlet} from '@angular/router';
+import {HeaderAdminComponent} from "../header-admin/header-admin.component";
 
 @Component({
   selector: 'app-statistical',
   templateUrl: './statistical.component.html',
   standalone: true,
-  imports: [
-    CurrencyPipe,
-    ReactiveFormsModule,
-    NgIf,
-    NgForOf,
-    RouterLink,
-    RouterOutlet,
-    DecimalPipe,
-    FormsModule
-  ],
+    imports: [
+        CurrencyPipe,
+        ReactiveFormsModule,
+        NgIf,
+        NgForOf,
+        RouterLink,
+        RouterOutlet,
+        DecimalPipe,
+        FormsModule,
+        HeaderAdminComponent
+    ],
   styleUrls: ['./statistical.component.scss']
 })
 export class StatisticalComponent implements OnInit {

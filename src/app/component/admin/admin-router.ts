@@ -32,6 +32,19 @@ import { ListStoreComponent } from "./store/list-store/list-store.component";
 import { HistoryTransferComponent } from "./inventory/history-transfer/history-transfer.component";
 import { TransferDetailComponent } from "./inventory/transfer-detail/transfer-detail.component";
 import {WishlistComponent} from './wishlist/wishlist.component';
+import {
+  DateRangeStatisticComponent
+} from '../staff/store-statistic/date-range-statistic/date-range-statistic.component';
+import {DailyChartComponent} from '../staff/store-statistic/daily-chart/daily-chart.component';
+import {StoreStatisticalComponent} from './store-statistical/store-statistical.component';
+import {
+  StoreDateRangeStatisticComponent
+} from './store-statistical/store-date-range-statistic/store-date-range-statistic.component';
+import {StoreDailyChartComponent} from './store-statistical/store-daily-chart/store-daily-chart.component';
+import {StoreDashboardComponent} from '../staff/store-dashboard/store-dashboard.component';
+import {
+  StoreStatisticDashboardComponent
+} from './store-statistical/store-statistic-dashboard/store-statistic-dashboard.component';
 
 
 export const adminRouter: Routes = [
@@ -110,7 +123,7 @@ export const adminRouter: Routes = [
         {
           path: 'statistical',
           component: StatisticalComponent,
-          canActivate: [AdminGuardFn]
+          canActivate: [AdminGuardFn],
         },
 
         {
@@ -200,6 +213,25 @@ export const adminRouter: Routes = [
           path: 'edit_promotion/:id',
           component: EditPromotionComponent,
           canActivate: [AdminGuardFn]
+        },
+        {
+          path: 'store-statistical',
+          component: StoreStatisticalComponent,
+          canActivate: [AdminGuardFn],
+          children: [
+            {
+              path: "dashboard1",
+              component: StoreStatisticDashboardComponent,
+            },
+            {
+              path: "date-range-statistic",
+              component: StoreDateRangeStatisticComponent,
+            },
+            {
+              path: "daily-statistic",
+              component: StoreDailyChartComponent,
+            }
+          ],
         },
       ]
   }
