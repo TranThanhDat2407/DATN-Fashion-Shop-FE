@@ -15,34 +15,40 @@ import {NgIf} from '@angular/common';
   styleUrl: './paypal-success.component.scss'
 })
 export class PaypalSuccessComponent implements OnInit {
+
   message: string = '';
-  isLoading = true;
+  isLoading: boolean = true;
+  private hasCaptured: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private paypal: PaypalService,
-  ) {}
+    private paypal: PaypalService
+  ) { }
 
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
     const payerId = this.route.snapshot.queryParamMap.get('PayerID');
+
     console.log('📥 Token nhận từ URL:', token);
 
-    if (token && payerId) {
+    if (token && payerId && !this.hasCaptured) {
+      this.hasCaptured = true; // Đánh dấu đã gọi capture
+      this.isLoading = false;
+
       this.paypal.captureOrder(token).subscribe({
-        next: (res) => {
-          this.message = '🎉 Thanh toán thành công!';
-          console.log('🎯 Kết quả từ BE:', res);
-          this.isLoading = false;
+        next: (res: any) => {
+          console.log('🎯 Phản hồi từ BE:', res);
+
+            this.message = '🎉 Thanh toán thành công!';
         },
         error: (err) => {
           this.message = '❌ Thanh toán thất bại!';
           console.error('❌ Capture BE thất bại:', err);
-          this.isLoading = false;
         }
       });
+    } else {
+      this.message = '❌ Thiếu token hoặc đã xử lý xong.';
     }
   }
-
 }

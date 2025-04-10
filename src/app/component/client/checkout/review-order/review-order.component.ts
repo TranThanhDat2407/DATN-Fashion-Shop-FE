@@ -168,21 +168,24 @@ export class ReviewOrderComponent implements OnInit {
 
     const orderRequest = this.checkoutService.getCheckoutData();
     if (this.paymentInfo.paymentMethodId === 6) {
-      this.checkoutService.placeOrder(orderRequest).subscribe(
-        response => {
-          const totalAmount = Math.round(this.getTotalAfterDiscount() * this.usdRate * 100) / 100;
-
-          this.paypal.createOrder(totalAmount).subscribe({
-            next: (approvalUrl) => window.location.href = approvalUrl,
-            error: (err) => {
-              console.error('❌ Lỗi tạo order PayPal:', err);
-              alert('Tạo thanh toán PayPal thất bại. Vui lòng thử lại.');
+      this.checkoutService.placeOrder(orderRequest).subscribe({
+          next: (response) => {
+            if (response.paymentUrl) {
+              // ✅ Hướng xử lý PayPal (hoặc VNPay)
+              window.location.href = response.paymentUrl;
+            } else if (typeof response?.payUrl === 'string') {
+              window.location.href = response.payUrl;
+            } else {
+              // ✅ Trường hợp COD / PAY-IN-STORE
+              this.router.navigate(['/client', this.currentCurrency, this.currentLang, 'checkout-confirmation'], {
+                queryParams: { orderId: response.orderId }
+              });
             }
-          });
-        },
-        error => {
-          console.error('❌ Lỗi khi lưu đơn hàng (PayPal):', error);
-          alert('Đặt hàng thất bại. Vui lòng thử lại.');
+          },
+          error: (err) => {
+            console.error('❌ Đặt hàng thất bại:', err);
+            alert('Đặt hàng thất bại. Vui lòng thử lại.');
+          }
         }
       );
     } else {

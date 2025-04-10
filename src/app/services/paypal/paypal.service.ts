@@ -26,6 +26,4 @@ export class PaypalService {
       responseType: 'text'
     });
   }
-
-
 }
