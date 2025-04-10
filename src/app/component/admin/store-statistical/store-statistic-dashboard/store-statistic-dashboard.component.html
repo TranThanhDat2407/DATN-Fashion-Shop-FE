@@ -1,0 +1,48 @@
+<div class="dashboard-container">
+  <div class="controls">
+    <h2>Statistics by City</h2>
+
+    <div class="year-selector d-flex align-items-center gap-2">
+      <label for="year" class="fw-bold">Year:</label>
+      <select id="year" class="form-select w-auto" [(ngModel)]="selectedYear" (change)="onYearChange(selectedYear)">
+        <option *ngFor="let year of getYearRange()" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <span>Loading data...</span>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage">
+    <app-store-city-revenue-chart
+      *ngIf="cityRevenueData.length > 0"
+      [data]="cityRevenueData">
+    </app-store-city-revenue-chart>
+
+    <div *ngIf="cityRevenueData.length === 0" class="no-data">
+      No data available for the year {{ selectedYear }}
+    </div>
+  </div>
+
+  <div class="header">
+    <h2>Top Stores by Revenue</h2>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <app-store-top-revenue *ngIf="topStoresData.length > 0" [data]="topStoresData"></app-store-top-revenue>
+
+    <div *ngIf="topStoresData.length === 0" class="no-data">
+      No data available for the year {{ selectedYear }}
+    </div>
+  </div>
+</div>

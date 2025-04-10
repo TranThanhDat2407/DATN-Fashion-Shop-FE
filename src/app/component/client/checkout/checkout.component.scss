@@ -31,16 +31,7 @@ body {
   z-index: -1;
 
 }
-//.overlay {
-//
-//     top: 0;
-//  left: 0;
-//  width: 100%;
-//  height: auto;
-//  background-color:
-//    rgb(255, 255, 255,0.4); /* Màu trắng với độ mờ 50% */
-//  z-index: 1; /* Đặt lớp phủ nằm trên ảnh nền */
-//}
+
 .content-box {
   position: relative;
   z-index: 2; /* Giá trị cao hơn để hiển thị trên ảnh */
@@ -52,6 +43,7 @@ body {
 
 .textTitle h2{
   border-radius: 28px;
+  margin-left: 50px;
   text-align: center;
   width: 250px;
   background-color: rgb(255, 255, 255,0.85);
@@ -62,7 +54,7 @@ body {
 
 .textTitle span{
   font-weight: 500;
-  font-size: 22px;
+  font-size: 20px;
   color: black;
   font-family: "Kanit", sans-serif;
 }
@@ -74,7 +66,6 @@ body {
 }
 .container {
   height: 90vh;
-  overflow-y:scroll;
 }
 
 /* end header */
@@ -92,10 +83,7 @@ body {
 .checkout-container {
   flex: 1;
   max-width: 770px;
-  //background-color: #f9f9f9;
-  //padding: 20px;
-  //border-radius: 8px;
-  //box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
 
 /* Order Summary */
@@ -126,9 +114,15 @@ body {
   border-bottom: 1px solid #333;
 }
 .fr-price-currency abbr {
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
 }
+.fr-price-currency span {
+  font-size: 16px;
+  font-weight: bold;
 
+}
 /* Coupon Button */
 .mt-m {
   margin-top: 20px;
@@ -143,10 +137,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  //padding: 10px;
-  //border: 1px solid #ddd;
-  //border-radius: 4px;
-  //background-color: #f9f9f9;
   cursor: pointer;
 }
 
@@ -195,11 +185,6 @@ button:focus {
 
 
 
-
-
-
-
-
 /* Media Query: Màn hình nhỏ (điện thoại) */
 @media (max-width: 768px) {
   .checkout-layout {
@@ -243,8 +228,8 @@ abbr[title] {
   text-decoration: none;
 }
 .fr-price-currency-order-change.fr-price-currency>abbr.fr-price-currency-margin {
-  margin-left: .278em;
-  font-size: 15px;
+  margin-left: .270em;
+  font-size: 12px;
 }
 .fr-price-currency-order-change.fr-price-currency>abbr {
   margin-right: auto;
@@ -252,13 +237,16 @@ abbr[title] {
 }
 
 .fr-price-currency {
-  align-items: baseline;
-  color: inherit;
-  display: inline-flex;
-  flex-wrap: wrap;
+  //align-items: baseline;
+  //color: inherit;
+  //display: inline-flex;
+  //flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 /* end Order Summary */
 
-/* modal */
+
 
 

@@ -1,7 +1,7 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {CheckoutService} from '../../../../services/checkout/checkout.service';
-import {CommonModule, isPlatformBrowser, Location, NgClass, NgIf} from "@angular/common";
+import {CommonModule, isPlatformBrowser, Location, NgClass, NgForOf, NgIf} from "@angular/common";
 import {AddressDTO} from '../../../../dto/address/AddressDTO';
 import {NavigationService} from '../../../../services/Navigation/navigation.service';
 import {HttpClient} from '@angular/common/http';
@@ -9,7 +9,7 @@ import {AddressServiceService} from '../../../../services/client/AddressService/
 import {TokenService} from '../../../../services/token/token.service';
 import {LocationServiceService} from '../../../../services/client/LocationService/location-service.service';
 import {ApiResponse} from '../../../../dto/Response/ApiResponse';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, NgModel} from '@angular/forms';
 import {ShippingService} from '../../../../services/client/ShippingService/shipping-service.service';
 import {CartDTO} from '../../../../dto/CartDTO';
 import {StoreService} from '../../../../services/client/store/store.service';
@@ -21,7 +21,7 @@ import {StoreDetailDTO} from '../../../../dto/StoreDetailDTO';
   standalone: true,
   imports: [
     NgIf,
-    NgClass, CommonModule, FormsModule, RouterLink,
+    NgClass, NgForOf, CommonModule, FormsModule, RouterLink,
   ],
   templateUrl: './shipping.component.html',
   styleUrl: './shipping.component.scss'
@@ -33,8 +33,8 @@ export class ShippingComponent implements OnInit{
   shippingFee: any | null;
   cartData: CartDTO | null = null;
   selectedAddressId: any = null;
-  selectedShippingMethod: number  = 1; // Mặc định chọn Method 1
-  address: AddressDTO[] | null = null; // Khai báo đối tượng address (có thể null nếu chưa có dữ liệu)
+  selectedShippingMethod: number  = 1;
+  address: AddressDTO[] | null = null;
   userId: number | null = null; // userId ban đầu là null
   provinces: any[] = [];
   districts: any[] = [];
@@ -58,10 +58,7 @@ export class ShippingComponent implements OnInit{
     isDefault: false
   };
 
-  shippingMethods = [
-    { id: 1, name: 'Giao hàng nhanh' },
-    { id: 2, name: 'Nhận tại cửa hàng' },
-  ];
+
 
 
   showMoreButton = false;
@@ -99,12 +96,19 @@ export class ShippingComponent implements OnInit{
   ngOnInit() {
     this.getProvinces();
     this.userId = this.tokenService.getUserId() // Gọi API khi component được khởi tạo
+
+    this.checkoutService.shippingInfo$.subscribe((shippingInfo) => {
+      if (shippingInfo?.shippingMethodId) {
+        this.selectedShippingMethod = shippingInfo.shippingMethodId;
+      } else {
+        this.selectedShippingMethod = 1; // Giá trị mặc định
+      }
+    });
+
     this.getAddress();
     document.addEventListener('shown.bs.modal', function () {
       document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.remove());
     });
-
-
 
     this.fetchStores();
   }
@@ -115,7 +119,8 @@ export class ShippingComponent implements OnInit{
   getProvinces() {
     this.locationService.getProvinces().subscribe(
       (response) => {
-        this.provinces = response;
+        this.provinces = response.data;
+
 
       },
       (error) => {
@@ -131,7 +136,15 @@ export class ShippingComponent implements OnInit{
       this.addressService.getAddressByUserId(this.userId).subscribe(
         (response: ApiResponse<AddressDTO[]>) => {
           this.address = response.data; // Gán toàn bộ response vào address
-          console.log(this.address)
+          console.log("danh sách địa chỉ :",this.address)
+
+          // tự động gán đia chỉ mặc định
+          const defaultAddress = this.address.find(addr => addr.isDefault);
+          if (defaultAddress) {
+            this.selectedAddressId = defaultAddress.id;
+            this.updateShippingInfo();
+            this.getShippingFee();
+          }
         },
         (error) => {
           console.error('Lỗi khi lấy địa chỉ:', error);
@@ -141,14 +154,16 @@ export class ShippingComponent implements OnInit{
       console.error('Không tìm thấy userId trong localStorage');
     }
   }
+
+
   onProvinceChange(event: any) {
     const provinceCode = Number(event.target.value);
     if (!provinceCode || provinceCode === this.selectedProvince) return;
     this.selectedProvince = provinceCode; // Chỉ lưu mã tỉnh (số)
 
     // Cập nhật NewAddress.province
-    const selectedProvinceObj = this.provinces.find(p =>  p.code ===  this.selectedProvince);
-    this.NewAddress.province = selectedProvinceObj ? selectedProvinceObj.name : '';
+    const selectedProvinceObj = this.provinces.find(p =>  p.ProvinceID ===  this.selectedProvince);
+    this.NewAddress.province = selectedProvinceObj ? selectedProvinceObj.ProvinceName : '';
     // Reset quận/huyện và phường/xã
     this.selectedDistrict = null;
     this.selectedWard = null;
@@ -156,12 +171,21 @@ export class ShippingComponent implements OnInit{
     this.districts = [];
     // Gọi API lấy danh sách quận/huyện
     if (this.selectedProvince) {
+      console.log("📍 Tỉnh đã chọn:", this.selectedProvince);
+
       this.locationService.getDistricts(this.selectedProvince).subscribe(
-        data => {
-          this.districts = data.districts || [];
+        (response) => {
+          if (response && response.data) {
+            this.districts = response.data; // API trả về object chứa `data`
+          } else {
+            this.districts = response.districts || []; // Kiểm tra fallback
+          }
+
+          console.log("🏠 Danh sách quận/huyện:", this.districts);
         },
-        error => {
-          console.error("Lỗi khi lấy danh sách quận/huyện:", error);
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách quận/huyện:", error);
+          this.districts = []; // Reset danh sách khi lỗi
         }
       );
     }
@@ -174,22 +198,37 @@ export class ShippingComponent implements OnInit{
     this.wards = [];
 
     // Gán tên quận vào NewAddress.district
-    const selectedDistrictObj = this.districts.find(d => d.code == districtCode);
-    this.NewAddress.district = selectedDistrictObj ? selectedDistrictObj.name : '';
+    const selectedDistrictObj = this.districts.find(d => d.DistrictID == districtCode);
+    this.NewAddress.district = selectedDistrictObj ? selectedDistrictObj.DistrictName : '';
     // Gọi API lấy danh sách phường/xã
     if (this.selectedDistrict) {
-      this.locationService.getWards(this.selectedDistrict).subscribe(data => {
-        this.wards = data.wards || [];
-      });
+      console.log("🏙 Quận/Huyện đã chọn:", this.selectedDistrict);
+
+      this.locationService.getWards(this.selectedDistrict).subscribe(
+        (response) => {
+          if (response && response.data) {
+            this.wards = response.data; // API trả về object chứa `data`
+          } else {
+            this.wards = response.wards || []; // Kiểm tra fallback
+          }
+
+          console.log("📍 Danh sách phường/xã:", this.wards);
+        },
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách phường/xã:", error);
+          this.wards = []; // Reset danh sách khi lỗi
+        }
+      );
     }
   }
   onWardChange(event: any) {
     const wardCode = (event.target.value)
     if (!wardCode || this.selectedWard === wardCode) return;
     this.selectedWard = wardCode;
+    console.log(this.selectedWard)
     // Gán tên phường vào NewAddress.ward
-    const selectedWardObj = this.wards.find(w => w.code == wardCode);
-    this.NewAddress.ward = selectedWardObj ? selectedWardObj.name : '';
+    const selectedWardObj = this.wards.find(w => w.WardCode == wardCode);
+    this.NewAddress.ward = selectedWardObj ? selectedWardObj.WardName : '';
     console.log(this.NewAddress)
   }
 
@@ -247,6 +286,7 @@ export class ShippingComponent implements OnInit{
       console.error('Không tìm thấy userId!');
       return;
     }
+
     this.addressService.addAddress(this.userId, this.NewAddress).subscribe({
       next: (response: ApiResponse<AddressDTO>) => {
         if (response && response.data) {
@@ -347,45 +387,81 @@ export class ShippingComponent implements OnInit{
 
 
   selectAddress(addr: AddressDTO) {
+    if (this.userId === null) {
+      console.error('❌ userId không hợp lệ');
+      return;
+    }
+
     this.selectedAddressId = addr.id;
+
+    // Gọi API cập nhật địa chỉ mặc định
+    this.addressService.setDefaultAddress( addr.id, this.userId).subscribe({
+      next: () => {
+        console.log(`✅ Đã cập nhật địa chỉ mặc định: ${addr.id}`);
+        this.getAddress(); // Cập nhật lại danh sách địa chỉ sau khi thay đổi
+      },
+      error: (err) => {
+        console.error('❌ Lỗi khi cập nhật địa chỉ mặc định:', err);
+      }
+    });
+
     this.updateShippingInfo();
     this.getShippingFee();
   }
 
   selectShippingMethod(methodId: number) {
     this.selectedShippingMethod = methodId;
-    if(this.selectedShippingMethod == 1){
-      this.updateShippingInfo();
-      this.getShippingFee();
-    }else if(this.selectedShippingMethod == 2){
-      this.fetchStores();
-    }
+
+    console.log('🔍 Trước khi cập nhật Shipping Info:', {
+      selectedShippingMethod: this.selectedShippingMethod,
+      selectedStore: this.selectedStore
+    });
+
+    this.checkoutService.setShippingFee({
+      ...this.checkoutService.shippingInfo.value,
+      shippingMethodId: methodId,
+      storeId: methodId === 2 ? this.selectedStore?.id ?? null : null
+    });
+
+    this.updateShippingInfo();
+    this.getShippingFee();
+    this.fetchStores();
   }
 
-  updateShippingInfo() {
-    if (this.selectedAddressId && this.selectedShippingMethod === 1) {
-      const selectedAddress = this.address?.find(a => a.id === this.selectedAddressId);
 
-      const shippingData = ({
-        addressId: this.selectedAddressId,
+  updateShippingInfo() {
+    if (this.selectedShippingMethod === 1) {
+      // Giao hàng đến địa chỉ
+      const selectedAddress = this.address?.find(a => a.id === this.selectedAddressId);
+      const shippingData = {
+        shippingAddress: selectedAddress?.street,
         receiverName: `${selectedAddress?.firstName} ${selectedAddress?.lastName}`,
         receiverPhone: selectedAddress?.phoneNumber || '',
         shippingMethodId: this.selectedShippingMethod,
         shippingFee: this.shippingFee ?? 0
-      });
-      console.log('ShippingComponent - Gửi shippingFee:', shippingData);
+        // shippingFee: 0
+      };
+      console.log('🚚 Giao đến địa chỉ:', shippingData);
       this.checkoutService.setShippingFee(shippingData);
-    }
 
-    else if (this.selectedShippingMethod === 2 && this.selectedStore) {
+    } else if (this.selectedShippingMethod === 2 && this.selectedStore) {
+      // Click & Collect
       const shippingData = {
+        shippingAddress: this.selectedStore.fullAddress, // Lưu địa chỉ kho vào shippingAddress
         storeId: this.selectedStore.id,
         shippingMethodId: this.selectedShippingMethod,
         shippingFee: 0
       };
+      console.log('🏬 Đã chọn cửa hàng:', this.selectedStore);
+      console.log('🏬 Nhận hàng tại cửa hàng:', shippingData);
       this.checkoutService.setShippingFee(shippingData);
+    }else {
+      console.error("⚠️ Không thể cập nhật shippingInfo vì thiếu thông tin!");
     }
   }
+
+
+
 
   confirmCheckout() {
     if (!this.selectedAddressId) {
@@ -424,7 +500,11 @@ export class ShippingComponent implements OnInit{
 
   selectStore(store: any) {
     this.selectedStore = store;
-    console.log(this.selectedStore)
+    console.log("Cửa hàng được chọn: ",this.selectedStore)
+
+    if (this.selectedShippingMethod === 2) {
+      this.updateShippingInfo();
+    }
   }
 
   fetchStores(): void {

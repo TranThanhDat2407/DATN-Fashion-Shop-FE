@@ -2,14 +2,9 @@
 
 
 <div class="container-fluid">
-  <div class="background-box">
-    <!--    <img src="../../../assets/images/payment_Background.jpeg" alt="">-->
-    <div class="overlay"></div>
-  </div>
-
   <div class="content-box mt-5">
     <div class="container-fluid">
-      <div class="col-12">
+      <div class="row mt-5">
         <div class="textTitle">
           <h2>
             <i class="fa-brands fa-paypal" style="font-weight: bolder; font-size: 25px; color: #85c5de;"></i>
@@ -17,142 +12,157 @@
           </h2>
         </div>
       </div>
-      <div class="checkout-layout d-flex justify-content-center">
-        <div class="checkout-container">
-          <div class="accordion" id="accordionPanelsStayOpenExample">
-            <router-outlet/>
-          </div>
-        </div>
 
-        <div class="sticky sticky--checkout">
-          <div class="" data-test="order-summary">
-            <div class="">
-              <div><span class="text-uppercase">Tổng đơn hàng</span><span class="">| {{ cartData?.cartItems?.length }}
-                Sản phẩm</span>
+      <div class="checkout-layout d-flex justify-content-center">
+        <div class="row">
+          <div class="col-md-8 pe-3">
+            <div class="checkout-container">
+              <div class="accordion" id="accordionPanelsStayOpenExample">
+                <router-outlet/>
               </div>
-              <div class="" data-test="order-summary-edit"><span
-                class="text-dark"><a class="text-uppercase text-decoration-underline" [routerLink]="['../cart']"
-                                     style="">Sửa</a></span></div>
             </div>
-            <div class="fr-table">
-              <table>
-                <tbody>
-                <tr class="">
-                  <td data-test="tổng-cộng-label">Tổng cộng</td>
-                  <td data-test="tổng-cộng">
+
+          </div>
+          <div class="col-md-4">
+            <div class="sticky sticky--checkout">
+              <div class="" data-test="order-summary">
+                <div class="">
+                  <div><span class="text-uppercase">Tổng sản phẩm</span><span
+                    class="">| {{ cartData?.cartItems?.length }}
+                    Sản phẩm</span>
+                  </div>
+                  <div class="" data-test="order-summary-edit"><span
+                    class="text-dark"><a class="text-uppercase text-decoration-underline" [routerLink]="['../cart']"
+                                         style="">Sửa</a></span></div>
+                </div>
+                <div class="fr-table">
+                  <table>
+                    <tbody>
+                    <tr class="">
+                      <td data-test="tổng-cộng-label">Tổng đơn hàng
+                      <td data-test="tổng-cộng">
   <span class="fr-price-currency fr-price-currency-order-change">
     <abbr class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
     <span>
-      {{ getCurrencyPrice(cartData?.totalPrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+     {{
+        getCurrencyPrice(cartData?.totalPrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1,
+          currentCurrencyDetail?.code ?? 'VND')
+      }}
     </span>
   </span>
-                  </td>
+                      </td>
 
-                </tr>
-                <tr>
+                    </tr>
+                    <tr>
 
-                  <td colspan="2">
-                    <ng-container *ngIf="appliedCoupon">
-                      <span>{{ "MÃ GIẢM GIÁ" | translate }} ({{ appliedCoupon.code }})</span>
-                      <span>
-      <ng-container *ngIf="appliedCoupon.discountType === 'PERCENTAGE'">
-        -{{ appliedCoupon.discountValue }}%
-        ( {{
-          getCurrencyPrice(getDiscountAmount(),
-            currentCurrencyDetail?.rateToBase ?? 1,
-            currentCurrencyDetail?.code ?? 'VND')
-        }} )
-      </ng-container>
-      <ng-container *ngIf="appliedCoupon.discountType === 'FIXED'">
-        -{{
-          getCurrencyPrice(appliedCoupon.discountValue ?? 0,
-            currentCurrencyDetail?.rateToBase ?? 1,
-            currentCurrencyDetail?.code ?? 'VND')
-        }}
-      </ng-container>
-    </span>
+                      <!-- Mã giảm giá (nếu có) -->
+                    <tr *ngIf="appliedCoupon">
+                      <td colspan="2">
+                        <span>{{ "MÃ GIẢM GIÁ" | translate }} ({{ appliedCoupon.code }})</span>
+                        <span>
+                    <ng-container *ngIf="appliedCoupon.discountType === 'PERCENTAGE'">
+                      -{{ appliedCoupon.discountValue }}%
+                      ( {{
+                        getCurrencyPrice(getDiscountAmount(),
+                          currentCurrencyDetail?.rateToBase ?? 1,
+                          currentCurrencyDetail?.code ?? 'VND')
+                      }} )
                     </ng-container>
-                  </td>
-
-                </tr>
-
-                <tr class="" *ngIf="shippingInfo">
-                  <td data-test="phi-vận-chuyển-label">Phí vận chuyển</td>
-                  <td data-test="phi-vận-chuyển"><span
-                    class="fr-price-currency fr-price-currency-order-change"><abbr
-                    class="fr-no-uppercase fr-price-currency-margin"
-                    title="Vietnamese dong">VND</abbr><span>
+                    <ng-container *ngIf="appliedCoupon.discountType === 'FIXED'">
+                      -{{
+                        getCurrencyPrice(appliedCoupon.discountValue ?? 0,
+                          currentCurrencyDetail?.rateToBase ?? 1,
+                          currentCurrencyDetail?.code ?? 'VND')
+                      }}
+                    </ng-container>
                   </span>
-                    {{ getCurrencyPrice(shippingInfo.shippingFee ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                      </td>
+                    </tr>
+
+                    <tr class="" *ngIf="shippingInfo">
+                      <td data-test="phi-vận-chuyển-label">Phí vận chuyển</td>
+                      <td data-test="phi-vận-chuyển"><span
+                        class="fr-price-currency fr-price-currency-order-change"><abbr
+                        class="fr-no-uppercase fr-price-currency-margin"
+                        title="Vietnamese dong">VND</abbr><span>
+                  </span>
+                        {{ getCurrencyPrice(shippingInfo.shippingFee ?? 0,
+                          currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
                   </span></td>
-                </tr>
-                <tr class="header-row">
-                  <th class="text-uppercase" data-test="tổng-label">Tổng</th>
-                  <th data-test="tổng">
+                    </tr>
+                    <tr class="header-row">
+                      <th class="text-uppercase" data-test="tổng-label">Tổng sau giảm giá</th>
+                      <th data-test="tổng">
                     <span class="fr-price-currency fr-price-currency-order-change">
                       <abbr
                         class="fr-no-uppercase fr-price-currency-margin"
                         title="Vietnamese dong">VND</abbr>
                       <span>
                   </span>
-                      {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                      {{ getCurrencyPrice(getTotalAfterDiscount(),
+                      currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
                     </span>
-                  </th>
-                </tr>
-                <tr class="">
-                  <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">Đã bao gồm thuế giá trị gia tăng</td>
-                  <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang"><span
-                    class="fr-price-currency fr-price-currency-order-change"><abbr
-                    class="fr-no-uppercase fr-price-currency-margin"
-                    title="Vietnamese dong">VND</abbr><span></span></span></td>
-                </tr>
-                </tbody>
-                <tfoot>
-                <tr class="">
-                  <th class="text-uppercase" data-test="tổng-dơn-dặt-hang-label">Tổng đơn đặt hàng</th>
-                  <th data-test="tổng-dơn-dặt-hang"><span
-                    class="fr-price-currency fr-price-currency-order-change"><abbr
-                    class="fr-no-uppercase fr-price-currency-margin"
-                    title="Vietnamese dong">VND</abbr><span> {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}</span></span>
-                  </th>
-                </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-          <div class="mt-m">
-            <div class="a11y-focus-section">
-              <nav class="fr-transition-btn-cards">
-                <ul class="fr-link-wrapper" [routerLink]="['../coupon']">
-                  <li class="btn">
-                    <button style="text-decoration: none">
-                      <div class="fr-link-wrapper fr-flbox middle"><span class="block-icon"><span
-                        class="mr-xxs"><span class="fr-icon coupon" aria-hidden="true"
-                                             style="font-size: 24px;"></span></span><span
-                        class="text">Phiếu giảm giá</span><span
-                        style="position: absolute; right: 0px; top: calc(50% - 12px);"><span class="fr-icon"
-                                                                                             aria-hidden="true"
-                                                                                             style="font-size: 24px;"><svg
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path
-                        fill="#757575" fill-rule="evenodd">
+                      </th>
+                    </tr>
+                    <tr class="">
+                      <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">Đã bao gồm thuế VAT (8%)</td>
+                      <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang"><span
+                        class="fr-price-currency fr-price-currency-order-change"><abbr
+                        class="fr-no-uppercase fr-price-currency-margin"
+                        title="Vietnamese dong">VND</abbr><span></span>
+                        {{ getCurrencyPrice(getVATAmount(), currentCurrencyDetail?.rateToBase ?? 1,
+                          currentCurrencyDetail?.code ?? 'VND') }}
+                      </span></td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr class="">
+                      <th class="text-uppercase" data-test="tổng-dơn-dặt-hang-label">Tổng đơn đặt hàng</th>
+                      <th data-test="tổng-dơn-dặt-hang"><span
+                        class="fr-price-currency fr-price-currency-order-change"><abbr
+                        class="fr-no-uppercase fr-price-currency-margin" style="color: red"
+                        title="Vietnamese dong">VND</abbr><span
+                        style="color: red;">
+                        {{ getCurrencyPrice(getGrandTotal(),
+                        currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                      </span></span>
+                      </th>
+                    </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+              <div class="mt-m">
+                <div class="a11y-focus-section">
+                  <nav class="fr-transition-btn-cards">
+                    <ul class="fr-link-wrapper" [routerLink]="['../coupon']">
+                      <li class="btn">
+                        <button style="text-decoration: none">
+                          <div class="fr-link-wrapper fr-flbox middle"><span class="block-icon"><span
+                            class="mr-xxs"><span class="fr-icon coupon" aria-hidden="true"
+                                                 style="font-size: 24px;"></span></span><span
+                            class="text">Phiếu giảm giá</span><span
+                            style="position: absolute; right: 0px; top: calc(50% - 12px);"><span class="fr-icon"
+                                                                                                 aria-hidden="true"
+                                                                                                 style="font-size: 24px;"><svg
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path
+                            fill="#757575" fill-rule="evenodd">
                            </path></svg></span></span></span>
-                      </div>
-                    </button>
-                  </li>
-                </ul>
-              </nav>
+                          </div>
+                        </button>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
-
-
       </div>
-
 
     </div>
 
   </div>
 
 </div>
-
-

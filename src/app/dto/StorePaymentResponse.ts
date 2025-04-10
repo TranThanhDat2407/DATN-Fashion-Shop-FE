@@ -9,4 +9,5 @@ export interface StorePaymentResponse  {
   paymentMethod: string;
   paymentDate: string;
   transactionCode: string;
+  payUrl?: string;
 }

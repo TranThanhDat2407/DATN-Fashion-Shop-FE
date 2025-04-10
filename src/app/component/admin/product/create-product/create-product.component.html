@@ -1,0 +1,202 @@
+<app-header-admin [title_header]="'Create Product'" [routerLinkString]="'/admin/list_product'" />
+
+
+<div class="container-item">
+ 
+
+    <div class="row"> <!-- Product Details (Right Section) -->
+        <div class="col-md-8 "> 
+            <div class="product-details sticky-top z-0" style="background-color: #f5f5f5;">
+                <div class="details">
+                    <div class="row">
+                        <div class="col-12 input-name">
+                            <label>Name</label>
+                            <input  type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-name">
+
+                    <div class="d-flex align-items-end justify-content-end mt-2">
+                       
+                        <h5 class="colorTitle">PRODUCT NAME</h5>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-4 input-name" *ngFor="let lang of dataLanguage">
+                            <label *ngIf="lang.code === 'vi'"> <img src="https://img.icons8.com/?size=100&id=60257&format=png&color=000000" width="30" alt=""> {{ lang.name }} Name</label>
+                            <label *ngIf="lang.code === 'en'"> <img src="https://img.icons8.com/?size=100&id=18212&format=png&color=000000" width="30" alt=""> {{ lang.name }} Name</label>
+                            <label *ngIf="lang.code === 'jp'"> <img src="https://img.icons8.com/?size=100&id=22435&format=png&color=000000" width="30" alt=""> {{ lang.name }} Name</label>
+                            <input type="text" class="form-control"
+                                [(ngModel)]="getTranslationByCodeName(lang.code).name" [attr.name]="lang.code"
+                                [placeholder]="lang.name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-name">
+                    <div class="d-flex align-items-end justify-content-end mt-2">
+                        <h5 class="colorTitle">PRODUCT DESCRIPTION</h5>
+                    </div>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-4 input-name" *ngFor="let lang of dataLanguage">
+                            <label *ngIf="lang.code === 'vi'"> <img src="https://img.icons8.com/?size=100&id=60257&format=png&color=000000" width="30" alt=""> {{ lang.name }} Description</label>
+                            <label *ngIf="lang.code === 'en'"> <img src="https://img.icons8.com/?size=100&id=18212&format=png&color=000000" width="30" alt=""> {{ lang.name }} Description</label>
+                            <label *ngIf="lang.code === 'jp'"> <img src="https://img.icons8.com/?size=100&id=22435&format=png&color=000000" width="30" alt=""> {{ lang.name }} Description</label>
+                            <textarea class="form-control" [(ngModel)]="getTranslationByCodeDescription(lang.code).name"
+                                [attr.name]="lang.code" [placeholder]="lang.name" required rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-name">
+                    <div class="d-flex align-items-end justify-content-end mt-2">
+                        <h5 class="colorTitle">PRODUCT MATERIAL</h5>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-4 input-name" *ngFor="let lang of dataLanguage">
+                            <label *ngIf="lang.code === 'vi'"> <img src="https://img.icons8.com/?size=100&id=60257&format=png&color=000000" width="30" alt=""> {{ lang.name }} Material</label>
+                            <label *ngIf="lang.code === 'en'"> <img src="https://img.icons8.com/?size=100&id=18212&format=png&color=000000" width="30" alt=""> {{ lang.name }} Material</label>
+                            <label *ngIf="lang.code === 'jp'"> <img src="https://img.icons8.com/?size=100&id=22435&format=png&color=000000" width="30" alt=""> {{ lang.name }} Material</label>
+                            <textarea class="form-control" [(ngModel)]="getTranslationByCodeMaterial(lang.code).name"
+                                [attr.name]="lang.code" [placeholder]="lang.name" required rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-name">
+                    <!-- Tiêu đề -->
+                    <div class="d-flex align-items-end justify-content-end mt-2">
+                        <h5 class="colorTitle">PRODUCT <span>CARE</span> </h5> 
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-4 input-name" *ngFor="let lang of dataLanguage">
+                            <label *ngIf="lang.code === 'vi'"> <img src="https://img.icons8.com/?size=100&id=60257&format=png&color=000000" width="30" alt=""> {{ lang.name }} Care</label>
+                            <label *ngIf="lang.code === 'en'"> <img src="https://img.icons8.com/?size=100&id=18212&format=png&color=000000" width="30" alt=""> {{ lang.name }} Care</label>
+                            <label *ngIf="lang.code === 'jp'"> <img src="https://img.icons8.com/?size=100&id=22435&format=png&color=000000" width="30" alt=""> {{ lang.name }} Care</label>
+                            <textarea class="form-control" [(ngModel)]="getTranslationByCodeCare(lang.code).name"
+                                [attr.name]="lang.code" [placeholder]="lang.name" required rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- <div class="product-name" [class.active]="expandedStates['description']">
+                    <div class="d-flex align-items-end justify-content-end mt-2" (click)="toggleDetails('description')">
+                        <h5>PRODUCT DESCRIPTION</h5>
+                    </div>
+                    <hr>
+                    <div class="details" *ngIf="expandedStates['description']">
+                        <div class="row">
+                            <div class="col-12 input-name" *ngFor="let lang of dataLanguage">
+                                <label>{{ lang.name }} Description</label>
+                                <textarea class="form-control" [(ngModel)]="getTranslationByCode(lang.code).name"
+                                    [attr.name]="lang.code" [placeholder]="lang.name" required rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+
+
+                <div>
+                    <!--        product-color-->
+                    <!-- <div class="color-picker" style="background-color: #f5f5f5;">
+                        <dl class="color-picker-list">
+                            <div class="color-item" *ngFor="let color of dataColors" [attr.data-test]="color.valueName">
+                                <dt>
+                                    <input type="radio" [value]="color.id" name="product-color-picker"
+                                        [id]="'product-color-picker' + color.id" class="color-input"
+                                        (click)="selectColor(color)" [checked]="color.id === selectedColorId">
+
+                                    <label class="color-label" [for]="'product-color-picker' + color.id"
+                                        [style.backgroundImage]="'url(' + getImageColor(color.valueImg) + ')'">
+
+                                    </label>
+                                </dt>
+                            </div>
+
+
+                        </dl>
+                        <p class="color-selected">{{ "Màu sắc:" | translate }} {{selectedColorName}}</p>
+                    </div> -->
+                    <!--            product-size-->
+                    <!-- <div class="size-picker" style="background-color: #f5f5f5;">
+                        <div class="btn-group flex-wrap gap-2" role="group">
+                            <div class="size-item" *ngFor="let size of dataSizes" [attr.data-test]="size.valueName">
+                                <input type="radio" class="btn-check" [value]="size.id" name="product-size-picker"
+                                    [id]="'product-size-picker' + size.valueName" (click)="selectSize(size)">
+
+                                <label class="btn btn-outline-dark size-label"
+                                    [for]="'product-size-picker' + size.valueName">
+                                    {{ size.valueName }}
+                                </label>
+                            </div>
+                        </div>
+                    </div> -->
+
+                </div>
+
+
+                <!------------------------END--------------------->
+            </div>
+        </div>
+        <!-- Product Images (Left Section) -->
+        <div class=" Product-Images col-md-4 ps-4 ps-0 ">
+            <div class="row mt-1 d-flex justify-content-end">
+
+                <div class="row mt-2 g-2 mb-3" *ngIf="previewUrls.length !==0 ">
+                    <button class="btn-save" (click)="createProduct()">SAVE PRODUCT</button>
+                    <div class="col-12 input-name" >
+                        <label>Base Price</label>
+                        <input type="number" [(ngModel)]="basePrice" name="basePrice" class="form-control" placeholder="Base Price" >
+                    </div>
+                </div>
+                <div class="col-3 position-relative p-0 product-variant-edit "
+                    style="background-repeat: no-repeat;
+                    background-size: 60% 60%; background-image: url('https://static.thenounproject.com/png/187803-200.png');" (click)="fileInput.click()">
+                    <input type="file" class="d-none" #fileInput (change)="onFileSelected($event)" multiple>
+                </div>
+                <div *ngFor="let url of previewUrls; let i = index"
+                    class="col-3 position-relative mb-2 d-flex justify-content-end">
+                    <div class="position-relative">
+                        <img [src]="url" class="img-fluid rounded border shadow-sm"
+                            style="width: 100%; height: auto; padding: 5px;">
+
+                        <!-- Nút X để xóa ảnh -->
+                        <button (click)="removeImage(i)" class="btn   btn-sm position-absolute"
+                            style="top: 5px; right: 5px; border-radius: 50%;">
+                            ❌
+                        </button>
+                    </div>
+                </div>
+
+
+
+                <!-- <div class="col-6 position-relative p-0  " *ngFor="let url of previewUrls; let i = index">
+                    <a>
+                        <img [src]="url" class="img-fluid" style="width: 100%; height: auto;">
+                    </a>
+
+                    <button (click)="removeImage(i)" class="btn  btn-sm position-absolute"
+                        style="top: 5px; right: 5px; border-radius: 50%;">
+                        ❌
+                    </button>
+                </div> -->
+
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -57,10 +57,10 @@ export class CheckoutComponent implements OnInit {
       this.currentStep = lastSegment || 'shipping';
     });
 
-    this.checkoutService.shippingInfo$.subscribe(info => {
-      if(info){
-        this.shippingInfo = info;
-        console.log('CheckoutComponent -  Nhận shippingInfo:', info );
+    this.checkoutService.shippingInfo$.subscribe(shippingInfo => {
+      if(shippingInfo){
+        this.shippingInfo = shippingInfo;
+        console.log('CheckoutComponent -  Nhận shippingInfo:', shippingInfo );
       }
 
     });
@@ -115,9 +115,25 @@ export class CheckoutComponent implements OnInit {
   }
 
   getTotalAfterDiscount(): number {
-    const total = (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount();
-    return Math.max(0, total + (this.shippingInfo?.shippingFee ?? 0));
-    // return Math.max((this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(), 0); // Đảm bảo không bị âm
+    return Math.max(
+      (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(),
+      0
+    );
   }
+
+  getVATAmount(): number {
+    const subtotal = (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount();
+    const taxRate = 0.08;
+    return Math.round(subtotal * taxRate * 100) / 100;
+  }
+
+  getGrandTotal(): number {
+    const subtotal = this.getTotalAfterDiscount();
+    const vat = this.getVATAmount();
+    const shippingFee = this.shippingInfo?.shippingFee ?? 0;
+    return subtotal + vat + shippingFee;
+  }
+
+
 
 }

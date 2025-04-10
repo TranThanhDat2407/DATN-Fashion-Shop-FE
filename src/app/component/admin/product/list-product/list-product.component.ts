@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HeaderAdminComponent } from '../../header-admin/header-admin.component';
 import { TableComponent } from "../../table/table.component";
@@ -7,7 +7,6 @@ import { ProductServiceService } from '../../../../services/client/ProductServic
 import { catchError, firstValueFrom, forkJoin, map, Observable, of } from 'rxjs';
 import { PageResponse } from '../../../../dto/Response/page-response';
 import { ProductListDTO } from '../../../../dto/ProductListDTO';
-import { response } from 'express';
 import { ApiResponse } from '../../../../dto/Response/ApiResponse';
 import { ProductVariantDetailDTO } from '../../../../models/ProductVariant/product-variant-detailDTO';
 
@@ -20,36 +19,36 @@ import { ProductVariantDetailDTO } from '../../../../models/ProductVariant/produ
 })
 export class ListProductComponent implements OnInit {
   constructor(
-    private productService: ProductServiceService
+    private productService: ProductServiceService,
+    private cdr: ChangeDetectorRef
   ) {
 
   }
   dataProduct: PageResponse<ProductListDTO[]> | null = null
   dataFullElementProduct: PageResponse<ProductListDTO[]> | null = null;
-  header: string[] = ['id','name','imageUrl','colors','sizes','promotions','button']
+  header: string[] = ['id', 'name', 'imageUrl', 'isActive', 'colors', 'sizes', 'promotions', 'button']
   listTest: ProductListDTO[] = []
-  checkedItem : number[] = [];
-
+  checkedItem: number[] = [];
+  isActive: any = null
   name: string = ''
   minPrice?: number
   maxPrice?: number
   page: number = 0
-  size: number = 2
+  size: number = 8
   sortBy?: string
   sortDir: 'asc' | 'desc' = 'asc'
+  nameSearch: string = ''
+  debounceTimerName: any;
 
   async ngOnInit(): Promise<void> {
     await this.fetchProductList()
-
-    console.log("Danh sách sản phẩm đầy đủ:", this.dataFullElementProduct?.content.flat()[2]);
-
   }
 
 
   async fetchProductList(): Promise<void> {
 
     const callApis = {
-      dataProduct: this.getProduct('en', this.name, this.minPrice, this.maxPrice, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of(null)))
+      dataProduct: this.getProduct('en', this.name, this.isActive, this.minPrice, this.maxPrice, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of(null)))
 
     }
 
@@ -65,13 +64,14 @@ export class ListProductComponent implements OnInit {
   getProduct(
     languageCode: string,
     name?: string,
+    isActive?: boolean,
     minPrice?: number,
     maxPrice?: number,
     page: number = 0,
     size: number = 0,
     sortBy?: string,
     sortDir: 'asc' | 'desc' = 'asc'): Observable<PageResponse<ProductListDTO[]> | null> {
-    return this.productService.getProducts(languageCode, undefined, true, name, minPrice, maxPrice, undefined, page, size, sortBy, sortDir).pipe(
+    return this.productService.getProductsAdmin(languageCode, name, isActive, minPrice, maxPrice, page, size, sortBy, sortDir).pipe(
       map((response: ApiResponse<PageResponse<ProductListDTO[]>>) => response.data || null),
       catchError(() => of(null))
     )
@@ -84,8 +84,30 @@ export class ListProductComponent implements OnInit {
     )
   }
 
+  onIsActiveChange(): void {
+    this.fetchProductList()
+    console.log("Selected isActive value:", this.isActive);
+  }
 
+  onNameChange(value: string): void {
+    // Xóa timer cũ nếu có
+    if (this.debounceTimerName) {
+      clearTimeout(this.debounceTimerName);
+    }
+    // Đặt timer mới chờ 1s
+    this.debounceTimerName = setTimeout(() => {
+      this.searchName(value);
+    }, 1000);
+  }
+  searchName(value: string): void {
+    this.name = value;
 
+    setTimeout(() => {
+      this.onPageChange(0)
+    }, 500);
+
+    this.cdr.detectChanges(); // Cập nhật lại giao diện ngay lập tức
+  }
 
   getFullElementProduct(): void {
     if (!this.dataProduct?.content) return; // Kiểm tra nếu dataProduct hoặc content là null
@@ -98,13 +120,21 @@ export class ListProductComponent implements OnInit {
         ...this.dataProduct!,
         content: this.dataProduct!.content.map((product, index) => ({
           ...product,
-          imageUrl : productDetails[index]?.variantImage || '', // Thêm trường img
+          imageUrl: productDetails[index]?.variantImage || '', // Thêm trường img
         })),
       };
 
     });
   }
 
+  onCreateAtChange() {
+      this.sortBy = this.sortBy
+      this.fetchProductList()
+  }
+  onSortDirChange() {
+      this.sortDir = this.sortDir
+      this.fetchProductList()
+  }
 
   toggleCheckbox = (item: any): void => {
     item.checked = !item.checked;

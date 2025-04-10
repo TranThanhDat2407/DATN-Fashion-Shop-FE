@@ -46,7 +46,6 @@ interface Category {
 export class StockComponent implements OnInit {
   stockList: ListStoreStockDTO[] = [];
   pageNo = 0;
-  pageSize = 10;
   totalPages = 0;
   storeId!: number;
 
@@ -128,13 +127,72 @@ export class StockComponent implements OnInit {
     this.listCategory = await firstValueFrom(this.buildCategoryTree());
   }
 
+// Thêm các biến mới vào component
+  pageSize: number = 10; // Default page size
+  maxDisplayedPages: number = 10; // Số trang tối đa hiển thị
+  additionalPages: number = 10; // Số trang thêm vào khi đạt đến giới hạn
+
+// Hàm thay đổi page size
+  onPageSizeChange(): void {
+    this.pageNo = 0; // Reset về trang đầu tiên khi thay đổi page size
+    this.fetchStockData();
+  }
+
+// Hàm thay đổi trang
+  changePage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.pageNo = page;
+      this.fetchStockData();
+    }
+  }
+
+// Các hàm hỗ trợ hiển thị phân trang
+  getDisplayedPages(): number[] {
+    let startPage: number;
+    let endPage: number;
+
+    if (this.totalPages <= this.maxDisplayedPages) {
+      // Hiển thị tất cả nếu tổng số trang ít
+      startPage = 0;
+      endPage = this.totalPages - 1;
+    } else {
+      // Tính toán các trang cần hiển thị
+      if (this.pageNo <= this.maxDisplayedPages - 1) {
+        startPage = 0;
+        endPage = this.maxDisplayedPages - 1;
+      } else {
+        startPage = this.pageNo;
+        endPage = Math.min(this.pageNo + this.additionalPages - 1, this.totalPages - 1);
+      }
+    }
+
+    return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
+  }
+
+  showFirstPage(): boolean {
+    return this.getDisplayedPages()[0] > 0;
+  }
+
+  showLastPage(): boolean {
+    return this.getDisplayedPages()[this.getDisplayedPages().length - 1] < this.totalPages - 1;
+  }
+
+  showFirstEllipsis(): boolean {
+    return this.getDisplayedPages()[0] > 1;
+  }
+
+  showLastEllipsis(): boolean {
+    return this.getDisplayedPages()[this.getDisplayedPages().length - 1] < this.totalPages - 2;
+  }
+
+// Cập nhật hàm fetchStockData để sử dụng pageSize
   fetchStockData() {
     const selectedCategoryId = this.selectedCategorySubChild?.id || this.selectedCategoryChild?.id || this.selectedCategoryParent?.id || null;
     this.storeService.getStoresStock(
       this.pageNo,
-      this.pageSize,
+      this.pageSize, // Sử dụng pageSize thay vì giá trị cố định
       this.storeId,
-      this.languageCode || 'vi', // Mặc định là 'vi' nếu không có giá trị
+      this.languageCode || 'vi',
       this.productName,
       selectedCategoryId,
       this.sortBy || 'id',
@@ -148,13 +206,6 @@ export class StockComponent implements OnInit {
       },
       error: (err) => console.error('Lỗi tải dữ liệu kho:', err)
     });
-  }
-
-  changePage(page: number) {
-    if (page >= 0 && page < this.totalPages) {
-      this.pageNo = page;
-      this.fetchStockData();
-    }
   }
 
   buildCategoryTree(): Observable<Category[]> {

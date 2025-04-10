@@ -1,6 +1,6 @@
 
 <div class="row">
-  <app-shipping></app-shipping>
+<!--  <app-shipping></app-shipping>-->
 
 </div>
 <div class="row">
@@ -29,65 +29,59 @@
             Vui lòng chọn tùy chọn thanh toán
           </div>
 
-          <div id="payment" class="accordion-collapse collapse show">
+          <div id="payment" class="accordion-collapse collapse show" >
             <div class="accordion-body">
               <div class="d-flex justify-content-around"
                    style="border-top: 1px solid rgb(224, 224, 224); padding: 28px 20px;">
 
-                <div class="mb-m pr-s">
-                  <span class="fr-radio fr-radio-primary bold-with-subtext">
-                    <input type="radio" id="payinstore" name="paymentMethod" value="3"
-                           (change)="onSelectionChange(5)" [checked]="selectedMethod === 5" />
-                    <label for="payinstore" class="content-wrapper">
-                      <span class="content-text">
-                        <span class="title">Thanh Toán Tại Cửa Hàng</span>
-                      </span>
-                    </label>
-                  </span>
+                <div *ngFor="let method of availablePaymentMethods">
+                  <div class="mb-m pr-s">
+    <span class="fr-radio fr-radio-primary bold-with-subtext">
+      <input type="radio" [id]="'pay-' + method.id" name="paymentMethod" [value]="method.id"
+             (change)="onSelectionChange(method.id)" [checked]="selectedMethod === method.id" />
+      <label [for]="'pay-' + method.id" class="content-wrapper">
+        <span class="content-text">
+          <span class="title">{{ method.label }}</span>
+        </span>
+      </label>
+    </span>
+                  </div>
                 </div>
-
-                <div class="mb-m pr-s">
-                    <span class="fr-radio fr-radio-primary bold-with-subtext">
-                      <input type="radio" id="cod" name="paymentMethod" value="1"
-                             (change)="onSelectionChange(1)" [checked]="selectedMethod === 1"/>
-                      <label for="cod" class="content-wrapper">
-                        <span class="content-text">
-                          <span class="title">Thanh toán khi nhận hàng</span>
-                        </span>
-                      </label>
-                    </span>
-                </div>
-
-                <div class="mb-m pr-s">
-                   <span class="fr-radio fr-radio-primary bold-with-subtext">
-                    <input type="radio" id="vnpay" name="paymentMethod" value="2"
-                           (change)="onSelectionChange(2)" [checked]="selectedMethod === 2" />
-                    <label for="vnpay" class="content-wrapper">
-                      <span class="content-text">
-                        <span class="title">Thanh toán bằng VNPAY</span>
-                      </span>
-                    </label>
-                  </span>
-                </div>
-
-
 
               </div>
               <hr>
               <!-- Nội dung tương ứng -->
 
-
-
-
-
-
-              <div *ngIf="selectedMethod === + '1'">
+              <div *ngIf="selectedMethod === 1">
                 <div class="fr-contents-card">
                   <div>
                     <div>
                       <div class="fr-wrapper mb-l mt-l" style="width: auto;">
                         <div class="fr-text">Vui lòng thanh toán bằng tiền mặt cho người vận chuyển khi đơn hàng của bạn đã
                           đến nơi.
+                        </div>
+                      </div>
+                      <div class="fr-wrapper mb-m mt-m" style="width: auto;">
+                        <button  [routerLink]="['../review']" style="max-width: 288px" class="fr-btn fr-btn w4-f wundefined-f" type="button" data-test="tiếp-tục-button"
+                        >Tiếp tục
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div *ngIf="selectedMethod === 2">
+                <div class="fr-contents-card">
+                  <div>
+                    <div>
+                      <div class="fr-wrapper mb-l mt-l" style="width: auto;">
+                        <div class="fr-text">Chọn tiếp tục để tiến hành thanh toán bằng VNPAY. Quý khách sẽ được chuyển
+                          hướng đến cổng thanh toán sau khi xác nhận chi tiết đơn hàng
+                        </div>
+                        <div class="fr-text">Quý khách vui lòng hoàn tất thanh toán trong vòng 5 phút sau khi nhấn "ĐẶT
+                          HÀNG".
                         </div>
                       </div>
                       <div class="fr-wrapper mb-m mt-m" style="width: auto;">
@@ -98,15 +92,15 @@
                     </div>
                   </div>
                 </div>
+
               </div>
 
-
-              <div *ngIf="selectedMethod === + '2'">
+              <div *ngIf="selectedMethod === 7">
                 <div class="fr-contents-card">
                   <div>
                     <div>
                       <div class="fr-wrapper mb-l mt-l" style="width: auto;">
-                        <div class="fr-text">Chọn tiếp tục để tiến hành thanh toán bằng VNPAY. Quý khách sẽ được chuyển
+                        <div class="fr-text">Chọn tiếp tục để tiến hành thanh toán bằng PayPal. Quý khách sẽ được chuyển
                           hướng đến cổng thanh toán sau khi xác nhận chi tiết đơn hàng
                         </div>
                         <div class="fr-text">Quý khách vui lòng hoàn tất thanh toán trong vòng 15 phút sau khi nhấn "ĐẶT
@@ -123,7 +117,6 @@
                 </div>
 
               </div>
-
 
               <div *ngIf="selectedMethod === 5">
                 <div class="fr-contents-card">

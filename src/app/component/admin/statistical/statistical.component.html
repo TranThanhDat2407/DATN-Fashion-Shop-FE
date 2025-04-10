@@ -1,0 +1,107 @@
+<app-header-admin [title_header]="'Statistics'" [routerLinkString]="'/admin/list_promotions'" />
+
+<div class="container">
+  <h2 class="text-uppercase">Revenue Statistics</h2>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h5 class="card-title">Daily Revenue</h5>
+          <p class="card-text"> <strong>{{ dailyRevenue | number }} VNĐ </strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h5 class="card-title">Monthly Revenue</h5>
+          <p class="card-text"><strong>{{ monthlyRevenue | number }} VNĐ </strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card bg-warning text-dark">
+        <div class="card-body">
+          <h5 class="card-title">Yearly Revenue</h5>
+          <p class="card-text"><strong>{{ yearlyRevenue | number }} VNĐ</strong></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<hr>
+
+        <div class="col-12 col-md-12 col-lg-12 ">
+          <div class="chart-container mt-3">
+  <!--          <span class="fw-bold mb-2 ">Bộ lọc</span>-->
+            <div class="d-flex justify-content-between w-100">
+              <div class="w-25">
+                <label for="date" class="fw-bold">Select date:</label>
+                <input id="date" type="date" class="form-control" [(ngModel)]="selectedDate" (change)="fetchDailyRevenue()">
+              </div>
+              <div class="w-25">
+                <label for="month" class="fw-bold">Select month:</label>
+                <input id="month" type="month" class="form-control" [(ngModel)]="selectedMonth" (change)="fetchMonthlyRevenue()">
+              </div>
+              <div class="w-25">
+                <label for="year" class="fw-bold">Select year</label>
+                <input id="year" type="number" min="2000" max="2100" class="form-control" [(ngModel)]="selectedYear" (change)="fetchYearlyRevenue()">
+              </div>
+            </div>
+          </div>
+        </div>
+
+  <hr class="mb-4">
+
+  <h2 class="text-uppercase">Total likes statistics</h2>
+
+  <!-- Bộ lọc -->
+  <div class="filter-container">
+    <input type="text" [formControl]="searchForm.controls.searchText" placeholder="Search product..." class="form-control"/>
+    <button (click)="resetFilter()" class="btn btn-secondary">Reset</button>
+  </div>
+
+  <div *ngIf="products.length > 0; else noData">
+    <table class="table table-bordered table-hover">
+      <thead class="table-dark text-center">
+      <tr>
+        <th>#</th>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Color</th>
+        <th>Image</th>
+        <th>Price</th>
+        <th>Wishlist number</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr class="text-center" *ngFor="let product of products; let i = index">
+        <td>{{ i + 1 + (currentPage * pageSize) }}</td>
+        <td>{{ product.productVariantId }}</td>
+        <td>{{ product.productName }}</td>
+        <td>{{ product.color }}</td>
+        <td>
+          <img [src]="getImageProduct(product.imageUrl)" alt="Product Image" class="product-image"/>
+        </td>
+        <td>{{ product.totalPrice | number}} VNĐ</td>
+        <td>{{ product.totalWishList }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <div class="pagination-container">
+      <button (click)="prevPage()" [disabled]="currentPage === 0" class="btn btn-outline-primary">Previous</button>
+      <span class="page-info">Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1" class="btn btn-outline-primary">Next</button>
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <p class="text-center text-muted">No data available!</p>
+  </ng-template>
+</div>
+

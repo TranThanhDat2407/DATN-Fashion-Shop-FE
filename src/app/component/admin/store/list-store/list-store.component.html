@@ -1,0 +1,36 @@
+<app-header-admin [title_header]="'List Store'" [routerLinkString]="'/admin/edit_store'" />
+<div class="containers">
+
+    <div class="row g-3 align-items-center ps-2 pe-2">
+        <label class="form-label mb-1 col-md-7">Filter</label>
+        <label class="form-label mb-1 col-md-3"></label>
+        <!-- Tìm kiếm theo tên -->
+        <div class="col-md-5 mt-1">
+            <input type="text" [(ngModel)]="name" (ngModelChange)="loadStore()" class="form-control"
+                placeholder="Enter store name...">
+            <!--  -->
+        </div>
+
+        <div class="col-md-5 mt-1">
+            <input type="text" [(ngModel)]="city" (ngModelChange)="loadStore()" class="form-control"
+            placeholder="Enter city ...">
+        </div>
+
+
+
+        <!-- Nút Reset -->
+        <div class="col-md-2 mt-1">
+            <button class="btn btn-danger w-100"  (click)="resetFilters()">Reset</button>
+        </div>
+    </div>
+    <div class="row   align-items-center">
+        <app-table [tableHeaders]="header" [dataPage]="dataPageStore" [tableData]="dataStore"
+            (pageChanged)="onPageChange($event)"
+            [routerLinkString]="'/admin/edit_store'"
+
+            [eventClickDelete]="deleteStore"
+            />
+    </div>
+
+
+</div>

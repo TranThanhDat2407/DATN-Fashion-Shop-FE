@@ -12,7 +12,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CategoryAdmin } from '../../../../models/Category/CategotyAdmin';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { EditOrderComponent } from '../../order/edit-order/edit-order.component';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { CategoryDTO } from '../../../../dto/CategoryDTO';
 import { LanguageDTO } from '../../../../dto/LanguageDTO';
@@ -383,7 +382,7 @@ export class ListCategoryComponent implements OnInit {
   }
 
   async resetFiter(): Promise<void> {
- 
+
     this.isActive = null;
     this.sortBy = 'id'
     this.sortDir = 'desc'
@@ -501,12 +500,12 @@ export class ListCategoryComponent implements OnInit {
 
   changeActive = (item: any): void => {
     console.log('Category ID:', item.id);
-    
-    const newStatus = !item.isActive;  
+
+    const newStatus = !item.isActive;
     this.categoryAdminService.changeActive(item.id, newStatus).subscribe({
       next: (response) => {
         this.toastService.success('Success', 'Category change isActive successfully!', { timeOut: 3000 });
-        item.isActive = newStatus; 
+        item.isActive = newStatus;
       },
       error: (error) => {
         this.toastService.error('Error', 'There was an error deleting the category.', { timeOut: 3000 });

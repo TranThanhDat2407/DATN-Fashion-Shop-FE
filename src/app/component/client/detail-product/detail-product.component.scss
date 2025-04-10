@@ -103,6 +103,8 @@ button {
   gap: 12px; /* Khoảng cách giữa các màu */
   padding: 0;
   margin: 0;
+max-width: 100%;
+flex-wrap: wrap;
 }
 
 /* Từng item màu sắc */

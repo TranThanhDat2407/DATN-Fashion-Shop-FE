@@ -36,6 +36,8 @@ import {VerifyEmailComponent} from './verify-email/verify-email.component';
 import {CheckoutConfirmationComponent} from './checkout-comfirmation/checkout-confirmation.component';
 import {ChangePasswordComponent} from './profile/change-password/change-password.component';
 import {NotificationComponent} from './notification/notification.component';
+import {MomoSuccessComponent} from './momo-success/momo-success.component';
+import {PaypalSuccessComponent} from './paypal-success/paypal-success.component';
 
 
 export const clientRouter: Routes =[
@@ -139,6 +141,9 @@ export const clientRouter: Routes =[
           { path: 'payment_success',
             component: PaymentSuccessComponent },
 
+          { path: 'momo-success',
+            component: MomoSuccessComponent },
+
           { path: 'otp',
             component: OTPComponent },
 
@@ -154,12 +159,16 @@ export const clientRouter: Routes =[
           {
             path: 'notify',
             component: NotificationComponent },
+
+          {
+            path: 'paypal-success',
+            component: PaypalSuccessComponent },
         ]
     },
 
 
 
-    { path: '', redirectTo: 'vnd/vi', pathMatch: 'full' } // Mặc định là 'vi'
+    { path: '', redirectTo: 'VND/vi', pathMatch: 'full' } // Mặc định là 'vi'
 ]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

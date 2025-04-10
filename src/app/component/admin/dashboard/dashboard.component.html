@@ -7,7 +7,7 @@
                     <span>Revenue Today </span><span style="font-size: 0.6rem;"> ({{dataRevenueToday?.revenueTodayDate |
                         date:'dd/MM/yyyy' }})</span>
                     <strong style="font-size: 1.3rem;">{{ dataRevenueToday?.totalRevenueToday |
-                        currency:'USD':'symbol':'1.0-0' }}
+                      currency:'USD':'symbol':'1.0-0' }}
                     </strong>
                 </div>
                 <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4 ">
@@ -19,244 +19,207 @@
             </div>
             <hr class=" mt-1 my-0 ms-4 me-4"
                 style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-            <div class="item-statis-time">
+          <div class="item-statis-time">
                 <span *ngIf="percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday) >= 0">
                     <span style="color: #4caf50;">
                         +{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday) | number: '1.2-2' }}%
                     </span> <span style="color: #212529;">  than yesterday</span>
                 </span>
-                <span *ngIf="percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday) < 0">
+            <span *ngIf="percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday) < 0">
                     <span style="color: #f44336;">
                         {{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday) | number: '1.2-2' }}%
                     </span> <span style="color: #212529;">less than yesterday</span>
                 </span>
-                <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
-                    | number: '1.2-2' }}% </span> than last week -->
-            </div>
+            <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
+                | number: '1.2-2' }}% </span> than last week -->
+          </div>
         </div>
 
     </div>
-    <div class="col-12 col-md-6 col-xl-3 ">
-        <div class="statis-item  ">
-            <div class="row">
-                <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
-                    <span style="font-size: 0.9rem;">Customer Account Today</span><span style="font-size: 0.6rem;"> ({{dataCustomerAccountToday?.customerCreateTodayDate|
-                        date:'dd/MM/yyyy' }})</span>
-                    <strong style="font-size: 1.3rem;">{{ dataCustomerAccountToday?.totalCustomerCreateToday}}
-                    </strong>
-                   
-                </div>
-                <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
-                    <div class="item-icon">
-                        <img src="https://img.icons8.com/?size=100&id=98957&format=png&color=ffffff"
-                            alt="icon item Dashboard" width="30" height="30">
-                    </div>
-                </div>
-            </div>
 
-            <hr class=" mt-1 my-0 ms-4 me-4"
-                style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-                <div class="item-statis-time">
+    <div class="col-12 col-md-6 col-xl-3 ">
+      <div class="statis-item  ">
+        <div class="row">
+          <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2 ">
+            <span style="font-size: 0.9rem;">Customer Account Today</span><span style="font-size: 0.6rem;"> ({{dataCustomerAccountToday?.customerCreateTodayDate|
+            date:'dd/MM/yyyy' }})</span>
+            <strong style="font-size: 1.3rem;">{{ dataCustomerAccountToday?.totalCustomerCreateToday}}
+            </strong>
+
+          </div>
+          <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
+            <div class="item-icon">
+              <img src="https://img.icons8.com/?size=100&id=98957&format=png&color=ffffff"
+                   alt="icon item Dashboard" width="30" height="30">
+            </div>
+          </div>
+        </div>
+
+        <hr class=" mt-1 my-0 ms-4 me-4"
+            style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
+        <div class="item-statis-time">
                     <span *ngIf="percent(dataCustomerAccountToday?.totalCustomerCreateToday ?? 0, dataCustomerAccountYesterday) >= 0">
                         <span style="color: #4caf50;">
                             +{{ percent(dataCustomerAccountToday?.totalCustomerCreateToday ?? 0, dataCustomerAccountYesterday) | number: '1.2-2' }}%
                         </span> <span style="color: #212529;">  than yesterday</span>
                     </span>
-                    <span *ngIf="percent(dataCustomerAccountToday?.totalCustomerCreateToday ?? 0, dataCustomerAccountYesterday) < 0">
+          <span *ngIf="percent(dataCustomerAccountToday?.totalCustomerCreateToday ?? 0, dataCustomerAccountYesterday) < 0">
                         <span style="color: #f44336;">
                             {{ percent(dataCustomerAccountToday?.totalCustomerCreateToday ?? 0, dataCustomerAccountYesterday) | number: '1.2-2' }}%
                         </span> <span style="color: #212529;"> less than yesterday</span>
                     </span>
-                    <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
-                        | number: '1.2-2' }}% </span> than last week -->
-                </div>
+          <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
+              | number: '1.2-2' }}% </span> than last week -->
         </div>
-
+      </div>
     </div>
-    <div class="col-12 col-md-6 col-xl-3 ">
-        <div class="statis-item  ">
-            <div class="row">
-                <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2  ">
-                    <span>Orders Today </span><span style="font-size: 0.6rem;"> ({{dataRevenueToday?.revenueTodayDate |
-                        date:'dd/MM/yyyy' }})</span>
-                    <strong style="font-size: 1.3rem;">{{ dataOrderToday?.totalOrder }}
-                    </strong>
-                </div>
-                <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
-                    <div class="item-icon">
-                        <img src="https://img.icons8.com/?size=100&id=4255&format=png&color=ffffff"
-                            alt="icon item Dashboard" width="30" height="30">
-                    </div>
-                </div>
-            </div>
 
-            <hr class=" mt-1 my-0 ms-4 me-4"
-                style="background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-            <div class="item-statis-time">
+
+  <div class="col-12 col-md-6 col-xl-3 ">
+    <div class="statis-item  ">
+      <div class="row">
+        <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2  ">
+          <span>Orders Today </span><span style="font-size: 0.6rem;"> ({{dataRevenueToday?.revenueTodayDate |
+          date:'dd/MM/yyyy' }})</span>
+          <strong style="font-size: 1.3rem;">{{ dataOrderToday?.totalOrder }}
+          </strong>
+        </div>
+        <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
+          <div class="item-icon">
+            <img src="https://img.icons8.com/?size=100&id=4255&format=png&color=ffffff"
+                 alt="icon item Dashboard" width="30" height="30">
+          </div>
+        </div>
+      </div>
+
+      <hr class=" mt-1 my-0 ms-4 me-4"
+          style="background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
+      <div class="item-statis-time">
                 <span *ngIf="percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) >= 0">
                     <span style="color: #4caf50;">
-                        +{{ percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) | number: '1.2-2' }} %    
+                        +{{ percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) | number: '1.2-2' }} %
                     </span> <span style="color: #212529;">  than yesterday</span>
                 </span>
-                <span *ngIf="percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) < 0">
+        <span *ngIf="percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) < 0">
                     <span style="color: #f44336;">
                         {{ percent( dataOrderToday?.totalOrder ?? 0, dataOrderYesterday) | number: '1.2-2' }}%
                     </span> <span style="color: #212529;">less than yesterday</span>
                 </span>
-                <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
-                        | number: '1.2-2' }}% </span> than last week -->
+        <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
+                | number: '1.2-2' }}% </span> than last week -->
+      </div>
+    </div>
+  </div>
+
+
+    <div class="col-12 col-md-6 col-xl-3 ">
+      <div class="statis-item  ">
+        <div class="row">
+          <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2  ">
+            <span>Orders Cancel Today </span><span style="font-size: 0.6rem;">
+                        ({{dataOrderCancelToday?.orderCancelDate|
+            date:'dd/MM/yyyy' }})</span>
+            <strong style="font-size: 1.3rem;">{{ dataOrderCancelToday?.totalOrderCancel }}
+            </strong>
+          </div>
+          <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
+            <div class="item-icon">
+              <img src="https://img.icons8.com/?size=100&id=114052&format=png&color=ffffff"
+                   alt="icon item Dashboard" width="30" height="30">
             </div>
+          </div>
         </div>
 
-    </div>
-    <div class="col-12 col-md-6 col-xl-3 ">
-        <div class="statis-item  ">
-            <div class="row">
-                <div class="col-6 col-md-8  d-flex flex-column ps-4 pt-2  ">
-                    <span>Orders Cancel Today </span><span style="font-size: 0.6rem;">
-                        ({{dataOrderCancelToday?.orderCancelDate|
-                        date:'dd/MM/yyyy' }})</span>
-                    <strong style="font-size: 1.3rem;">{{ dataOrderCancelToday?.totalOrderCancel }}
-                    </strong>
-                </div>
-                <div class="col-6 col-md-4 d-flex justify-content-center align-items-center pe-4   ">
-                    <div class="item-icon">
-                        <img src="https://img.icons8.com/?size=100&id=114052&format=png&color=ffffff"
-                            alt="icon item Dashboard" width="30" height="30">
-                    </div>
-                </div>
-            </div>
-
-            <hr class=" mt-1 my-0 ms-4 me-4"
-                style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
-                <div class="item-statis-time">
+        <hr class=" mt-1 my-0 ms-4 me-4"
+            style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9);; height: 7px;">
+        <div class="item-statis-time">
                     <span *ngIf="percent( dataOrderCancelToday?.totalOrderCancel  ?? 0, dataOrderCancelYesterday) >= 0">
                         <span style="color: #4caf50;">
                             +{{ percent( dataOrderCancelToday?.totalOrderCancel  ?? 0, dataOrderCancelYesterday) | number: '1.2-2' }}%
                         </span> <span style="color: #212529;">  than yesterday</span>
                     </span>
-                    <span *ngIf="percent( dataOrderCancelToday?.totalOrderCancel  ?? 0, dataOrderCancelYesterday) < 0">
+          <span *ngIf="percent( dataOrderCancelToday?.totalOrderCancel  ?? 0, dataOrderCancelYesterday) < 0">
                         <span style="color: #f44336;">
                             {{ percent( dataOrderCancelToday?.totalOrderCancel ?? 0, dataOrderCancelYesterday) | number: '1.2-2' }}%
-                        </span> <span style="color: #212529;"> 
+                        </span> <span style="color: #212529;">
                             less than yesterday</span>
                     </span>
-                    <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
-                            | number: '1.2-2' }}% </span> than last week -->
-                </div>
+          <!-- <span style="color: #4caf50;">+{{ percent(dataRevenueToday?.totalRevenueToday ?? 0, dataRevenueYesteday)
+                  | number: '1.2-2' }}% </span> than last week -->
         </div>
-
+      </div>
     </div>
 
-
-    <div class="col-12 col-md-12 col-lg-6  ">
-        <div class="chart-content line-chart-box">
-            <span>Daily Sales</span>
-            <label>Check and edit category</label>
-            <app-line-chart [labels]="labels" [datasetOne]="data" />
+    <div class="col-12 col-md-12 col-lg-12  ">
+        <div class="chart-content line-chart-box mt-3">
+            <span>Weekly revenue</span>
+          <div class="chart-container">
+            <canvas baseChart
+                    [data]="revenueChartData"
+                    [options]="revenueChartOptions"
+                    [plugins]="revenueChartPlugins"
+                    chartType="bar">
+            </canvas>
+          </div>
 
             <hr class=" mt-1 my-0 ms-4 me-4"
                 style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
-            <div class="ps-4 p-3">
-                <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
-                <label>updated 4 min ago</label>
-            </div>
         </div>
     </div>
 
-    <div class="col-12 col-md-12 col-lg-6 ">
-        <div class="chart-content line-chart-box">
-            <span>Daily Sales</span>
-            <label>Check and edit category</label>
-            <app-bar-chart [lable]="lable2" [data_col_one]="data2" [data_col_two]="data_dou2" [lable_col]="lable_col" />
-
-
-            <hr class=" mt-1 my-0 ms-4 me-4"
-                style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
-            <div class="ps-4 p-3">
-                <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
-                <label>updated 4 min ago</label>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="col-12 col-md-12  col-lg-8">
-        <div class="chart-content line-chart-box">
-            <span>Daily Sales</span>
-            <label>Check and edit category</label>
-            <app-bar-chart [lable]="labels" [data_col_one]="data" />
-
-            <hr class=" mt-1 my-0 ms-4 me-4"
-                style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
-            <div class="ps-4 p-3">
-                <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
-                <label>updated 4 min ago</label>
-            </div>
-        </div>
-    </div>
-    <div class="col-12  col-md-12 col-lg-4 ">
-        <div class="chart-content line-chart-box pb-4">
-            <span>Daily Sales</span>
-            <label>Check and edit category</label>
-            <app-doughnut-chart [lable]="labels" [data]="data" />
-
-            <hr class=" mt-1 my-0 ms-4 me-4"
-                style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
-            <div class="ps-4 p-3">
-                <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
-                <label>updated 4 min ago</label>
-            </div>
-        </div>
-    </div>
-    <div class="col-12  col-md-12 col-lg-3 ">
+    <div class="col-12  col-md-12 col-lg-12  ">
         <div class="chart-content line-chart-box  ">
-            <span>Daily Sales</span>
-            <label>Check and edit category</label>
+            <span>Top 10 best selling products</span>
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered table-hover">
+              <thead class="table-dark text-center">
+              <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Color</th>
+                <th>Size</th>
+                <th>Quantity sold</th>
+                <th>Total revenue</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let product of topProducts | paginate: { itemsPerPage: 5, currentPage: currentPage }; let i = index"
+                  [routerLink]="['/admin/statistical']"
+
+                  class="clickable-row">
+                <td class="text-center">{{ (currentPage - 1) * 5 + i + 1 }}</td>
+                <td class="text-center">
+                  <img [src]="getImageProduct(product.imageUrl)" alt="Hình ảnh" class="img-thumbnail" width="50">
+                </td>
+                <td>{{ product.productName }}</td>
+                <td class="text-center">
+                  <span class="color-box" [ngStyle]="{'background-color': product.color}"></span>
+                  {{ product.color }}
+                </td>
+                <td class="text-center">{{ product.size }}</td>
+                <td class="text-center fw-bold text-success">{{ product.totalSold }}</td>
+                <td class="text-center fw-bold text-danger">{{ product.totalRevenue | number:'1.0-0' }} VNĐ</td>
+              </tr>
+              <tr *ngIf="topProducts.length === 0">
+                <td colspan="7" class="text-center text-muted">No data</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Nút phân trang -->
+          <div class="d-flex justify-content-center my-3">
+            <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+          </div>
+        </div>
 
 
 
             <hr class=" mt-1 my-0 ms-4 me-4"
                 style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
-            <div class="ps-4 p-3">
-                <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
-                <label>updated 4 min ago</label>
-            </div>
+
         </div>
-    </div>
-    <div class="col-12  col-md-12 col-lg-9  ">
-        <div class="chart-content line-chart-box  ">
-            <span>Daily Sales</span>
-            <label>Check and edit category</label>
-            <app-table [tableHeaders]="headers" [tableData]="dataTable" [changePage]="false" />
-
-
-            <hr class=" mt-1 my-0 ms-4 me-4"
-                style="   background: linear-gradient(to right, #f9f9f9, #e8e8e8, #f9f9f9); ">
-            <div class="ps-4 p-3">
-                <img src="https://img.icons8.com/?size=100&id=85465&format=png&color=000000" height="20" alt="">
-                <label>updated 4 min ago</label>
-            </div>
-        </div>
-
-
-    </div>
-
-
-
-
-
-
-    <!-- <app-bar-chart [lable]="labels" [data]="data"/> -->
-
-
-
-
-
-
-
-
-
-
-
 </div>
+
+
