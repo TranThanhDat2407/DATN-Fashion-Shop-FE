@@ -204,7 +204,14 @@ table {
   color: #fff;
 }
 
- 
+ .card-footer {
+    font-family: "Kanit", sans-serif;
+
+ }
+ select {
+    margin-left: 4px;
+    padding: 0 10px 0 10px;
+ }
 .card-footer .pagination .page-item {
     margin: 0 5px; /* Giãn cách giữa các nút */
 }
