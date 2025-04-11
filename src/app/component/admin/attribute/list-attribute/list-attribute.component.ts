@@ -85,7 +85,18 @@ export class ListAttributeComponent implements OnInit {
 
     console.log('resetColor')
   }
+  onItemsPerPageChangeColor(newSize: number) {
+    this.sizeColor = newSize;
+    this.pageColor = 0;
+    this.fetchAttributeValue();
 
+  }
+  onItemsPerPageChangeSize(newSize: number) {
+    this.sizeSize = newSize;
+    this.pageSize = 0;
+    this.fetchAttributeValue();
+
+  }
 
   getSizes(
     page: number,

@@ -13,23 +13,21 @@
 
         <div class="col-md-5 mt-1">
             <input type="text" [(ngModel)]="city" (ngModelChange)="loadStore()" class="form-control"
-            placeholder="Enter city ...">
+                placeholder="Enter city ...">
         </div>
 
 
 
         <!-- Nút Reset -->
         <div class="col-md-2 mt-1">
-            <button class="btn btn-danger w-100"  (click)="resetFilters()">Reset</button>
+            <button class="btn btn-danger w-100" (click)="resetFilters()">Reset</button>
         </div>
     </div>
     <div class="row   align-items-center">
         <app-table [tableHeaders]="header" [dataPage]="dataPageStore" [tableData]="dataStore"
-            (pageChanged)="onPageChange($event)"
-            [routerLinkString]="'/admin/edit_store'"
-
-            [eventClickDelete]="deleteStore"
-            />
+            (pageChanged)="onPageChange($event)" [routerLinkString]="'/admin/edit_store'" [currentPage]="0"
+            (itemsPerPageChanged)="onItemsPerPageChange($event)"
+            [eventClickDelete]="deleteStore" />
     </div>
 
 

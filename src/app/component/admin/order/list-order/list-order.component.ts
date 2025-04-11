@@ -167,6 +167,13 @@ export class ListOrderComponent implements OnInit {
   }
 
 
+
+  onItemsPerPageChange(newSize: number) {
+    this.size = newSize;
+    this.page = 0;
+    this.fetchOrdersList(); // Gọi lại API với size mới
+  }
+
   applyFilter(): void {
     // Kiểm tra nếu chưa chọn bộ lọc
     if (!this.selectedFilter) {

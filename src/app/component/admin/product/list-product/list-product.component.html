@@ -82,6 +82,7 @@
 <div class="container-list">
     <app-table *ngIf="dataFullElementProduct" [currentPage]="page"
         [tableData]="dataFullElementProduct?.content?.flat() || []" [dataPage]="dataFullElementProduct"
+        (itemsPerPageChanged)="onItemsPerPageChange($event)"
         [typeImage]="'products'" [tableHeaders]="header" [routerLinkString]="'/admin/edit_product'"
         [toggleCheckbox]="toggleCheckbox" (pageChanged)="onPageChange($event)">
     </app-table>
