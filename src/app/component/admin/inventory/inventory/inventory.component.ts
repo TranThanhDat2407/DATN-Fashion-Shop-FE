@@ -224,6 +224,65 @@ export class InventoryComponent implements OnInit {
     this.fetchInventoryStore()
   }
 
+
+  // Thêm các biến mới vào component
+
+  maxDisplayedPagesWarehouse: number = 10; // Số trang tối đa hiển thị
+  additionalPagesWarehouse: number = 10; // Số trang thêm vào khi đạt đến giới hạn
+
+  // Hàm thay đổi page size
+  onPageSizeChangeWarehouse(): void {
+    this.pageNoWarehouse = 0; // Reset về trang đầu tiên khi thay đổi page size
+    this.fetchInventoryForWarehouseOnly();
+  }
+
+  // Hàm thay đổi trang
+  changePageWarehouse(page: number): void {
+    if (page >= 0 && page < this.totalPagesWarehouse) {
+      this.pageNoWarehouse = page;
+      this.fetchInventoryForWarehouseOnly();
+    }
+  }
+
+  // Các hàm hỗ trợ hiển thị phân trang
+  getDisplayedPagesWarehouse(): number[] {
+    let startPage: number;
+    let endPage: number;
+
+    if (this.totalPagesWarehouse <= this.maxDisplayedPagesWarehouse) {
+      // Hiển thị tất cả nếu tổng số trang ít
+      startPage = 0;
+      endPage = this.totalPagesWarehouse - 1;
+    } else {
+      // Tính toán các trang cần hiển thị
+      if (this.pageNoWarehouse <= this.maxDisplayedPagesWarehouse - 1) {
+        startPage = 0;
+        endPage = this.maxDisplayedPagesWarehouse - 1;
+      } else {
+        startPage = this.pageNoWarehouse;
+        endPage = Math.min(this.pageNoWarehouse + this.additionalPagesWarehouse - 1, this.totalPagesWarehouse - 1);
+      }
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
+  showFirstPageWarehouse(): boolean {
+    return this.getDisplayedPagesWarehouse()[0] > 0;
+  }
+
+  showLastPageWarehouse(): boolean {
+    return this.getDisplayedPagesWarehouse()[this.getDisplayedPagesWarehouse().length - 1] < this.totalPagesWarehouse - 1;
+  }
+
+  showFirstEllipsisWarehouse(): boolean {
+    return this.getDisplayedPagesWarehouse()[0] > 1;
+  }
+
+  showLastEllipsisWarehouse(): boolean {
+    return this.getDisplayedPagesWarehouse()[this.getDisplayedPagesWarehouse().length - 1] < this.totalPagesWarehouse - 2;
+  }
+
   validateTransfer(): boolean {
     for (const item of this.selectedWarehouseTransfer) {
       if (!item.quantityInStock || item.quantityInStock <= 0) {
@@ -486,69 +545,69 @@ export class InventoryComponent implements OnInit {
 
   }
   insertProductVariantFromWarehouse = async (): Promise<void> => {
-  if (!this.validationInsert()) return;
+    if (!this.validationInsert()) return;
 
-  const duplicatedItems = this.selectedProductVariants.filter(item =>
-    this.dataAllInventoryForWarehouseTransfer.some(
-      warehouse => warehouse.productVariantId === Number(item)
-    )
-  );
+    const duplicatedItems = this.selectedProductVariants.filter(item =>
+      this.dataAllInventoryForWarehouseTransfer.some(
+        warehouse => warehouse.productVariantId === Number(item)
+      )
+    );
 
-  if (duplicatedItems.length > 0) {
-    const messageLines = duplicatedItems.map(item => {
-      const warehouse = this.dataAllInventoryForWarehouseTransfer.find(
-        w => w.productVariantId === Number(item)
-      );
+    if (duplicatedItems.length > 0) {
+      const messageLines = duplicatedItems.map(item => {
+        const warehouse = this.dataAllInventoryForWarehouseTransfer.find(
+          w => w.productVariantId === Number(item)
+        );
 
-      if (!warehouse) {
-        console.error(`Warehouse for productVariantId ${item} not found.`);
-        return `ID ${item}: Warehouse not found!`; // Nếu không tìm thấy warehouse, trả về thông báo lỗi.
+        if (!warehouse) {
+          console.error(`Warehouse for productVariantId ${item} not found.`);
+          return `ID ${item}: Warehouse not found!`; // Nếu không tìm thấy warehouse, trả về thông báo lỗi.
+        }
+
+        const oldQty = warehouse.quantityInStock || 0; // Đảm bảo luôn có giá trị số
+        const newQty = oldQty + this.qtyInStock;
+        return `ID ${item}: ${oldQty} + ${this.qtyInStock} = ${newQty}`;
+      });
+
+      const dialogRef = this.diaLog.open(DialogComponent, {
+        data: {
+          message: `The following products are already in stock. Do you want to add more quantity? \n \n${messageLines.join('\n')}\n`,
+          confirm: 'YES'
+        }
+      });
+
+      const result = await firstValueFrom(dialogRef.afterClosed());
+      if (!result) {
+        console.log("❌ Hủy thêm do người dùng từ chối.");
+        return;
       }
-
-      const oldQty = warehouse.quantityInStock || 0; // Đảm bảo luôn có giá trị số
-      const newQty = oldQty + this.qtyInStock;
-      return `ID ${item}: ${oldQty} + ${this.qtyInStock} = ${newQty}`;
-    });
-
-    const dialogRef = this.diaLog.open(DialogComponent, {
-      data: {
-        message: `The following products are already in stock. Do you want to add more quantity? \n \n${messageLines.join('\n')}\n`,
-        confirm: 'YES'
-      }
-    });
-
-    const result = await firstValueFrom(dialogRef.afterClosed());
-    if (!result) {
-      console.log("❌ Hủy thêm do người dùng từ chối.");
-      return;
     }
-  }
 
-  const insertPromises = this.selectedProductVariants.map(async item => {
-    const dataInsertWarehouse = {
-      warehouseId: 1,
-      productVariantId: Number(item),
-      quantityInStock: this.qtyInStock
-    };
+    const insertPromises = this.selectedProductVariants.map(async item => {
+      const dataInsertWarehouse = {
+        warehouseId: 1,
+        productVariantId: Number(item),
+        quantityInStock: this.qtyInStock
+      };
+
+      try {
+        await firstValueFrom(this.inventoryService.insertInventory(dataInsertWarehouse));
+      } catch (error) {
+        console.error(`❌ Lỗi khi thêm productVariantId ${item}:`, error);
+        throw error;
+      }
+    });
 
     try {
-      await firstValueFrom(this.inventoryService.insertInventory(dataInsertWarehouse));
+      await Promise.all(insertPromises);
+      this.toastService.success('Add Product Variant Successfully! ', "Success", { timeOut: 3000 });
+      this.fetchInventoryForWarehouseOnly();
+      this.dataAllInventoryForWarehouseTransfer = await this.fetchAllInventoryForWarehouse();
+      this.resetForm();
     } catch (error) {
-      console.error(`❌ Lỗi khi thêm productVariantId ${item}:`, error);
-      throw error;
+      this.toastService.error('Lỗi khi thêm vào kho', "Error", { timeOut: 3000 });
     }
-  });
-
-  try {
-    await Promise.all(insertPromises);
-    this.toastService.success('Add Product Variant Successfully! ', "Success", { timeOut: 3000 });
-    this.fetchInventoryForWarehouseOnly();
-    this.dataAllInventoryForWarehouseTransfer = await this.fetchAllInventoryForWarehouse();
-    this.resetForm();
-  } catch (error) {
-    this.toastService.error('Lỗi khi thêm vào kho', "Error", { timeOut: 3000 });
-  }
-};
+  };
 
 
 
@@ -641,6 +700,63 @@ export class InventoryComponent implements OnInit {
     )
   }
 
+
+  // Thêm các biến mới vào component
+  maxDisplayedPages: number = 10; // Số trang tối đa hiển thị
+  additionalPages: number = 10; // Số trang thêm vào khi đạt đến giới hạn
+
+  // Hàm thay đổi page size
+  onPageSizeChange(): void {
+    this.pageNo = 0; // Reset về trang đầu tiên khi thay đổi page size
+    this.fetchStockData();
+  }
+
+  // Hàm thay đổi trang
+  changePage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.pageNo = page;
+      this.fetchStockData();
+    }
+  }
+
+  // Các hàm hỗ trợ hiển thị phân trang
+  getDisplayedPages(): number[] {
+    let startPage: number;
+    let endPage: number;
+
+    if (this.totalPages <= this.maxDisplayedPages) {
+      // Hiển thị tất cả nếu tổng số trang ít
+      startPage = 0;
+      endPage = this.totalPages - 1;
+    } else {
+      // Tính toán các trang cần hiển thị
+      if (this.pageNo <= this.maxDisplayedPages - 1) {
+        startPage = 0;
+        endPage = this.maxDisplayedPages - 1;
+      } else {
+        startPage = this.pageNo;
+        endPage = Math.min(this.pageNo + this.additionalPages - 1, this.totalPages - 1);
+      }
+    }
+
+    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+  }
+
+  showFirstPage(): boolean {
+    return this.getDisplayedPages()[0] > 0;
+  }
+
+  showLastPage(): boolean {
+    return this.getDisplayedPages()[this.getDisplayedPages().length - 1] < this.totalPages - 1;
+  }
+
+  showFirstEllipsis(): boolean {
+    return this.getDisplayedPages()[0] > 1;
+  }
+
+  showLastEllipsis(): boolean {
+    return this.getDisplayedPages()[this.getDisplayedPages().length - 1] < this.totalPages - 2;
+  }
 
 
 
@@ -797,18 +913,18 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  changePage(page: number) {
-    if (page >= 0 && page < this.totalPages) {
-      this.pageNo = page;
-      this.fetchStockData();
-    }
-  }
-  changePageWarehouse(page: number) {
-    if (page >= 0 && page < this.totalPagesWarehouse) {
-      this.pageNoWarehouse = page;
-      this.fetchInventoryForWarehouseOnly();
-    }
-  }
+  // changePage(page: number) {
+  //   if (page >= 0 && page < this.totalPages) {
+  //     this.pageNo = page;
+  //     this.fetchStockData();
+  //   }
+  // }
+  // changePageWarehouse(page: number) {
+  //   if (page >= 0 && page < this.totalPagesWarehouse) {
+  //     this.pageNoWarehouse = page;
+  //     this.fetchInventoryForWarehouseOnly();
+  //   }
+  // }
 
   async fetchInventoryForWarehouseOnly(): Promise<void> {
     const response = await firstValueFrom(
@@ -817,7 +933,7 @@ export class InventoryComponent implements OnInit {
         this.nameSearchWarehouse,
         this.categoryIdWarehouse,
         this.pageNoWarehouse,
-        this.sizeWarehouse,
+        this.pageSizeWarehouse,
         this.sortByWarehouse,
         this.sortDirWarehouse
       ).pipe(catchError(() => of(null)))
