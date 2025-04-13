@@ -35,7 +35,7 @@
             <div>Phí vận chuyển: {{ order.shippingFee | number }} VND</div>
 
             <div [ngClass]="getStatusClass(order.orderStatus)">
-              Trạng thái: {{ order.orderStatus }}
+              Trạng thái: {{ getStatusText(order.orderStatus) }}
             </div>
             <div>Địa chỉ: {{ order.shippingAddress }}</div>
 

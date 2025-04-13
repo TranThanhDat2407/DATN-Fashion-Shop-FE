@@ -86,7 +86,7 @@ export class RevenueService {
   }
 
   getTopSellingProducts(languageCode: string, page: number, size: number): Observable<ApiResponse<PageResponse<TopProduct>>> {
-    return this.http.get<ApiResponse<PageResponse<TopProduct>>>(`${this.apiUrl}/top-products`, {
+    return this.http.get<ApiResponse<PageResponse<TopProduct>>>(`${this.apiUrl}/top-10-products`, {
       params: { languageCode, page: page.toString(), size: size.toString() },
     });
   }
@@ -158,7 +158,7 @@ export class RevenueService {
   }
 
   getReviewsByProduct(productId: number): Observable<ApiResponse<PageResponse<any>>> {
-    return this.http.get<ApiResponse<PageResponse<any>>>(`${this.apiUrl}/${productId}`);
+    return this.http.get<ApiResponse<PageResponse<any>>>(`${this.apiUrl}/product/${productId}`);
   }
 
 

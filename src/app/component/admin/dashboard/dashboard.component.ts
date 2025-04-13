@@ -44,6 +44,16 @@ export interface TableDataModel {
   createAt: string;
   updateAt: string;
 }
+interface TopProduct {
+  productVariantId: number;
+  productName: string;
+  color: string;
+  colorImage: string;
+  size: string;
+  imageUrl: string;
+  totalSold: number;
+  totalRevenue: number;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -67,7 +77,7 @@ export class DashboardComponent implements OnInit {
   dailyRevenue: number = 0;
   monthlyRevenue: number = 0;
   yearlyRevenue: number = 0;
-  topProducts: any[] = [];
+  topProducts: TopProduct[] = [];
   orders: any[] = [];
 
   selectedDate = new Date().toISOString().split('T')[0];
@@ -137,7 +147,7 @@ export class DashboardComponent implements OnInit {
     // this.fetchYearlyRevenue();
     this.fetchDashboard();
     this.getRevenueYesterday().subscribe(response => {
-      console.log(response); // Kiểm tra dữ liệu trả về từ API
+
     });
 
   }
@@ -321,7 +331,7 @@ export class DashboardComponent implements OnInit {
 
   loadTopProducts() {
     this.revenueService.getTopSellingProducts(this.languageCode, this.page, this.size).subscribe({
-      next: (response: ApiResponse<PageResponse<any>>) => {
+      next: (response: ApiResponse<PageResponse<TopProduct>>) => {
         if (response?.data?.content) {
           this.topProducts = response.data.content;
         } else {

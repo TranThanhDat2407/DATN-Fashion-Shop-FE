@@ -110,6 +110,18 @@ export class OrderHistoryComponent implements OnInit {
       default: return 'text-muted';
     }
   }
+  getStatusText(status: string): string {
+    switch (status) {
+      case 'PENDING': return 'Chờ xác nhận';
+      case 'PROCESSING': return 'Đang xử lý';
+      case 'SHIPPED': return 'Đang giao hàng';
+      case 'DELIVERED': return 'Đã giao hàng';
+      case 'CANCELLED': return 'Đã hủy';
+      case 'DONE': return 'Hoàn tất';
+      default: return 'Không xác định';
+    }
+  }
+
 
   loadOrderHistoryByStatus() {
     let statusFilter = this.status && this.status.trim() !== "" ? this.status : null; // Nếu rỗng thì gửi null để lấy tất cả đơn hàng

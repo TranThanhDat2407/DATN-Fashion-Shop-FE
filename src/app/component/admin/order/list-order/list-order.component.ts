@@ -67,7 +67,7 @@ export class ListOrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchCities();
-
+    this.fetchOrdersList();
     this.route.queryParams.subscribe(params => {
       if (params['storeId']) {
         this.storeId = +params['storeId'];
