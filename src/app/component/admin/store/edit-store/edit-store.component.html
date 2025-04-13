@@ -78,44 +78,56 @@
                     <span *ngIf="storeForm.controls['street'].errors?.['pattern']">Invalid characters.</span>
                 </div>
             </div>
-            <!-- WARD -->
             <div class="div7">
-                <label class="form-label">WARD</label>
-                <input type="text" formControlName="ward" class="form-control">
-                <div class="text-danger"
-                    *ngIf="storeForm.controls['ward'].invalid && storeForm.controls['ward'].touched">
-                    <span *ngIf="storeForm.controls['ward'].errors?.['required']">Ward is required.</span>
-                    <span *ngIf="storeForm.controls['ward'].errors?.['pattern']">Invalid characters.</span>
-                </div>
-            </div>
-
-            <!-- DISTRICT -->
-            <div class="div8">
-                <label class="form-label">DISTRICT</label>
-                <input type="text" formControlName="district" class="form-control">
-                <div class="text-danger"
-                    *ngIf="storeForm.controls['district'].invalid && storeForm.controls['district'].touched">
-                    <span *ngIf="storeForm.controls['district'].errors?.['required']">District is required.</span>
-                    <span *ngIf="storeForm.controls['district'].errors?.['pattern']">Invalid characters.</span>
-                </div>
-            </div>
-
-            <!-- CITY -->
-            <div class="div12">
                 <label class="form-label">CITY</label>
-                <input type="text" formControlName="city" class="form-control">
+                <select class="form-select" formControlName="city" (change)="onProvinceChange($event)">
+                    <option value="">Select a province</option>
+                    <option *ngFor="let province of provinces" [value]="province.ProvinceID">
+                        {{ province.ProvinceName }}
+                    </option>
+                </select>
                 <div class="text-danger"
                     *ngIf="storeForm.controls['city'].invalid && storeForm.controls['city'].touched">
-                    <span *ngIf="storeForm.controls['city'].errors?.['required']">City is required.</span>
-                    <span *ngIf="storeForm.controls['city'].errors?.['pattern']">Only letters are allowed.</span>
+                    <span *ngIf="storeForm.controls['city'].errors?.['required']">Please select a province.</span>
                 </div>
             </div>
+
+
+            <div class="div8">
+                <label class="form-label">District</label>
+                <select class="form-select" formControlName="district" (change)="onDistrictChange($event)"
+                    [disabled]="!storeForm.get('province')?.value">
+                    <option value="">Select a district</option>
+                    <option *ngFor="let district of districts" [value]="district.DistrictID">
+                        {{ district.DistrictName }}
+                    </option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['district'].invalid && storeForm.controls['district'].touched">
+                    <span *ngIf="storeForm.controls['district'].errors?.['required']">Please select a district.</span>
+                </div>
+            </div>
+            <div class="div12">
+                <label class="form-label">Ward</label>
+                <select class="form-select" formControlName="ward" (change)="onWardChange($event)"
+                    [disabled]="!storeForm.get('district')?.value">
+                    <option value="">Select a ward</option>
+                    <option *ngFor="let ward of wards" [value]="ward.WardCode">
+                        {{ ward.WardName }}
+                    </option>
+                </select>
+                <div class="text-danger"
+                    *ngIf="storeForm.controls['ward'].invalid && storeForm.controls['ward'].touched">
+                    <span *ngIf="storeForm.controls['ward'].errors?.['required']">Please select a ward.</span>
+                </div>
+            </div>
+
 
             <!-- FULL ADDRESS -->
             <div class="div9">
                 <label class="form-label">FULL ADDRESS</label>
                 <input *ngIf="storeId === 0" type="text" formControlName="fullAddress" class="form-control" readonly>
-                <input *ngIf="storeId !== 0" type="text" formControlName="fullAddress" class="form-control" >
+                <input *ngIf="storeId !== 0" type="text" formControlName="fullAddress" class="form-control">
             </div>
 
             <!-- IS ACTIVE -->
@@ -128,7 +140,7 @@
 
             <!-- BUTTON -->
             <div class="item-store mt-4">
-                <button type="submit" class="pushable" >
+                <button type="submit" class="pushable">
                     <span class="shadow"></span>
                     <span class="edge"></span>
                     <span class="front"> APPLY</span>

@@ -106,6 +106,8 @@ export class ListCouponComponent implements OnInit {
 
 
 
+ 
+
   loadUsers() {
     this.userService.searchUsers('').subscribe(users => {
       this.allUsers = users;

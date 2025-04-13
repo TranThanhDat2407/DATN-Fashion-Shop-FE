@@ -40,7 +40,7 @@ export class ListStoreComponent implements OnInit {
   name?: string
   city?: string
   page: number = 0
-  size: number = 10
+  size: number = 7
   userLat?: number
   userLon?: number
   dataPageStore: PageResponse<Store[]> | null = null
@@ -62,7 +62,12 @@ export class ListStoreComponent implements OnInit {
   }
 
 
+  onItemsPerPageChange(newSize: number) {
+    this.size = newSize;
+    this.page = 0;
+    this.loadStore();
 
+  }
 
   loadStore(): void {
     this.storeService

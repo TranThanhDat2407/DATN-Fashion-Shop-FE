@@ -50,7 +50,7 @@ export class ListCategoryComponent implements OnInit {
 
 
   page: number = 0
-  size: number = 7
+  size: number = 10
   nameSearch: string = ''
   parentIdSearch: any = null
   sortBy: string = 'id'
@@ -360,7 +360,11 @@ export class ListCategoryComponent implements OnInit {
 
 
 
-
+  onItemsPerPageChange(newSize: number) {
+    this.size = newSize;
+    this.page = 0;
+    this.fetchCategory(); // Gọi lại API với size mới
+  }
 
 
   onPageChange(newPage: number): void {
@@ -388,7 +392,7 @@ export class ListCategoryComponent implements OnInit {
     this.sortDir = 'desc'
     this.nameSearch = ''
     this.parentIdSearch = ''
-    this.parentId= ''
+    this.parentId = ''
     this.selectedCategoryParent = null;
     this.selectedCategoryChild = null;
     this.selectedCategorySubChild = null;
@@ -414,8 +418,8 @@ export class ListCategoryComponent implements OnInit {
     const response = await firstValueFrom(forkJoin(callApis))
     this.dataPageCategory = response.dataCategories
     this.dataParentCategories = response.dataParentCategory
-
     console.log(" run  fetchCategory")
+    
 
     // this.dataCategories = response.dataCategories?.content?.flat() || [];
 

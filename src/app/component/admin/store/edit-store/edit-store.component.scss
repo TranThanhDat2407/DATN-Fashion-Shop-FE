@@ -14,6 +14,20 @@
   }
 
   
+  select {
+    border-radius: 1px;
+    font-family: 600;
+    font-family: "Kanit", sans-serif;
+    max-height: 100px;
+  
+  }
+  option {
+    border-radius: 1px;
+    font-family: 600;
+    font-family: "Kanit", sans-serif;
+  
+  }
+  
 .parent {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -47,22 +61,27 @@
     grid-column-start: 2;
     grid-row-start: 2;
 }
-
-.div6 {
-    grid-column: span 2 / span 2;
-    grid-column-start: 1;
-    grid-row-start: 3;
-}
-
 .div7 {
-    grid-column-start: 3;
-    grid-row-start: 3;
+  grid-column-start: 1;
+  grid-row-start: 3;
 }
 
 .div8 {
-    grid-column-start: 4;
-    grid-row-start: 3;
+  grid-column-start: 2;
+  grid-row-start: 3;
 }
+
+.div12 {
+  grid-column-start: 3;
+  grid-row-start: 3;
+}
+
+.div6 {
+  grid-column: span 2 / span 2;
+  grid-column-start: 4;
+  grid-row-start: 3;
+}
+
 
 .div9 {
     grid-column: span 5 / span 5;
@@ -75,9 +94,8 @@
     grid-row-start: 2;
 }
 
-.div12 {
-    grid-column-start: 5;
-    grid-row-start: 3;
+option {
+  max-height: 100px;
 }
         
 

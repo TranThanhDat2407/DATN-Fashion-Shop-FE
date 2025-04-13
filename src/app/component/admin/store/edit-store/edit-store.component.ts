@@ -14,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '../../../../models/Store/Store';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../dialog/dialog.component';
+import { LocationServiceService } from '../../../../services/client/LocationService/location-service.service';
 
 @Component({
   selector: 'app-edit-store',
@@ -27,17 +28,28 @@ export class EditStoreComponent implements OnInit {
   dataEdit: ListStoreDTO | null = null
 
   storeId: number = 0
+  selectedDistrict: number | null = null;
+  selectedWard: number | null = null;
+  wards: any[] = [];
+  districts: any[] = [];
+  selectedProvince: number | null = null;
+  provinces: any[] = [];
+
   constructor(private fb: FormBuilder,
     private toastService: ToastrService,
     private storeService: StoreService,
     private routerActivated: ActivatedRoute,
-        private diaLog: MatDialog,
+    private diaLog: MatDialog,
+    private locationService: LocationServiceService,
+
 
 
   ) { }
 
   ngOnInit(): void {
+    this.getProvinces();
     this.getIdFromRouter();
+  
 
     this.storeForm = this.fb.group({
       name: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹ0-9\\s.,-_]+$')]],
@@ -46,10 +58,10 @@ export class EditStoreComponent implements OnInit {
       openHour: ['', [Validators.required]],
       closeHour: ['', [Validators.required]],
       street: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹ0-9\\s.,-_]+$')]],
-      ward: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹ0-9\\s.,-_]+$')]],
-      district: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹ0-9\\s.,-_]+$')]],
-      city: ['', [Validators.required, Validators.pattern('^[a-zA-ZÀ-ỹ0-9\\s.,-_]+$')]],
       fullAddress: [{ value: '', disabled: true }],
+      city: ['', Validators.required],
+      district: ['', Validators.required],
+      ward: ['', Validators.required],
       isActive: [true]
     });
 
@@ -85,8 +97,47 @@ export class EditStoreComponent implements OnInit {
       this.storeForm.get(field)?.valueChanges.subscribe(() => this.updateFullAddress());
     });
   }
+  getProvinces() {
+    this.locationService.getProvinces().subscribe(
+      (response) => {
+        this.provinces = response.data;
+      },
+      (error) => {
+        console.error("Lỗi khi lấy danh sách tỉnh:", error);
+      }
+    );
+  }
+  onDistrictChange(event: any) {
+    const districtCode = (event.target.value)
+    if (!districtCode || this.selectedDistrict === districtCode) return;
+    this.selectedDistrict = districtCode;
+    this.selectedWard = null;
+    this.wards = [];
 
+    // Gán tên quận vào NewAddress.district
+    if (this.selectedDistrict) {
+      console.log("🏙 Quận/Huyện đã chọn:", this.selectedDistrict);
+
+      this.locationService.getWards(this.selectedDistrict).subscribe(
+        (response) => {
+          if (response && response.data) {
+            this.wards = response.data; // API trả về object chứa `data`
+          } else {
+            this.wards = response.wards || []; // Kiểm tra fallback
+          }
+
+          console.log("📍 Danh sách phường/xã:", this.wards);
+        },
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách phường/xã:", error);
+          this.wards = []; // Reset danh sách khi lỗi
+        }
+      );
+    }
+  }
   getIdFromRouter(): void {
+    this.getProvinces()
+
     this.routerActivated.params.subscribe(params => {
       this.storeId = Number(params['id']) || 0;
       if (this.storeId !== 0 || this.storeId !== undefined || this.storeId !== null) {
@@ -96,6 +147,39 @@ export class EditStoreComponent implements OnInit {
       }
     })
 
+  }
+
+  onProvinceChange(event: any) {
+    const provinceCode = Number(event.target.value);
+    if (!provinceCode || provinceCode === this.selectedProvince) return;
+    this.selectedProvince = provinceCode; // Chỉ lưu mã tỉnh (số)
+
+    // Cập nhật NewssAddress.province
+    const selectedProvinceObj = this.provinces.find(p => p.ProvinceID === this.selectedProvince);
+    this.selectedDistrict = null;
+    this.selectedWard = null;
+    this.wards = [];
+    this.districts = [];
+    // Gọi API lấy danh sách quận/huyện
+    if (this.selectedProvince) {
+      console.log("📍 Tỉnh đã chọn:", this.selectedProvince);
+
+      this.locationService.getDistricts(this.selectedProvince).subscribe(
+        (response) => {
+          if (response && response.data) {
+            this.districts = response.data; // API trả về object chứa `data`
+          } else {
+            this.districts = response.districts || []; // Kiểm tra fallback
+          }
+
+          console.log("🏠 Danh sách quận/huyện:", this.districts);
+        },
+        (error) => {
+          console.error("❌ Lỗi khi lấy danh sách quận/huyện:", error);
+          this.districts = []; // Reset danh sách khi lỗi
+        }
+      );
+    }
   }
   updateStore(): void {
 
@@ -114,6 +198,10 @@ export class EditStoreComponent implements OnInit {
       latitude: 0,
       longitude: 0,
       isActive: this.storeForm.value.isActive,
+      street: this.storeForm.value.street,
+      ward: this.storeForm.value.ward,
+      district: this.storeForm.value.district,
+      city: this.storeForm.value.city,
       openHour: openHourFormatted,
       closeHour: closeHourFormatted,
       full_address: this.storeForm.getRawValue().fullAddress,
@@ -135,6 +223,15 @@ export class EditStoreComponent implements OnInit {
     })
 
     // this.storeForm.controls['fullAddress'].disable();
+  }
+  onWardChange(event: any) {
+    const wardCode = (event.target.value)
+    if (!wardCode || this.selectedWard === wardCode) return;
+    this.selectedWard = wardCode;
+    console.log(this.selectedWard)
+    // Gán tên phường vào NewAddress.ward
+    const selectedWardObj = this.wards.find(w => w.WardCode == wardCode);
+
   }
 
 
@@ -192,6 +289,11 @@ export class EditStoreComponent implements OnInit {
     this.storeService.editStore(storeId).subscribe(
       (response) => {
         this.dataEdit = response.data;
+        const city = this.provinces.find(c => c.ProvinceName === this.dataEdit?.city )
+        console.log('jkojijin ',city)
+        console.log('jkojijin ',this.dataEdit?.city)
+        console.log('jkojijin ',this.provinces)
+
 
         this.storeForm.patchValue({
           name: this.dataEdit.name,
@@ -200,14 +302,18 @@ export class EditStoreComponent implements OnInit {
           openHour: this.formatTime(this.dataEdit.openHour),  // Format lại
           closeHour: this.formatTime(this.dataEdit.closeHour),  // Format lại
           isActive: this.dataEdit.isActive,
-          fullAddress: this.dataEdit.fullAddress
+          fullAddress: this.dataEdit.fullAddress,
+          street: this.dataEdit.street,
+          ward: this.dataEdit.ward,
+          district: this.dataEdit.district,
+          city: this.dataEdit.city,
         });
 
-        this.storeForm.get('fullAddress')?.enable();
-        this.storeForm.get('street')?.disable();
-        this.storeForm.get('ward')?.disable();
-        this.storeForm.get('district')?.disable();
-        this.storeForm.get('city')?.disable();
+        // this.storeForm.get('fullAddress')?.enable();
+        // this.storeForm.get('street')?.disable();
+        // this.storeForm.get('ward')?.disable();
+        // this.storeForm.get('district')?.disable();
+        // this.storeForm.get('city')?.disable();
 
         const fullAddress = this.dataEdit.fullAddress;
         this.storeForm.patchValue({ fullAddress }, { emitEvent: true });
@@ -240,58 +346,131 @@ export class EditStoreComponent implements OnInit {
 
   updateFullAddress() {
     const street = this.storeForm.get('street')?.value || '';
-    const ward = this.storeForm.get('ward')?.value || '';
-    const district = this.storeForm.get('district')?.value || '';
-    const city = this.storeForm.get('city')?.value || '';
+    const wardCode = this.storeForm.get('ward')?.value;
+    const districtCode = this.storeForm.get('district')?.value;
+    const cityCode = this.storeForm.get('city')?.value;
 
-    const fullAddress = [street, ward, district, city].filter(Boolean).join(', ');
-    this.storeForm.patchValue({ fullAddress }, { emitEvent: false }); // Sử dụng patchValue để tránh lỗi
+    const wardName = this.wards.find(w => w.WardCode == wardCode)?.WardName || '';
+    const districtName = this.districts.find(d => d.DistrictID == districtCode)?.DistrictName || '';
+    const cityName = this.provinces.find(p => p.ProvinceID == cityCode)?.ProvinceName || '';
+
+    const fullAddress = [street, wardName, districtName, cityName].filter(Boolean).join(', ');
+    this.storeForm.patchValue({ fullAddress }, { emitEvent: false });
   }
+
 
   eventApply() {
     console.log(this.storeId);
     if (this.storeId !== undefined && this.storeId !== null && this.storeId !== 0) {
       this.updateStore();
     } else {
-      this.createStore();
+      this.createStoress();
     }
   }
 
 
   createStore() {
-    console.log('create', this.storeForm.value)
-    if (this.storeForm.valid) {
-      const openHour = new Date(this.storeForm.get('openHour')?.value);
-      const closeHour = new Date(this.storeForm.get('closeHour')?.value);
+    // console.log('createStore() called:', this.storeForm.value);
 
-      if (
-        openHour.getFullYear() !== closeHour.getFullYear() ||
-        openHour.getMonth() !== closeHour.getMonth() ||
-        openHour.getDate() !== closeHour.getDate()
-      ) {
-        this.toastService.error('Open and close hours must be on the same day.', 'Error', { timeOut: 3000 });
-        return;
-      }
+    // if (this.storeForm.invalid) {
+    //   this.toastService.error('Invalid form! Please check again.', 'Error', { timeOut: 3000 });
+    //   this.storeForm.markAllAsTouched(); // hiển thị hết lỗi nếu người dùng chưa chạm vào các trường
+    //   return;
+    // }
 
-      if (closeHour <= openHour) {
-        this.toastService.error('Close hour must be later than open hour.', 'Error', { timeOut: 3000 });
-        return;
-      }
+    // const openHourStr = this.storeForm.get('openHour')?.value;
+    // const closeHourStr = this.storeForm.get('closeHour')?.value;
 
-      this.storeService.createStore(this.storeForm.value).subscribe({
-        next: () => {
-          this.toastService.success('Store created successfully!', 'Success', { timeOut: 3000 });
-          this.storeForm.reset();
-          console.log('Valid data:', this.storeForm.value);
-        },
-        error: (err) => {
-          this.toastService.error('Failed to create store. Please try again.', 'Error', { timeOut: 3000 });
-          console.error('Error creating store:', err);
-        }
-      });
-    } else {
-      this.toastService.error('Invalid form! Please check again.', 'Error', { timeOut: 3000 });
+    // if (!openHourStr || !closeHourStr) {
+    //   this.toastService.error('Please fill in both open and close hours.', 'Error', { timeOut: 3000 });
+    //   return;
+    // }
+
+    // const openHour = new Date(`1970-01-01T${openHourStr}`);
+    // const closeHour = new Date(`1970-01-01T${closeHourStr}`);
+
+    // if (closeHour <= openHour) {
+    //   this.toastService.error('Close hour must be later than open hour.', 'Error', { timeOut: 3000 });
+    //   return;
+    // }
+
+    // Cập nhật lại fullAddress trước khi gửi lên
+    const province = this.provinces.find(p => p.ProvinceID === this.selectedProvince);
+    const district = this.districts.find(d => d.DistrictID === Number(this.selectedDistrict));
+    const ward = this.wards.find(w => w.WardCode === this.selectedWard);
+
+    console.log('province:', province);
+    console.log('district:', district);
+    console.log('ward:', ward);
+
+    if (!province || !district || !ward) {
+      this.toastService.error('Vui lòng chọn đầy đủ địa chỉ (Tỉnh, Quận, Phường).', 'Lỗi');
+      return;
     }
+
+    const street = this.storeForm.get('street')?.value || '';
+    const fullAddress = `${street}, ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`;
+    this.storeForm.patchValue({ fullAddress });
+    console.log(fullAddress)
+    this.storeForm.patchValue({ fullAddress });
+
+    this.storeService.createStore(this.storeForm.value).subscribe({
+      next: () => {
+        this.toastService.success('Store created successfully!', 'Success', { timeOut: 3000 });
+        this.storeForm.reset();
+        this.wards = [];
+        this.districts = [];
+      },
+      error: (err) => {
+        this.toastService.error('Failed to create store. Please try again.', 'Error', { timeOut: 3000 });
+        console.error('Error creating store:', err);
+      }
+    });
   }
+
+  createStoress(): void {
+    if (this.storeForm.invalid) {
+      this.storeForm.markAllAsTouched();
+      return;
+    }
+
+    const street = this.storeForm.get('street')?.value || '';
+    const province = this.provinces.find(p => p.ProvinceID === this.selectedProvince);
+    const district = this.districts.find(d => d.DistrictID === Number(this.selectedDistrict));
+    const ward = this.wards.find(w => w.WardCode === this.selectedWard);
+    const fullAddress = `${street}, ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`;
+    this.storeForm.patchValue({ fullAddress });
+
+    const storeData = {
+      name: this.storeForm.value.name,
+      email: this.storeForm.value.email,
+      phone: this.storeForm.value.phoneNumber,
+      openHour: this.storeForm.value.openHour,
+      closeHour: this.storeForm.value.closeHour,
+      isActive: this.storeForm.value.isActive,
+      fullAddress: this.storeForm.value.fullAddress,
+      street: this.storeForm.value.street,
+      ward: ward?.WardName || '',              // Lấy tên phường
+      district: district?.DistrictName || '',  // Lấy tên quận/huyện
+      city: province?.ProvinceName || ''       // Lấy tên tỉnh/thành phố
+    };
+
+    this.storeService.createStore(storeData).subscribe({
+      next: (response) => {
+         this.toastService.success('Store created successfully!', 'Success', { timeOut: 3000 });
+        this.storeForm.reset();
+        this.selectedProvince = null;
+        this.selectedDistrict = null;
+        this.selectedWard = null;
+      },
+      error: (error) => {
+        this.toastService.error('Failed to create store. Please try again.', 'Error', { timeOut: 3000 });
+
+        console.error('❌ Lỗi khi tạo store:', error);
+      }
+    });
+  }
+
+
 
 }

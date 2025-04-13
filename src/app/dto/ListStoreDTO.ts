@@ -9,5 +9,9 @@ export interface ListStoreDTO{
   openHour: string;
   closeHour: string;
   fullAddress: string;
+  city: string
+  ward: string
+  district: string
+  street:string
   distance: number | null;
 }

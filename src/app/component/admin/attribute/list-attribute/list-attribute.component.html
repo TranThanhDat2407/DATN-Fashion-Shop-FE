@@ -96,6 +96,7 @@
       <app-table *ngIf="dataColor" [currentPage]="pageColor" [tableData]="dataColor?.content?.flat() || []"
                  [dataPage]="dataColor" [typeImage]="'colors'" [tableHeaders]="headersColor"
                  [routerLinkString]="'/admin/edit_attribute/color'" [eventClickDelete]="deleteColor"
+                 (itemsPerPageChanged)="onItemsPerPageChangeColor($event)"
                  [toggleCheckbox]="toggleCheckboxColor" (pageChanged)="onPageChangeColor($event)">
 
       </app-table>
@@ -105,8 +106,9 @@
     <label class="label" for="tab-2" (click)="resetSize()"><i class="fa-solid fa-maximize"></i> Size List</label>
     <div class="panel">
       <!-- <h1>Color List</h1> -->
-      <app-table *ngIf="dataSize" [currentPage]="pageSize" [tableData]="dataSize?.content?.flat() || []"
+      <app-table *ngIf="dataSize" [currentPage]="pageSize" [tableData]="dataSize?.content?.flat() || []"   (itemsPerPageChanged)="onItemsPerPageChangeSize($event)"
                  [dataPage]="dataSize" [tableHeaders]="headersSize" [routerLinkString]="'/admin/edit_attribute/size'"
+                 [currentPage]="0"
                  [eventClickDelete]="deleteSize" [toggleCheckbox]="toggleCheckboxSize"
                  (pageChanged)="onPageChangeSize($event)">
       </app-table>

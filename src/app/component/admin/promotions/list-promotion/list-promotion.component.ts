@@ -43,7 +43,12 @@ export class ListPromotionComponent implements OnInit{
         console.error('Error fetching promotion list', error);
       });
   }
+  onItemsPerPageChange(newSize: number) {
+    this.size = newSize;
+    this.page = 0;
+    this.fetchPromotionList();
 
+  }
   // Hàm thay đổi trang
   onPageChange(newPage: number) {
     this.page = newPage;

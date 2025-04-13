@@ -189,16 +189,8 @@
 
 
 
-<app-table *ngIf="dataPageCategory"
- [currentPage]="page" 
-
- [tableData]="dataPageCategory?.content?.flat() || []"
-  [dataPage]="dataPageCategory"
-  
-   [typeImage]="'categories'" 
-  [tableHeaders]="headers"
-  [routerLinkString]="'/admin/edit_category'"
-   [eventClickDelete]="deleteCategory"
-    [toggleCheckbox]="toggleCheckbox"
+<app-table *ngIf="dataPageCategory" [currentPage]="page" [tableData]="dataPageCategory?.content?.flat() || []"
+  [dataPage]="dataPageCategory"   [typeImage]="'categories'" [tableHeaders]="headers"   (itemsPerPageChanged)="onItemsPerPageChange($event)"
+  [routerLinkString]="'/admin/edit_category'" [eventClickDelete]="deleteCategory" [toggleCheckbox]="toggleCheckbox"
   [changeActive]="changeActive" (pageChanged)="onPageChange($event)">
 </app-table>

@@ -26,7 +26,7 @@ export class ListProductComponent implements OnInit {
   }
   dataProduct: PageResponse<ProductListDTO[]> | null = null
   dataFullElementProduct: PageResponse<ProductListDTO[]> | null = null;
-  header: string[] = ['id', 'name', 'imageUrl', 'isActive', 'colors', 'sizes', 'promotions', 'button']
+  header: string[] = ['id', 'name', 'imageUrl', 'isActive', 'colors-product', 'sizes', 'promotions', 'button']
   listTest: ProductListDTO[] = []
   checkedItem: number[] = [];
   isActive: any = null
@@ -59,7 +59,12 @@ export class ListProductComponent implements OnInit {
 
 
   }
+  onItemsPerPageChange(newSize: number) {
+    this.size = newSize;
+    this.page = 0;
+    this.fetchProductList();
 
+  }
 
   getProduct(
     languageCode: string,

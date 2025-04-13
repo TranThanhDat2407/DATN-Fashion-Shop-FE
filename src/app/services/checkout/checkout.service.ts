@@ -90,7 +90,6 @@ export class CheckoutService {
   }
 
   placeOrder(orderRequest: any): Observable<any> {
-
     return this.http.post<ApiResponse<any>>('http://localhost:8080/api/v1/orders/create-order', orderRequest) .pipe(
       map((response: ApiResponse<any>) => {
 
