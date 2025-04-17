@@ -305,7 +305,7 @@ input[type="range"] {
 }
 
 /* Khi dropdown mở */
-.custom-select:hover .dropdown {
+.custom-select .dropdown {
   max-height: 200px; /* Trượt xuống */
   opacity: 1;
 }

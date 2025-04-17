@@ -100,30 +100,31 @@ export class InsertReviewComponent implements OnInit {
   ];
   //Giới tính
   genders = [
-    { gender: 'Nam' },
-    { gender: 'Nữ' },
-    { gender: 'Khác' }
+    { gender: '♂ (M)' },
+    { gender: '♀ (F)' },
+    { gender: '⚤ (O)' }
   ];
   //Độ tuổi
   ages = [
-    { age: '0 đến 6 tháng' },
-    { age: '7 đến 12 tháng' },
-    { age: '13 đến 24 tháng' },
-    { age: '2 đến 3 tuổi' },
-    { age: '4 đến 6 tuổi' },
-    { age: '7 đến 9 tuổi' },
-    { age: '10 đến 14 tuổi' },
-    { age: '15 đến 19 tuổi' },
-    { age: '20 đến 24 tuổi' },
-    { age: '25 đến 34 tuổi' },
-    { age: '35 đến 44 tuổi' },
-    { age: '45 đến 54 tuổi' },
-    { age: '55 đến 64 tuổi' },
-    { age: '65 tuổi và hơn' }
+    { age: '0 - 6 mo' },
+    { age: '7 - 12 mo' },
+    { age: '13 - 24 mo' },
+    { age: '2 - 3 yo' },
+    { age: '4 - 6 yo' },
+    { age: '7 - 9 yo' },
+    { age: '10 - 14 yo' },
+    { age: '15 - 19 yo' },
+    { age: '20 - 24 yo' },
+    { age: '25 - 34 yo' },
+    { age: '35 - 44 yo' },
+    { age: '45 - 54 yo' },
+    { age: '55 - 64 yo' },
+    { age: '65+ yo' }
   ];
+  
   //Chiều cao
   heights = [
-    { height: '50cm trở xuống' },
+    { height: ' <= 50cm  ' },
     { height: '51 - 60cm' },
     { height: '61 - 70cm' },
     { height: '71 - 80cm' },
@@ -145,7 +146,7 @@ export class InsertReviewComponent implements OnInit {
   ];
   //Cân nặng
   weights = [
-    { weight: '5kg trở xuống' },
+    { weight: '<= 5kg  ' },
     { weight: '5 - 8kg' },
     { weight: '9 - 12kg' },
     { weight: '13 - 15kg' },
@@ -168,7 +169,7 @@ export class InsertReviewComponent implements OnInit {
 
   //Cỡ giày
   shoeSizes = [
-    { size: 'EU33 trở xuống' },
+    { size: '<= EU33' },
     { size: 'EU34' },
     { size: 'EU35' },
     { size: 'EU36' },
