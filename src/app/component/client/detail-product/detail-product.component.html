@@ -323,24 +323,30 @@
         <div class="product-actions mt-3">
           <!-- Quantity Selector -->
           <div class="quantity-selector d-flex align-items-center justify-content-start gap-2 " style="width: 40%;">
-            <button class="quantity-btn">-</button>
-            <input type="text" [(ngModel)]="qtyCart" name="qtyCart" id="" (input)="onInput($event)"
-              style="border: none; width: 50%; text-align: center; background-color: #f7f7f7;">
-
-            <button class="quantity-btn">+</button>
+            <button class="quantity-btn" (click)="decreaseQty()">-</button>
+          
+            <input type="text"
+                   [(ngModel)]="qtyCart"
+                   name="qtyCart"
+                   id=""
+                   (input)="onInput($event)"
+                   style="border: none; width: 50%; text-align: center; background-color: #f7f7f7;">
+          
+            <button class="quantity-btn" (click)="increaseQty()">+</button>
           </div>
+          
           <div class="stock-status mt-2">
 
             <span> {{quantityInStock?.quantityInStock}} {{"Trong kho" | translate}} </span>
           </div>
 
           <!-- Add to Cart Button -->
-          <div class="add-to-cart mt-3  " (click)="createCart()">
-            <button class="btn-cart">
+          <div class="add-to-cart mt-3" (click)="createCart()">
+            <button class="btn-cart" [disabled]="isOutOfStock">
               {{ "THÊM VÀO GIỎ HÀNG" | translate }}
             </button>
           </div>
-
+          
 
           <!-- Find Product in Inventory -->
           <div class="inventory-check mt-3 text-end" [routerLink]="['/client', currentCurrency, currentLang,'store_inventory', dataDetailsProduct?.id,

@@ -115,7 +115,9 @@ export class CartComponent implements OnInit {
     }
   }
 
-
+  get cartIsEmpty(): boolean {
+    return !this.cartItems || this.cartItems.length === 0;
+  }
 
   async fetchApiCart(): Promise<void> {
 
@@ -160,6 +162,7 @@ export class CartComponent implements OnInit {
   }
 
   clearCart() {
+    if(this.cartIsEmpty) return
     const dialogRef = this.dialog.open(ModalNotifyDeleteComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -197,6 +200,17 @@ export class CartComponent implements OnInit {
     if (newQuantity <= 0) {
       newQuantity = 1;
     }
+
+    this.getStatusQuantityInStock(productId ,colorId ,sizeId).subscribe(item => {
+      if (item?.quantityInStock === undefined || item?.quantityInStock === 0 || item?.quantityInStock < newQuantity) {
+        this.notifyError = false;
+        setTimeout(() => {
+          this.notifyError = true;
+        }, 10);
+        return;
+      }
+    });
+
     this.getStatusQuantityInStock(productId, colorId, sizeId).subscribe(item => {
       if (item?.quantityInStock === undefined || item?.quantityInStock === 0 || item?.quantityInStock < newQuantity) {
         // this.dialog.open(ModalNotifyErrorComponent);

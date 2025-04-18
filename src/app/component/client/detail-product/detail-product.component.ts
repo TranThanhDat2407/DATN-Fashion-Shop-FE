@@ -257,9 +257,7 @@ export class DetailProductComponent implements OnInit {
   }
 
   createCart() {
-
     this.getStatusQuantityInStock(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(item => {
-
       if (item?.quantityInStock === undefined || item?.quantityInStock === 0 || item?.quantityInStock < this.qtyCart) {
         this.notifyError = false;
         setTimeout(() => {
@@ -291,21 +289,57 @@ export class DetailProductComponent implements OnInit {
 
   totalCart$!: Observable<number>;
 
+  increaseQty(): void {
+    this.getStatusQuantityInStock(this.productId ?? 0, this.colorId ?? 0, this.sizeId ?? 0).subscribe(item => {
+      if (item?.quantityInStock === undefined || item?.quantityInStock === 0 || item?.quantityInStock < this.qtyCart) {
+        this.notifyError = false;
+        setTimeout(() => {
+          this.notifyError = true;
+        }, 10);
+        return;
+      }
+    });
 
+    
+    this.qtyCart++;
+    
+  }
+  get isOutOfStock(): boolean {
+    return (
+      !this.quantityInStock || 
+      this.quantityInStock.quantityInStock === undefined ||
+      this.quantityInStock.quantityInStock === 0 ||
+      this.quantityInStock.quantityInStock < this.qtyCart
+    );
+  }
+  
+  
+  decreaseQty(): void {
+    if (this.qtyCart > 1) {
+      this.qtyCart--;
+    }
+  }
 
   onInput(event: any): void {
     // Lọc chỉ cho phép nhập số
     const inputValue = event.target.value;
-
+  
     // Chỉ giữ lại số, bỏ qua chữ và ký tự đặc biệt
     const numericValue = inputValue.replace(/[^0-9]/g, '');
-
-    // Cập nhật lại giá trị qtyCart chỉ với các chữ số
-    this.qtyCart = numericValue ? parseInt(numericValue, 10) : 0;
-
-    // Cập nhật lại giá trị input field
+  
+    // Chuyển thành số
+    let parsedValue = numericValue ? parseInt(numericValue, 10) : 0;
+  
+    // Nếu nhỏ hơn hoặc bằng 0 thì đặt lại là 1
+    if (parsedValue <= 0) {
+      parsedValue = 1;
+    }
+  
+    // Cập nhật lại qtyCart và giá trị input
+    this.qtyCart = parsedValue;
     event.target.value = this.qtyCart;
   }
+  
   getIdsFromProductRouter(): void {
     this.routerActi.params.pipe(take(1)).subscribe(params => {
       this.productId = Number(params['productId']) || 0;
