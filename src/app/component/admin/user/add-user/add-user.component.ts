@@ -11,6 +11,9 @@ import {RoleService} from '../../../../services/role/role.service';
 import {UserService} from '../../../../services/user/user.service';
 import {debounceTime, distinctUntilChanged, Subject, switchMap} from 'rxjs';
 import {TranslatePipe} from '@ngx-translate/core';
+import {
+  ModalRegisterSuccessComponent
+} from '../../../client/Modal-notify/modal-register-success/modal-register-success.component';
 
 @Component({
   selector: 'app-add-user',
@@ -22,7 +25,8 @@ import {TranslatePipe} from '@ngx-translate/core';
     NgClass,
     NgForOf,
     NgIf,
-    TranslatePipe
+    TranslatePipe,
+    ModalRegisterSuccessComponent
   ],
   templateUrl: './add-user.component.html',
   styleUrl: './add-user.component.scss'
@@ -149,10 +153,10 @@ export class AddUserComponent implements OnInit {
           form.resetForm();
         },
         error: (error) => {
-          // this.notifySuccsess = false;
-          // setTimeout(() => {
-          //   this.notifySuccsess = true;
-          // }, 100);
+          this.notifySuccsess = false;
+          setTimeout(() => {
+            this.notifySuccsess = true;
+          }, 100);
           console.log(error)
           form.resetForm();
         }
