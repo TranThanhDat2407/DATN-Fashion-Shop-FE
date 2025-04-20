@@ -45,6 +45,7 @@ import {StoreDashboardComponent} from '../staff/store-dashboard/store-dashboard.
 import {
   StoreStatisticDashboardComponent
 } from './store-statistical/store-statistic-dashboard/store-statistic-dashboard.component';
+import {ListUserComponent} from './user/list-user/list-user.component';
 
 
 export const adminRouter: Routes = [
@@ -95,7 +96,6 @@ export const adminRouter: Routes = [
         },
 
         {
-
           path:'list_category',
           component: ListCategoryComponent,
           canActivate: [AdminGuardFn]
@@ -192,6 +192,11 @@ export const adminRouter: Routes = [
         {
           path: 'list_coupon',
           component: ListCouponComponent,
+          canActivate: [AdminGuardFn]
+        },
+        {
+          path: 'list_user',
+          component: ListUserComponent,
           canActivate: [AdminGuardFn]
         },
         {

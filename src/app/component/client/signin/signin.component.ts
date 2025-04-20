@@ -127,7 +127,13 @@ export class SigninComponent implements OnInit{
         form.resetForm();
       },
       error: (error) => {
-        this.dialog.open(ModalRegisterFailComponent)
+        this.notifySuccsess = false;
+        setTimeout(() => {
+          this.notifySuccsess = true;
+        }, 100);
+
+        form.resetForm();
+        // this.dialog.open(ModalRegisterFailComponent)
       },
       complete: () => {
         this.isSubmitting = false;
