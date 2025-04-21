@@ -128,8 +128,8 @@
             <ng-container *ngIf="header === 'button'">
               <div class="button-container">
                 <button type="button" [routerLink]="[routerLinkString, item.id]"
-                  [routerLinkActive]="activeRouterLinkString" class="button-89" role="button">Edit</button>
-                <button type="button" (click)="eventClickDelete(item.id)" class="button-89"
+                  [routerLinkActive]="activeRouterLinkString" class="button-89 btn-edit" role="button">Edit</button>
+                <button type="button" (click)="eventClickDelete(item.id)" class="button-89 btn-delete"
                   role="button">Delete</button>
               </div>
             </ng-container>
