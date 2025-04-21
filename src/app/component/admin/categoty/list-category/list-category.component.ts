@@ -550,7 +550,7 @@ export class ListCategoryComponent implements OnInit {
         try {
           await firstValueFrom(this.categoryAdminService.deleteCategory(id));
           console.log(`Deleted category with id ${id}`);
-          this.toastService.success('Success', 'Category deleted successfully!', { timeOut: 1000 });
+          this.toastService.success('Category deleted successfully!', 'Success', { timeOut: 1000 });
         } catch (error) {
           console.error(`Error deleting category with id ${id}`, error);
           this.toastService.error('Error', 'There was an error deleting the category.', { timeOut: 1000 });
