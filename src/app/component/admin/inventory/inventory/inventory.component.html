@@ -644,11 +644,11 @@
             </div>
             <div class="col-md-8">
               <div style="margin-left: 40px;">
-                <span> <span class="title-color ">Selected Prodduct Variant : </span><span class="pr_varaint_select"
+                <span> <span class="title-color ">Selected Product Variant : </span><span class="pr_varaint_select"
                     *ngFor="let item of selectedProductVariants">{{item}}</span></span>
                 <p></p>
                 <span class="title-color search-variant">Quantity In Stock <input class="input-height"
-                    [(ngModel)]="qtyInStock" name="modelHeight" type="number"></span>
+                    [(ngModel)]="qtyInStock" name="qtyInStock" type="number"></span>
               </div>
 
               <ul id="dic-none">
@@ -661,7 +661,7 @@
 
                 </div>
                 <div class="row variant-all " style="padding: 10px 0 0 0;">
-                  <label class="col-md-6"
+                  <label class="col-md-6 product-variant-addInventoryToWareHouse"
                     style="margin: 0 0 10px 10px;border-radius: 20px; border: 1px solid rgb(83, 82, 82); width: 47%; height: 33%;min-height: 130px;"
                     *ngFor="let item of dataProductVariant" [for]="item.productVariantId"
                     (click)="toggleCheckbox(item.productVariantId)">
@@ -790,7 +790,7 @@
             <div class="d-flex justify-content-between" style="margin-left: 40px;">
               <div class="mb-4" style="width: 48%;">
                 <label class="form-label mb-1 col-md-3">Store</label>
-                <select class="form-select" [(ngModel)]="storeIdForWarehouse" (ngModelChange)="chooseStoreWarehouse()">
+                <select class="form-select" name="storeSelect" [(ngModel)]="storeIdForWarehouse" (ngModelChange)="chooseStoreWarehouse()">
                   <option *ngFor="let store of dataStore" [value]="store.id"> {{store.name}} </option>
                 </select>
               </div>
@@ -806,7 +806,7 @@
                   *ngFor="let item of selectedProductVariants">{{item}}</span></span>
               <p></p> -->
               <div> <span class="form-label">Quantity In Stock : </span> </div>
-              <div> <input class="input-height-warehouse" [(ngModel)]="qtyTransfer" name="modelHeight" type="number">
+              <div> <input class="input-height-warehouse" [(ngModel)]="qtyTransfer" name="qtyTransfer" type="number">
               </div>
               <div> <button class="btn-applyAll" (click)="applyAllQtyWarehouse()">APPLY ALL QUANTITY</button></div>
 
@@ -822,7 +822,7 @@
 
               </div>
               <div class="row variant-all " style="padding: 10px 0 0 0;">
-                <label class="col-md-6"
+                <label class="col-md-6 product-variant-test"
                   style="margin: 0 0 10px 10px;border-radius: 20px; border: 1px solid rgb(83, 82, 82); width: 47%; height: 33%;min-height: 130px;"
                   *ngFor="let item of dataInventoryForWarehouseTransfer" [for]="item.productVariantId"
                   (click)="toggleSelectedWarehouseTransfer(item)">

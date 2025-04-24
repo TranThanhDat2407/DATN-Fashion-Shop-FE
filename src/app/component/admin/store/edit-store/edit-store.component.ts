@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderAdminComponent } from '../../header-admin/header-admin.component';
@@ -369,64 +369,7 @@ export class EditStoreComponent implements OnInit {
   }
 
 
-  createStore() {
-    // console.log('createStore() called:', this.storeForm.value);
 
-    // if (this.storeForm.invalid) {
-    //   this.toastService.error('Invalid form! Please check again.', 'Error', { timeOut: 3000 });
-    //   this.storeForm.markAllAsTouched(); // hiển thị hết lỗi nếu người dùng chưa chạm vào các trường
-    //   return;
-    // }
-
-    // const openHourStr = this.storeForm.get('openHour')?.value;
-    // const closeHourStr = this.storeForm.get('closeHour')?.value;
-
-    // if (!openHourStr || !closeHourStr) {
-    //   this.toastService.error('Please fill in both open and close hours.', 'Error', { timeOut: 3000 });
-    //   return;
-    // }
-
-    // const openHour = new Date(`1970-01-01T${openHourStr}`);
-    // const closeHour = new Date(`1970-01-01T${closeHourStr}`);
-
-    // if (closeHour <= openHour) {
-    //   this.toastService.error('Close hour must be later than open hour.', 'Error', { timeOut: 3000 });
-    //   return;
-    // }
-
-    // Cập nhật lại fullAddress trước khi gửi lên
-    const province = this.provinces.find(p => p.ProvinceID === this.selectedProvince);
-    const district = this.districts.find(d => d.DistrictID === Number(this.selectedDistrict));
-    const ward = this.wards.find(w => w.WardCode === this.selectedWard);
-
-    console.log('province:', province);
-    console.log('district:', district);
-    console.log('ward:', ward);
-
-    if (!province || !district || !ward) {
-      this.toastService.error('Vui lòng chọn đầy đủ địa chỉ (Tỉnh, Quận, Phường).', 'Lỗi');
-      return;
-    }
-
-    const street = this.storeForm.get('street')?.value || '';
-    const fullAddress = `${street}, ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`;
-    this.storeForm.patchValue({ fullAddress });
-    console.log(fullAddress)
-    this.storeForm.patchValue({ fullAddress });
-
-    this.storeService.createStore(this.storeForm.value).subscribe({
-      next: () => {
-        this.toastService.success('Store created successfully!', 'Success', { timeOut: 3000 });
-        this.storeForm.reset();
-        this.wards = [];
-        this.districts = [];
-      },
-      error: (err) => {
-        this.toastService.error('Failed to create store. Please try again.', 'Error', { timeOut: 3000 });
-        console.error('Error creating store:', err);
-      }
-    });
-  }
 
   createStoress(): void {
     if (this.storeForm.invalid) {
@@ -444,7 +387,7 @@ export class EditStoreComponent implements OnInit {
     const storeData = {
       name: this.storeForm.value.name,
       email: this.storeForm.value.email,
-      phone: this.storeForm.value.phoneNumber,
+      phoneNumber: this.storeForm.value.phoneNumber,
       openHour: this.storeForm.value.openHour,
       closeHour: this.storeForm.value.closeHour,
       isActive: this.storeForm.value.isActive,

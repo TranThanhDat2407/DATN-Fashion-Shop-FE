@@ -600,7 +600,7 @@ export class InventoryComponent implements OnInit {
 
     try {
       await Promise.all(insertPromises);
-      this.toastService.success('Add Product Variant Successfully! ', "Success", { timeOut: 3000 });
+      this.toastService.success('Add Product Variant Successfully!', "Success", { timeOut: 3000 });
       this.fetchInventoryForWarehouseOnly();
       this.dataAllInventoryForWarehouseTransfer = await this.fetchAllInventoryForWarehouse();
       this.resetForm();
