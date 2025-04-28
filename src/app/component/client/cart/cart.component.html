@@ -245,7 +245,7 @@
 
 
           <div class="priceBill">
-            <div
+            <div id="btn-buy-now"
             class="btnBuyCart slide_leftbtnBuyCart"
             [ngClass]="{ disabled: cartIsEmpty }"
             [routerLink]="cartIsEmpty ? null : ['../checkout']">
@@ -253,7 +253,7 @@
           </div>
             <!-- <span class="hr-element-decor"><hr>or <hr></span -->
             <hr>
-            <div class="btnBuyToContinue slide_leftbtnBuyToContinue" [routerLink]="['../product']">{{
+            <div id="continue-buy" class="btnBuyToContinue slide_leftbtnBuyToContinue" [routerLink]="['../product']">{{
               "TIẾP TỤC MUA SẮM" | translate
               }}
             </div>

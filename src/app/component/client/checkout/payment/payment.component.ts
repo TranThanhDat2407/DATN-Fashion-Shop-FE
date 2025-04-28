@@ -3,6 +3,8 @@ import {CheckoutService} from '../../../../services/checkout/checkout.service';
 import {Router, RouterLink} from '@angular/router';
 import {NgForOf, NgIf} from '@angular/common';
 import {ShippingComponent} from '../shipping/shipping.component';
+import {TranslatePipe} from '@ngx-translate/core';
+import {translate} from '@angular/localize/tools';
 
 @Component({
   selector: 'app-payment',
@@ -11,7 +13,8 @@ import {ShippingComponent} from '../shipping/shipping.component';
     NgIf,
     ShippingComponent,
     RouterLink,
-    NgForOf
+    NgForOf,
+    TranslatePipe
   ],
   templateUrl: './payment.component.html',
   styleUrl: './payment.component.scss'
@@ -23,11 +26,11 @@ export class PaymentComponent implements OnInit {
   availablePaymentMethods: { id: number; label: string }[] = [];
 
   paymentMethods = [
-    { id: 1, label: 'Thanh toán khi nhận hàng' },
-    { id: 2, label: 'Thanh toán bằng VNPAY' },
-    { id: 5, label: 'Thanh toán tại cửa hàng' },
-    { id: 6, label: 'Thanh toán bằng Momo' },
-    { id: 7, label: 'Thanh toán bằng PayPal' },
+    { id: 1, label: 'payment.cod' }, // 'COD' -> 'payment.cod'
+    { id: 2, label: 'payment.vnpay' },
+    { id: 5, label: 'payment.in_store'},
+    { id: 6, label: 'payment.momo' },
+    { id: 7, label: 'payment.paypal' },
   ];
 
 
