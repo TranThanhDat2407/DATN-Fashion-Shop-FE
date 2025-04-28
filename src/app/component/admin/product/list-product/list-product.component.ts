@@ -43,12 +43,10 @@ export class ListProductComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.fetchProductList()
   }
-
-
   async fetchProductList(): Promise<void> {
 
     const callApis = {
-      dataProduct: this.getProduct('en', this.name, this.isActive, this.minPrice, this.maxPrice, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of(null)))
+      dataProduct: this.getProduct('vi', this.name, this.isActive, this.minPrice, this.maxPrice, this.page, this.size, this.sortBy, this.sortDir).pipe(catchError(() => of(null)))
 
     }
 

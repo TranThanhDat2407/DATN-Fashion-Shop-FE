@@ -866,7 +866,7 @@ export class InventoryComponent implements OnInit {
     sortDir?: string
   ): Observable<PageResponse<ListStoreStockDTO[]>> {
 
-    return this.inventoryService.getInventoryForWarehouse(warehouseId, 'en', productName, categoryId, page, size, sortBy, sortDir).pipe(
+    return this.inventoryService.getInventoryForWarehouse(warehouseId, 'vi', productName, categoryId, page, size, sortBy, sortDir).pipe(
       map((response: ApiResponse<PageResponse<ListStoreStockDTO[]>>) => response.data)
     );
 
