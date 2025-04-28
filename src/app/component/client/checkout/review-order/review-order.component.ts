@@ -5,7 +5,7 @@ import { ShippingComponent } from '../shipping/shipping.component';
 import { PaymentComponent } from '../payment/payment.component';
 import { CheckoutService } from '../../../../services/checkout/checkout.service';
 import { NavigationService } from '../../../../services/Navigation/navigation.service';
-import { firstValueFrom } from 'rxjs';
+import {catchError, firstValueFrom, map, Observable, of, tap} from 'rxjs';
 import { CartDTO } from '../../../../dto/CartDTO';
 import { CouponLocalizedDTO } from '../../../../dto/coupon/CouponClientDTO';
 import { Currency } from '../../../../models/Currency';
@@ -16,11 +16,14 @@ import { CouponService } from '../../../../services/client/CouponService/coupon-
 import {AddressDTO} from '../../../../dto/address/AddressDTO';
 import {ShippingService} from '../../../../services/client/ShippingService/shipping-service.service';
 import {PaypalService} from '../../../../services/paypal/paypal.service';
+import {TranslatePipe} from '@ngx-translate/core';
+import {ApiResponse} from '../../../../dto/Response/ApiResponse';
+import {CurrencyService} from '../../../../services/currency/currency-service.service';
 
 @Component({
   selector: 'app-review-order',
   standalone: true,
-  imports: [NgIf, ShippingComponent, PaymentComponent, DecimalPipe, AsyncPipe, CurrencyPipe],
+  imports: [NgIf, ShippingComponent, PaymentComponent, DecimalPipe, AsyncPipe, CurrencyPipe, TranslatePipe],
   templateUrl: './review-order.component.html',
   styleUrls: ['./review-order.component.scss']
 })
@@ -51,7 +54,8 @@ export class ReviewOrderComponent implements OnInit {
     private couponService: CouponService,
     private navigationService: NavigationService,
     private shippingService : ShippingService,
-    private paypal: PaypalService
+    private paypal: PaypalService,
+    private currencySevice: CurrencyService,
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
   }
@@ -60,6 +64,7 @@ export class ReviewOrderComponent implements OnInit {
     this.userId = this.tokenService.getUserId() ?? 0;
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
+    this.fetchCurrency();
 
     this.navigationService.getCurrency().subscribe({
       next: (currencies) => {
@@ -167,7 +172,7 @@ export class ReviewOrderComponent implements OnInit {
     console.log("📌 paymentMethodId:", this.paymentInfo.paymentMethodId);
 
     const orderRequest = this.checkoutService.getCheckoutData();
-    if (this.paymentInfo.paymentMethodId === 6) {
+    if (this.paymentInfo.paymentMethodId === 7) {
       this.checkoutService.placeOrder(orderRequest).subscribe({
           next: (response) => {
             if (response.paymentUrl) {
@@ -215,5 +220,36 @@ export class ReviewOrderComponent implements OnInit {
     }
   }
 
+  fetchCurrency() {
+    this.getCurrency().subscribe(({ data }) => {
+      const index = { USD: 0, VND: 1, JPY: 2 }[this.currentCurrency] ?? 0;
+      const currency = data?.[index] || { code: '', name: '', symbol: '', exchangeRate: 0 };
+      this.currentCurrencyDetail = currency
+      console.log('Thông tin tiền tệ:', currency);
+    });
+  }
 
+
+  getCurrency(): Observable<ApiResponse<Currency[]>> {
+    return this.currencySevice.getCurrency().pipe(
+      tap(response => console.log("📢 API Currency Response:", response)), // Log dữ liệu API
+      map((response: ApiResponse<Currency[]>) => {
+        if (!response.data || response.data.length === 0) {
+          console.warn("⚠️ API không trả về danh sách tiền tệ hợp lệ!");
+          return { ...response, data: [{ id: 1, code: 'USD', name: 'US Dollar', symbol: '$', rateToBase: 1, isBase: true }] };
+        }
+        return response;
+      }),
+      catchError(error => {
+        console.error('❌ Lỗi khi gọi API tiền tệ:', error);
+        return of({
+          timestamp: new Date().toISOString(),
+          status: 500,
+          message: 'Lỗi khi gọi API tiền tệ',
+          data: [{ id: 1, code: 'USD', name: 'US Dollar', symbol: '$', rateToBase: 1, isBase: true }],
+          errors: ['Không thể lấy dữ liệu tiền tệ']
+        } as ApiResponse<Currency[]>);
+      })
+    );
+  }
 }

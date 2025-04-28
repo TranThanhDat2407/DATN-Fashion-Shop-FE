@@ -15,13 +15,14 @@ import {CartDTO} from '../../../../dto/CartDTO';
 import {StoreService} from '../../../../services/client/store/store.service';
 import {ListStoreDTO} from '../../../../dto/ListStoreDTO';
 import {StoreDetailDTO} from '../../../../dto/StoreDetailDTO';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-shipping',
   standalone: true,
   imports: [
     NgIf,
-    NgClass, NgForOf, CommonModule, FormsModule, RouterLink,
+    NgClass, NgForOf, CommonModule, FormsModule, RouterLink, TranslatePipe,
   ],
   templateUrl: './shipping.component.html',
   styleUrl: './shipping.component.scss'
