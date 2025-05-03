@@ -684,6 +684,7 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
   orderFailedMessage?: string;
   orderId?: number;
   customerName?: String;
+
   createOrder(): void {
     if (!this.dataCart || this.cartItems.length === 0) {
       this.orderFailedMessage = "Empty cart!";
