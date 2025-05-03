@@ -67,7 +67,7 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
   couponDetails: CouponDTO | null = null;
 
   paymentMethod: string = '4';
-
+  MOMO_PAYMENT_ID = 6;
   staffDetail!: UserDetailDTO;
 
   constructor(
@@ -130,7 +130,7 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
   calculateTotals() {
     if (this.dataCart) {
       this.totalPrice = this.dataCart.totalPrice || 0;
-      this.vat = this.totalPrice * 0.1; // Thuế VAT 10%
+      this.vat = this.totalPrice * 0.08; // Thuế VAT 8%
 
       if (this.couponDetails) {
         if (this.couponDetails.discountType === 'FIXED') {
@@ -684,6 +684,7 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
   orderFailedMessage?: string;
   orderId?: number;
   customerName?: String;
+
   createOrder(): void {
     if (!this.dataCart || this.cartItems.length === 0) {
       this.orderFailedMessage = "Empty cart!";
@@ -691,6 +692,7 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
       setTimeout(() => { this.showErrorMessage = false; }, 5000);
       return;
     }
+    localStorage.setItem('staffId', this.staffId.toString());
     // Tạo request object
     const request: StorePaymentRequest = {
       userId: this.userId,
@@ -703,7 +705,31 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
       transactionCode: null
     };
     console.log(this.couponId);
+
+  if(Number(this.paymentMethod) === this.MOMO_PAYMENT_ID){
+
+    console.log("📢 MoMo được chọn - tạo đơn hàng MoMo");
     this.orderService.createStoreOrder(this.staffId, request).subscribe({
+      next: (response: any) => {
+        console.log("🔗 Response từ API:", response);
+        const momoUrl = response?.data?.payUrl
+        console.log("🔗 MoMo URL nhận được:", momoUrl);
+        if (momoUrl) {
+          window.location.href = response.data.payUrl;
+        }
+      },
+      error: (err) => {
+        console.error("❌ Lỗi tạo đơn hàng MoMo:", err);
+        this.orderFailedMessage = "No MoMo payment URL received!";
+        this.showErrorMessage = true;
+        setTimeout(() => { this.showErrorMessage = false; }, 5000);
+      }
+    });
+
+  } else {
+    console.log("💵 Phương thức thanh toán không phải MoMo");
+    this.orderService.createStoreOrder(this.staffId, request).subscribe({
+
       next: (response: any) => {
         this.orderSuccessMessage = `Order #${response.data.orderId} placed successfully!`;
         this.orderId = response.data.orderId;
@@ -727,6 +753,7 @@ export class StaffCheckoutComponent implements OnInit, AfterViewInit {
         setTimeout(() => { this.showErrorMessage = false; }, 5000);
       }
     });
+  }
   }
 
   clearMessages() {

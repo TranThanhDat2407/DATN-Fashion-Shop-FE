@@ -737,7 +737,12 @@ export class EditCategoryComponent implements OnInit {
       languageCode: lang.code,
       name: ''
     }));
-
+    this.dataLanguages.forEach(lang => {
+      const translation = this.getTranslationByCode(lang.code);
+      if (translation) {
+        translation.name = ''; // Reset giá trị name
+      }
+    });
     // Nếu có các giá trị khác cần reset, bạn có thể reset thêm ở đây, ví dụ:
     this.selectedFile = null;
     this.imageUrl = 'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg';

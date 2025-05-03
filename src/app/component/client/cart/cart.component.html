@@ -3,7 +3,7 @@
 <!--</div>-->
 
 <app-model-notify-succsess [isModalOpenaa]="notifySuccsess" />
-<app-modal-notify-error [isModalOpen]="notifyError"/>
+<app-modal-notify-error [isModalOpen]="notifyError" />
 <div class="container-fluid">
   <div class="background-box">
     <!-- <img src="../../../assets/images/backgroundCart.jpeg" alt=""> -->
@@ -18,7 +18,7 @@
       </div>
       <div class="cart-allProduct">
         <p class="clear-cart" style="color: black; margin-left: 20px; " (click)="clearCart()"><i
-          class="fa-solid fa-square-xmark"></i>{{ 'Xóa giỏ hàng' | translate }}</p>
+            class="fa-solid fa-square-xmark me-1"></i>{{ 'Xóa giỏ hàng' | translate }}</p>
 
         <!-- render product cart -->
 
@@ -52,7 +52,7 @@
                   </p>
                   <p class="item-color">
                     <span>{{ "Kích thước:" | translate }} <span class="text-size-color">MEN
-                      {{ getProductDetailByProductVariantId(cart.productVariantId)?.size }}</span>
+                        {{ getProductDetailByProductVariantId(cart.productVariantId)?.size }}</span>
                     </span>
                   </p>
                 </div>
@@ -69,8 +69,8 @@
                                     getProductDetailByProductVariantId(cart.productVariantId)?.productId ?? 0,
                                     getProductDetailByProductVariantId(cart.productVariantId)?.colorId ?? 0,
                                     getProductDetailByProductVariantId(cart.productVariantId)?.sizeId ?? 0)"
-                           [value]="cart.quantity" [name]="cart.id" type="number">
-                    <span class="input-group-text btn-group-qty" (click)="redoubleQty(cart.quantity,cart.id,
+                      [value]="cart.quantity" [name]="cart.id" type="number">
+                    <span class="input-group-text btn-group-qty btn-redoubleQty" (click)="redoubleQty(cart.quantity,cart.id,
                                     getProductDetailByProductVariantId(cart.productVariantId)?.productId ?? 0,
                                     getProductDetailByProductVariantId(cart.productVariantId)?.colorId ?? 0,
                                     getProductDetailByProductVariantId(cart.productVariantId)?.sizeId ?? 0)
@@ -84,7 +84,7 @@
               <div class="item-inforPrice_btnRemove">
                 <span class="item-btnRemove" (click)="deleteCart(cart.id)"><a>{{
                     "Xóa" | translate
-                  }}</a></span>
+                    }}</a></span>
                 <div class="item-price">
                   <span class="textTotal">
                     <span>Giá: </span>
@@ -95,9 +95,9 @@
                         *ngIf=" getProductDetailByProductVariantId(cart.productVariantId)?.basePrice  === getProductDetailByProductVariantId(cart.productVariantId)?.salePrice"
                         class="product-item-priceInit">
                         {{
-                          getCurrencyPrice(getProductDetailByProductVariantId(cart.productVariantId)?.basePrice
-                            ?? 0, currentCurrencyDetail?.rateToBase ??
-                            1, currentCurrencyDetail?.code ?? '')
+                        getCurrencyPrice(getProductDetailByProductVariantId(cart.productVariantId)?.basePrice
+                        ?? 0, currentCurrencyDetail?.rateToBase ??
+                        1, currentCurrencyDetail?.code ?? '')
                         }}
 
                       </span>
@@ -109,18 +109,18 @@
                         <span class="product-item-priceSale" style="color: red;">
 
                           {{
-                            getCurrencyPrice(getProductDetailByProductVariantId(cart.productVariantId)?.salePrice
-                              ?? 0, currentCurrencyDetail?.rateToBase ??
-                              1, currentCurrencyDetail?.code ?? '')
+                          getCurrencyPrice(getProductDetailByProductVariantId(cart.productVariantId)?.salePrice
+                          ?? 0, currentCurrencyDetail?.rateToBase ??
+                          1, currentCurrencyDetail?.code ?? '')
                           }}
 
                         </span>
                         <br>
                         <span class="product-item-priceInit" style="text-decoration: line-through;">
                           {{
-                            getCurrencyPrice(getProductDetailByProductVariantId(cart.productVariantId)?.basePrice
-                              ?? 0, currentCurrencyDetail?.rateToBase ??
-                              1, currentCurrencyDetail?.code ?? '')
+                          getCurrencyPrice(getProductDetailByProductVariantId(cart.productVariantId)?.basePrice
+                          ?? 0, currentCurrencyDetail?.rateToBase ??
+                          1, currentCurrencyDetail?.code ?? '')
                           }}
 
                         </span>
@@ -145,9 +145,9 @@
                       *ngIf="getProductDetailByProductVariantId(cart.productVariantId)?.basePrice == getProductDetailByProductVariantId(cart.productVariantId)?.salePrice">
 
                       {{
-                        getCurrencyPrice((getProductDetailByProductVariantId(cart.productVariantId)?.basePrice
-                          ?? 0) * cart.quantity, currentCurrencyDetail?.rateToBase ??
-                          1, currentCurrencyDetail?.code ?? '')
+                      getCurrencyPrice((getProductDetailByProductVariantId(cart.productVariantId)?.basePrice
+                      ?? 0) * cart.quantity, currentCurrencyDetail?.rateToBase ??
+                      1, currentCurrencyDetail?.code ?? '')
                       }}
 
 
@@ -157,9 +157,9 @@
 
 
                       {{
-                        getCurrencyPrice((getProductDetailByProductVariantId(cart.productVariantId)?.salePrice
-                          ?? 0) * cart.quantity, currentCurrencyDetail?.rateToBase ??
-                          1, currentCurrencyDetail?.code ?? '')
+                      getCurrencyPrice((getProductDetailByProductVariantId(cart.productVariantId)?.salePrice
+                      ?? 0) * cart.quantity, currentCurrencyDetail?.rateToBase ??
+                      1, currentCurrencyDetail?.code ?? '')
                       }}
                     </ng-container>
 
@@ -173,8 +173,8 @@
 
         <div class="cart-order">
           <div class="priceBill">
-            <p class="total-decor-bold"><span>{{ "TỔNG SỐ LƯỢNG" | translate }} </span>  <span>
-              {{totalCartQty()}} {{ "SẢN PHẨM" | translate }}</span></p>
+            <p class="total-decor-bold"><span>{{ "TỔNG SỐ LƯỢNG" | translate }} </span> <span>
+                {{totalCartQty()}} {{ "SẢN PHẨM" | translate }}</span></p>
             <hr>
             <ng-container *ngIf="appliedCoupon">
               <p class="total-decor">
@@ -183,16 +183,16 @@
                   <ng-container *ngIf="appliedCoupon.discountType === 'PERCENTAGE'">
                     -{{ appliedCoupon.discountValue }}%
                     ( {{
-                      getCurrencyPrice(getDiscountAmount(),
-                        currentCurrencyDetail?.rateToBase ?? 1,
-                        currentCurrencyDetail?.code ?? '')
+                    getCurrencyPrice(getDiscountAmount(),
+                    currentCurrencyDetail?.rateToBase ?? 1,
+                    currentCurrencyDetail?.code ?? '')
                     }})
                   </ng-container>
                   <ng-container *ngIf="appliedCoupon.discountType === 'FIXED'">
                     -{{
-                      getCurrencyPrice(appliedCoupon.discountValue ?? 0,
-                        currentCurrencyDetail?.rateToBase ?? 1,
-                        currentCurrencyDetail?.code ?? '')
+                    getCurrencyPrice(appliedCoupon.discountValue ?? 0,
+                    currentCurrencyDetail?.rateToBase ?? 1,
+                    currentCurrencyDetail?.code ?? '')
                     }}
                   </ng-container>
                 </span>
@@ -204,8 +204,8 @@
 
                 {{
                 getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ??
-                  1, currentCurrencyDetail?.code ?? '')
-              }}
+                1, currentCurrencyDetail?.code ?? '')
+                }}
 
 
               </span>
@@ -213,9 +213,9 @@
             <hr>
             <p class="total-decor-bold"><span>{{ "TỔNG HÓA ĐƠN" | translate }} </span> <span> {{
                 getCurrencyPrice(getTotalAfterDiscount()
-                  ?? 0, currentCurrencyDetail?.rateToBase ??
-                  1, currentCurrencyDetail?.code ?? '')
-              }}
+                ?? 0, currentCurrencyDetail?.rateToBase ??
+                1, currentCurrencyDetail?.code ?? '')
+                }}
               </span></p>
           </div>
           <nav class="fr-transition-btn-cards">
@@ -223,11 +223,11 @@
               <li class="btn">
                 <button style="text-decoration: none">
                   <div class="fr-link-wrapper fr-flbox middle"><span class="block-icon"><span class="mr-xxs"><span
-                    class="fr-icon coupon" aria-hidden="true" style="font-size: 24px;"></span></span><span
-                    class="text">Phiếu giảm giá</span><span
-                    style="position: absolute; right: 0px; top: calc(50% - 12px);"><span class="fr-icon"
-                                                                                         aria-hidden="true" style="font-size: 24px;"><svg xmlns="http://www.w3.org/2000/svg"
-                                                                                                                                          viewBox="0 0 24 24" width="24" height="24">
+                          class="fr-icon coupon" aria-hidden="true" style="font-size: 24px;"></span></span><span
+                        class="text">Phiếu giảm giá</span><span
+                        style="position: absolute; right: 0px; top: calc(50% - 12px);"><span class="fr-icon"
+                          aria-hidden="true" style="font-size: 24px;"><svg xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24" width="24" height="24">
                             <path fill="#757575" fill-rule="evenodd">
                             </path>
                           </svg></span></span></span>
@@ -245,15 +245,16 @@
 
 
           <div class="priceBill">
-            <div class="btnBuyCart slide_leftbtnBuyCart" [routerLink]="['../checkout']"> {{
-                "MUA NGAY" |
-                  translate
-              }}
-            </div>
+            <div id="btn-buy-now"
+            class="btnBuyCart slide_leftbtnBuyCart"
+            [ngClass]="{ disabled: cartIsEmpty }"
+            [routerLink]="cartIsEmpty ? null : ['../checkout']">
+            {{ "MUA NGAY" | translate }}
+          </div>
             <!-- <span class="hr-element-decor"><hr>or <hr></span -->
             <hr>
-            <div class="btnBuyToContinue slide_leftbtnBuyToContinue" [routerLink]="['../product']">{{
-                "TIẾP TỤC MUA SẮM" | translate
+            <div id="continue-buy" class="btnBuyToContinue slide_leftbtnBuyToContinue" [routerLink]="['../product']">{{
+              "TIẾP TỤC MUA SẮM" | translate
               }}
             </div>
           </div>

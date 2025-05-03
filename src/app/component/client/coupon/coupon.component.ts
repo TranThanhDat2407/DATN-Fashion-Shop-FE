@@ -50,7 +50,8 @@ export class CouponComponent implements OnInit {
   ngOnInit() {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
     console.log(this.sessionId);
-    this.userId = this.tokenService.getUserId() // Gọi API khi component được khởi tạo4
+    this.userId = this.tokenService.getUserId()
+    console.log(this.userId)// Gọi API khi component được khởi tạo4
     this.loadCoupons()
     this.cartService.getAllCart(this.userId,this.sessionId ).subscribe({
       next: (response) => {

@@ -13,7 +13,10 @@ import {CartDTO} from '../../../dto/CartDTO';
 import {CouponService} from '../../../services/client/CouponService/coupon-service.service';
 import {CouponLocalizedDTO} from '../../../dto/coupon/CouponClientDTO';
 import {Currency} from '../../../models/Currency';
-import {TranslatePipe} from '@ngx-translate/core';
+import {TranslateModule} from '@ngx-translate/core';
+import {catchError, firstValueFrom, map, Observable, of, tap} from 'rxjs';
+import {CurrencyService} from '../../../services/currency/currency-service.service';
+import {ApiResponse} from '../../../dto/Response/ApiResponse';
 
 @Component({
   selector: 'app-checkout',
@@ -21,12 +24,14 @@ import {TranslatePipe} from '@ngx-translate/core';
   imports: [
     RouterOutlet,
     ShippingComponent,
-    PaymentComponent, ReviewOrderComponent, NgIf, RouterLink, TranslatePipe, CurrencyPipe
+    PaymentComponent, ReviewOrderComponent, NgIf, RouterLink, CurrencyPipe,TranslateModule
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent implements OnInit {
+  currentLang: string = '';
+  currentCurrency: string = '';
   shippingInfo: any = {};
   currentStep: string = 'shipping'; // Mặc định là 'shipping'
   cartData: CartDTO | null = null;
@@ -41,7 +46,8 @@ export class CheckoutComponent implements OnInit {
               private tokenService: TokenService,
               private cookieService: CookieService,
               private couponService : CouponService,
-              private checkoutService : CheckoutService
+              private checkoutService : CheckoutService,
+              private currencySevice: CurrencyService,
 
   ) {
     this.sessionId = this.cookieService.get('SESSION_ID') || '';
@@ -49,7 +55,10 @@ export class CheckoutComponent implements OnInit {
 
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void>  {
+    this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
+    this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
+
     this.userId = this.tokenService.getUserId() ?? 0;
     // Theo dõi sự thay đổi URL để cập nhật currentStep
     this.route.url.subscribe((urlSegments) => {
@@ -57,15 +66,15 @@ export class CheckoutComponent implements OnInit {
       this.currentStep = lastSegment || 'shipping';
     });
 
-    this.checkoutService.shippingInfo$.subscribe(info => {
-      if(info){
-        this.shippingInfo = info;
-        console.log('CheckoutComponent -  Nhận shippingInfo:', info );
+    this.checkoutService.shippingInfo$.subscribe(shippingInfo => {
+      if (shippingInfo) {
+        this.shippingInfo = shippingInfo;
+        console.log('CheckoutComponent -  Nhận shippingInfo:', shippingInfo);
       }
 
     });
 
-    this.cartService.getAllCart(this.userId,this.sessionId ).subscribe({
+    this.cartService.getAllCart(this.userId, this.sessionId).subscribe({
       next: (response) => {
         this.cartData = response.data;
         this.checkoutService.setCartData(this.cartData);
@@ -82,6 +91,8 @@ export class CheckoutComponent implements OnInit {
       console.log('⚠️ Không có mã giảm giá nào!');
     }
     console.log("Danh sách sản phẩm đã tải:", this.qtyTotal);
+
+    this.fetchCurrency();
 
   }
 
@@ -115,9 +126,58 @@ export class CheckoutComponent implements OnInit {
   }
 
   getTotalAfterDiscount(): number {
-    const total = (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount();
-    return Math.max(0, total + (this.shippingInfo?.shippingFee ?? 0));
-    // return Math.max((this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(), 0); // Đảm bảo không bị âm
+    return Math.max(
+      (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount(),
+      0
+    );
   }
+
+  getVATAmount(): number {
+    const subtotal = (this.cartData?.totalPrice ?? 0) - this.getDiscountAmount();
+    const taxRate = 0.08;
+    return Math.round(subtotal * taxRate * 100) / 100;
+  }
+
+  getGrandTotal(): number {
+    const subtotal = this.getTotalAfterDiscount();
+    const vat = this.getVATAmount();
+    const shippingFee = this.shippingInfo?.shippingFee ?? 0;
+    return subtotal + vat + shippingFee;
+  }
+
+
+  fetchCurrency() {
+    this.getCurrency().subscribe(({ data }) => {
+      const index = { USD: 0, VND: 1, JPY: 2 }[this.currentCurrency] ?? 0;
+      const currency = data?.[index] || { code: '', name: '', symbol: '', exchangeRate: 0 };
+      this.currentCurrencyDetail = currency
+      console.log('Thông tin tiền tệ:', currency);
+    });
+  }
+
+
+  getCurrency(): Observable<ApiResponse<Currency[]>> {
+    return this.currencySevice.getCurrency().pipe(
+      tap(response => console.log("📢 API Currency Response:", response)), // Log dữ liệu API
+      map((response: ApiResponse<Currency[]>) => {
+        if (!response.data || response.data.length === 0) {
+          console.warn("⚠️ API không trả về danh sách tiền tệ hợp lệ!");
+          return { ...response, data: [{ id: 1, code: 'USD', name: 'US Dollar', symbol: '$', rateToBase: 1, isBase: true }] };
+        }
+        return response;
+      }),
+      catchError(error => {
+        console.error('❌ Lỗi khi gọi API tiền tệ:', error);
+        return of({
+          timestamp: new Date().toISOString(),
+          status: 500,
+          message: 'Lỗi khi gọi API tiền tệ',
+          data: [{ id: 1, code: 'USD', name: 'US Dollar', symbol: '$', rateToBase: 1, isBase: true }],
+          errors: ['Không thể lấy dữ liệu tiền tệ']
+        } as ApiResponse<Currency[]>);
+      })
+    );
+  }
+
 
 }

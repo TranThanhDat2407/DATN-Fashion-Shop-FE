@@ -1,0 +1,604 @@
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.select-box {
+  flex: 9;
+  padding: 10px 10px 0px 10px;
+}
+
+.sortBox {
+  text-align: end;
+
+  margin-left: -50px;
+  flex: 1;
+  display: flex;
+  // flex-direction: column;
+  justify-content: end;
+
+}
+
+.col-1.mt-2 img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.col-1.mt-2:hover img {
+  transform: scale(0.9);
+}
+
+.tools-title {
+  transition: transform 0.3s ease-in-out;
+}
+
+.tools-title:hover {
+  transform: scale(0.9);
+  cursor: pointer;
+}
+
+.tools-title {
+
+  gap: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  height: 60px;
+  border-right: 3px solid #e7e7e7;
+  width: 110px;
+  // background-color: rgb(97, 16, 16);
+  font-size: 15px;
+  font-family: "Kanit", sans-serif;
+  margin-top: -5px;
+}
+
+.content-fiter-tools {
+  padding-top: 10px;
+  gap: 5px;
+  display: flex;
+  height: auto;
+  // background-color: rgb(34, 114, 126);
+}
+
+.tool-elements {
+  gap: 10px;
+  // background-color: red;
+  width: 10%;
+  display: flex;
+  overflow-x: auto;
+  justify-content: start;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  scrollbar-width: thin;
+  -ms-overflow-style: scrollbar;
+}
+
+.tool-elements::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.tool-elements::-webkit-scrollbar-thumb {
+  // background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 3px;
+
+}
+
+.tool-elements::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.element-select {
+  color: #2f2f2f;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 50px;
+  box-sizing: border-box;
+
+}
+
+.element-select select {
+  font-weight: 600;
+  border: 2px solid #dadada;
+  border-radius: 3px;
+  font-size: 13px;
+
+  overflow: hidden;
+}
+
+.element-select select option {
+  display: inline-flex;
+  overflow: hidden;
+  font-size: 13px;
+  border: 1px solid #e7e7e7;
+  height: auto;
+  padding: 10px 20px;
+  font-family: "Kanit", sans-serif;
+  white-space: normal;
+  overflow-wrap: break-word;
+  border-radius: 3px;
+}
+
+
+
+.tool-search {
+  display: flex;
+  align-items: center;
+  /* Căn giữa theo chiều dọc */
+  justify-content: left;
+  /* Căn giữa theo chiều ngang */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  flex: 1;
+
+}
+
+.count-product {
+  flex: 1;
+  min-width: 90px;
+  text-align: left;
+  font-family: "Kanit", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  flex: 0.8;
+}
+
+.search-product {
+  height: 60px;
+  display: flex;
+  /* Đảm bảo input nằm giữa */
+  justify-content: center;
+  /* Căn giữa theo chiều ngang */
+  align-items: center;
+  /* Căn giữa theo chiều dọc */
+}
+
+input {
+  padding-left: 10px;
+  font-family: "Kanit", sans-serif;
+
+}
+
+.search-product input {
+  width: 100%;
+  height: 70%;
+
+  flex: 9;
+  border: 2px solid #dadada;
+  border-radius: 3px;
+
+
+}
+.form-select{
+  padding: 10px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: white;
+  height: 50px;
+}
+.mobile-text-product {
+  display: none;
+}
+
+
+.custom-select {
+  position: relative;
+  width: 100%;
+  font-family: "Kanit", sans-serif;
+}
+
+.selected-item {
+  padding: 10px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.selected-item img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* Dropdown ẩn ban đầu */
+.dropdown {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #000000;
+  border-top: none;
+  background: white;
+  z-index: 1000;
+  max-height: 0; /* Ẩn dropdown */
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Khi dropdown mở */
+.custom-select:hover .dropdown {
+  max-height: 200px; /* Trượt xuống */
+  opacity: 1;
+}
+
+/* Input trong dropdown */
+.dropdown input {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  outline: none;
+}
+
+/* Danh sách dropdown */
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 130px;
+  overflow-y: auto; /* Cho phép cuộn */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome & Safari */
+.dropdown ul::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown li {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown li img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.dropdown li:hover {
+  background: #f1f1f1;
+}
+
+
+.custom-select {
+  position: relative;
+  width: 20%;
+  font-family: "Kanit", sans-serif;
+}
+
+.selected-item {
+  padding: 10px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.selected-item img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* Dropdown ẩn ban đầu */
+.dropdown {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #000000;
+  border-top: none;
+  background: white;
+  z-index: 1000;
+  max-height: 0; /* Ẩn dropdown */
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Khi dropdown mở */
+.custom-select:hover .dropdown {
+  max-height: 200px; /* Trượt xuống */
+  opacity: 1;
+}
+
+/* Input trong dropdown */
+.dropdown input {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  outline: none;
+}
+
+/* Danh sách dropdown */
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 130px;
+  overflow-y: auto; /* Cho phép cuộn */
+  scrollbar-width: none; /* Ẩn thanh cuộn trên Firefox */
+  -ms-overflow-style: none; /* Ẩn thanh cuộn trên IE và Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome & Safari */
+.dropdown ul::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown li {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown li img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.dropdown li:hover {
+  background: #f1f1f1;
+}
+
+
+.container-fluid {
+  padding: 10px;
+  background-color: #f5f5f5;
+
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  /* Đặt 2 cột với tỷ lệ khác nhau */
+  grid-template-rows: auto auto;
+  column-gap: 10px
+}
+
+select {
+  border-radius: 0;
+}
+
+input {
+  border-radius: 1px;
+  font-family: 600;
+  font-family: "Kanit", sans-serif;
+
+}
+
+option {
+  border-radius: 1px;
+  font-family: 600;
+  font-family: "Kanit", sans-serif;
+
+}
+
+.custom-select {
+  position: relative;
+  width: 200px;
+  font-family: Arial, sans-serif;
+}
+
+.selected-option {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.selected-option img.thumbnail,
+.options img.thumbnail {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.options {
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+}
+
+.options li {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.options li:hover {
+  background-color: #e6e6e6;
+}
+
+.form-label {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+
+
+}
+
+.edit-category-form {
+  padding: 20px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 3px;
+  border: 0.5px solid #e5e5e5;
+  display: grid;
+
+  grid-template-rows: 0.2fr 0.2fr 0.2fr 1fr auto;
+  row-gap: 12px;
+
+
+}
+
+.edit-category-image {
+  padding: 10px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #ccc;
+
+  border-radius: 3px;
+}
+
+.custom-select {
+  position: relative;
+  width: 100%;
+  font-family: "Kanit", sans-serif;
+}
+
+.selected-item {
+  padding: 10px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+
+.selected-item img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+/* Dropdown ẩn ban đầu */
+.dropdown {
+  position: absolute;
+  width: 100%;
+  border: 1px solid #000000;
+  border-top: none;
+  background: white;
+  z-index: 1000;
+  max-height: 0;
+  /* Ẩn dropdown */
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Khi dropdown mở */
+.custom-select:hover .dropdown {
+  max-height: 200px;
+  /* Trượt xuống */
+  opacity: 1;
+}
+
+/* Input trong dropdown */
+.dropdown input {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  outline: none;
+}
+
+/* Danh sách dropdown */
+.dropdown ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 130px;
+  overflow-y: auto;
+  /* Cho phép cuộn */
+  scrollbar-width: none;
+  /* Ẩn thanh cuộn trên Firefox */
+  -ms-overflow-style: none;
+  /* Ẩn thanh cuộn trên IE và Edge */
+}
+
+/* Ẩn thanh cuộn trên Chrome & Safari */
+.dropdown ul::-webkit-scrollbar {
+  display: none;
+}
+
+.dropdown li {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown li img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.dropdown li:hover {
+  background: #f1f1f1;
+}
+
+@media (max-width: 1000px) {
+  label {
+    font-size: 0.5px;
+  }
+
+  .btn-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+  }
+
+  .pushable {
+    margin-bottom: 10px;
+  }
+}
+
+.category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  background: white;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: #f1f1f1;
+  }
+}
+
+.delete-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+
+  &:hover {
+    background: #cc0000;
+  }
+}
+
+.no-category {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  margin-top: 10px;
+}

@@ -1,17 +1,42 @@
 <div class="container-header">
-  <ul  class="header-item" >
+  <ul class="header-item">
     <li>
       {{store?.name}} / <span> {{title_header}} </span>
     </li>
     <li>
-      <ul >
+      <ul>
         <li class="name-admin">
           {{ userDetail?.firstName }} {{ userDetail?.lastName }}
         </li>
         <p>{{ userDetail?.role?.name }}</p>
         <li><img src="../../../../assets/images/user (1).png" alt="" width="17"></li>
         <li><img src="../../../../assets/images/setting.png" alt="" width="17"></li>
-        <li><img src="../../../../assets/images/bell.png" alt="" width="17"></li>
+        <li class="nav-item">
+          <!-- Nút chuông thông báo -->
+          <button class="btn notif-btn position-relative" type="button" (click)="isNotify = !isNotify">
+            <i class="bi bi-bell"></i>
+            <span class="notif-badge" *ngIf="(totalNotify$ | async) !== 0">
+      {{ totalNotify$ | async }}
+    </span>
+          </button>
+
+          <!-- Thông báo hiển thị khi isNotify = true -->
+          <div *ngIf="isNotify" class="notification-panel">
+            <div *ngFor="let notify of notifications" class="notification-item d-flex align-items-center">
+              <img [src]="'http://localhost:8080/uploads/images/products/' + notify.imageUrl" alt="Product Image" class="notif-img">
+              <div class="notif-text">
+                <p class="mb-1 fw-bold text-truncate">{{notify.title}}</p>
+                <span class="text-muted small text-truncate">{{notify.message}}</span>
+              </div>
+            </div>
+
+            <div class="text-center py-2">
+              <a [routerLink]="['/staff',store?.id,'notify']" class="text-black fw-semibold">
+                {{ "Xem tất cả thông báo" | translate }}
+              </a>
+            </div>
+          </div>
+        </li>
       </ul>
     </li>
   </ul>

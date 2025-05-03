@@ -1,0 +1,16 @@
+<app-header-admin [title_header]="'Promotion'" [routerLinkString]="'/admin/create_promotion'" />
+
+
+<div class="container-list">
+  <app-table *ngIf="dataFullElementProduct" [currentPage]="page"
+             [tableData]="dataFullElementProduct?.content?.flat() || []" [dataPage]="dataFullElementProduct"
+             [tableHeaders]="header" [routerLinkString]="'/admin/edit_promotion'"
+        (itemsPerPageChanged)="onItemsPerPageChange($event)"
+        [eventClickDelete]="removePromotion" 
+             (pageChanged)="onPageChange($event)">
+
+  </app-table>
+</div>
+
+
+

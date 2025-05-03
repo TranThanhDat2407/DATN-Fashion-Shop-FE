@@ -1,9 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule, NgClass } from '@angular/common';
-import { firstValueFrom } from 'rxjs';
+import {firstValueFrom, take} from 'rxjs';
 import { NavigationService } from '../../../services/Navigation/navigation.service';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+
+interface OrderResponse {
+  orderId: number;
+  userId: number;
+  couponId?: number | null;
+  shippingMethodName: string;
+  shippingAddress: string;
+  paymentMethodName: string;
+  orderStatusName: string;
+}
 
 @Component({
   selector: 'app-payment-success',
@@ -18,28 +28,26 @@ export class PaymentSuccessComponent implements OnInit {
   currentLang: string = '';
   currentCurrency: string = '';
   userId: any = null;
+  isLoading: boolean = true;
+
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private navigationService: NavigationService,
     private http: HttpClient
-  ) {}
+  ) {
+  }
 
   async ngOnInit(): Promise<void> {
     this.currentLang = await firstValueFrom(this.navigationService.currentLang$);
     this.currentCurrency = await firstValueFrom(this.navigationService.currentCurrency$);
 
-    this.route.queryParams.subscribe(params => {
+
+    this.route.queryParams.pipe(take(1)).subscribe(params => {
+
       this.paymentData = params;
-      const responseCode = params['vnp_ResponseCode']?.toString();
-      const transactionStatus = params['vnp_TransactionStatus']?.toString();
-
-      this.isSuccess = responseCode === '00' && transactionStatus === '00';
-
-      if (this.isSuccess) {
-        this.verifyPayment(params);
-      }
+      this.verifyPayment(params);
     });
   }
 
@@ -54,10 +62,22 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
 
-  formatCurrency(amount: string): string {
+  formatCurrency(amount: any): string {
     if (!amount) return '0 VND';
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(parseInt(amount) / 100);
+
+    let amountNumber = Number(amount); // Chuyển đổi về số
+
+    if (isNaN(amountNumber)) {
+      console.error("⚠ Lỗi: Giá trị amount không hợp lệ:", amount);
+      return '0 VND';
+    }
+
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amountNumber / 100);
   }
+
 
   getStatusText(status: string): string {
     return status === '00' ? 'Giao dịch thành công' : 'Giao dịch thất bại';
@@ -66,7 +86,6 @@ export class PaymentSuccessComponent implements OnInit {
   clearCart(userId: number | null, sessionId: string | null): void {
     console.log("🛒 Đang gọi API xóa giỏ hàng...");
     console.log("🔍 UserId:", userId);
-    console.log("🔍 SessionId:", sessionId);
 
     if (!userId && !sessionId) {
       console.error("⚠ Không có userId hoặc sessionId, không thể xóa giỏ hàng!");
@@ -77,7 +96,7 @@ export class PaymentSuccessComponent implements OnInit {
     if (userId) params.userId = userId;
     if (sessionId) params.sessionId = sessionId;
 
-    this.http.delete(`http://localhost:8080/api/v1/cart/clear`, { params }).subscribe({
+    this.http.delete(`http://localhost:8080/api/v1/cart/clear`, {params}).subscribe({
       next: () => console.log('✅ Giỏ hàng đã được xóa thành công!'),
       error: (err) => {
         console.error('⚠ Lỗi khi xóa giỏ hàng:', err);
@@ -87,31 +106,35 @@ export class PaymentSuccessComponent implements OnInit {
   }
 
   verifyPayment(vnpParams: any) {
-    console.log("📤 Dữ liệu gửi lên backend:", vnpParams);
+    console.log("📤 [VNPay] Bắt đầu xác thực thanh toán:", vnpParams);
 
+    this.isLoading = true; // Hiển thị trạng thái loading trước khi gửi yêu cầu
 
-    this.http.post('http://localhost:8080/api/v1/orders/return', vnpParams)
-      .subscribe({
+    this.http.post<OrderResponse>('http://localhost:8080/api/v1/orders/return', vnpParams, {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    }).subscribe({
       next: (res) => {
-        console.log("✅ Giao dịch hợp lệ:", res);
-        this.userId = this.getUserInfo();
-        const sessionId = localStorage.getItem('sessionId') || null;
-        if (this.userId) {
-          this.clearCart(this.userId, sessionId);
+        console.log("✅ [VNPay] Giao dịch hợp lệ:", res);
+        // vnpParams.vnp_ResponseCode === "00" && vnpParams.vnp_TransactionStatus === "00"
+        this.isSuccess = res.orderStatusName === "PROCESSING";
+        this.isLoading = false;
+
+        if (this.isSuccess) {
+          this.userId = this.getUserInfo();
+          const sessionId = localStorage.getItem('sessionId') || null;
+
+          if (this.userId) {
+            this.clearCart(this.userId, sessionId);
+          }
+        } else {
+          console.warn("⚠ Giao dịch không thành công, không xóa giỏ hàng.");
         }
       },
       error: (err: HttpErrorResponse) => {
-        if (err.error && err.error.message) {
-          console.error("⚠ Giao dịch không hợp lệ:", err.error.message);
-
-        } else {
-          console.error("⚠ Giao dịch không hợp lệ, lỗi không xác định:", err);
-        }
+        console.error("⚠ Lỗi khi xác thực giao dịch:", err);
+        this.isSuccess = false;
+        this.isLoading = false; // Tắt trạng thái loading dù có lỗi
       }
     });
   }
-
-
-
-
 }

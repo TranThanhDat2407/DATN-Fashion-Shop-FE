@@ -163,9 +163,9 @@
 
                   <div class="dropdown" *ngIf="isOpen">
                     <!-- Đã thêm [ngModelOptions]="{standalone: true}" -->
-                    <input type="text" [(ngModel)]="searchText"  [ngModelOptions]="{standalone: true}" placeholder="Tìm kiếm sản phẩm..." name="searchText" />
+                    <input class="searchLocation" type="text" [(ngModel)]="searchText"  [ngModelOptions]="{standalone: true}" placeholder="Tìm kiếm sản phẩm..." name="searchText" />
                     <ul>
-                      <li *ngFor="let province of filteredProvinces" (click)="selectItem(province)">
+                      <li class="showLocation" *ngFor="let province of filteredProvinces" (click)="selectItem(province)">
                         {{ province.name }}
                       </li>
                     </ul>

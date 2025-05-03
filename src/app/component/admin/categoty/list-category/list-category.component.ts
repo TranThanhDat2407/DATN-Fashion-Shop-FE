@@ -12,7 +12,6 @@ import { ToastrService } from 'ngx-toastr';
 import { CategoryAdmin } from '../../../../models/Category/CategotyAdmin';
 import { FormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { EditOrderComponent } from '../../order/edit-order/edit-order.component';
 import { DialogComponent } from '../../dialog/dialog.component';
 import { CategoryDTO } from '../../../../dto/CategoryDTO';
 import { LanguageDTO } from '../../../../dto/LanguageDTO';
@@ -51,7 +50,7 @@ export class ListCategoryComponent implements OnInit {
 
 
   page: number = 0
-  size: number = 7
+  size: number = 10
   nameSearch: string = ''
   parentIdSearch: any = null
   sortBy: string = 'id'
@@ -361,7 +360,11 @@ export class ListCategoryComponent implements OnInit {
 
 
 
-
+  onItemsPerPageChange(newSize: number) {
+    this.size = newSize;
+    this.page = 0;
+    this.fetchCategory(); // Gọi lại API với size mới
+  }
 
 
   onPageChange(newPage: number): void {
@@ -383,13 +386,13 @@ export class ListCategoryComponent implements OnInit {
   }
 
   async resetFiter(): Promise<void> {
- 
+
     this.isActive = null;
     this.sortBy = 'id'
     this.sortDir = 'desc'
     this.nameSearch = ''
     this.parentIdSearch = ''
-    this.parentId= ''
+    this.parentId = ''
     this.selectedCategoryParent = null;
     this.selectedCategoryChild = null;
     this.selectedCategorySubChild = null;
@@ -415,8 +418,8 @@ export class ListCategoryComponent implements OnInit {
     const response = await firstValueFrom(forkJoin(callApis))
     this.dataPageCategory = response.dataCategories
     this.dataParentCategories = response.dataParentCategory
-
     console.log(" run  fetchCategory")
+    
 
     // this.dataCategories = response.dataCategories?.content?.flat() || [];
 
@@ -501,12 +504,12 @@ export class ListCategoryComponent implements OnInit {
 
   changeActive = (item: any): void => {
     console.log('Category ID:', item.id);
-    
-    const newStatus = !item.isActive;  
+
+    const newStatus = !item.isActive;
     this.categoryAdminService.changeActive(item.id, newStatus).subscribe({
       next: (response) => {
         this.toastService.success('Success', 'Category change isActive successfully!', { timeOut: 3000 });
-        item.isActive = newStatus; 
+        item.isActive = newStatus;
       },
       error: (error) => {
         this.toastService.error('Error', 'There was an error deleting the category.', { timeOut: 3000 });
@@ -547,7 +550,7 @@ export class ListCategoryComponent implements OnInit {
         try {
           await firstValueFrom(this.categoryAdminService.deleteCategory(id));
           console.log(`Deleted category with id ${id}`);
-          this.toastService.success('Success', 'Category deleted successfully!', { timeOut: 1000 });
+          this.toastService.success('Category deleted successfully!', 'Success', { timeOut: 1000 });
         } catch (error) {
           console.error(`Error deleting category with id ${id}`, error);
           this.toastService.error('Error', 'There was an error deleting the category.', { timeOut: 1000 });

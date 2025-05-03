@@ -1,0 +1,117 @@
+<app-header-admin [title_header]="'Create User'" [routerLinkString]="'/admin/list_user'" />
+<app-modal-register-success [isModalOpenaa]="notifySuccsess"/>
+<form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="container mt-4">
+  <div class="row g-3">
+    <!-- First Name -->
+    <div class="col-md-6">
+      <label for="first_name" class="form-label">First Name</label>
+      <input type="text" id="first_name" name="first_name" [(ngModel)]="first_name" required class="form-control"/>
+    </div>
+
+    <!-- Last Name -->
+    <div class="col-md-6">
+      <label for="last_name" class="form-label">Last Name</label>
+      <input type="text" id="last_name" name="last_name" [(ngModel)]="last_name" required class="form-control"/>
+    </div>
+
+    <!-- Phone -->
+    <div class="col-md-6">
+      <label for="phone" class="form-label">Phone Number</label>
+      <input type="text" id="phone" name="phone" [(ngModel)]="phone" required
+             (ngModelChange)="checkPhone()"
+             pattern="^0(3[2-9]|5[2-9]|7[0|6-9]|8[1-9]|9[0-9])\d{7,8}$"
+             class="form-control"/>
+
+      <div *ngIf="phoneExists" class="text-danger">
+        {{ "Số điện thoại đã được sử dụng." | translate }}
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="col-md-6">
+      <label for="email" class="form-label">Email Address</label>
+      <input type="email"
+             id="email" name="email"
+             [(ngModel)]="email"
+             (ngModelChange)="checkEmail()"
+             required class="form-control"/>
+
+      <div *ngIf="emailExists" class="text-danger">
+        {{ "Email đã được sử dụng." | translate }}
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="col-md-6">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" id="password" name="password"
+             [(ngModel)]="password" required
+             pattern="^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$" #passwordCtrl="ngModel"
+             class="form-control"/>
+
+      <div *ngIf="passwordCtrl.touched && passwordCtrl.invalid" class="error mt-2">
+        <div *ngIf="passwordCtrl.errors?.['required']" class="text-danger">{{ "Vui lòng nhập mật khẩu." | translate }}</div>
+        <div *ngIf="passwordCtrl.errors?.['pattern']" class="text-danger">{{ "Mật khẩu phải có ít nhất 6 ký tự, gồm chữ hoa và số." | translate }}</div>
+      </div>
+    </div>
+
+    <!-- Gender -->
+    <div class="col-md-6">
+      <label for="gender" class="form-label">Gender</label>
+      <select id="gender" name="gender" [(ngModel)]="gender" required class="form-select">
+        <option value="">-- Select Gender --</option>
+        <option value="M">Male</option>
+        <option value="F">Female</option>
+        <option value="U">Other</option>
+      </select>
+    </div>
+
+    <!-- Date of Birth -->
+    <div class="col-md-6">
+      <label for="dateOfBirth" class="form-label">Date of Birth</label>
+      <input type="date" id="dateOfBirth" name="dateOfBirth" [(ngModel)]="dateOfBirth" required class="form-control"/>
+    </div>
+
+
+    <!-- role_id -->
+    <div class="col-md-6">
+      <label for="roleId" class="form-label fw-bold">Role</label>
+      <select id="roleId" class="form-select"
+              name="role_id"
+              [(ngModel)]="role_id"
+              required
+              #roleIdCtrl="ngModel"
+              >
+        <option value="">Choose Role</option>
+        <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+      </select>
+      <div *ngIf="roleIdCtrl.touched && roleIdCtrl.invalid" class="text-danger">
+        Please choose a role.
+      </div>
+    </div>
+
+    <!-- storeId -->
+    <div class="col-md-6" *ngIf="role_id == 3 || role_id == 4">
+      <label for="storeId" class="form-label">Store</label>
+      <select id="storeId"
+              class="form-select"
+              name="storeId"
+              [(ngModel)]="storeId"
+              [ngClass]="{ 'border border-danger': userForm.submitted && !storeId }"
+              required>
+        <option value="">Choose Store</option>
+        <option *ngFor="let store of stores" [value]="store.id">{{ store.name }}</option>
+      </select>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="col-12">
+      <button type="submit"
+              class="btn btn-primary w-100 mt-3"
+              [disabled]="!userForm.valid">
+        Create Account
+      </button>
+    </div>
+  </div>
+</form>
+

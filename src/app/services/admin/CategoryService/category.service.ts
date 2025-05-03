@@ -46,8 +46,11 @@ export class CategoryAdminService {
       params += `&sortDir=${encodeURIComponent(sortDir)}`;
     }
 
-    return this.http.get<ApiResponse<PageResponse<CategoryAdmin[]>>>(`${this.apiUrl}/en/admin${params}`);
+    return this.http.get<ApiResponse<PageResponse<CategoryAdmin[]>>>(`${this.apiUrl}/vi/admin${params}`);
   }
+
+
+  
 
   createCategory(formData: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}`, formData);

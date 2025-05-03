@@ -19,16 +19,32 @@
   z-index: -1;
 
 }
-.overlay {
+.form-new-address {
+  position: fixed;
+  inset: 0;
+  top: 100px;
+  max-width: 600px; /* Giảm chiều rộng */
+  max-height: 620px; /* Giảm chiều cao */
+  margin: auto;
+  padding: 15px; /* Giảm padding */
+  background: white;
+  border-radius: 10px;
+  z-index: 10000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); /* Giảm độ mờ của bóng */
+}
+
+.modal-overlay {
   position: absolute;
-  top: 0%;
+  top: 0;
   left: 0;
   width: 100%;
-  height: auto;
-  background-color:
-    rgb(255, 255, 255,0.4); /* Màu trắng với độ mờ 50% */
-  z-index: 1; /* Đặt lớp phủ nằm trên ảnh nền */
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.3); /* Giữ độ mờ */
+  z-index: 1;
 }
+
+
+
 .content-box {
   position: relative;
   z-index: 2; /* Giá trị cao hơn để hiển thị trên ảnh */
@@ -72,10 +88,9 @@
   background-color: rgba(0, 0, 0, 0.5);
   position: fixed;
   top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000;
+  z-index: 999;
 }
 
 span .fr-price-currency{
@@ -369,37 +384,40 @@ fr-btn primary {
 }
 
 
-/* modal */
-/* Center the modal on the screen */
-.modal-dialog {
-  max-width: 600px;
-  margin: 30px auto;
-}
 
-/* Style modal title */
-.modal-header {
-  border-bottom: none;
-}
-.modal-backdrop {
-  background-color: transparent
-}
 
-.modal-header h2 {
-  font-size: 1.5rem;
-  text-align: center;
-  color: #333;
-}
 
-/* Button styling */
-.modal-footer {
-  border-top: none;
-  display: flex;
-  justify-content: space-between;
-}
 
-.modal-footer .btn {
-  width: 45%;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .fr-btn {
   padding: 12px;
@@ -447,10 +465,6 @@ fr-btn primary {
   font-size: 18px;
 }
 
-/* Modal Body styling */
-.modal-body {
-  padding: 20px;
-}
 
 /* Button hover effects */
 .fr-btn.bg-black:hover {
@@ -771,14 +785,7 @@ button:hover {
   margin-left: .5em;
   margin-right: calc(-24px - .5em);
 }
-.modal {
-  --bs-modal-width: 770px;
-}
 
-.modal-content{
-  padding: 20px;
-  border-radius: 0;
-}
 .fr-icon{
   background-image: url(https://asset.uniqlo.com/g/icons/required_error.svg);
 }
@@ -800,16 +807,94 @@ button:hover {
   font-weight: 600;
 
 }
-.form-control, .form-select{
-  font-size: 13px;
-  padding: 12px;
-  border-radius: 0;
-  border:0.5px solid rgb(97% 97% 97%);
-  background-color: rgb(97% 97% 97%);
-  box-shadow: rgb(0% 0% 0% / 0) 0px 1px 0px 0px;
-  color: rgb(11% 11% 11%);
-  letter-spacing: 0.32px;
-  line-height: 23.536px;
+/* Đảm bảo input và select có viền rõ ràng */
+.form-control, .form-select {
+  border: 1px solid #ccc;  /* Viền xám nhẹ */
+  border-radius: 5px;      /* Bo góc mềm mại */
+  padding: 10px;
+  width: 100%;
+  font-size: 16px;
+  background-color: #fff;
+}
 
+.form-control:focus, .form-select:focus {
+  border-color: #000;   /* Khi focus, viền đậm hơn */
+  outline: none;        /* Xóa viền xanh mặc định */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Sửa lỗi nút xác nhận bị lệch và icon lấn vào */
+.row.g-3 {
+  display: flex;
+  justify-content: space-between; /* Căn nút đều */
+}
+
+.btn-address {
+  width: 100%;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 5px;
+}
+
+.btn-address:first-child {
+  background-color: #1b1b1b;
+  color: #fff;
+}
+
+.btn-address:first-child:hover {
+  background-color: #333;
+}
+
+.btn-address.border {
+  border: 1px solid #1b1b1b;
+  background: transparent;
+}
+
+.btn-address.border:hover {
+  background: #f0f0f0;
+}
+
+/* Sửa dropdown bị mất placeholder */
+.form-select {
+  appearance: none; /* Ẩn kiểu mặc định của trình duyệt */
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="black"><path d="M5 7l5 5 5-5H5z"/></svg>') no-repeat right 10px center;
+  background-size: 16px;
+}
+
+/* Giữ kích thước dropdown ổn định */
+.form-select option {
+  font-size: 16px;
+  padding: 5px;
+}
+
+
+
+
+
+
+
+/* Canh chỉnh nhãn và input */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+/* Kiểu chữ và căn chỉnh input */
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.form-group input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
 }
 

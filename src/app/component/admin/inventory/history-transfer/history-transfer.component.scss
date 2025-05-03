@@ -1,0 +1,25 @@
+th {
+    background-color: #f6f9fc;
+    text-transform: uppercase;
+    color: #8898aa;
+    font-size: 0.6rem;
+    padding: 20px 10px 20px 10px;
+    border: 1px solid #eef0f2;
+}
+.aa td{
+    background-color: rgba(64, 50, 255, 0.5) !important;
+}
+
+.active td{
+    background-color: rgba(255, 252, 50, 0.5) !important;
+}
+
+
+.highlight-row {
+    font-weight: bold;
+  }
+  
+  tr.highlight-row td {
+    background-color: rgba(255, 132, 0, 0.6) !important; /* Light Orange */
+  }
+  

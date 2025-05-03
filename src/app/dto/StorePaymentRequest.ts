@@ -7,4 +7,5 @@ export interface StorePaymentRequest  {
   totalAmount: number;
   taxAmount: number;
   transactionCode: string | null;
+  payUrl?: string;
 }

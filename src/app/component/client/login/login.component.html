@@ -26,7 +26,7 @@
                                      class="text-danger">{{"Vui lòng nhập email." | translate}}</div>
                                 <div *ngIf="emailCtrl.errors?.['pattern']"
                                      class="text-danger">{{"Vui lòng nhập email đúng định dạng." | translate}}</div>
-                              </div>
+                             </div>
                             <label class="form-label fw-bold">{{ "MẬT KHẨU" | translate }}</label>
                             <input class="form-control" name="password" [type]="showPassword ? 'text' : 'password'"
                                 [(ngModel)]="password" required minlength="6" #passwordCtrl="ngModel" />
@@ -38,7 +38,7 @@
                                      class="text-danger">
                                   {{"Mật khẩu phải có 6 kí tự bao gồm kí tự hoa và số." | translate}}
                                 </div>
-                              </div>
+                             </div>
 
                             <div class="form-check">
                                 <div>
@@ -66,16 +66,6 @@
                             <div class="login-buttons">
 
                                 <div class="btnLogin slide_leftbtnLogin" (click)="login()">{{ "ĐĂNG NHẬP" | translate }}
-                                </div>
-                                <div class="btnLoginWithGoogle slide_leftbtnbtnLoginWithGoogle"> <span>{{ "ĐĂNG NHẬP VỚI" | translate }}</span>
-                                    <i></i>
-                                    <i style="color: #4285f4;" class="ggText">G</i>
-                                    <i style="color: #ea4335;" class="ggText">o</i>
-                                    <i style="color: #F4B400;" class="ggText">o</i>
-                                    <i style="color: #4285f4;" class="ggText">g</i>
-                                    <i style="color: #34a853;" class="ggText">l</i>
-                                    <i style="color: #ea4335;" class="ggText">e</i>
-
                                 </div>
                             </div>
                         </div>

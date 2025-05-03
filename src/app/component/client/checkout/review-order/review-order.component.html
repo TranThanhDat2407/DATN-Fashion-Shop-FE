@@ -25,7 +25,7 @@
           <div class="fr-wrapper mb-m" style="width: auto;">
             <h4 class="text-uppercase accordion-header">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#overview" aria-expanded="false" aria-controls="overview">
-                <span class="title">3. Tổng đơn hàng</span>
+                <span class="title">3. {{ "Tổng đơn hàng" | translate }}</span>
               </button>
             </h4>
           </div>
@@ -40,39 +40,51 @@
                         <table>
                           <tbody>
                           <tr class="">
-                            <td data-test="tổng-cộng-label">Tổng cộng</td>
+                            <td data-test="tổng-cộng-label">{{ "Tổng đơn hàng" | translate }}</td>
                             <td data-test="tổng-cộng"><span
                               class="fr-price-currency fr-price-currency-order-change"><abbr
                               class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
                             <span>
-                              {{ getCurrencyPrice(cartData?.totalPrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                             {{ getCurrencyPrice(cartData?.totalPrice ?? 0, currentCurrencyDetail?.rateToBase ?? 1,
+                              currentCurrencyDetail?.code ?? 'VND') }}
                             </span></span>
                             </td>
                           </tr>
+                          <tr *ngIf="appliedCoupon">
+                            <td>{{"Giảm giá" | translate}}</td>
+                            <td>
+                              -{{ getCurrencyPrice(getDiscountAmount(), currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                            </td>
+                          </tr>
                           <tr class="">
-                            <td data-test="phi-vận-chuyển-label">Phí vận chuyển</td>
+                            <td data-test="phi-vận-chuyển-label">{{"Phí vận chuyển" | translate}}</td>
                             <td data-test="phi-vận-chuyển"><span
                               class="fr-price-currency fr-price-currency-order-change"><abbr
                               class="fr-no-uppercase fr-price-currency-margin"
                               title="Vietnamese dong">VND</abbr><span>
                              </span>
-                              {{ getCurrencyPrice(shippingInfo.shippingFee ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                              {{ getCurrencyPrice(shippingInfo.shippingFee ?? 0,
+                                currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
                           </span></td>
                           </tr>
                           <tr class="header-row separate-header">
-                            <th class="text-uppercase" data-test="tổng-label">Tổng</th>
+                            <th class="text-uppercase" data-test="tổng-label">{{"Tổng sau giảm giá" | translate}}</th>
                             <th data-test="tổng"><span class="fr-price-currency fr-price-currency-order-change"><abbr
                               class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
                             <span>
-                            {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                           {{ getCurrencyPrice(getTotalAfterDiscount(), currentCurrencyDetail?.rateToBase ?? 1,
+                              currentCurrencyDetail?.code ?? 'VND') }}
                           </span></span>
                             </th>
                           </tr>
                           <tr class="">
-                            <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">Đã bao gồm thuế giá trị gia tăng</td>
+                            <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang-label">{{ "Đã bao gồm thuế VAT (8%)" | translate}}</td>
                             <td data-test="da-bao-gồm-thuế-gia-trị-gia-tang"><span
                               class="fr-price-currency fr-price-currency-order-change"><abbr
-                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr><span></span></span>
+                              class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr><span>
+                              {{ getCurrencyPrice(getVATAmount(), currentCurrencyDetail?.rateToBase ?? 1,
+                              currentCurrencyDetail?.code ?? 'VND') }}
+                            </span></span>
                             </td>
                           </tr>
                           </tbody>
@@ -81,12 +93,13 @@
                             <hr>
                           </div>
                           <tr class="text-uppercase">
-                            <th data-test="tổng-dơn-dặt-hang-label">Tổng đơn đặt hàng</th>
+                            <th data-test="tổng-dơn-dặt-hang-label">{{ "Tổng đơn đặt hàng" | translate}}</th>
                             <th data-test="tổng-dơn-dặt-hang"><span
                               class="fr-price-currency fr-price-currency-order-change"><abbr
                               class="fr-no-uppercase fr-price-currency-margin" title="Vietnamese dong">VND</abbr>
                             <span>
-                              {{ getCurrencyPrice(getTotalAfterDiscount() ?? 0, currentCurrencyDetail?.rateToBase ?? 1, currentCurrencyDetail?.code ?? 'VND') }}
+                              {{ getCurrencyPrice(getGrandTotal(), currentCurrencyDetail?.rateToBase ?? 1,
+                              currentCurrencyDetail?.code ?? 'VND') }}
                             </span></span>
                             </th>
                           </tr>
@@ -98,9 +111,9 @@
                          style="display: flex; align-items: flex-start; justify-content: flex-start; flex-direction: column;">
                       <div>
                         <button (click)="confirmOrder()" class="fr-btn attention fr-btn w4-f w4-f" type="button" data-test="đặt-hàng-button"
-                        >Đặt hàng
+                        >{{"Đặt hàng" | translate}}
                         </button>
-                        <span class="mt-xxs fr-text-annotation weak">Nhấn Đặt hàng để hoàn tất mua hàng.</span></div>
+                        <span class="mt-xxs fr-text-annotation weak">{{"Nhấn Đặt hàng để hoàn tất mua hàng." | translate}}</span></div>
                     </div>
                   </div>
                 </div>

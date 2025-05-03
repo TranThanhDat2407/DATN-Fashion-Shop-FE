@@ -11,7 +11,7 @@ import { PageResponse } from '../../../../dto/Response/page-response';
 import { catchError, firstValueFrom, forkJoin, map, Observable, of } from 'rxjs';
 import { ApiResponse } from '../../../../dto/Response/ApiResponse';
 import { Size } from '../../../../models/AttributeValue/Size';
-import {AttributeService} from '../../../../services/admin/AttributeService/attribute.service';
+import { AttributeService } from '../../../../services/admin/AttributeService/attribute.service';
 export interface Attribute_value {
   valueName: string,
   sortOrder: number
@@ -75,10 +75,7 @@ export class EditAttributeComponent implements OnInit {
     const response = await firstValueFrom(forkJoin(callApis));
     this.dataColor = response.dataColor?.content.flat() || []
     this.dataSize = response.dataSize?.content.flat() || []
-
-
-    console.log(this.dataColor)
-
+    // console.log(this.dataColor)
   }
   getIdsFromRouter(): void {
     const id = this.router.snapshot.paramMap.get('id');
@@ -89,12 +86,15 @@ export class EditAttributeComponent implements OnInit {
     } else if (window.location.pathname.includes('/edit_attribute/size/')) {
       this.sizeId = Number(id)
       console.log('sizeId : ' + this.sizeId)
-
     } else {
       console.log('ko thay id')
     }
   }
   editColorById(id: number): void {
+    if (id === 0) {
+      console.log("Id = 0 ");
+      return;
+    }
     if (!this.dataColor || this.dataColor.length === 0) {
       console.log("Dữ liệu chưa load xong");
       return;
@@ -102,18 +102,22 @@ export class EditAttributeComponent implements OnInit {
 
     const color = this.dataColor.find(item => item.id === id);
     if (!color) {
-      console.log("Không tìm thấy màu với ID:");
+      console.log(`Color ID Not Found  ${color!.id}`);
       return;
     }
 
     this.nameColor = color.valueName;
-    this.newColor.valueName =  color.valueImg
-    this.imageUrl ='http://localhost:8080/uploads/images/products/colors/' +  color.valueImg;
+    this.newColor.valueName = color.valueImg
+    this.imageUrl = 'http://localhost:8080/uploads/images/products/colors/' + color.valueImg;
     console.log("nameColor:", this.imageUrl);
   }
 
 
   editSizeById(id: number): void {
+    if (id === 0) {
+      console.log("Id = 0 ");
+      return;
+    }
     if (!this.dataSize || this.dataSize.length === 0) {
       console.log("Dữ liệu chưa load xong");
       return;
@@ -144,6 +148,10 @@ export class EditAttributeComponent implements OnInit {
   }
 
   createSize = (): void => {
+    if (this.sizeId !== 0) {
+      this.toastService.error('Please complete update|', "Error", { timeOut: 3000 });
+      return;
+    }
     const sampleSize: Attribute_value = {
       valueName: this.nameSize,
       sortOrder: 0
@@ -158,8 +166,9 @@ export class EditAttributeComponent implements OnInit {
     formData.append('request', new Blob([JSON.stringify(sampleSize)], { type: 'application/json' }));
     this.attributeService.createSize(formData).subscribe({
       next: response => {
+        this.resetSizeForm()
         this.toastService.success('Success', 'Size created successfully!', { timeOut: 3000 });
-        this.resetForm();
+
       },
       error: error => {
         this.toastService.error('Error', 'There was an error creating the Size.', { timeOut: 3000 });
@@ -168,6 +177,10 @@ export class EditAttributeComponent implements OnInit {
     });
   };
   createColor = (): void => {
+    if (this.colorId !== 0) {
+      this.toastService.error('Please complete update|', "Error", { timeOut: 3000 });
+      return;
+    }
     if (!this.validateColor()) return; // Kiểm tra file trước khi tiếp tục
 
     const sampleColor: Attribute_value = {
@@ -184,6 +197,7 @@ export class EditAttributeComponent implements OnInit {
 
     this.attributeService.createColor(formData).subscribe({
       next: response => {
+        this.resetColorForm()
         this.toastService.success('Success', 'Color created successfully!', { timeOut: 3000 });
         this.nameSize = ''
       },
@@ -195,13 +209,16 @@ export class EditAttributeComponent implements OnInit {
   };
 
   updateColor = (): void => {
-
+    if (this.sizeId !== 0) {
+      this.toastService.error('Please complete update|', "Error", { timeOut: 3000 });
+      return;
+    }
     const sampleColor: Attribute_value = {
       valueName: this.nameColor,
       sortOrder: 0
     };
 
-    if(sampleColor.valueName === ''){
+    if (sampleColor.valueName === '') {
       this.toastService.error('Error', 'Color isEmty!', { timeOut: 3000 });
       return
     }
@@ -209,7 +226,7 @@ export class EditAttributeComponent implements OnInit {
       next: response => {
         this.toastService.success('Success', 'Color updated successfully!', { timeOut: 3000 });
         console.log(response)
-        this.resetForm();
+        this.resetColorForm();
       },
       error: error => {
         this.toastService.error('Error', 'Có lỗi xảy ra khi cập nhật danh mục.', { timeOut: 3000 });
@@ -224,7 +241,7 @@ export class EditAttributeComponent implements OnInit {
       sortOrder: 0
     };
 
-    if(sampleSize.valueName === ''){
+    if (sampleSize.valueName === '') {
       this.toastService.error('Error', 'Size isEmty!', { timeOut: 3000 });
       return
     }
@@ -242,10 +259,15 @@ export class EditAttributeComponent implements OnInit {
   };
 
   validateColor(): boolean {
+
     const sampleColor: Attribute_value = {
       valueName: this.nameColor,
       sortOrder: 0
     };
+    if (!this.selectedFile && sampleColor.valueName === '') {
+      this.toastService.error('Color is Empty!', "Error", { timeOut: 3000 });
+      return false;
+    }
     if (!this.selectedFile) {
       this.toastService.error('Please select an image file!', "Error", { timeOut: 3000 });
       return false;
@@ -299,18 +321,23 @@ export class EditAttributeComponent implements OnInit {
   }
 
 
-  async resetForm(): Promise<void> {
+  resetColorForm() {
     this.newColor = {
       valueName: '',
       sortOrder: 0
     };
     this.selectedFile = null;
-    this.imageUrl = 'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg';
-    this.nameColor = ''
-    // this.fetchCategory()
+    // this.imageUrl = 'https://thumb.ac-illust.com/b1/b170870007dfa419295d949814474ab2_t.jpeg';
+    // this.nameColor = ''
 
+  }
+  resetSizeForm() {
 
-
+    this.newSize = {
+      valueName: '',
+      sortOrder: 0
+    };
+    // this.nameSize = ''
 
   }
 

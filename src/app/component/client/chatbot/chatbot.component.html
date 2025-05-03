@@ -1,0 +1,27 @@
+<div class="chat-container">
+  <!-- Bong bóng chat -->
+  <div class="chat-bubble" (click)="toggleChat()">
+    <span>💬</span>
+  </div>
+
+  <!-- Hộp chat -->
+  <div class="chat-box card shadow-lg" *ngIf="isChatOpen">
+    <div class="card-header d-flex justify-content-between align-items-center bg-dark text-white">
+      <span>Chat với chúng tôi</span>
+      <button class="btn btn-sm btn-outline-light" (click)="toggleChat()">✖</button>
+    </div>
+
+    <div class="card-body chat-content">
+      <div *ngFor="let msg of messages" class="d-flex" [ngClass]="{'justify-content-end': msg.sender === 'user', 'justify-content-start': msg.sender === 'bot'}">
+        <div class="message p-2 rounded" [ngClass]="msg.sender">
+          <span [innerHTML]="formatMessage(msg.text)"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-footer d-flex">
+      <input type="text" class="form-control me-2" [(ngModel)]="userMessage" placeholder="Nhập tin nhắn..." (keyup.enter)="sendMessage()">
+      <button class="btn btn-primary" (click)="sendMessage()">Gửi</button>
+    </div>
+  </div>
+</div>

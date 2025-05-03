@@ -145,6 +145,9 @@ form {
   display: inline-block;
   padding-bottom: 8px;
 }
+.fr-radio-primary input[type="radio"] {
+  margin-right: 2px;
+}
 .fr-flbox, .fr-pulldown-box {
   display: flex
 ;

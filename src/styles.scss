@@ -2,7 +2,6 @@
 @import 'ngx-toastr/toastr';
 
 
-
 html{
     font-size: 16px;
 }
@@ -23,3 +22,9 @@ html{
 }
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

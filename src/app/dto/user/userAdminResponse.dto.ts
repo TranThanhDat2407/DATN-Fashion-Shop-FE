@@ -1,4 +1,6 @@
-export interface UserAdminResponse {
+import {BaseResponse} from '../Response/base-response';
+
+export interface UserAdminResponse extends BaseResponse{
   id: number;
   firstName: string;
   lastName: string;
@@ -7,7 +9,7 @@ export interface UserAdminResponse {
   gender: string;
   dateOfBirth: string; // Định dạng ISO "yyyy-MM-dd'T'HH:mm:ss"
   role: Role;
-  is_active: boolean;
+  isActive: boolean;
 }
 
 export interface Role {

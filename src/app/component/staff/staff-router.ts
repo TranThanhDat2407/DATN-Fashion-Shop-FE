@@ -14,6 +14,13 @@ import {
 } from './store-inventory-tranfer/store-inventory-transfer-detail/store-inventory-transfer-detail.component';
 import {StoreOrderComponent} from './store-order/store-order.component';
 import {StoreOrderDetailComponent} from './store-order/store-order-detail/store-order-detail.component';
+import {ManagerComponent} from './manager/manager.component';
+import {StaffDetailComponent} from './manager/staff-detail/staff-detail.component';
+import {StoreStatisticComponent} from './store-statistic/store-statistic.component';
+import {DateRangeStatisticComponent} from './store-statistic/date-range-statistic/date-range-statistic.component';
+import {DailyChartComponent} from './store-statistic/daily-chart/daily-chart.component';
+import {NotificationComponent} from './notification/notification.component';
+import {MomoStoreSuccessComponent} from './momo-store-success/momo-store-success.component';
 
 
 export const staffRouter: Routes = [
@@ -29,6 +36,11 @@ export const staffRouter: Routes = [
       {
         path: "checkout",
         component: StaffCheckoutComponent,
+        canActivate: [StoreGuardFn],
+      },
+      {
+        path: "momo-store-success",
+        component: MomoStoreSuccessComponent,
         canActivate: [StoreGuardFn],
       },
       {
@@ -62,8 +74,38 @@ export const staffRouter: Routes = [
         canActivate: [StoreGuardFn],
       },
       {
+        path: "staff-manager",
+        component: ManagerComponent,
+        canActivate: [StoreGuardFn],
+      },
+      {
+        path: "staff-manager/:userId",
+        component: StaffDetailComponent,
+        canActivate: [StoreGuardFn],
+      },
+      {
+        path: "store-statistic",
+        component: StoreStatisticComponent,
+        canActivate: [StoreGuardFn],
+        children: [
+          {
+            path: "date-range-statistic",
+            component: DateRangeStatisticComponent,
+          },
+          {
+            path: "daily-statistic",
+            component: DailyChartComponent,
+          }
+        ],
+      },
+      {
         path: "login",
         component: StoreLoginComponent
+      },
+      {
+        path: "notify",
+        component: NotificationComponent,
+        canActivate: [StoreGuardFn],
       }
     ]
   }

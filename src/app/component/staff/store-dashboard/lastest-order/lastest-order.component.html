@@ -8,6 +8,7 @@
       <th>Product</th>
       <th>Color</th>
       <th>Size</th>
+      <th>Status</th>
       <th>Unit Price</th>
       <th>Quantity</th>
       <th>Total Price</th>
@@ -15,9 +16,9 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let order of orders" class="table-light">
+    <tr *ngFor="let order of orders" class="table-light" (click)="viewDetail(order.orderId)">
       <td>{{ order.orderId }}</td>
-      <td>{{ order.user.email }}</td>
+      <td>{{ order.user?.email || 'Guest'  }}</td>
       <td>
         <img [src]="'http://localhost:8080/uploads/images/products/' + order.productImage"
              alt="{{ order.productName }}" class="rounded shadow-sm"
@@ -32,6 +33,20 @@
       </td>
       <td>
         <span class="badge bg-secondary px-3 py-2">{{ order.sizeName }}</span>
+      </td>
+
+      <td>
+  <span class="fw-bold d-flex align-items-center">
+    <span
+      class="status-indicator"
+      [ngClass]="{
+        'bg-success': order.status === 'DONE',
+        'bg-warning': order.status === 'PENDING',
+        'bg-danger': order.status === 'CANCELED'
+      }"
+    ></span>
+    {{ order.status }}
+  </span>
       </td>
 
       <td>

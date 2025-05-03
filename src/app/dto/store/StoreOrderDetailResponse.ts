@@ -1,4 +1,6 @@
-export interface StoreOrderDetailResponse {
+import {BaseResponse} from '../Response/base-response';
+
+export interface StoreOrderDetailResponse extends BaseResponse{
   productImage: string;
   productName: string;
   colorName: string;

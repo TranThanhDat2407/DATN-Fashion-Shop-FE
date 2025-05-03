@@ -16,12 +16,12 @@
         <div class="fr-wrapper mb-m" style="width: auto;">
           <h4 class="text-uppercase accordion-header">
             <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#delivery" aria-expanded="true" aria-controls="delivery">
-              <span class="title">1. Tùy chọn giao hàng</span>
+              <span class="title">{{ "Tùy chọn giao hàng" | translate }}</span>
             </button>
           </h4>
         </div>
         <div class="fr-wrapper" style="width: auto;">
-          Đủ điều kiện áp dụng miễn phí vận chuyển.
+          {{ "Đủ điều kiện áp dụng miễn phí vận chuyển." | translate }}
         </div>
       </div>
       <div id="delivery" class="accordion-collapse collapse show">
@@ -30,203 +30,198 @@
           <div style="border: 1px solid rgb(224, 224, 224); padding: 28px 20px;">
             <div style="width: auto;">
               <div class="mb-m pr-s">
-                  <span class="fr-radio fr-radio-primary bold-with-subtext">
-                  <input type="radio" id="shippingAddress" name="shippingMethod" value="1"
-                         (change)="selectShippingMethod(1)"   [checked]="selectedShippingMethod === 1" >
-                  <label for="shippingAddress" class="content-wrapper">
-                    <span class="content-text">
-                      <span class="title">Giao đến địa chỉ</span>
-                      <span class="text-price">
-                        <span class="text-label">Phí vận chuyển</span>
-                        <strong class="text-price-num">
-                          <span class="fr-price-currency">
-<!--                            <span>Miễn phí</span>-->
-                          </span>
-                        </strong>
-                      </span>
+          <span class="fr-radio fr-radio-primary bold-with-subtext">
+            <input type="radio" id="shippingAddress" name="shippingMethod" value="1"
+                   (change)="selectShippingMethod(1)" [checked]="selectedShippingMethod === 1">
+            <label for="shippingAddress" class="content-wrapper">
+              <span class="content-text">
+                <span class="title">{{ "Giao đến địa chỉ" | translate }}</span>
+                <span class="text-price">
+                  <span class="text-label">{{ "Phí vận chuyển" | translate }}</span>
+                  <strong class="text-price-num">
+                    <span class="fr-price-currency">
+<!--                       <span>Miễn phí</span> -->
                     </span>
-                  </label>
+                  </strong>
                 </span>
+              </span>
+            </label>
+          </span>
               </div>
-              <div class=" fr-wrapper pt-xxs px-l mx-xxxs" style="width: auto;">
+              <div class="fr-wrapper pt-xxs px-l mx-xxxs" style="width: auto;">
                 <p class="text-shipping">
-                  [Thời gian giao hàng dự kiến] TP. Hồ Chí Minh: 2 ngày, các tỉnh miền Nam khác: 3 ngày, Hà Nội: 3
-                  ngày,
-                  các tỉnh miền Bắc khác: 4 ngày, các tỉnh miền Trung: 4 ngày.
+                  {{ "[Thời gian giao hàng dự kiến] TP. Hồ Chí Minh: 2 ngày, các tỉnh miền Nam khác: 3 ngày, Hà Nội: 3 ngày, các tỉnh miền Bắc khác: 4 ngày, các tỉnh miền Trung: 4 ngày." | translate }}
                 </p>
               </div>
             </div>
 
-
             <div>
-               <span class="fr-radio fr-radio-primary bold-with-subtext">
-                  <input type="radio" id="store" name="shippingMethod" value="2"
-                         (change)="selectShippingMethod(2)"   [checked]="selectedShippingMethod === 2"/>
-                  <label for="store" class="content-wrapper">
-                    <span class="content-text">
-                      <span class="title">Click &amp; Collect</span>
-                      <span class="text-price">
-                        <span class="text-label">Phí vận chuyển</span>
-                        <strong class="text-price-num">
-                          <span class="fr-price-currency">
-                            <span>Miễn phí</span>
-                          </span>
-                        </strong>
-                      </span>
-                    </span>
-                  </label>
-                </span>
-              <div class=" fr-wrapper pt-xxs px-l mx-xxxs" style="width: auto;">
+        <span class="fr-radio fr-radio-primary bold-with-subtext">
+          <input type="radio" id="store" name="shippingMethod" value="2"
+                 (change)="selectShippingMethod(2)" [checked]="selectedShippingMethod === 2" />
+          <label for="store" class="content-wrapper">
+            <span class="content-text">
+              <span class="title">{{ "Click & Collect" | translate }}</span>
+              <span class="text-price">
+                <span class="text-label">{{ "Phí vận chuyển" | translate }}</span>
+                <strong class="text-price-num">
+                  <span class="fr-price-currency">
+                    <span>{{ "Miễn phí" | translate }}</span>
+                  </span>
+                </strong>
+              </span>
+            </span>
+          </label>
+        </span>
+
+              <div class="fr-wrapper pt-xxs px-l mx-xxxs" style="width: auto;">
                 <p class="text-shipping">
-                  Khách hàng sẽ nhận được email thông báo khi đơn hàng có tại cửa hàng. Cửa hàng có thể trực tiếp chuẩn
-                  bị đơn hàng nếu có số lượng sản phẩm phù hợp. TP. Hồ Chí Minh: 1 - 4 ngày, Hà Nội &amp; Hải Phòng: 1 -
-                  7 ngày.
+                  {{ "Khách hàng sẽ nhận được email thông báo khi đơn hàng có tại cửa hàng. Cửa hàng có thể trực tiếp chuẩn bị đơn hàng nếu có số lượng sản phẩm phù hợp. TP. Hồ Chí Minh: 1 - 4 ngày, Hà Nội & Hải Phòng: 1 - 7 ngày." | translate }}
                 </p>
               </div>
-              <div>
 
+              <div>
                 <div class="fr-h-rule full">
                   <hr style="color: rgb(224, 224, 224)">
                 </div>
                 <div *ngIf="selectedShippingMethod === 2" class="fr-contents-card">
-
                   <div>
                     <div>
                       <div class="pay-in-store">
-                        <div class="fr-wrapper mt-l mb-m" style="width: auto;"><h4 id="" class="fr-head h4"><span
-                          class="title">Tìm một cửa hàng</span></h4></div>
-                        <div class="fr-textfield"><label class="fr-textfield-label">
-                          <div class="fr-flbox middle">
-                            <div class="fr-form-label" style="margin-bottom: 0px;">Nhập tỉnh/ thành phố
+                        <div class="fr-wrapper mt-l mb-m" style="width: auto;">
+                          <h4 id="" class="fr-head h4">
+                            <span class="title">{{ "Tìm một cửa hàng" | translate }}</span>
+                          </h4>
+                        </div>
+
+                        <div class="fr-textfield">
+                          <label class="fr-textfield-label">
+                            <div class="fr-flbox middle">
+                              <div class="fr-form-label" style="margin-bottom: 0px;">{{ "Nhập tỉnh/ thành phố" | translate }}</div>
+                              <input class="fr-textfield-input" [(ngModel)]="searchQuery"
+                                     [placeholder]="'Nhập tỉnh/ thành phố' | translate"
+                                     autocomplete="on" type="text">
                             </div>
-                            <input class="fr-textfield-input"
-                                   [(ngModel)]="searchQuery"
-                                   placeholder="Nhập tỉnh/ thành phố "
-                                   autocomplete="on" type="text" fdprocessedid="hs86rf">
-                          </div>
-                        </label></div>
+                          </label>
+                        </div>
+
                         <div style="margin-left: 30%;">
                           <div class="fr-wrapper mt-m mb-xl" style="width: auto;">
-                            <button fdprocessedid="a60y9" style="background-color: #ffffff" (click)="getUserLocation()">
-                              <div class="fr-link link-text-left"><span class="inner">
-                                <div class="text">
-                                  Sử dụng vị trí hiện tại
-                                </div>
-                              </span>
+                            <button style="background-color: #ffffff" (click)="getUserLocation()">
+                              <div class="fr-link link-text-left">
+                          <span class="inner">
+                            <div class="text">{{ "Sử dụng vị trí hiện tại" | translate }}</div>
+                          </span>
                               </div>
                             </button>
                           </div>
                         </div>
+
                         <div class="fr-flbox">
                           <div class="mr-l searchButton w4-f" data-test="searchButton">
-                            <button class="fr-btn primary wundefined-f" type="button" data-test="tìm-địa-điểm-button"
-                                    fdprocessedid="31su3z"
-                                    (click)="fetchStores()"
-                            >Tìm địa điểm
+                            <button class="fr-btn primary wundefined-f" type="button" (click)="fetchStores()">
+                              {{ "Tìm địa điểm" | translate }}
                             </button>
                           </div>
                         </div>
-                        <ul  class="fr-list bordered-bottom-with-pd mt-l mb-xl">
-                          <li class="" *ngFor="let store of stores">
-                            <div>
-                              <div class="fr-panel">
-                                <div class="panel-inner">
-                                  <div class="panel-contents">
-                                    <div class="fr-showmore close">
-                                      <div>
-                                        <div><h4  class="fr-head h4"><span
-                                          class="title">{{ store.name }}</span></h4></div>
-                                        <div class="mt-xxs">
-                                          <span class="title-search fs-5 mt-2" *ngIf="store.distance">
-                                            {{ store.distance | number:'1.0-0' }} KM</span>
-                                          <div class="fr-text bold">● Email: {{ store.email }}
-                                          </div>
-                                          <div class="fr-text bold">● Tel: {{ store.phone }}
-                                          </div>
-                                        </div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">
-                                            <div class="fr-text bold"> {{store.fullAddress}}
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="mt-xxs"><h4 class="fr-head h4"><span
-                                          class="title">Giờ mở cửa</span></h4></div>
-                                        <div class="mt-xxs">
-                                          <div class="fr-text">
-                                            {{ store.openHour }}{{ +store.openHour.split(':')[0] < 12 ? ' AM' : ' PM' }} -
-                                            {{ store.closeHour }}{{ +store.closeHour.split(':')[0] < 12 ? ' AM' : ' PM' }}
-                                          </div>
-                                        </div>
 
-                                        <!--                                        <div class="mt-xxs">-->
-                                        <!--                                          <div class="fr-text"></div>-->
-                                        <!--                                          <div class="fr-text"></div>-->
-
+                        <ul class="fr-list bordered-bottom-with-pd mt-l mb-xl">
+                          <li *ngFor="let store of stores">
+                            <div class="fr-panel">
+                              <div class="panel-inner">
+                                <div class="panel-contents">
+                                  <div class="fr-showmore close">
+                                    <div>
+                                      <h4 class="fr-head h4">
+                                        <span class="title">{{ store.name }}</span>
+                                      </h4>
+                                      <div class="mt-xxs">
+                                  <span class="title-search fs-5 mt-2" *ngIf="store.distance">
+                                    {{ store.distance | number:'1.0-0' }} KM
+                                  </span>
+                                        <div class="fr-text bold">● Email: {{ store.email }}</div>
+                                        <div class="fr-text bold">● Tel: {{ store.phone }}</div>
                                       </div>
-<!--                                      <p class="button" ><a class="">Đọc thêm</a></p>-->
-                                    </div>
-                                    <div class="panel-action"
-                                         style="width: 30%; display: flex; flex-direction: column; align-items: flex-end; padding-left: 20px; justify-content: flex-start;">
-                                      <div class="mb-xs">
-                                        <button *ngIf="selectedStore?.id !== store.id"
-                                                class="fr-btn small fr-btn panel-action-button w2-f"
-                                                (click)="selectStore(store)">
-                                          Chọn
-                                        </button>
-
-                                        <button *ngIf="selectedStore?.id === store.id"
-                                                class="fr-btn small fr-btn panel-action-button w2-f btn-selected" disabled>
-                                          ✅ Đã chọn
-                                        </button>
+                                      <div class="mt-xxs">
+                                        <div class="fr-text">
+                                          <div class="fr-text bold">{{ store.fullAddress }}</div>
+                                        </div>
                                       </div>
-                                      <div class="mb-xs">
-                                        <button class=" icon relative small panel-action-button w2-f btn-text fr-btn"
-                                                [routerLink]="['/client', currentCurrency, currentLang,'store_detail', store.id]"
-                                                data-test="chi-tiết-button">
-                                          <!--                                        <div class="fr-btn small panel-action-button w2-f"></div>Chi tiết-->
-                                          Chi tiết
-                                        </button>
+                                      <div class="mt-xxs">
+                                        <h4 class="fr-head h4">
+                                          <span class="title">{{ "Giờ mở cửa" | translate }}</span>
+                                        </h4>
+                                      </div>
+                                      <div class="mt-xxs">
+                                        <div class="fr-text">
+                                          {{ store.openHour }}{{ +store.openHour.split(':')[0] < 12 ? ' AM' : ' PM' }} - {{ store.closeHour }}{{ +store.closeHour.split(':')[0] < 12 ? ' AM' : ' PM' }}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
+
+                                  <div class="panel-action" style="width: 30%; display: flex; flex-direction: column; align-items: flex-end; padding-left: 20px; justify-content: flex-start;">
+                                    <div class="mb-xs">
+                                      <button *ngIf="selectedStore?.id !== store.id" class="fr-btn small fr-btn panel-action-button w2-f" (click)="selectStore(store)">
+                                        {{ "Chọn" | translate }}
+                                      </button>
+
+                                      <button *ngIf="selectedStore?.id === store.id" class="fr-btn small fr-btn panel-action-button w2-f btn-selected" disabled>
+                                        ✅ {{ "Đã chọn" | translate }}
+                                      </button>
+                                    </div>
+
+                                    <div class="mb-xs">
+                                      <button class="icon relative small panel-action-button w2-f btn-text fr-btn"
+                                              [routerLink]="['/client', currentCurrency, currentLang, 'store_detail', store.id]">
+                                        {{ "Chi tiết" | translate }}
+                                      </button>
+                                    </div>
+                                  </div>
+
                                 </div>
                               </div>
                             </div>
                           </li>
-
                         </ul>
-                        <!--                        <div data-test="loadingIndicator" class=""><span-->
-                        <!--                          class="_2vJqfSRj93G2OKjQYIF5OI" style="animation-delay: 0s;"></span></div>-->
-                        <a class=""  target="_self">
-                          <div class="fr-load-more noborder"
-                               *ngIf="showMoreButton" (click)="showMoreStore()"
-                          ><span class="text">Xem thêm</span><span class="arrow"><span
-                            class="fr-icon chevron_updown" style="font-size: 24px;" role="img" aria-label="View more"
-                            aria-hidden="true"></span></span></div>
+
+                        <a class="" target="_self">
+                          <div class="fr-load-more noborder" *ngIf="showMoreButton" (click)="showMoreStore()">
+                            <span class="text">{{ "Xem thêm" | translate }}</span>
+                            <span class="arrow">
+                        <span class="fr-icon chevron_updown" style="font-size: 24px;" role="img" aria-label="View more" aria-hidden="true"></span>
+                      </span>
+                          </div>
                         </a>
+
                         <div class="fr-wrapper mt-m w4-f" style="width: auto;">
-<!--                          <button class="fr-btn primary disabled wundefined-f" type="button"-->
-<!--                                  data-test="lấy-hàng-tại-cửa-hàng-này-button" fdprocessedid="40frbwg" disabled="">Lấy-->
-<!--                            hàng tại cửa hàng này-->
-<!--                          </button>-->
+                          <button *ngIf="selectedStore" [routerLink]="['../payment']" class="fr-btn primary wundefined-f" type="button">
+                            {{ "Lấy hàng tại cửa hàng này" | translate }}
+                          </button>
                         </div>
+
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
 
             </div>
+          </div>
+
+        </div>
+      </div>
 
 
 
-            <!-- Danh sách địa chỉ -->
-            <div class="fr-h-rule full">
+
+      <!-- Danh sách địa chỉ -->
+            <div class="fr-h-rule full" >
               <hr style="color: rgb(224, 224, 224)">
             </div>
             <div>
-              <div class="fr-contents-card">
+              <div *ngIf="selectedShippingMethod === 1" class="fr-contents-card">
                 <div>
                   <div>
                     <div>
@@ -241,7 +236,7 @@
                                       <div class="info-container">
                                         <div class="left-info">
                                           <h4 class="info-main">
-                                            {{ addr.firstName }} <span *ngIf="addr.lastName ">(Địa chỉ thành viên)</span>
+                                            {{ addr.firstName }} <span *ngIf="addr.lastName ">{{( "Địa chỉ thành viên" ) | translate }}</span>
                                           </h4>
                                         </div>
                                         <div class="right-info">
@@ -257,19 +252,19 @@
                                       <button class="icon relative small panel-action-button w2-f btn-text fr-btn" type="button"
                                               *ngIf="addr.id === selectedAddressId">
                                         <div class="absolute fr-icon check_large center-vertical" aria-hidden="true"></div>
-                                        <div>Đã chọn</div>
+                                        <div>{{"✅ Đã chọn" | translate}}</div>
                                       </button>
                                       <!-- Nếu địa chỉ này chưa được chọn -->
-                                      <button class="icon relative small panel-action-button w2-f btn-text fr-btn"
+                                      <button id = "btn-address" class="icon relative small panel-action-button w2-f btn-text fr-btn"
                                               *ngIf="addr.id !== selectedAddressId" (click)="selectAddress(addr)">
-                                        <div>Chọn</div>
+                                        <div>{{ "Chọn" | translate}}</div>
                                       </button>
                                       <button class="icon relative small panel-action-button w2-f btn-text fr-btn"
                                               type="button"
                                               data-bs-toggle="modal"
                                               data-bs-target="#dang-ky-dia-chi"
                                               (click)="editAddress(addr)">
-                                        <div>Sửa</div>
+                                        <div>{{"Sửa"| translate}}</div>
                                       </button>
                                     </div>
                                   </div>
@@ -283,15 +278,15 @@
 
                       <div class="button-container">
                     <span class="mr-s">
-                      <button [routerLink]="['../payment']" class="fr-btn btn-dark w4-f" type="button" data-test="tiếp-tục-thanh-toán-button"
-                      >Tiếp tục thanh toán</button>
+                      <button id="btn-show-payment" [routerLink]="['../payment']" class="fr-btn btn-dark w4-f" type="button" data-test="tiếp-tục-thanh-toán-button"
+                      >{{ "Tiếp tục thanh toán" | translate }}</button>
                     </span><span>
                           <button
                             class="fr-btn back w4-f border" type="button"
                             data-bs-toggle="modal"
                             data-bs-target="#dang-ky-dia-chi"
                             data-bs-backdrop="false">
-                    Đăng ký một địa chỉ mới</button></span>
+                   {{ "Đăng ký một địa chỉ mới" | translate}}</button></span>
                       </div>
                     </div>
                   </div>
@@ -303,154 +298,145 @@
 
 
       </div>
-    </div>
-
-  </div>
 
 
 
-</div>
-<div class="modal" id="dang-ky-dia-chi" tabindex="-1" aria-labelledby="modal-new-address" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title text-uppercase">Đăng ký một địa chỉ mới</h3>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Hủy"></button>
-      </div>
-      <div class="modal-body">
-        <div class="wrapper">
-          <form #addressForm="ngForm" novalidate class="form-new-address">
-            <h3
-              class="modal-title text-uppercase"> {{ NewAddress.id === 0 ? 'Thêm địa chỉ mới' : 'Chỉnh sửa địa chỉ' }}</h3>
-            <div class="row mb-3">
-              <label class="col-sm-3 col-form-label">Tên&nbsp;</label>
-              <div class="col-sm-9">
-                <input class="form-control" maxlength="30" name="givenName"
-                       placeholder="Vui lòng nhập tên của bạn" autocomplete="on" type="text"
-                       pattern="^.{1,30}$"
-                       required [(ngModel)]="NewAddress.lastName" #givenName="ngModel">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-3 col-form-label">Họ&nbsp;</label>
-              <div class="col-sm-9">
-                <input class="form-control" maxlength="30" name="familyName" pattern="^.{1,30}$"
-                       placeholder="Vui lòng nhập họ của bạn" autocomplete="on" required
-                       [(ngModel)]="NewAddress.firstName" #familyName="ngModel" type="text">
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label class="col-sm-3 col-form-label">Tỉnh&nbsp;</label>
-              <div class="col-sm-9">
-                <select class="form-select" required name="state" [(ngModel)]="selectedProvince" #province="ngModel"
-                        (change)="onProvinceChange($event)"
-                        [ngClass]="{'is-invalid': province.invalid && province.touched}">
-                  <option value="">Chọn tỉnh/thành</option>
-                  <option *ngFor="let province of provinces" [value]="province.code">{{ province.name }}</option>
-                </select>
-                <div *ngIf="province.invalid && province.touched" class="invalid-feedback">
-                  <small>Vui lòng chọn tỉnh/thành.</small>
-                </div>
-              </div>
-            </div>
-
-            <!-- Quận/Huyện -->
-            <div class="row mb-3">
-              <label class="col-sm-3 col-form-label">Quận/Huyện:</label>
-              <div class="col-sm-9">
-                <select
-                  class="form-select"
-                  required
-                  [(ngModel)]="selectedDistrict"
-                  #district="ngModel"
-                  (change)="onDistrictChange($event)"
-                  [disabled]="!selectedProvince"
-                  [ngClass]="{'is-invalid': district.invalid && district.touched}">
-                  <option value="">Chọn quận/huyện</option>
-                  <option *ngFor="let district of districts" [value]="district.code">
-                    {{ district.name }}
-                  </option>
-                </select>
-                <div *ngIf="district.invalid && district.touched" class="invalid-feedback">
-                  <small>Vui lòng chọn quận/huyện.</small>
-                </div>
-              </div>
-            </div>
-            <!-- Phường/Xã -->
-            <div class="row mb-3">
-              <label class="col-sm-3 col-form-label">Phường/Xã:</label>
-              <div class="col-sm-9">
-                <select
-                  class="form-select"
-                  required
-                  [(ngModel)]="selectedWard"
-                  #ward="ngModel"
-                  (change)="onWardChange($event)"
-                  [disabled]="!selectedDistrict"
-                  [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
-                  <option value="">Chọn phường/xã</option>
-                  <option *ngFor="let ward of wards" [value]="ward.code">
-                    {{ ward.name }}
-                  </option>
-                </select>
-                <div *ngIf="ward.invalid && ward.touched" class="invalid-feedback">
-                  <small>Vui lòng chọn phường/xã.</small>
-                </div>
-              </div>
-            </div>
 
 
-            <div class="row mb-3">
-              <label class="col-sm-3 col-form-label">Chi tiết địa chỉ&nbsp;</label>
-              <div class="col-sm-9">
-                <input class="form-control" maxlength="70" name="street2" pattern="^.{0,70}$"
-                       placeholder="Căn hộ, dãy phòng, khu, tòa nhà, tầng, v.v." autocomplete="on"
-                       required [(ngModel)]="NewAddress.street" #street="ngModel"
-                       type="text">
-                <div class="form-text">
-                  Để hóa đơn hợp lệ, yêu cầu điền chính xác thông tin bằng tiếng Việt có dấu.&nbsp;
-                </div>
-              </div>
-            </div>
 
 
-            <div class="row mb-3" style="width: auto;">
-              <label class="col-sm-3 col-form-label"> Điện thoại&nbsp;</label>
-              <div class="col-sm-9">
-                <input class="form-control" maxlength="11" name="phone"
-                       pattern="^0[235789][0-9]{8,9}$" placeholder="Nhập 10-11 số bắt đầu bằng số 0"
-                       autocomplete="on" type="text1"
-                       required [(ngModel)]="NewAddress.phoneNumber" #phone="ngModel">
-                <div class="form-text">
-                  Vui lòng nhập 10-11 số bắt đầu bằng 0&nbsp;
-                </div>
-              </div>
-            </div>
-
-            <div class="row mb-3">
-              <div class="form-text">Chúng tôi có thể liên hệ với bạn qua điện thoại hoặc email nếu chúng tôi có
-                thắc mắc về đơn đặt hàng và tùy chọn giao hàng của bạn.
-              </div>
-            </div>
-
-            <div class="row g-3">
-              <div class="col">
-                <button class="btn btn-address" [disabled]="addressForm.invalid"
-                        style="padding: 10px 100px; background-color: #1b1b1b; color: #ffffff"
-                        type="button" (click)="isUpdate ? updateAddress() : addNewAddress()">
-                  {{ isUpdate ? 'Cập nhật' : 'Xác nhận' }}
-                </button>
-
-              </div>
-              <div class="col">
-                <button class="btn btn-address border" style="padding: 10px 100px;color: #1b1b1b"
-                        type="button" data-bs-dismiss="modal" (click)="resetForm()">Huỷ
-                </button>
-              </div>
-            </div>
-
-          </form>
+<div class="container">
+  <div class="modal" id="dang-ky-dia-chi" tabindex="-1" aria-labelledby="modal-new-address" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
         </div>
+        <div class="modal-body">
+          <div class="wrapper">
+            <form #addressForm="ngForm" novalidate class="form-new-address">
+              <h3 class="modal-title text-uppercase" style="font-size: 20px; font-weight: bold; text-align: center; margin-bottom: 15px;">
+                {{ NewAddress.id === 0 ? 'Thêm địa chỉ mới' : 'Chỉnh sửa địa chỉ' }}
+              </h3>
+
+
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Tên&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" maxlength="30" name="givenName"
+                         placeholder="Vui lòng nhập tên của bạn" autocomplete="on" type="text"
+                         pattern="^.{1,30}$"
+                         required [(ngModel)]="NewAddress.lastName" #givenName="ngModel">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Họ&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" maxlength="30" name="familyName" pattern="^.{1,30}$"
+                         placeholder="Vui lòng nhập họ của bạn" autocomplete="on" required
+                         [(ngModel)]="NewAddress.firstName" #familyName="ngModel" type="text">
+                </div>
+              </div>
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Tỉnh&nbsp;</label>
+                <div class="col-sm-9">
+                  <select class="form-select" required name="state" [(ngModel)]="selectedProvince" #province="ngModel"
+                          (change)="onProvinceChange($event)"
+                          [ngClass]="{'is-invalid': province.invalid && province.touched}">
+                    <option value="">Chọn tỉnh/thành</option>
+                    <option *ngFor="let province of provinces" [value]="province.ProvinceID">
+                      {{ province.ProvinceName }}
+                    </option>
+                  </select>
+                  <div *ngIf="province.invalid && province.touched" class="invalid-feedback">
+                    <small>Vui lòng chọn tỉnh/thành.</small>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Quận/Huyện:</label>
+                <div class="col-sm-9">
+                  <select class="form-select" required [(ngModel)]="selectedDistrict" #district="ngModel"
+                          (change)="onDistrictChange($event)"
+                          [disabled]="!selectedProvince"
+                          [ngClass]="{'is-invalid': district.invalid && district.touched}">
+                    <option value="">Chọn quận/huyện</option>
+                    <option *ngFor="let district of districts" [value]="district.DistrictID">
+                      {{ district.DistrictName }}
+                    </option>
+                  </select>
+                  <div *ngIf="district.invalid && district.touched" class="invalid-feedback">
+                    <small>Vui lòng chọn quận/huyện.</small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Phường/Xã -->
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Phường/Xã:</label>
+                <div class="col-sm-9">
+                  <select class="form-select" required [(ngModel)]="selectedWard" #ward="ngModel"
+                          (change)="onWardChange($event)"
+                          [disabled]="!selectedDistrict"
+                          [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
+                    <option value="">Chọn phường/xã</option>
+                    <option *ngFor="let ward of wards" [value]="ward.WardCode">
+                      {{ ward.WardName }}
+                    </option>
+                  </select>
+                  <div *ngIf="ward.invalid && ward.touched" class="invalid-feedback">
+                    <small>Vui lòng chọn phường/xã.</small>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Chi tiết địa chỉ&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" maxlength="70" name="street2" pattern="^.{0,70}$"
+                         placeholder="Căn hộ, dãy phòng, khu, tòa nhà, tầng, v.v." autocomplete="on"
+                         required [(ngModel)]="NewAddress.street" #street="ngModel"
+                         type="text">
+
+                </div>
+              </div>
+
+
+              <div class="row mb-3" style="width: auto;">
+                <label class="col-sm-3 col-form-label"> Điện thoại&nbsp;</label>
+                <div class="col-sm-9">
+                  <input class="form-control" maxlength="11" name="phone"
+                         pattern="^0[235789][0-9]{8,9}$" placeholder="Nhập 10-11 số bắt đầu bằng số 0"
+                         autocomplete="on" type="text1"
+                         required [(ngModel)]="NewAddress.phoneNumber" #phone="ngModel">
+
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <div class="col">
+                  <button class="btn btn-address" [disabled]="addressForm.invalid"
+                          style="padding: 10px 100px; background-color: #1b1b1b; color: #ffffff"
+                          type="button" (click)="isUpdate ? updateAddress() : addNewAddress()"
+                          data-bs-dismiss="modal">
+                    {{ isUpdate ? 'Cập nhật' : 'Xác nhận' }}
+                  </button>
+
+                </div>
+                <div class="col">
+                  <button class="btn btn-address border" style="padding: 10px 100px;color: #1b1b1b"
+                          type="button" data-bs-dismiss="modal" (click)="resetForm()">Huỷ
+                  </button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
       </div>
 
     </div>
@@ -458,15 +444,6 @@
   </div>
 
 </div>
-
-
-
-
-
-
-
-
-
 
 
 

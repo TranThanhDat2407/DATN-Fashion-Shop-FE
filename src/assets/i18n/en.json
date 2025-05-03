@@ -125,7 +125,7 @@
   "TỔNG HÓA ĐƠN": "TOTAL BILL",
   "MÃ GIẢM": "DISCOUNT CODE",
   "MUA NGAY": "BUY NOW",
-  "TIẾP TỤC MUA SẮM": "CONTINUE SHOPPING",  
+  "TIẾP TỤC MUA SẮM": "CONTINUE SHOPPING",
   "Xóa giỏ hàng" : "Clear cart",
 
 
@@ -161,5 +161,107 @@
 
   "_commentStore-modal-delete": "----------------------Phần commentStore-modal-delete ----------------------------",
   "Bạn có muốn xóa không": "Do you want to delete",
-  "Hủy": "Close"
+  "Hủy": "Close",
+
+  "All_Address": "All Addresses",
+
+
+
+
+  "_commentCheckout": "----------------------Phần Checkout.HTML----------------------------",
+  "THANH TOÁN": "CHECKOUT",
+  "Tổng sản phẩm": "Total Products",
+  "Sản phẩm": "Products",
+  "Sửa": "Edit",
+  "Giảm giá": "Discount",
+  "Tổng đơn hàng": "Order Total",
+  "MÃ GIẢM GIÁ": "DISCOUNT CODE",
+  "Phí vận chuyển": "Shipping Fee",
+  "Tổng sau giảm giá": "Total After Discount",
+  "Đã bao gồm thuế VAT (8%)": "VAT Included (8%)",
+  "Tổng đơn đặt hàng": "Grand Total",
+  "Phiếu giảm giá": "Coupon",
+  "Đặt hàng": "Order",
+  "Nhấn Đặt hàng để hoàn tất mua hàng." :"Click Order to complete your purchase.",
+
+  "_commentShipping": "----------------------Phần Shipping.HTML----------------------------",
+  "Tùy chọn giao hàng": "Delivery options",
+  "Đủ điều kiện áp dụng miễn phí vận chuyển.": "Eligible for free shipping",
+  "Giao đến địa chỉ": "Deliver to address",
+  "Phí vận chuyển": "Shipping fee",
+  "Thời gian giao hàng dự kiến": "Estimated delivery time",
+  "Click & Collect": "Click & Collect",
+  "[Thời gian giao hàng dự kiến] TP. Hồ Chí Minh: 2 ngày, các tỉnh miền Nam khác: 3 ngày, Hà Nội: 3 ngày, các tỉnh miền Bắc khác: 4 ngày, các tỉnh miền Trung: 4 ngày.":
+  "[Estimated delivery time] Ho Chi Minh City: 2 days, other Southern provinces: 3 days, Hanoi: 3 days, other Northern provinces: 4 days, Central provinces: 4 days.",
+  "Khách hàng sẽ nhận được email thông báo khi đơn hàng có tại cửa hàng. Cửa hàng có thể trực tiếp chuẩn bị đơn hàng nếu có số lượng sản phẩm phù hợp.":
+  "Customers will receive an email notification when their order is ready at the store. The store can prepare the order directly if stock is available.",
+  "Khách hàng sẽ nhận được email thông báo khi đơn hàng có tại cửa hàng. Cửa hàng có thể trực tiếp chuẩn bị đơn hàng nếu có số lượng sản phẩm phù hợp. TP. Hồ Chí Minh: 1 - 4 ngày, Hà Nội & Hải Phòng: 1 - 7 ngày.":
+  "Customers will receive an email notification when the order is available at the store. The store can directly prepare the order if stock is available. Ho Chi Minh City: 1 - 4 days, Hanoi & Hai Phong: 1 - 7 days.",
+  "Miễn phí": "Free",
+  "Tìm một cửa hàng": "Find a store",
+  "Nhập tỉnh/ thành phố": "Enter province/city",
+  "Sử dụng vị trí hiện tại": "Use current location",
+  "Tìm địa điểm": "Find location",
+  "Tên cửa hàng": "Store name",
+  "Khoảng cách": "Distance",
+  "Email": "Email",
+  "Tel": "Tel",
+  "Địa chỉ đầy đủ": "Full address",
+  "Giờ mở cửa": "Business hours",
+  "Chọn": "Select",
+  "✅ Đã chọn": "✅ Selected",
+  "Chi tiết": "Details",
+  "Xem thêm": "See more",
+  "Lấy hàng tại cửa hàng này": "Pick up at this store",
+  "Danh sách địa chỉ": "Address list",
+  "Tên": "First name",
+  "Vui lòng nhập tên của bạn": "Please enter your first name",
+  "Họ": "Last name",
+  "Vui lòng nhập họ của bạn": "Please enter your last name",
+  "Tỉnh": "Province",
+  "Chọn tỉnh/thành": "Select province/city",
+  "Quận/huyện": "District",
+  "Chọn quận/huyện": "Select district",
+  "Phường/xã": "Ward",
+  "Chọn phường/xã": "Select ward",
+  "Chi tiết địa chỉ": "Address details",
+  "Căn hộ, dãy phòng, khu, tòa nhà, tầng, v.v.": "Apartment, room number, area, building, floor, etc.",
+  "Điện thoại": "Phone",
+  "Nhập 10-11 số bắt đầu bằng số 0": "Enter 10-11 digits starting with 0",
+  "Sửa": "Edit",
+  "Tiếp tục thanh toán": "Continue to payment",
+  "Đăng ký một địa chỉ mới": "Register a new address",
+  "Thêm địa chỉ mới": "Add new address",
+  "Chỉnh sửa địa chỉ": "Edit address",
+  "Xác nhận": "Confirm",
+  "Cập nhật": "Update",
+  "Huỷ": "Cancel",
+  "Địa chỉ thành viên": "(Member address)",
+
+
+  "_commentPayment": "----------------------Phần Payment Component----------------------------",
+
+  "2. Phương thức thanh toán": "2. Payment Method",
+  "Vui lòng chọn tùy chọn thanh toán": "Please select a payment option",
+  "Vui lòng thanh toán bằng tiền mặt cho người vận chuyển khi đơn hàng của bạn đã đến nơi.": "Please pay cash to the delivery person when your order arrives.",
+  "Tiếp tục": "Continue",
+  "Chọn tiếp tục để tiến hành thanh toán bằng VNPAY. Quý khách sẽ được chuyển hướng đến cổng thanh toán sau khi xác nhận chi tiết đơn hàng":
+  "Select continue to proceed with VNPAY payment. You will be redirected to the payment gateway after confirming your order details.",
+  "Quý khách vui lòng hoàn tất thanh toán trong vòng 5 phút sau khi nhấn \"ĐẶT HÀNG\".": "Please complete your payment within 5 minutes after clicking \"PLACE ORDER\".",
+  "Chọn tiếp tục để tiến hành thanh toán bằng MoMo. Quý khách sẽ được chuyển hướng đến cổng thanh toán sau khi xác nhận chi tiết đơn hàng":
+  "Select continue to proceed with MoMo payment. You will be redirected to the payment gateway after confirming your order details.",
+  "Chọn tiếp tục để tiến hành thanh toán bằng PayPal. Quý khách sẽ được chuyển hướng đến cổng thanh toán sau khi xác nhận chi tiết đơn hàng":
+  "Select continue to proceed with PayPal payment. You will be redirected to the payment gateway after confirming your order details.",
+  "Quý khách vui lòng hoàn tất thanh toán trong vòng 15 phút sau khi nhấn \"ĐẶT HÀNG\".": "Please complete your payment within 15 minutes after clicking \"PLACE ORDER\".",
+  "1. Thanh Toán Trong Vòng 120 Phút": "1. Pay Within 120 Minutes",
+  "Đưa mã vạch Thanh toán tại cửa hàng cho nhân viên thu ngân.": "Present the in-store payment barcode to the cashier.",
+  "2. Hãy Đưa Vạch Của Bạn": "2. Present Your Barcode",
+  "Vui lòng yêu cầu nhân viên thu ngân quét mã vạch.": "Please ask the cashier to scan your barcode.",
+  "payment": {
+    "cod": "Cash on Delivery",
+    "vnpay": "VNPAY",
+    "in_store": "In Store",
+    "momo": "MoMo",
+    "paypal": "PayPal"
+  }
 }

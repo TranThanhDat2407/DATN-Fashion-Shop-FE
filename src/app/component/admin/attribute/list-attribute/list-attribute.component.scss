@@ -46,13 +46,14 @@ p {
   position: absolute;
   opacity: 0;
 }
+
 .label {
   width: 100%;
   padding: 10px 20px;
   background: #e5e5e5;
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 1rem;
   color: #7f7f7f;
   transition: background 0.1s, color 0.1s;
 }
@@ -75,6 +76,7 @@ p {
     width: auto;
   }
 }
+
 .panel {
   display: none;
   padding: 20px 30px 30px;
@@ -90,7 +92,7 @@ p {
   display: block;
 }
 
-
+///////////
 .select-box {
   flex: 9;
   padding: 10px 10px 0px 10px;

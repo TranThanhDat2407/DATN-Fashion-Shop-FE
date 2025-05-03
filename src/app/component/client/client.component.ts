@@ -7,6 +7,7 @@ import {CheckoutComponent} from './checkout/checkout.component';
 import {CouponComponent} from './coupon/coupon.component';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {ModalNotifyLoginComponent} from './Modal-notify/modal-notify-login/modal-notify-login.component';
+import {ChatbotComponent} from './chatbot/chatbot.component';
 
 
 @Component({
@@ -19,7 +20,8 @@ import {ModalNotifyLoginComponent} from './Modal-notify/modal-notify-login/modal
     NavBottomComponent,
     FooterComponent,
     TranslateModule,
-    ModalNotifyLoginComponent
+    ModalNotifyLoginComponent,
+    ChatbotComponent
   ],
   templateUrl: './client.component.html',
   styleUrl: './client.component.scss'

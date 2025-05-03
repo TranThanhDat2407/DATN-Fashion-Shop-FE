@@ -2,7 +2,7 @@
   <table class="table">
     <thead>
     <tr>
-      <th>Tất Cả Địa Chỉ </th>
+      <th>{{ 'All_Address' | translate }}</th>
 
       <th class="text-center "> <label for="toggleForm" class="btn-open-form btn-primary">
         <span class="mobile-title"><i class="fa-solid fa-plus"></i></span>
@@ -89,9 +89,6 @@
 
 
 <div class="container">
-
-
-
   <div class="modal" id="dang-ky-dia-chi-profile" tabindex="-1" aria-labelledby="modal-new-address"  aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -102,8 +99,6 @@
         <div class="modal-body">
           <div class="wrapper">
             <form #addressForm="ngForm" novalidate class="form-new-address">
-
-              <!-- Tên -->
               <div class="row mb-3">
                 <label class="col-sm-3 col-form-label">Tên&nbsp;</label>
                 <div class="col-sm-9">
@@ -139,7 +134,7 @@
                           (change)="onProvinceChange($event)"
                           [ngClass]="{'is-invalid': province.invalid && province.touched}">
                     <option value="">Chọn tỉnh/thành</option>
-                    <option *ngFor="let province of provinces" [value]="province.code">{{ province.name }} </option>
+                    <option *ngFor="let province of provinces" [value]="province.ProvinceID">{{ province.ProvinceName }} </option>
                   </select>
                   <div *ngIf="province.invalid && province.touched" class="invalid-feedback">
                     <small>Vui lòng chọn tỉnh/thành.</small>
@@ -160,8 +155,8 @@
                     [disabled]="!selectedProvince"
                     [ngClass]="{'is-invalid': district.invalid && district.touched}">
                     <option value="">Chọn quận/huyện</option>
-                    <option *ngFor="let district of districts" [value]="district.code">
-                      {{ district.name }}
+                    <option *ngFor="let district of districts" [value]="district.DistrictID">
+                      {{ district.DistrictName }}
                     </option>
                   </select>
 
@@ -185,8 +180,8 @@
                     [disabled]="!selectedDistrict"
                     [ngClass]="{'is-invalid': ward.invalid && ward.touched}">
                     <option value="">Chọn phường/xã</option>
-                    <option *ngFor="let ward of wards" [value]="ward.code">
-                      {{ ward.name }}
+                    <option *ngFor="let ward of wards" [value]="ward.WardCode">
+                      {{ ward.WardName }}
                     </option>
                   </select>
                   <div *ngIf="ward.invalid && ward.touched" class="invalid-feedback">
@@ -230,8 +225,12 @@
                 <div class="col">
                   <button class="btn btn-address" [disabled]="addressForm.invalid"
                           style="padding: 10px 100px; background-color: #1b1b1b; color: #ffffff"
-                          type="button" (click)="isUpdate ? updateAddress() : addNewAddress()">
+                          type="button"
+                          (click)="isUpdate ? updateAddress() : addNewAddress()"
+                          data-bs-dismiss="modal"
+                       >
                     {{ isUpdate ? 'Cập nhật' : 'Xác nhận' }}
+
                   </button>
                 </div>
                 <div class="col">
@@ -241,13 +240,9 @@
               </div>
 
             </form>
-
           </div>
         </div>
-
       </div>
-
     </div>
-
   </div>
 </div>
