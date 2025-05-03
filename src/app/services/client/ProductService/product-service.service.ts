@@ -198,7 +198,7 @@ export class ProductServiceService {
   getProductVariants(name: string, page: number, size: number): Observable<ApiResponse<PageResponse<ProductVariantDTO[]>>> {
     const params = name.trim() ? `&productName=${encodeURIComponent(name)}` : '';
 
-    return this.http.get<ApiResponse<PageResponse<ProductVariantDTO[]>>>(`${this.apiUrl}/variants/by-product-name?languageCode=en&page=${page}&size=${size}${params}`);
+    return this.http.get<ApiResponse<PageResponse<ProductVariantDTO[]>>>(`${this.apiUrl}/variants/by-product-name?languageCode=vi&page=${page}&size=${size}${params}`);
   }
 
   editProductVariant(mediaId: number, formData: FormData): Observable<any> {

@@ -40,13 +40,16 @@
             <!-- OPEN HOUR -->
             <div class="div5">
                 <label class="form-label">OPEN HOUR</label>
-                <input *ngIf="storeId === 0" type="datetime-local" formControlName="openHour" class="form-control">
-                <input *ngIf="storeId !== 0" type="time" formControlName="openHour" class="form-control">
-                <div class="text-danger"
-                    *ngIf="storeForm.controls['openHour'].invalid && storeForm.controls['openHour'].touched">
+                <!-- Nếu storeId là 0, sử dụng datetime-local, nếu không sử dụng time -->
+                <input *ngIf="storeId === 0" type="datetime-local" formControlName="openHour" class="form-control" [ngClass]="{'is-invalid': storeForm.controls['openHour'].invalid && storeForm.controls['openHour'].touched}">
+                <input *ngIf="storeId !== 0" type="time" formControlName="openHour" class="form-control" [ngClass]="{'is-invalid': storeForm.controls['openHour'].invalid && storeForm.controls['openHour'].touched}">
+                
+                <!-- Thông báo lỗi nếu openHour là invalid và đã được touched -->
+                <div class="text-danger" *ngIf="storeForm.controls['openHour'].invalid && storeForm.controls['openHour'].touched">
                     Open hour is required.
                 </div>
             </div>
+            
 
             <!-- CLOSE HOUR -->
             <div class="div4">

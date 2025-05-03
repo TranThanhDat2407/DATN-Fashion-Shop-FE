@@ -161,7 +161,7 @@ export class EditProductComponent implements OnInit {
   pageSize: number = 0
   sizeSize: number = 10
   sortBySize: string = 'id'
-  sortDirSize: string = 'desc'
+  sortDirSize: string = 'asc'
   nameSize: string = ''
   pageNoSize: number = 0
   totalPagesSize: number = 0;

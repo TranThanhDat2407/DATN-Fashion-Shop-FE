@@ -600,7 +600,7 @@ export class InventoryComponent implements OnInit {
 
     try {
       await Promise.all(insertPromises);
-      this.toastService.success('Add Product Variant Successfully! ', "Success", { timeOut: 3000 });
+      this.toastService.success('Add Product Variant Successfully!', "Success", { timeOut: 3000 });
       this.fetchInventoryForWarehouseOnly();
       this.dataAllInventoryForWarehouseTransfer = await this.fetchAllInventoryForWarehouse();
       this.resetForm();
@@ -866,7 +866,7 @@ export class InventoryComponent implements OnInit {
     sortDir?: string
   ): Observable<PageResponse<ListStoreStockDTO[]>> {
 
-    return this.inventoryService.getInventoryForWarehouse(warehouseId, 'en', productName, categoryId, page, size, sortBy, sortDir).pipe(
+    return this.inventoryService.getInventoryForWarehouse(warehouseId, 'vi', productName, categoryId, page, size, sortBy, sortDir).pipe(
       map((response: ApiResponse<PageResponse<ListStoreStockDTO[]>>) => response.data)
     );
 

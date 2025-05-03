@@ -81,14 +81,14 @@
 
       <div class="product-details sticky-top z-0">
         <!--        product-name-->
-        <button class="btn-save" (click)="updateProduct()">SAVE PRODUCT</button>
+        <button class="btn-save btn-save-product" (click)="updateProduct()">SAVE PRODUCT</button>
 
         <div class="product-names  " style="background-color: #f5f5f5;">
           <!-- Tên sản phẩm -->
           <h3 class="product-title fw-normal">{{dataDetailsProduct?.name}}</h3>
 
           <!-- <label class="flex-1">Base Price</label> -->
-          <input [(ngModel)]="basePrice" type="number" class="form-control"
+          <input [(ngModel)]="basePrice" name="basePrice" type="number" class="form-control"
             style="width: 30%; margin: 10px 10px 10px 0;" placeholder="Base Price" required>
           <div class="d-flex">
             <span class="me-3">Is Active : </span>
@@ -110,7 +110,7 @@
               </div>
               <div class="popup-color" *ngIf="isOpenColor">
                 <div class="popup-content-color">
-                  <span (click)="closePopupColor()" class="close-btn">&times;</span>
+                  <span (click)="closePopupColor()" class="close-btn btn-close-color">&times;</span>
                   <h2>Select Color</h2>
                   <div class="selected-color">
                     <div class="list-color ">
@@ -242,14 +242,9 @@
                       <input class="check-color" type="checkbox" (change)="toggleSizeSelection(size, $event)"
                         [checked]="isSizeSelected(size)" [id]="'size-' + i">
 
-
-
-
                       <!-- Nhãn hoạt động như một div -->
                       <label class="d-flex w-100 align-items-center" [for]="'size-' + i"
                         style="cursor: pointer; padding: 5px;">
-
-
                         <!-- Tên màu -->
                         <div class="d-flex align-items-center justify-content-center"
                           style="height: 100%; margin-left: 24px; padding: 0; max-width: 60px;">
@@ -257,11 +252,6 @@
                         </div>
                       </label>
                     </div>
-
-
-
-
-
                   </div>
                   <div class="pagination">
                     <button (click)="prevPageSize()" [disabled]="pageNoSize === 0">Prev</button>
@@ -333,7 +323,7 @@
                    || selectedColors.length !==0 && selectedSizes.length ===0
           
           ">
-            <button class="btn-save" (click)="insertVariantsColor()">SAVE COLOR & SIZE</button>
+            <button class="btn-save btn-save-both" (click)="insertVariantsColor()">SAVE COLOR & SIZE</button>
           </div>
 
           <div class="product-details sticky-top z-0 " style="background-color: #f5f5f5;">
@@ -385,7 +375,7 @@
                   <label *ngIf="lang.code === 'jp'"> <img
                       src="https://img.icons8.com/?size=100&id=22435&format=png&color=000000" width="30" alt=""> {{
                     lang.name }} Description</label>
-                  <textarea class="form-control" [(ngModel)]="getTranslationByCodeDescription(lang.code).name"
+                  <textarea class="form-control description-test" [(ngModel)]="getTranslationByCodeDescription(lang.code).name"
                     [attr.name]="lang.code" [placeholder]="lang.name" required rows="4"></textarea>
                 </div>
               </div>
@@ -409,7 +399,7 @@
                   <label *ngIf="lang.code === 'jp'"> <img
                       src="https://img.icons8.com/?size=100&id=22435&format=png&color=000000" width="30" alt=""> {{
                     lang.name }} Material</label>
-                  <textarea class="form-control" [(ngModel)]="getTranslationByCodeMaterial(lang.code).name"
+                  <textarea class="form-control material-test" [(ngModel)]="getTranslationByCodeMaterial(lang.code).name"
                     [attr.name]="lang.code" [placeholder]="lang.name" required rows="4"></textarea>
                 </div>
               </div>
@@ -433,7 +423,7 @@
                   <label *ngIf="lang.code === 'jp'"> <img
                       src="https://img.icons8.com/?size=100&id=22435&format=png&color=000000" width="30" alt=""> {{
                     lang.name }} Care</label>
-                  <textarea class="form-control" [(ngModel)]="getTranslationByCodeCare(lang.code).name"
+                  <textarea class="form-control care-test" [(ngModel)]="getTranslationByCodeCare(lang.code).name"
                     [attr.name]="lang.code" [placeholder]="lang.name" required rows="4"></textarea>
                 </div>
               </div>

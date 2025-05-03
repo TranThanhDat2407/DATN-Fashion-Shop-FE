@@ -4,17 +4,25 @@
 }
 
 .product-image {
-  width: 80%
+  padding-top:3px;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
 }
 
 .product-image img {
   width: 100%;
+  margin-right: 4px;
   height: auto;
+  max-height: 350px;
   border-radius: 8px;
   display: block;
+  object-fit: contain; /* hoặc cover tùy bạn muốn fit như thế nào */
+  background-color: #f0f0f0; /* để dễ thấy khung */
 }
 
 .product-details {
+  margin-left: 4px;
   margin-top: 15px;
   width: 32rem;
 }
@@ -298,7 +306,7 @@ color: white;
 
   .product-image img {
     width: 150px;
-    max-width: 100%;
+    max-width: 100px;
   }
 
   .product-details {

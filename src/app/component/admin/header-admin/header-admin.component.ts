@@ -30,7 +30,7 @@ export class HeaderAdminComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.tokenService.getUserId();
     const token = this.tokenService.getToken(); // Lấy token từ TokenService
-
+     
     if (token) {
       this.userService.getUserDetail(token).subscribe({
         next: (response) => {
