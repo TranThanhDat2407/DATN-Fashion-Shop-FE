@@ -664,7 +664,7 @@ export class EditProductComponent implements OnInit {
   validateTranslations(): boolean {
     const checkEmptyFields = (translations: TranslationDTO[], fieldName: string): boolean => {
       if (translations.every(t => t.name.trim() === '')) {
-        this.toastService.error(`${fieldName} cannot be empty in all languages!`, 'Validation Error', { timeOut: 1600 });
+        this.toastService.warning(`${fieldName} cannot be empty in all languages!`, 'Warning', { timeOut: 1600 });
         return false;
       }
       return true;
